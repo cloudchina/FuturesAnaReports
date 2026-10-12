@@ -1,0 +1,106 @@
+# 品种关联图谱（静态部分）
+#
+# 关系为**无序对称关系**：分析 HC 时 RB 是关联方，分析 RB 时 HC 也是关联方，
+# 同一条记录互为镜像，不重复存储、不重复计算。
+
+relations:
+  - members: [RB, HC]
+    type: substitute      # 替代/套利
+    strength: 0.9
+    note: 卷螺价差套利，螺纹地产需求、热卷制造业需求
+
+  - members: [JM, J]
+    type: upstream        # 焦煤 → 焦炭（原料→成品）
+    strength: 0.9
+    lead: JM              # 焦煤领先焦炭约 1 日
+    lead_hint: 焦煤领先焦炭约 1 日
+
+  - members: [PX, TA]
+    type: upstream        # PX → PTA
+    strength: 0.85
+    lead: PX
+    lead_hint: PX 成本传导至 PTA，滞后 1~2 日
+
+  - members: [I, RB]
+    type: upstream        # 铁矿 → 成材成本
+    strength: 0.75
+    lead: I
+    lead_hint: 铁矿成本传导，螺纹跟随
+
+  - members: [Y, P, OI]
+    type: substitute      # 油脂替代（三元组 → Y-P / Y-OI / P-OI）
+    strength: 0.8
+    note: 豆油/棕榈油/菜油互为替代，需求端可切换
+
+  - members: [SC, FU, LU, BU, MA, EB, EG, PX]
+    type: chain           # 原油产业链（四元组 → 6 条无序对）
+    strength: 0.8
+    note: 原油 → 燃料油/低硫燃油/沥青，成本同源，原油产业链，整个能源化工的上下游
+
+  - members: [AU, AG]
+    type: macro           # 宏观同向
+    strength: 0.8
+    note: 贵金属，宏观（实际利率/避险）驱动同向
+
+  - members: [FG, SA]
+    type: chain           # 玻璃-纯碱
+    strength: 0.8
+    lead: SA
+    lead_hint: 纯碱成本传导至玻璃
+
+  - members: [L, PP, V]
+    type: chain           # 聚烯烃
+    strength: 0.75
+    note: 塑料/聚丙烯/PVC，同属氯碱-烯烃链
+
+  - members: [M, RM]
+    type: substitute      # 豆粕-菜粕
+    strength: 0.85
+    lead: M
+    lead_hint: 豆粕主导菜粕定价
+
+  # ===== 以下为补充：覆盖6个目标品种的关联关系 =====
+
+  - members: [C, LH]
+    type: upstream        # 玉米 → 生猪（饲料成本）
+    strength: 0.75
+    lead: C
+    lead_hint: 玉米是生猪核心饲料原料，成本传导约 5~10 个交易日
+
+  - members: [M, LH]
+    type: upstream        # 豆粕 → 生猪（饲料成本）
+    strength: 0.7
+    lead: M
+    lead_hint: 豆粕是生猪蛋白饲料核心，成本传导约 5~10 个交易日
+
+  - members: [LH, JD]
+    type: macro           # 生猪-鸡蛋（禽畜蛋白替代）
+    strength: 0.65
+    note: 同为蛋白消费，消费端有一定替代效应，但各自独立基本面主导
+
+  - members: [C, JD]
+    type: upstream        # 玉米 → 鸡蛋（饲料成本）
+    strength: 0.75
+    lead: C
+    lead_hint: 玉米是蛋鸡核心饲料，成本传导约 3~5 个交易日
+
+  - members: [M, JD]
+    type: upstream        # 豆粕 → 鸡蛋（饲料成本）
+    strength: 0.7
+    lead: M
+    lead_hint: 豆粕是蛋鸡蛋白饲料，成本传导约 3~5 个交易日
+
+  - members: [CJ, AP]
+    type: substitute      # 红枣-苹果（果品替代）
+    strength: 0.5
+    note: 同为鲜干果消费，季节性消费有一定替代，关联较弱
+
+  - members: [BU, MA]
+    type: chain           # 沥青-甲醇（烯烃/煤化工链交叉）
+    strength: 0.7
+    note: 同属原油/煤化工链，成本端和需求端有交叉
+
+  - members: [EB, V]
+    type: chain           # 苯乙烯-PVC（氯碱链交叉）
+    strength: 0.65
+    note: 苯乙烯与PVC同属氯碱-烯烃链，原料端有交叉
