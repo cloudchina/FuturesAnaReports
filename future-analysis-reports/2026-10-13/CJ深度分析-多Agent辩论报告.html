@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>红枣(CJ) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px}
+  .cs-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">红枣</span>
+      <span class="h-code">CJ2701 · 郑商所</span>
+      <span class="h-tag">主连 CJZL.CZC</span>
+      <span class="h-tag">多Agent辩论 · 单品种深度分析</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v down">6620 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅</div><div class="v down">-1.93%</div></div>
+      <div class="p-item"><div class="k">前收（10-12）</div><div class="v">6750</div></div>
+      <div class="p-item"><div class="k">日内最高 / 最低</div><div class="v" style="font-size:18px">6770 / 6570</div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">242,886 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">239,512 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-13（周二收盘后）　|　下一交易日：2026-10-14（周三）　|　数据来源：同花顺 iFinD</div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:18px">偏空 · 弱势震荡</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="down">空62%</span> / <span class="up">多38%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">62%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">1~5个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v" style="font-size:18px">6570（日内低点）</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>供过于求格局主导——36 家样本点物理库存约 <b>9450~9570 吨</b>（周环比 -1.25%，同比 +2.68%），<b>总库存约 50 万吨高位</b>；新季灰枣即将集中上市（产量预测 <b>50~60 万吨</b>），销区走货转弱、囤货意愿不足，华泰/广州期货均看"弱势震荡/低位磨底"。期价 6620 呈 <b>contango（主连 6620 &lt; 次主连 6750，近弱远强）</b>，且远低于 BOLL 中轨 7415.38 与 EXPMA 6973.83，弱势格局确立。<b>但</b> RSI(6) <b>16.59</b>、KDJ K <b>7.48</b> 极度超卖、MACD(DIFF) <b>-295.32</b> 深度负值，需高度警惕超跌反弹。<b>策略：反弹沽空，避免追空。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          36 家样本点物理库存约 <b>9450~9570 吨</b>（周环比 -1.25%，同比 +2.68%），<b>总库存约 50 万吨高位</b>。<br>
+          绝对库存高企，压制盘面。
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">总库存高位 → 偏空（样本点库存边际去化）</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>0</b>（iFinD 10-13）；新闻口径 9 月底仓单 <b>4063 张</b>、有效预报 <b>11 张</b>（折 20370 吨，截至 9/24）。<br>
+          新季交割前仓单大幅注销，交割压力阶段性减轻。
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">仓单注销为新季规则所致，方向中性</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          主连 <b>6620</b> vs 次主连 <b>6750</b> → <b>contango（近弱远强）</b>；基差率 <b>数据缺失</b>。<br>
+          <span style="color:var(--bear)">近月贴水远月，结构压制近月。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">近弱远强，直接压制近月</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          RSI(6) <b>16.59（超卖）</b>；KDJ K <b>7.48（超卖）</b>；MACD(DIFF) <b>-295.32</b>（深度负值）；BOLL 中轨 7415.38（收盘 6620 远低于中轨）；EXPMA ≈ 6973.83。<br>
+          <span style="color:var(--bear)">趋势极弱，但指标深度超卖。</span>
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">空头趋势明确 vs 极度超卖反弹风险</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          利空：新季灰枣即将集中上市（产量预测 <b>50~60 万吨</b>）、总库存约 50 万吨高位、销区走货转弱、囤货意愿不足；华泰/广州期货看"弱势震荡/低位磨底"。<br>
+          关注：品质风险（裂口/烂枣）或限制优质货源。
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">供过于求格局大概率延续 → 偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          持仓量 <b>242886</b> 手（10-12 为 241276，<span style="color:var(--bear)">增仓 +1610</span>）；成交 239512 手（10-12 为 190002，放量）。<br>
+          <span style="color:var(--dim)">持仓席位明细数据缺失，无法验证多空主力结构。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">放量增仓下跌 → 偏空；席位明细数据缺失</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>EXPMA ≈ <b>6973.83</b>，收盘 6620 远位于其下 → 空头</li>
+          <li>MACD(DIFF)：<b>-295.32</b>（深度负值）→ 空头动能强</li>
+          <li>BOLL 中轨 <b>7415.38</b>，价格远低于中轨 → 弱势</li>
+          <li>结论：<b>趋势性偏空</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>16.59</b>（超卖）</li>
+          <li>KDJ：K <b>7.48</b>（超卖）</li>
+          <li>BOLL 中轨 7415.38，价差空间极大</li>
+          <li>结论：<b>极度超卖，反弹风险上升</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>239512</b> 手（10-12 为 190002，明显放量）</li>
+          <li>持仓量：<b>+1610 手</b>（241276 → 242886）</li>
+          <li>组合：<b>放量 + 增仓 + 下跌</b> → 空头增仓，趋势性强</li>
+          <li>研判：<b>偏空</b>（资金顺势加空）</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>日内冲高 <b>6770</b> 回落收 <b>6620</b>，留长上影，低点 <b>6570</b></li>
+          <li>收盘 -1.93%，弱势收盘</li>
+          <li>未见明确跳空缺口</li>
+          <li>研判：弱势下行，关注 <b>6570</b> 支撑与超卖反弹</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>contango · 近弱远强</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">6620</div><div class="cs-bar near" style="height:147px"></div><div class="cs-lbl">主连 CJZL<br>（近月）</div></div>
+        <div class="cs-col"><div class="cs-val">6750</div><div class="cs-bar" style="height:150px"></div><div class="cs-lbl">次主连<br>（远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。主连 <b>6620</b> 低于次主连 <b>6750</b>（6750 − 6620 = 130），呈 <b>contango</b> 结构，印证"近月弱于远月"。基差率数据缺失。数据文件仅提供主连与次主连两档，更远月合约数据缺失。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板 <small>数据缺失 · 仅披露总量</small></h2>
+    <table>
+      <thead><tr><th>项目</th><th>2026-10-13</th><th>2026-10-12</th><th>变化</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>主力持仓量</td><td class="mono">242886 手</td><td class="mono">241276 手</td><td class="mono up">+1610 手</td><td><span class="pill bear">增仓（价跌）</span></td></tr>
+        <tr><td>成交量</td><td class="mono">239512 手</td><td class="mono">190002 手</td><td class="mono">放量</td><td><span class="pill neu">量能放大</span></td></tr>
+        <tr><td>注册仓单</td><td class="mono">0</td><td colspan="2" class="mono">—</td><td><span class="pill neu">新季交割前注销</span></td></tr>
+        <tr><td>多头/空头席位明细（前 20 会员）</td><td colspan="4" class="mono" style="color:var(--dim)">数据缺失</td></tr>
+        <tr><td>净多 / 净空持仓（第 1 名）</td><td colspan="4" class="mono" style="color:var(--dim)">数据缺失</td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：本次 iFinD 取数未取得红枣席位明细，无法验证多空主力结构与增减仓方向。<b>不得以本表推断席位意图</b>，持仓维度可信度低，不宜单独作为方向依据。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1 极度超卖</span> RSI(6) 16.59、KDJ K 7.48，双指标深度超卖，技术性反弹一触即发。</p>
+          <p><span class="lbl">核心2 仓单注销</span> 新季交割前仓单大幅注销（注册仓单 0），阶段性交割压力减轻。</p>
+          <p><span class="lbl">核心3 品质风险</span> 新季"裂口/烂枣"品质风险或限制优质货源有效供给，支撑现货。</p>
+          <p style="color:var(--dim)">目标：6750（次主连/前收）→ 6973.83（EXPMA）；试多区 6570 附近</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1 高库存</span> 总库存约 50 万吨高位，样本点物理库存同比 +2.68%，供给充裕。</p>
+          <p><span class="lbl">核心2 新季上市</span> 新季灰枣即将集中上市，产量预测 50~60 万吨，供过于求延续。</p>
+          <p><span class="lbl">核心3 需求走弱</span> 销区走货转弱、囤货意愿不足；华泰/广州期货均看"弱势震荡/低位磨底"。</p>
+          <p style="color:var(--dim)">目标：6570 → 更低（数据缺失）；止损 6973.83（EXPMA）上方</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"高库存"</span> 样本点物理库存周环比 -1.25% 已边际去化，同比 +2.68% 幅度有限，压力被高估。</p>
+          <p><span class="lbl">驳"新季上市"</span> "即将上市"尚未落地，且品质风险可能削减可交割的优质货源。</p>
+          <p><span class="lbl">驳"技术弱"</span> 极度超卖（RSI 16.59 / KDJ 7.48）下利空已充分定价，任何利多边际都会放大反弹弹性。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"超卖反弹"</span> 超卖 ≠ 见底；MACD(DIFF) -295.32 深度负值显示趋势动能仍强，反弹即加空机会。</p>
+          <p><span class="lbl">驳"仓单注销"</span> 仓单注销源于新季交割规则而非需求驱动，反证供应压力的季节性切换。</p>
+          <p><span class="lbl">驳"品质风险"</span> 裂口/烂枣是结构性问题，利好优质货源，却难改盘面整体供过于求的大格局。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 极度超卖（RSI(6) 16.59、KDJ K 7.48）+ 价格远低于 BOLL 中轨 7415.38，技术性反弹弹性大。</p>
+          <p><span class="lbl">胜负手2</span> 新季交割前仓单注销（注册仓单 0），短期抛压减弱。</p>
+          <p><span class="lbl">建议</span> 试多：6570 附近轻仓；目标 6750 → 6973.83；止损收盘有效跌破 6570。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 总库存约 50 万吨高位 + 新季 50~60 万吨集中上市 + 需求走弱，供过于求延续。</p>
+          <p><span class="lbl">胜负手2</span> contango（6620 &lt; 6750）近弱远强，价格远低于 EXPMA 6973.83，趋势下行未破。</p>
+          <p><span class="lbl">建议</span> 沽空：反弹 6750~6770 轻仓；目标 6570（10-13 低点）；止损收盘站上 6973.83（EXPMA）。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">偏空 · 弱势震荡</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="down">62%</span> / <span class="up">38%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">62%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">23 / 60</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>库存</td><td class="mono down">4</td><td>总库存约 50 万吨高位、物理库存同比 +2.68%，压制盘面</td></tr>
+          <tr><td>仓单</td><td class="mono">5</td><td>注册仓单 0，新季交割前注销，方向中性</td></tr>
+          <tr><td>期限结构</td><td class="mono down">4</td><td>contango（6620 &lt; 6750）近弱远强，压制近月</td></tr>
+          <tr><td>技术面</td><td class="mono down">3</td><td>RSI 16.59 / KDJ 7.48 超卖、MACD -295.32、价格远低于中轨 → 趋势极弱</td></tr>
+          <tr><td>新闻基本面</td><td class="mono down">3</td><td>新季 50~60 万吨集中上市 + 高库存 + 需求走弱 + 机构看弱</td></tr>
+          <tr><td>持仓席位</td><td class="mono down">4</td><td>放量增仓下跌显示空头顺势；席位明细数据缺失，方向含义有限</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>RSI(6) 16.59 + KDJ K 7.48 极度超卖，价格远低于 BOLL 中轨 7415.38，超跌反弹弹性最大。</li>
+            <li><b>最弱：</b>缺乏基本面利多支撑，反弹主要靠技术修复；供过于求格局未改，反弹高度受限。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>总库存约 50 万吨高位 + 新季 50~60 万吨集中上市 + 需求走弱，供需与结构、技术方向一致向下。</li>
+            <li><b>最弱：</b>指标深度超卖（RSI 16.59 / KDJ 7.48），一旦利多边际出现，超跌反弹会快速侵蚀空头浮盈。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">偏空 · 弱势震荡（极度超卖存反弹风险）—— 供过于求格局主导，contango 结构自上方压制</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">反弹至 <b>6750~6770</b> 分批轻仓做空（前收 6750 / 10-13 日内高点 6770 压力区）；<b>6650 下方不追空</b></div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>6570</b>（10-13 日内低点）；有效下破后再评估下方空间（技术位数据结构缺失）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效站上 6973.83</b>（EXPMA）离场</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv">1~5 个交易日（含超卖反弹的窗口）</div></div>
+        <div class="plan-row"><div class="pk">置信度依据</div><div class="pv">空方信号占优（高库存 + 新季集中上市 + 需求走弱 + contango + 价格远低于中轨/EXPMA），机构观点亦偏弱；但 RSI 16.59 / KDJ 7.48 极度超卖构成明确反弹风险，压低置信度上行空间；基差率与席位明细数据缺失 → 综合 <b>62%</b></div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>本判断的最大风险是"极度超卖后的技术性反弹"——RSI(6) 16.59、KDJ K 7.48 均处深度超卖区，价格 6620 远离 BOLL 中轨 7415.38，一旦新季品质问题（裂口/烂枣）发酵或销区补库启动，盘面可能快速修复至 6750 前收甚至 6973.83（EXPMA）；收盘站上 EXPMA 6973.83 即视为空头逻辑破坏，须离场。反之，若新季集中上市兑现且需求持续走弱，下行将首先考验 6570 日内低点。本质是"现实偏空 vs 超卖反弹"的博弈，<b>务必轻仓、严止损，避免在超卖区裸空</b>。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes / 注册仓单数量 / search_news（同花顺 iFinD）。行情为日频，"仓单/基差率/席位"部分字段数据缺失或口径不一，已在正文标注。<br>
+    生成时间：2026-10-13　|　品种：红枣 CJ（郑商所）　|　合约：CJ2701（主连 CJZL.CZC）
+  </div>
+
+</div>
+</body>
+</html>

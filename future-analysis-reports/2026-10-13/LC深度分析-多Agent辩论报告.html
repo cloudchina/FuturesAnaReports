@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>碳酸锂(LC) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px}
+  .cs-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">碳酸锂</span>
+      <span class="h-code">LC2701 · 广期所</span>
+      <span class="h-tag">主连 LCZL.GFE</span>
+      <span class="h-tag">六维数据 + 多Agent辩论</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v up">107,060 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅</div><div class="v up">+2.22%</div></div>
+      <div class="p-item"><div class="k">前收（10/12）</div><div class="v">104,740 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">422,392 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">314,846 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-13（周二收盘后）　|　下一交易日：2026-10-14（周三）　|　日内最高 108260 / 最低 102700　|　数据来源：同花顺 iFinD</div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:19px">震荡偏多（超跌反弹+周度去库）</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="up">多58%</span> / <span class="down">空42%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">58%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">2~5个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v" style="font-size:16px">108260 → 125092</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>矛盾激烈——<b>RSI(6) 19.61、KDJ K 8.41 双双极度超卖</b>，叠加<b>周度去库 -6522 吨（-10.11%）</b>、供给减产（周产量 25418 吨、环比 -523 吨/-2.01%）、需求走强（磷酸铁锂产量环比 +2.45%），构成超跌反弹动能；但 <b>MACD(DIFF) -9276.37 深度负值</b>、EXPMA 125091.98 高悬、价格贴近 BOLL 下轨 103510.73，中期趋势极弱。<b>策略：攻其超卖、守其下轨，轻仓博反弹，破下轨即离场。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">8 / 10</span></div>
+        <div class="c-body">
+          现货库存 <b>57973 吨</b>（环比 <b>-6522 吨、-10.11%</b>），<b>周度去库加速</b>；下游 34362（<b>-15.90%</b>）、大样本 66163（-6696）。<br>
+          <span style="color:var(--bear)">瑕疵：冶炼厂 6582（+2.68%），小幅累库。</span>
+        </div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="c-note">周度去库显著，下游去库 -15.90% 为主力，冶炼厂小幅累库</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>29643</b>（iFinD 10-13）。<br>
+          <span style="color:var(--dim)">环比变化数据缺失，无法评估增减方向，按中性处理。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">仓单绝对量中性；环比数据缺失，不构成方向信号</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">7 / 10</span></div>
+        <div class="c-body">
+          主连 <b>107060</b> vs 次主连 <b>104580</b> → <b>backwardation</b>（近强远弱），价差 <b>+2480</b>。<br>
+          基差率 <b>+4.29%</b>（正基差，现货升水）。
+        </div>
+        <div class="bar"><i style="width:70%"></i></div>
+        <div class="c-note">近强远弱 + 正基差，短期现货端相对偏紧</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          利多：RSI(6) <b>19.61</b>、KDJ K <b>8.41</b> 双双<span class="up">极度超卖</span>，反弹动能积蓄。<br>
+          <span style="color:var(--bear)">利空：MACD(DIFF) <b>-9276.37</b> 深度负值；BOLL 上/中/下 = 160907.73 / 132209.23 / 103510.73，收盘 107060 贴近下轨；EXPMA ≈ 125091.98 高悬压制。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">超卖 vs 趋势极弱的矛盾体，带宽极宽反映高波动</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">6 / 10</span></div>
+        <div class="c-body">
+          利多：周度产量 <b>25418 吨</b>（环比 -523 吨、-2.01%，锂辉石/盐湖/回收均减产）；磷酸铁锂产量环比 <b>+2.45%</b>，需求走强、库存天数下探。<br>
+          <span style="color:var(--bear)">利空：国内大矿复产程序持续推进，远期供需预期承压。</span>
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="c-note">近月减产+去库+需求走强利多 vs 远期复产压力利空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">数据缺失</span></div>
+        <div class="c-body">
+          <b>持仓席位数据缺失</b>：未能获取多空席位明细（前二十名持仓/净多净空）。<br>
+          无法评估主力资金方向与边际变化，本维度不参与评分。
+        </div>
+        <div class="bar"><i style="width:0%"></i></div>
+        <div class="c-note">数据缺失（须注明），不可虚构席位，不参与综合评分</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>EXPMA：<b>≈ 125091.98</b>，收盘 107060 远低于 EXPMA → 空头排列/趋势极弱</li>
+          <li>MACD：DIFF <b>-9276.37</b> 深度负值 → 下行动能强</li>
+          <li>BOLL：中轨 132209.23、下轨 <b>103510.73</b>、上轨 160907.73，收盘 107060 贴近下轨</li>
+          <li>研判：中期空头趋势未改，短期极度超跌</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>19.61</b> → <span class="up">极度超卖</span></li>
+          <li>KDJ：K <b>8.41</b> → <span class="up">极度超卖</span></li>
+          <li>研判：超卖共振，技术性反弹动能积蓄</li>
+          <li>结论：<b>超跌反弹条件具备，但趋势未反转</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>314,846</b>（10-12 为 405,572）→ 缩量</li>
+          <li>持仓量：<b>422,392</b>（10-12 为 429,039）→ 减仓 <b>-6,647</b></li>
+          <li>组合：<b>缩量减仓</b> → 空头动能衰减、部分资金离场</li>
+          <li>研判：<b>抛压趋缓，利于超跌反弹</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>收盘 <b>107060</b>，日内最高 108260、最低 102700，贴近 BOLL 下轨 103510.73</li>
+          <li>极度超卖 + 缩量减仓，形态上具备超跌反弹条件</li>
+          <li>MACD -9276.37、EXPMA 125091.98 上方压制，反弹高度受限</li>
+          <li>研判：<b>超跌反弹窗口，上方 108260 为第一阻力</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>近强远弱 · backwardation</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">107060</div><div class="cs-bar near" style="height:142px"></div><div class="cs-lbl">主连 LC2701<br>（主力）</div></div>
+        <div class="cs-col"><div class="cs-val">104580</div><div class="cs-bar" style="height:138px"></div><div class="cs-lbl">次主连<br>（LC 远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。主连 107060 vs 次主连 104580 → <b>backwardation</b>（近强远弱），价差 <b>+2480</b>；基差率 <b>+4.29%</b>（正基差，现货升水）。近强远弱与正基差反映当下现货端相对偏紧，远月受"大矿复产"远期预期压制。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板</h2>
+    <table>
+      <thead><tr><th>项目</th><th>2026-10-13</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>多头持仓（第1名）</td><td class="mono">数据缺失</td><td><span class="pill neu">席位明细获取受限</span></td></tr>
+        <tr><td>空头持仓（第1名）</td><td class="mono">数据缺失</td><td><span class="pill neu">席位明细获取受限</span></td></tr>
+        <tr><td>净多头持仓（第1名）</td><td class="mono">数据缺失</td><td><span class="pill neu">无法评估边际变化</span></td></tr>
+        <tr><td>净空头持仓（第1名）</td><td class="mono">数据缺失</td><td><span class="pill neu">无法评估边际变化</span></td></tr>
+        <tr><td>主力 LC2701 持仓量</td><td class="mono down">422,392 手</td><td><span class="pill bear">减仓 -6,647（10-12 为 429,039）</span></td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：未能获取前二十名会员的多空席位明细，无法验证主力资金方向与趋势连续性。<b>本报告不虚构任何席位数据，本维度方向信号缺失，不宜单独作为方向依据。</b></div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1</span> 极度超卖：RSI(6) <b>19.61</b>、KDJ K <b>8.41</b> 双双极度超卖，技术性反弹动能积蓄。</p>
+          <p><span class="lbl">核心2</span> 周度去库加速：现货库存 <b>57973 吨</b>（环比 -6522 吨、<b>-10.11%</b>），下游 34362（-15.90%）、大样本 66163（-6696）。</p>
+          <p><span class="lbl">核心3</span> 供给减产 + 需求走强：周度产量 25418 吨（环比 -523 吨、-2.01%，锂辉石/盐湖/回收均减产）；磷酸铁锂产量环比 <b>+2.45%</b>。</p>
+          <p style="color:var(--dim)">目标：108260 → 125092（EXPMA）；止损 102700（当日低点）</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1</span> 趋势极弱：MACD(DIFF) <b>-9276.37</b> 深度负值，EXPMA ≈ 125091.98 高悬，多头排列完全破坏。</p>
+          <p><span class="lbl">核心2</span> 远期供给压力：国内大矿复产程序持续推进，远期供需预期承压。</p>
+          <p><span class="lbl">核心3</span> 逼近下轨：收盘 107060 贴近 BOLL 下轨 103510.73，破位风险；带宽极宽反映高波动。</p>
+          <p><span class="lbl">核心4</span> 缩量减仓（-6647）：反弹缺乏增量资金，缩量反弹易夭折。</p>
+          <p style="color:var(--dim)">目标：102700 → 103510 失守看更低；止损 108260 上方</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"趋势极弱"</span> MACD 深度负值（-9276.37）恰恰是超卖极致的体现，价格已贴近下轨 103510.73，向下空间有限。</p>
+          <p><span class="lbl">驳"复产压力"</span> 复产是<b>远期预期</b>，而当下供给在减产（-2.01%）、需求在走强（+2.45%），近月现实偏紧。</p>
+          <p><span class="lbl">驳"缩量反弹无力"</span> 缩量减仓是<b>空头动能衰减</b>信号，抛压减轻反而利于反弹展开。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"超卖必反弹"</span> 超卖可以更超卖，MACD -9276.37 说明下行动能仍强，超卖 ≠ 见底。</p>
+          <p><span class="lbl">驳"去库利多"</span> 冶炼厂库存 6582 仍在累库（+2.68%），去库集中于下游 34362（-15.90%），偏向<b>补库</b>而非需求爆发。</p>
+          <p><span class="lbl">驳"供给减产"</span> 周度 -523 吨（-2.01%）量级有限，且大矿复产将回补减产，供给端中期偏松。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 双超卖共振（RSI <b>19.61</b> + KDJ K <b>8.41</b>）+ 缩量减仓（-6647），空头动能衰减，超跌反弹条件成熟。</p>
+          <p><span class="lbl">胜负手2</span> 周度去库加速（-6522 吨 / <b>-10.11%</b>）+ 减产（-2.01%）+ 需求 +2.45%，现实供需边际改善。</p>
+          <p><span class="lbl">建议</span> 做多：107060 附近分批，<b>103510（下轨）附近加仓</b>；目标 108260 → 125092；止损收盘破 102700。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> MACD <b>-9276.37</b> 深度负值 + EXPMA ≈ 125091.98 压制，中期趋势向下未扭转。</p>
+          <p><span class="lbl">胜负手2</span> 大矿复产远期压力 + 冶炼厂累库（+2.68%）+ 价格贴近下轨的破位风险。</p>
+          <p><span class="lbl">建议</span> 反弹至 108260 附近轻仓试空；目标 103510 → 更低；止损 108260 上方。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">震荡偏多（超跌反弹+周度去库）</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="up">58%</span> / <span class="down">42%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">58%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v" style="font-size:16px">30 / 50</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>库存</td><td class="mono up">8</td><td>现货库存 57973 吨、周环比 -6522 吨（-10.11%），下游 -15.90%、大样本 -6696，周度去库加速；冶炼厂 +2.68% 小幅累库</td></tr>
+          <tr><td>仓单</td><td class="mono">5</td><td>注册仓单 29643，环比变化数据缺失，按中性处理</td></tr>
+          <tr><td>期限结构</td><td class="mono up">7</td><td>backwardation（价差 +2480）、基差率 +4.29%（正基差），近强远弱</td></tr>
+          <tr><td>技术面</td><td class="mono down">4</td><td>极度超卖（RSI 19.61、KDJ K 8.41）提供反弹动能；MACD -9276.37 深度负值、EXPMA 125091.98 压制，趋势极弱</td></tr>
+          <tr><td>新闻基本面</td><td class="mono up">6</td><td>供给减产 -2.01%、需求 +2.45% 利多；大矿复产远期承压利空</td></tr>
+          <tr><td>持仓席位</td><td class="mono down">数据缺失</td><td>席位明细获取受限，不参与评分，不可虚构</td></tr>
+        </tbody>
+      </table>
+      <div class="c-note" style="margin-bottom:12px">注：六维合计为有效五维（库存 8 + 仓单 5 + 期限结构 7 + 技术面 4 + 新闻基本面 6 = 30），满分为 50；持仓席位维度因数据缺失不计入。</div>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>双超卖共振（RSI 19.61 + KDJ K 8.41）+ 周度去库加速（-6522 吨 / -10.11%）+ 供给减产（-2.01%）+ 需求走强（+2.45%），叠加缩量减仓（-6647）抛压趋缓，超跌反弹动能有现实数据支撑。</li>
+            <li><b>最弱：</b>价格贴近 BOLL 下轨 103510.73，超跌不等于见底；MACD -9276.37 深度负值说明下行动能仍强，反弹高度受 EXPMA 125091.98 压制。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>MACD -9276.37 深度负值 + EXPMA 125091.98 高悬，中期趋势向下未扭转；大矿复产远期压力 + 冶炼厂累库（+2.68%）+ 价格贴近下轨的破位风险。</li>
+            <li><b>最弱：</b>把"大矿复产"这一远期预期当作即时利空交易；而当下供给在减产（-2.01%）、需求在走强（+2.45%）、周度去库 -10.11%，近月现实与空头叙事相悖。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">震荡偏多（超跌反弹+周度去库）—— 极度超卖与周度去库提供反弹动能，但中期趋势极弱压制反弹高度</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">107060 附近分批做多；<b>103510（BOLL 下轨）附近为加仓区</b>；不追高 108260 上方</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>108260</b>（当日高点）→ 第二目标 <b>125092</b>（EXPMA ≈ 125091.98）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效跌破 102700</b>（当日低点）离场</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv">2~5 个交易日</div></div>
+        <div class="plan-row"><div class="pk">置信度依据</div><div class="pv">极度超卖（RSI 19.61 / KDJ K 8.41）+ 周度去库（-6522 吨）构成反弹动能，对阵 MACD -9276.37 深度负值、EXPMA 125091.98 压制的趋势极弱；缩量减仓方向不明；仓单环比、持仓席位数据缺失降低确定性 → 综合 <b>58%</b></div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>若大矿复产提速、冶炼厂累库（+2.68%）延续，价格有效跌破 BOLL 下轨 103510.73 并失守 102700，超跌可能演变为趋势性下跌；反之若超卖共振触发技术性反弹，空头亦面临踩踏。<b>超跌反弹属"高胜率、低确定性"博弈，务必轻仓、严止损。</b>本报告不构成任何投资建议。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes / 注册仓单数量 / search_news（同花顺 iFinD，2026-10-13）。行情为日频；仓单环比、持仓席位明细缺失已如实标注，未作任何推算或补充。关联品种：无（关联图谱未定义），未触发替换。<br>
+    生成时间：2026-10-13　|　品种：碳酸锂 LC（广期所）　|　主连：LC2701（LCZL.GFE）
+  </div>
+
+</div>
+</body>
+</html>

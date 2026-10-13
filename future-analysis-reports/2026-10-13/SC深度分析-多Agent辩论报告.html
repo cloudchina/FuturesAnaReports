@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原油(SC) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px}
+  .cs-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">原油</span>
+      <span class="h-code">SC2612 · 上期能源 INE</span>
+      <span class="h-tag">主连 SCZL.INE</span>
+      <span class="h-tag">由甲醇(MA)低置信度触发关联分析</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v up">744.3 <small style="font-size:12px">元/桶</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅</div><div class="v up">+0.36%</div></div>
+      <div class="p-item"><div class="k">前收（10/12）</div><div class="v">741.6 <small style="font-size:12px">元/桶</small></div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">18,417 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">89,483 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-13（周二收盘后）　|　下一交易日：2026-10-14（周三）　|　数据来源：同花顺 iFinD</div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:18px">震荡<br><small style="font-size:12px;color:var(--sub)">地缘支撑 vs 需求走弱</small></div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="up">多55%</span> / <span class="down">空45%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">58%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">2~5个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v">767.5 / 738.5</div></div>
+    </div>
+    <div class="b-sum">
+      <b>关联说明：</b>本报告由原品种<b>甲醇(MA)低置信度(52%)触发关联分析</b>（原油产业链关联强度 0.8）。<br>
+      <b>核心判断：</b>收盘 744.3（+0.36%），价格<b>贴近 BOLL 中轨 739.30</b>，多空处于均衡带。中东地缘反复、霍尔木兹通航受阻构成持续的供给端扰动（支撑）；但美伊谈判消息反复、<b>外盘原油偏弱</b>，需求走弱预期压制上方空间。方向判为<b>震荡</b>，多方略占优（55%）。<b>策略：区间操作，下沿试多、上沿减仓。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score" style="color:var(--dim)">数据缺失</span></div>
+        <div class="c-body">
+          <span style="color:var(--dim)">本报告数据源未提供 SC 库存数据（商业/战略/港口原油库存均缺失）。</span><br>
+          仅可用注册仓单口径（见"② 仓单"）。本维度不参与打分。
+        </div>
+        <div class="bar"><i style="width:0%"></i></div>
+        <div class="c-note">数据缺失：无库存口径可用，不参与六维评分</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>421.6 万</b>。<br>
+          仓单绝对量偏高，对近月构成一定的可交割压力；<span style="color:var(--dim)">无前值/环比，仅作静态中性参考。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">仓单量偏高但缺变化序列，中性处理</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">6 / 10</span></div>
+        <div class="c-body">
+          主连 <b>744.3</b> vs 次主连 <b>727.9</b> → <b>backwardation（近强远弱）</b>。<br>
+          近月升水约 <b>+16.4</b>，现货/近月强于远月，对近月价格形成一定支撑。
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="c-note">近强远弱结构，利多近月、限制远月上方</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          RSI(6) <b>52.92</b>（中性）、MACD(DIFF) <b>+19.94</b>（温和偏多）、KDJ K <b>61.51</b>（中性偏多）；<br>
+          收盘 744.3 <b>贴近 BOLL 中轨 739.30</b>，区间震荡特征明显。
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">指标中性偏多，价格贴中轨 → 典型震荡格局</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          利多：中东地缘反复、霍尔木兹通航受阻构成供给端扰动；<br>
+          <span style="color:var(--bear)">利空：美伊谈判消息反复、外盘原油偏弱、需求走弱预期。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">地缘支撑 vs 需求走弱，多空交织</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score" style="color:var(--dim)">数据缺失</span></div>
+        <div class="c-body">
+          <span style="color:var(--dim)">本报告数据源未提供 SC 持仓席位明细（多空净持仓、会员排名、席位变化等均缺失）。</span><br>
+          <b>不得虚构席位数据</b>，本维度不参与打分。
+        </div>
+        <div class="bar"><i style="width:0%"></i></div>
+        <div class="c-note">数据缺失：席位明细未获取，无法提供方向信号</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>收盘 <b>744.3</b> vs BOLL 中轨 <b>739.30</b> → 价格贴中轨，趋势不明</li>
+          <li>MACD(DIFF)：<b>+19.94</b>（零轴上方，温和偏多）</li>
+          <li>BOLL 上/下轨 = <b>865.92 / 612.69</b>，带宽偏宽 → 高波动</li>
+          <li>研判：<b>无明确趋势，震荡格局</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>52.92</b>（中性区，多空均衡）</li>
+          <li>KDJ：K 值 <b>61.51</b>（中性偏多）</li>
+          <li>研判：无超买超卖，动能中性</li>
+          <li>结论：<b>震荡指标支持区间操作</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>89483 手</b></li>
+          <li>持仓量：<b>18417 手</b>（绝对值偏低）</li>
+          <li>组合：<b>量能平淡</b>，缺乏单边突破动能</li>
+          <li>研判：<b>中性</b>（无放量信号，趋势难成）</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>当日区间 <b>738.5~767.5</b>，收 <b>744.3</b>（+0.36%）</li>
+          <li>收盘靠近区间下沿，<b>上冲 767.5 后回落</b></li>
+          <li>价格围绕 BOLL 中轨 739.30 上下摆动</li>
+          <li>研判：<b>典型箱体震荡，突破需外力（地缘）催化</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>近强远弱 · backwardation</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">744.3</div><div class="cs-bar near" style="height:150px"></div><div class="cs-lbl">主连 SC2612<br>（主力）</div></div>
+        <div class="cs-col"><div class="cs-val">727.9</div><div class="cs-bar" style="height:147px"></div><div class="cs-lbl">次主连<br>（远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。主连 744.3 较次主连 727.9 升水约 <b>+16.4</b>，呈 backwardation（近强远弱）。近月强势反映地缘扰动下的现货偏紧，远月贴水反映对长期供需转松的定价。数据源仅提供主连/次主连两档，未提供中间月份报价。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板</h2>
+    <table>
+      <thead><tr><th>项目</th><th>2026-10-13</th><th>变化</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>多头持仓占比（席位）</td><td class="mono" style="color:var(--dim)">数据缺失</td><td class="mono" style="color:var(--dim)">—</td><td><span class="pill neu">未获取</span></td></tr>
+        <tr><td>空头持仓占比（席位）</td><td class="mono" style="color:var(--dim)">数据缺失</td><td class="mono" style="color:var(--dim)">—</td><td><span class="pill neu">未获取</span></td></tr>
+        <tr><td>净多头 / 净空头持仓</td><td class="mono" style="color:var(--dim)">数据缺失</td><td class="mono" style="color:var(--dim)">—</td><td><span class="pill neu">未获取</span></td></tr>
+        <tr><td>进榜会员排名</td><td class="mono" style="color:var(--dim)">数据缺失</td><td class="mono" style="color:var(--dim)">—</td><td><span class="pill neu">未获取</span></td></tr>
+        <tr><td>主力持仓量</td><td class="mono">18417 手</td><td class="mono" style="color:var(--dim)">—</td><td><span class="pill neu">无环比</span></td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：本报告数据源未提供持仓席位明细（多空占比、净持仓、会员排名等），仅有总持仓量（18417 手，无环比）可用，<b>席位数据不可虚构</b>，本维度不参与六维评分。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1</span> 地缘供给扰动：中东地缘反复、<b>霍尔木兹通航受阻</b>，运输与供给风险溢价对油价构成底部支撑。</p>
+          <p><span class="lbl">核心2</span> 近月结构偏强：backwardation（主连 744.3 vs 次主连 727.9），现货/近月强于远月，支撑近月价格。</p>
+          <p><span class="lbl">核心3</span> 技术中性偏多：MACD +19.94 位于零轴上方、KDJ K 61.51 偏多，收盘 744.3 站上中轨 739.30。</p>
+          <p style="color:var(--dim)">目标：767.5 → 800 → 865.92（BOLL 上轨）；试多区 738.5~745</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1</span> 需求走弱：全球需求预期走弱，<b>外盘原油偏弱</b>，产业链上行动能不足。</p>
+          <p><span class="lbl">核心2</span> 地缘反复难持续：美伊谈判消息反复，风险溢价随谈判进展易涨易消，不具备单边驱动。</p>
+          <p><span class="lbl">核心3</span> 上方压力：当日上冲 <b>767.5 后回落</b>，收于区间下沿，BOLL 中轨 739.30 一破下方空间打开。</p>
+          <p style="color:var(--dim)">目标：738.5 → 727.9（次主连）；止损 770 上方</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"需求走弱"</span> 需求走弱是慢变量，地缘是快变量；霍尔木兹通航受阻未解除前，供给端随时可提供脉冲式上行。</p>
+          <p><span class="lbl">驳"地缘难持续"</span> 正是"反复"才构成双向波动而非单边下行，油价深跌后同样会因谈判破裂而快速反弹。</p>
+          <p><span class="lbl">驳"上方压力"</span> 767.5 冲高回落是区间上沿的正常试探，中轨 739.30 未破，箱体下沿 738.5 附近反而是低吸位置。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"地缘支撑"</span> 地缘溢价是"事件驱动、幅度难测、方向不可持续"，无法作为做多的稳定依据；外盘偏弱已给出反向信号。</p>
+          <p><span class="lbl">驳"近月结构强"</span> back 结构仅代表当下现货不松，并不等于价格会上涨；一旦地缘溢价回吐，近月跌幅往往最大。</p>
+          <p><span class="lbl">驳"技术偏多"</span> MACD +19.94 力度温和、KDJ 61.51 中性，均不构成有效多头信号；价格仅贴中轨，趋势无从谈起。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 霍尔木兹通航受阻是硬约束：只要运输风险未解除，油价下方即有地缘底；叠加 backwardation 的近月强势结构。</p>
+          <p><span class="lbl">胜负手2</span> 价格贴近中轨 739.30、量能平淡，属于"跌不动"的震荡下沿，具备低吸价值。</p>
+          <p><span class="lbl">建议</span> 轻仓做多：<b>738.5~745</b> 区间试多；目标 767.5 → 800 → 865.92；止损收盘跌破 <b>730</b>。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 需求走弱 + 外盘偏弱构成中期压制，地缘溢价随美伊谈判反复而衰减。</p>
+          <p><span class="lbl">胜负手2</span> 当日上冲 767.5 未站稳、收于区间下沿，上方压力明确，一旦跌破中轨 739.30 将下探 727.9。</p>
+          <p><span class="lbl">建议</span> 反弹做空：<b>766~768</b> 区间试空；目标 738.5 → 727.9；止损 <b>770</b> 上方。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">震荡（地缘支撑 vs 需求走弱）</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="up">多55%</span> / <span class="down">空45%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">58%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">21 / 40 <small style="font-size:11px;color:var(--dim)">（库存·席位缺失）</small></div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>库存</td><td class="mono" style="color:var(--dim)">数据缺失</td><td>数据源未提供 SC 库存口径，不参与打分</td></tr>
+          <tr><td>仓单</td><td class="mono">5</td><td>注册仓单 421.6 万，绝对量偏高，但缺环比序列，中性处理</td></tr>
+          <tr><td>期限结构</td><td class="mono up">6</td><td>backwardation（主连 744.3 vs 次主连 727.9），近强远弱，利多近月</td></tr>
+          <tr><td>技术面</td><td class="mono">5</td><td>RSI 52.92 / KDJ 61.51 中性偏多、MACD +19.94 温和，价格贴 BOLL 中轨 739.30，典型震荡</td></tr>
+          <tr><td>新闻基本面</td><td class="mono">5</td><td>地缘/霍尔木兹扰动利多，美伊谈判反复+外盘偏弱+需求走弱利空，多空交织</td></tr>
+          <tr><td>持仓席位</td><td class="mono" style="color:var(--dim)">数据缺失</td><td>数据源未提供席位明细，不可虚构，不参与打分</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>霍尔木兹通航受阻 + 中东地缘反复，供给端风险溢价构成油价硬底部；backwardation 结构支持近月。</li>
+            <li><b>最弱：</b>过度依赖不可估值的"地缘事件"，无法给出可量化的上行幅度与持续性。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>外盘原油偏弱 + 需求走弱预期 + 当日上冲 767.5 未站稳，中期压制与上方压力明确。</li>
+            <li><b>最弱：</b>忽视地缘扰动带来的上行不对称风险，一旦谈判破裂，空头面临脉冲式反弹。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">震荡（地缘支撑 vs 需求走弱）—— 价格贴近 BOLL 中轨 739.30，多空均衡，方向中性偏多（多方 55%）</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">区间操作：<b>下沿 738.5~745 轻仓试多</b>（贴近中轨/当日低点）；<b>上沿 766~768 减仓或试空</b>；不追单边突破</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">向上 <b>767.5</b>（当日高）→ 800 → <b>865.92</b>（BOLL 上轨）；向下 <b>738.5</b>（当日低）→ <b>727.9</b>（次主连）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">多单：收盘<b>跌破 730</b> 离场；空单：收盘<b>站上 770</b> 离场</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv"><b>2~5 个交易日</b>（区间震荡窗口）</div></div>
+        <div class="plan-row"><div class="pk">置信度依据</div><div class="pv">多空信号接近平衡且偏多（多 55% / 空 45%）；技术面为典型震荡（价格贴中轨、量能平淡）；核心驱动地缘事件双向不可估值；<b>库存与席位数据缺失</b>降低结论可验证性 → 综合 <b>58%</b></div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>本品种为典型事件驱动型震荡。<b>上行风险：</b>若霍尔木兹通航受限升级或美伊谈判破裂，地缘风险溢价快速抬升，油价可一举上破 767.5 直逼 BOLL 上轨 865.92，空单 770 止损极易被击穿；<b>下行风险：</b>若谈判取得进展、地缘溢价回吐，叠加外盘偏弱与需求走弱，价格可跌破中轨 739.30 下探 727.9。此外<b>库存与持仓席位数据缺失</b>，无法验证供需与资金方向，进一步降低结论可信度。<b>务必区间操作、轻仓、严止损</b>。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes / 注册仓单数量 / search_news（同花顺 iFinD）。行情数据为日频，库存/仓单为周频与日频，部分口径存在差异。缺失项已标注"数据缺失"。<br>
+    关联说明：本报告由原品种甲醇(MA)低置信度(52%)触发关联分析（原油产业链关联强度 0.8；MA 关联中 FU 已用于 BU，故取次高 SC 以避免重复）。<br>
+    生成时间：2026-10-13　|　品种：原油 SC（上期能源 INE）　|　合约：SC2612　|　主连：SCZL.INE
+  </div>
+
+</div>
+</body>
+</html>

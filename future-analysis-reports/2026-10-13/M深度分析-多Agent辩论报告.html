@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>豆粕(M) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px}
+  .cs-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+  .relnote{margin-top:14px;padding:12px 16px;background:rgba(75,141,255,.08);border:1px solid rgba(75,141,255,.28);border-radius:12px;font-size:12.3px;color:#c6d5f0}
+  .relnote b{color:var(--blue)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">豆粕</span>
+      <span class="h-code">M2701 · 大商所</span>
+      <span class="h-tag">主连 MZL.DCE</span>
+      <span class="h-tag">生猪关联触发</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v down">3361 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅</div><div class="v down">-0.65%</div></div>
+      <div class="p-item"><div class="k">前收（10-12）</div><div class="v">3383</div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">240.92 <small style="font-size:12px">万手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">973,868 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-13（周二收盘后）　|　下一交易日：2026-10-14（周三）　|　数据来源：同花顺 iFinD</div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:19px">震荡偏空</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="down">空55%</span> / <span class="up">多45%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">55%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">1~5 个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v">3330</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>豆粕 M2701 收 3361（-0.65%），价格位于 BOLL 中轨 3395.46 <b>下方</b>并<b>逼近下轨 3330.23</b>，RSI(6) 40.51、KDJ K 41.20 偏弱；期限结构为 <b>backwardation（近强远弱，3361 vs 2987）</b>，近月升水但远月深贴水已定价远期转松；MACD(DIFF) +19.06 为正，动能未完全转负，<b>震荡偏空</b>格局。方向为"震荡偏空"。
+    </div>
+    <div class="relnote">
+      <b>关联替换说明：</b>本品种方向"震荡偏空"，胜率空方 55% / 多方 45%，置信度 <b>55%</b>，触发窗口 1~5 个交易日。本报告由原品种生猪（LH，置信度 56%）低置信度触发关联分析；关联置信度（55%）未超过原品种（56%），故<b>不替换</b>，最终仍呈现生猪 LH。
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">数据缺失</span></div>
+        <div class="c-body">
+          数据文件未提供豆粕的港口 / 油厂 / 社会库存口径数据。<br>
+          可参考的已知信息：注册仓单 <b>52939</b>（见②）。库存维度本身<b>数据缺失</b>。
+        </div>
+        <div class="bar"><i style="width:50%;background:#3a4560"></i></div>
+        <div class="c-note">数据缺失（库存口径无数据），暂计中性，不计入合计</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>52939</b>（iFinD 10-13）。相对主力持仓 240.92 万手，<b>可交割货源相对充足</b>。<br>
+          <span style="color:var(--bear)">仓单对近月合约形成一定压力。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">仓单体量对近月构成压力，偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">6 / 10</span></div>
+        <div class="c-body">
+          主连 <b>3361</b> vs 次主连 <b>2987</b> → <b>backwardation（近强远弱）</b>。<br>
+          近月升水属偏多结构，<span style="color:var(--bear)">但远月 2987 大幅贴水，已定价远期转松。</span>
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="c-note">结构偏多，与需求偏空方向存在分歧</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          偏多：MACD(DIFF) <b>+19.06</b> 为正值。<br>
+          <span style="color:var(--bear)">偏空：收盘 3361 位于 BOLL 中轨 3395.46 下方、逼近下轨 3330.23；RSI(6) 40.51、KDJ K 41.20 偏弱；10-13 收跌 -0.65%。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">偏空信号占优（价格位置+震荡指标），MACD 正值对冲</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          <b>豆粕自身新闻要点：数据缺失</b>（数据文件未提供）。<br>
+          关联品种生猪 LH（[M,LH] 0.7）：10 月规模猪场出栏环比 <b>+1.91%</b>、屠宰量环比 <b>-0.61%</b>、冻品库存偏高、猪粮比 <b>4.57</b> 处一级预警线下，蛋白饲料需求边际走弱 → 偏空。
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">自身新闻数据缺失；关联生猪需求端偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">数据缺失</span></div>
+        <div class="c-body">
+          数据文件未提供豆粕的席位明细数据。<br>
+          已知：持仓量 <b>240.92 万手</b>（10-12 持仓数据缺失，无法比较增减）。席位维度<b>数据缺失</b>，不可虚构席位。
+        </div>
+        <div class="bar"><i style="width:50%;background:#3a4560"></i></div>
+        <div class="c-note">数据缺失（无席位明细），暂计中性，不计入合计</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>MACD(DIFF)：<b>+19.06</b>，零轴附近正值 → 动能未转负</li>
+          <li>BOLL：上/中/下 = <b>3460.70 / 3395.46 / 3330.23</b></li>
+          <li>收盘 3361 位于中轨 <b>3395.46 下方、逼近下轨 3330.23</b></li>
+          <li>研判：<b>结构偏弱</b>，下方看下轨 3330.23</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>40.51</b>，偏弱区（未入超卖）</li>
+          <li>KDJ：K <b>41.20</b>，偏弱</li>
+          <li>研判：短线动能偏空但未极端</li>
+          <li>结论：<b>偏空但存反复</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>973,868 手</b></li>
+          <li>持仓量：<b>240.92 万手</b>（10-12 持仓数据缺失，无法计算增减）</li>
+          <li>组合：当日收跌 -0.65%（3383→3361），量仓数据不完整</li>
+          <li>研判：<b>量能验证不足</b>（增减仓无法确认）</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>当日区间：最高 <b>3395</b>、最低 <b>3356</b>，收盘 3361 贴近全日低位</li>
+          <li>收盘 3361 低于前收 3383，日内收阴</li>
+          <li>价格处 BOLL 中轨下方、下轨附近，弱势特征</li>
+          <li>研判：<b>弱势下行，逼近下轨支撑</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>近强远弱 · backwardation</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">3361</div><div class="cs-bar near" style="height:101px"></div><div class="cs-lbl">主连 M2701<br>（近月/主力）</div></div>
+        <div class="cs-col"><div class="cs-val">2987</div><div class="cs-bar" style="height:90px"></div><div class="cs-lbl">次主连<br>（远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。主连 3361 &gt; 次主连 2987，呈 <b>backwardation（近强远弱）</b>，近月升水反映近端现货偏紧；但远月 2987 大幅贴水，市场已定价远期供需转松，与"震荡偏空"的短中期方向形成分歧。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板</h2>
+    <table>
+      <thead><tr><th>项目</th><th>2026-10-13</th><th>2026-10-12</th><th>变化</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>主力持仓量</td><td class="mono">240.92 万手</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td><span class="pill neu">无法比较</span></td></tr>
+        <tr><td>多头持仓（第1名）</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td><span class="pill neu">—</span></td></tr>
+        <tr><td>空头持仓（第1名）</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td><span class="pill neu">—</span></td></tr>
+        <tr><td>净多头 / 净空头</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td class="mono">数据缺失</td><td><span class="pill neu">—</span></td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：数据文件未提供豆粕的席位明细及增减仓数据，本表不可虚构任何席位名称与数值，方向信号可信度低，<b>不纳入方向判断</b>。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1</span> 近强远弱：期限结构 backwardation（主连 3361 vs 次主连 2987），近月升水、现货端偏紧，属偏多结构。</p>
+          <p><span class="lbl">核心2</span> 动能未转负：MACD(DIFF) <b>+19.06</b> 为正，中期动能尚未确认转空。</p>
+          <p><span class="lbl">核心3</span> 需求预期：生猪四季度若二育补库、旺季兑现，蛋白饲料需求或回暖（LH 口径）。</p>
+          <p style="color:var(--dim)">目标：3361 → 3395（BOLL 中轨）→ 3460（上轨）；止损收盘破 3330（下轨下方）</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1</span> 位置偏弱：收盘 3361 位于 BOLL 中轨 3395.46 下方、逼近下轨 3330.23。</p>
+          <p><span class="lbl">核心2</span> 指标走弱：RSI(6) <b>40.51</b>、KDJ K <b>41.20</b> 偏弱；10-13 收跌 -0.65%（3383→3361），日内收阴贴近低位。</p>
+          <p><span class="lbl">核心3</span> 需求承压：关联生猪屠宰量环比 -0.61%、猪粮比 4.57 处一级预警线下，蛋白需求边际走弱。</p>
+          <p style="color:var(--dim)">目标：3330（BOLL 下轨 3330.23）；止损收盘上破 3400</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"中轨下方"</span> 收盘 3361 距中轨 3395.46 仅约 34 点、逼近下轨，属超跌区而非破位，下方空间有限。</p>
+          <p><span class="lbl">驳"指标走弱"</span> RSI 40.51 未入超卖、KDJ 41.20 仅中性偏弱，MACD +19.06 正值说明动能尚在，属回调非反转。</p>
+          <p><span class="lbl">驳"需求走弱"</span> 能繁母猪 3780 万头（同比 -6.5%）产能去化持续，且出栏均重 123.91kg（环比 +0.15%），二育若启动将提升饲料消耗。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"backwardation 利多"</span> 近强远弱更多反映近月现货交割偏紧，非需求驱动；<b>远月 2987 大幅贴水已定价远期转松</b>，恰是偏空信号。</p>
+          <p><span class="lbl">驳"MACD 正值"</span> DIFF +19.06 属前期上涨残值，价格已回落至中轨下方近下轨，动量正面临转负拐点。</p>
+          <p><span class="lbl">驳"需求回暖"</span> 关联生猪屠宰量环比 -0.61%、冻品库存偏高、猪粮比 4.57 一级预警线下，蛋白需求尚未启动。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> backwardation 近强远弱（3361 vs 2987），近月升水结构提供支撑。</p>
+          <p><span class="lbl">胜负手2</span> MACD(DIFF) +19.06 正动能仍在，价格逼近下轨 3330.23 属超跌区，具备技术反弹条件。</p>
+          <p><span class="lbl">建议</span> 逢低做多：3330~3361 分批；目标 3395→3460；止损收盘破 3330（下轨下方）。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> 价格处 BOLL 中轨下方近下轨 + 10-13 收跌 -0.65% + RSI 40.51/KDJ 41.20 偏弱，弱势特征明确。</p>
+          <p><span class="lbl">胜负手2</span> 需求端承压（关联生猪屠宰 -0.61%、猪粮比 4.57）；远月 2987 深贴水定价远期宽松。</p>
+          <p><span class="lbl">建议</span> 逢高沽空：3361~3395 分批；目标 3330（BOLL 下轨）；止损收盘上破 3400。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">震荡偏空</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="down">55%</span> / <span class="up">45%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">55%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">17 / 40</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>库存</td><td class="mono">—</td><td>数据缺失（无库存口径数据），不计入合计</td></tr>
+          <tr><td>仓单</td><td class="mono down">4</td><td>注册仓单 52939，相对持仓 240.92 万手可交割货源较充足，压制近月</td></tr>
+          <tr><td>期限结构</td><td class="mono up">6</td><td>backwardation（3361 vs 2987）近强远弱属偏多结构，但远月 2987 深贴水定价远期转松，存分歧</td></tr>
+          <tr><td>技术面</td><td class="mono down">4</td><td>价格中轨 3395.46 下方近下轨、RSI 40.51/KDJ 41.20 偏弱、10-13 收跌；MACD +19.06 正值对冲</td></tr>
+          <tr><td>新闻基本面</td><td class="mono down">3</td><td>自身新闻数据缺失；关联生猪需求端偏空（屠宰 -0.61%、猪粮比 4.57）</td></tr>
+          <tr><td>持仓席位</td><td class="mono">—</td><td>数据缺失（无席位明细），不计入合计</td></tr>
+        </tbody>
+      </table>
+      <div class="c-note" style="margin-bottom:8px">说明：库存、持仓席位 2 个维度数据缺失，合计仅统计有数据维度（满分 40）。</div>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>期限结构 backwardation（3361 vs 2987）近强远弱 + MACD +19.06 正值，结构偏多的客观证据。</li>
+            <li><b>最弱：</b>把"生猪旺季"作为需求回暖依据，与生猪当前"震荡偏弱"的现状相矛盾，属未落地预期。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>价格处 BOLL 中轨下方近下轨 + RSI 40.51/KDJ 41.20 偏弱 + 10-13 收跌 -0.65%，弱势特征与远月 2987 深贴水相互印证。</li>
+            <li><b>最弱：</b>backwardation 结构本身偏多、MACD 仍为正值，空头缺乏结构面的合力，且库存/席位/自身新闻数据缺失。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">震荡偏空 —— 价格中轨下方近下轨，逢高沽空为主</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">3361~3395 逢高分批沽空（当前价至 BOLL 中轨 3395.46 压力区）</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>3330</b>（BOLL 下轨 3330.23）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效上破 3400</b>（BOLL 中轨 3395.46 上方）离场</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv">1~5 个交易日</div></div>
+        <div class="plan-row"><div class="pk">置信度依据</div><div class="pv">方向由原品种生猪（LH，置信度 56%）低置信度触发关联分析；关联置信度 55% 未超过原品种 56%，故<b>不替换</b>，最终仍呈现生猪 LH（此为豆粕关联分支）。技术面价格处 BOLL 中轨下方近下轨、RSI/KDJ 偏弱，需求端（关联生猪）承压，指向偏空；但期限结构 backwardation 偏多、MACD +19.06 正值形成对冲，且库存/席位/自身新闻数据缺失 → 综合 <b>55%</b>。（置信度定义：分析结论在下一交易日或未来几个交易日内触发的概率）</div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>若价格在 BOLL 下轨 3330.23 附近获得支撑反弹，或生猪二育补库、旺季提前启动带动蛋白需求，豆粕或上破中轨 3395 触发止损，空头面临反弹风险；反之若需求持续走弱、价格跌破下轨 3330.23，则打开新一轮下行空间。因库存、席位、自身新闻三项目 <b>数据缺失</b>，且期限结构（backwardation）与技术面存在方向分歧，本判断精度受限。建议<b>轻仓、严止损</b>，密切关注 10-14 起的量仓变化与生猪端需求兑现。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes / 注册仓单数量 / search_news（同花顺 iFinD）；行情数据为日频。报告中所有数字均取自数据文件，缺失项已标注"数据缺失"。<br>
+    生成时间：2026-10-13（收盘后）　|　品种：豆粕 M（大商所）　|　合约：M2701（主连 MZL.DCE）　|　下一交易日：2026-10-14
+  </div>
+
+</div>
+</body>
+</html>
