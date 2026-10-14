@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>燃料油(FU) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Replace / review notice */
+  .swap{margin-top:16px;background:linear-gradient(120deg,rgba(169,112,255,.14),rgba(224,179,84,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:16px 20px;font-size:12.8px;color:#dcd2f2}
+  .swap .st{font-weight:700;color:var(--purple);letter-spacing:.3px}
+  .swap b{color:var(--gold)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px;justify-content:center}
+  .cs-col{flex:0 1 200px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:96px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">燃料油</span>
+      <span class="h-code">FUZL.SHF · 上期所</span>
+      <span class="h-tag">主连 FUZL.SHF</span>
+      <span class="h-tag">原油产业链 · 关联 SC / BU / LU</span>
+      <span class="h-tag">重质油下游 · 主力标注 FU2704</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v up">5501 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅</div><div class="v up">+3.31%</div></div>
+      <div class="p-item"><div class="k">前收（10/13）</div><div class="v">5268</div></div>
+      <div class="p-item"><div class="k">当日最高</div><div class="v up">5593 <small style="font-size:11px">历史新高</small></div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">112,010 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">511,167 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-14（周三收盘后）　|　下一交易日：2026-10-15（周四）　|　数据来源：同花顺 iFinD（future_quotes / edb / news）　|　涨跌幅以交易所前结算价为基准；当日最低 5272</div>
+  </header>
+
+  <!-- 复盘说明 -->
+  <div class="swap">
+    <span class="st">◆ 前日复盘命中：</span>2026-10-13 报告对 FU 给出 <b>62% 偏多</b>判断，<b>方向命中</b>——目标位 5437 已被远超（10-14 日内最高 <b>5593</b>），当日收 5501、涨 <b>+3.31%</b>，连续第二个强势交易日。<b>本次重点：原油成本传导、新加坡燃料油库存、发电/船燃需求、高硫 vs 低硫价差、以及超买后回抽风险。</b>FU 已连续两日强势且创历史新高，<b>警惕追高风险</b>。
+  </div>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:19px">偏多（强势·防高位回抽）</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="up">多61%</span> / <span class="down">空39%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">61%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">1~3个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v" style="font-size:20px">5593→5700</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>FU 处于<b>强势多头</b>——收盘 5501 <b>站上 BOLL 上轨 5313.02</b>、日内最高 <b>5593 刷新历史新高</b>，MACD DIFF <b>+342.68</b>＞DEA +239.90（红柱放大），EMA5/10/20（5181.5/4917.9/4617.1）<b>多头排列</b>；主连 5501 对次主连 4807 呈 <b>backwardation +694</b>（近强远弱），且期货较舟山高硫保税现货 5859 仍贴水约 <b>+358</b>（基差为正、期货补涨修复）。基本面供应端偏紧、新加坡库存连续 6 周去库。但 <b>RSI(6) 86.23、KDJ J 值 101.36 极端超买</b>，收盘偏离上轨达 <b>188 点</b>，且持仓连续 4 日下降（<b>减仓上涨</b>），<b>短线追高性价比低、回抽风险上升</b>。策略：<b>顺势偏多、不追高，回踩上轨 5313~5350 确认后再介入。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多；缺失项如实标注</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">7 / 10</span></div>
+        <div class="c-body">
+          新加坡燃料油库存（万桶）连续 6 周去库：<b>10/09 1867.2</b> ← 10/02 1872.6 ← 09/25 1977.8 ← 09/18 2014.4 ← 09/11 2035.5 ← 09/04 2045.3，<b>累计 -178.1 万桶</b>（EDB/同花顺）。<br>
+          国内保税样本港口库存 10/8 降至 <b>65.5 万吨</b>（周环比 -13.25%，华闻期货）。<br>
+          <span style="color:var(--bear)">瑕疵：绝对水平仍处近三年同期高位，去库主要靠供应收缩而非需求拉动。</span>
+        </div>
+        <div class="bar"><i style="width:70%"></i></div>
+        <div class="c-note">持续去库+供应收缩 → 偏多；高位库存为约束项</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">7 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>550</b>（iFinD，燃油2704 FU2704.SHF，10-14），与 10-13 持平。<br>
+          相对主力持仓 112,010 手，可交割注册仓单量级极低，<b>近月可交割资源偏紧</b>，对近月价格构成结构性支撑。
+        </div>
+        <div class="bar"><i style="width:70%"></i></div>
+        <div class="c-note">仓单低位 → 近月供给弹性有限，偏利多</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">8 / 10</span></div>
+        <div class="c-body">
+          主连 <b>5501</b> vs 次主连 <b>4807</b> → <b>backwardation（近强远弱）</b>，价差 <b>+694</b>。<br>
+          基差：舟山高硫保税现货 10-14 报 <b>5859</b>，对主连 <b>升水 +358</b>（现货强、期货补涨修复基差）。新加坡高硫 380CST 10-13 报 <b>843.5 美元/吨</b>（+33.5 vs 10/09），内外盘共振。
+        </div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="c-note">近强远弱 + 现货升水 → 正套红利偏多近月</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">6 / 10</span></div>
+        <div class="c-body">
+          强势：收盘 5501 <b>突破 BOLL 上轨 5313.02</b>、日内最高 5593 <b>刷新历史新高</b>；MACD 红柱放大；EMA 多头排列。<br>
+          <span style="color:var(--bear)">瑕疵：RSI(6) 86.23、KDJ J 值 101.36 <b>极端超买</b>；收盘偏离上轨 188 点，上影 92 点。</span>
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="c-note">趋势极强 vs 极端超买，多头略占优</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">8 / 10</span></div>
+        <div class="c-body">
+          供应端偏紧：俄罗斯燃料油流入减少、高昂运费抑制欧洲套利船货、中东出口恢复滞后（上海中期 10-13）；10 月欧洲到港低于 9 月（光大期货）。<br>
+          地缘：霍尔木兹海峡油轮袭击频发、<b>胡塞武装袭击沙特机场</b>（10-13）；摩根大通 10-14 上调 Q4 布伦特至 <b>105 美元</b>。需求端：地炼增加高硫替代采购、船燃加注坚挺。<br>
+          <span style="color:var(--bear)">反证：生意社提示现货处 1 年高位、空间有限；高盛预计 Q4 起原油转供应过剩。</span>
+        </div>
+        <div class="bar"><i style="width:80%"></i></div>
+        <div class="c-note">成本+供应+地缘共振偏多，但含高位/长期过剩警示</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          席位明细（会员名称/净持仓排名）<b>缺失</b>，仅获汇总口径。<br>
+          第 1 名多头占比：10/09 10.49 → 10/12 10.76 → 10/13 10.69 → 10/14 <b>10.39</b>；第 1 名空头占比：10.63 → 9.72 → 8.96 → <b>8.58</b>（空头持续离场）。<br>
+          <span style="color:var(--bear)">瑕疵：总持仓 125354→112010 连续 4 日下降，属"减仓上涨"，增量多头不足。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">空头离场偏多，但减仓上涨为资金质量瑕疵；席位明细缺失</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>收盘 5501，站上 BOLL 上轨 <b>5313.02</b>，<b>向上突破（新高）</b></li>
+          <li>MACD：DIFF <b>+342.68</b> ＞ DEA <b>+239.90</b>，零轴上方红柱<b>放大</b> → 多头动能充沛</li>
+          <li>BOLL 上/中/下 = <b>5313.02 / 4378.50 / 3443.98</b>，开口向上</li>
+          <li>EMA5 <b>5181.5</b> ＞ EMA10 <b>4917.9</b> ＞ EMA20 <b>4617.1</b> → <b>多头排列</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>86.23</b>（较 10-13 的 82.21 继续走高），<span style="color:var(--bear)">极端超买</span></li>
+          <li>KDJ：K <b>87.95</b> / D <b>81.25</b> / J <b>101.36</b>，<span style="color:var(--bear)">J 破 100 极端超买</span></li>
+          <li>研判：突破动能强，但短周期指标钝化于极高位</li>
+          <li>结论：<b>强势但极度超买，强压制短线追高空间</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>511,167 手</b>（10/13 499,133，10/12 587,646）</li>
+          <li>持仓量：<b>112,010 手</b> ← 112,867 ← 121,532 ← 125,354（10/09），<b>连续 4 日减仓</b></li>
+          <li>价格：当日涨 <b>+3.31%</b>（收盘较前收 +4.42%）</li>
+          <li>研判：<b>减仓上涨</b>——涨势由空头回补/获利了结推动，量能配合存疑</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>当日区间：最高 <b>5593</b>（历史新高）、最低 <b>5272</b>，收盘 <b>5501</b></li>
+          <li>收盘自高点 5593 回落，留 <b>92 点上影线</b>（收盘处区间上沿 92%）</li>
+          <li>价格突破 BOLL 上轨 5313.02，偏离约 <b>188</b> 点</li>
+          <li>研判：<b>突破新高（强势）vs 上影/极端超买，短线有回抽上轨需求</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>近强远弱 · backwardation + 现货升水</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--gold)">5859</div><div class="cs-bar spot" style="height:160px"></div><div class="cs-lbl">舟山高硫保税现货<br>（船供卖方估价）</div></div>
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">5501</div><div class="cs-bar near" style="height:150px"></div><div class="cs-lbl">主连 FUZL.SHF<br>（近月/主力）</div></div>
+        <div class="cs-col"><div class="cs-val">4807</div><div class="cs-bar" style="height:131px"></div><div class="cs-lbl">次主连 FUZM.SHF<br>（远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。现货 5859 ＞ 主连 5501 ＞ 次主连 4807，呈典型 <b>backwardation（近强远弱）</b>：主连较次主连升水 <b>+694</b>，现货较主连升水 <b>+358</b>——近端强、远期贴水，反映当下供给偏紧与市场对远期定价走弱的一致性预期。10-14 期货涨幅（收盘环比 +4.42%）大于现货涨幅（舟山现货环比 +2.66%），<b>期货补涨、基差修复</b>。与关联品种 SC、BU 同为 Back 结构，产业链共振。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板 <small>仅汇总口径，无会员席位明细</small></h2>
+    <table>
+      <thead><tr><th>项目</th><th>数值 / 变化</th><th>状态</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>总持仓量（10-14）</td><td class="mono">112,010 手</td><td><span class="pill neu">环比 -857</span></td><td>四日累计 125354→112010，<b>减仓 13,344 手</b></td></tr>
+        <tr><td>第1名多头持仓占比</td><td class="mono">10.39%（前值 10.69%）</td><td><span class="pill bear">回落</span></td><td>多头主力占比小幅回落，未加码</td></tr>
+        <tr><td>第1名空头持仓占比</td><td class="mono">8.58%（前值 8.96%）</td><td><span class="pill bull">持续降</span></td><td>空头连续 4 日离场（10.63→8.58），支撑上涨</td></tr>
+        <tr><td>成交量（10-14）</td><td class="mono">511,167 手</td><td><span class="pill neu">环比 +12,034</span></td><td>量能温和放大</td></tr>
+        <tr><td>净多头 / 净空头席位排名</td><td class="mono">数据缺失</td><td><span class="pill neu">未提供</span></td><td>iFinD 未返回会员席位明细，不可虚构</td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：FU 持仓席位明细（会员名称、净持仓排名）在 iFinD 期货服务中<b>仅返回汇总口径</b>，为避免虚构，本面板<b>不列示任何具体席位</b>。资金面信号仅供总量参考：空头占比持续下降偏多，但"减仓上涨"表明增量多头不足，<b>综合判定为中性偏多、可信度中等</b>。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <!-- Round 1 -->
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基（各3核心）</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1｜供应收缩+库存去化，成本与结构双支撑。</span>新加坡燃料油库存连续 6 周去库，从 09/04 的 2045.3 万桶降至 10/09 的 <b>1867.2 万桶</b>，累计 -178.1 万桶；国内保税样本港口库存 10/8 降至 <b>65.5 万吨</b>（周环比 -13.25%）。供应端，俄罗斯燃料油流入减少、高昂运费抑制欧洲套利船货、中东出口恢复滞后（上海中期）。库存去化叠加供应收缩，构成现实端硬支撑。</p>
+          <p><span class="lbl">核心2｜Back 结构 + 正基差，近月有正套红利。</span>主连 5501 对次主连 4807 升水 <b>+694</b>，呈 backwardation；期货较舟山高硫保税现货 5859 仍贴水 <b>+358</b>，基差为正，10-14 期货补涨修复基差。新加坡高硫 380CST 10-13 报 <b>843.5 美元/吨</b>（较 10/09 的 810 涨 33.5），内外盘共振。</p>
+          <p><span class="lbl">核心3｜技术强突破 + 空头持续离场。</span>收盘 5501 <b>站上 BOLL 上轨 5313.02</b>，日内最高 <b>5593 刷新历史新高</b>；MACD DIFF 342.68 ＞ DEA 239.90 红柱放大；EMA5/10/20 多头排列。资金面，第 1 名空头占比从 10/09 的 10.63% 连续降至 <b>8.58%</b>，空头持续离场。</p>
+          <p style="color:var(--dim)">目标：5593 突破后看 <b>5700~5800</b>；加仓区 5313~5350（上轨回踩不破）；窗口 1~3 个交易日。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1｜极端超买，均值回归压力大。</span>RSI(6) <b>86.23</b>、KDJ <b>J 值 101.36</b>（K 87.95 / D 81.25），J 破 100 为极端读数；收盘 5501 偏离 BOLL 上轨 5313.02 达 <b>188 点</b>。10/09 以来 4 个交易日累计上涨约 <b>9.1%</b>（5042→5501），短线严重透支，回抽概率高。</p>
+          <p><span class="lbl">核心2｜减仓上涨，资金质量差。</span>持仓量连续 4 日下滑：10/09 125354 → 10/12 121532 → 10/13 112867 → 10/14 <b>112010</b>，累计 <b>-13,344 手</b>。价格新高却伴随持仓下降，属"减仓上涨"，本质是空头回补与获利了结，<b>而非增量多头入场</b>；第 1 名多头占比也从 10/12 的 10.76% 降至 10.39%，多头主力未加码。</p>
+          <p><span class="lbl">核心3｜现货高位、库存绝对量高、长期过剩预期。</span>生意社 10-14 提示国内 180CST 处 <b>1 年周期高位、上涨空间有限</b>；新加坡库存虽去库但仍处近三年同期高位，去库依赖供应收缩而非需求；高盛预计原油市场自 Q4 起<b>转为供应过剩</b>；原油 SC 夜盘仅震荡盘整，成本端未同步共振。</p>
+          <p style="color:var(--dim)">目标：回抽上轨 <b>5313</b> → 前收 5268；止损 5593 上方（仅逆势短线，仓位严控）。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Round 2 -->
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"极端超买即见顶"</span> 超买是<b>突破动能</b>的读数，而非背离信号：MACD DIFF 342.68 ＞ DEA 239.90 且红柱仍放大，价格站上上轨并刷新历史新高，属强势确认。新高行情中 RSI/J 值长期钝化是常态，历史上以指标钝化断言见顶，胜率并不高。</p>
+          <p><span class="lbl">驳"减仓上涨=资金差"</span> 持仓下降恰是<b>空头大规模止损离场</b>的直接证据——空头占比从 10.63% 连续降至 8.58%，被逼空的空头平仓本身就是最强的上涨燃料；且仓单仅 550、近月可交割资源紧，空头缺乏交割筹码，回补具有强制性。</p>
+          <p><span class="lbl">驳"高位/长期过剩"</span> 高盛的"Q4 过剩"与摩根大通 10-14 <b>上调 Q4 布伦特至 105 美元</b>相互矛盾，而后者对成本传导更直接；去库 178 万桶与现货升水 +358 是实打实的现实，而非预期。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"突破新高"</span> 突破伴随 <b>J 值 101.36 极端超买 + 92 点上影</b>，且全日高点 5593 未能收于其上，冲高回落特征明显。<b>减仓突破</b>是典型的"衰竭式新高"——没有增仓承接的突破，回抽上轨 5313 是大概率事件。</p>
+          <p><span class="lbl">驳"Back+正基差利多"</span> 现货升水越高、结构越脆弱：升水 +358 意味着期货已<b>大幅透支</b>现货强势，一旦地缘缓和或原油回落，高升水的近月<b>跌得更快</b>；10-14 基差已从 10-13 的 +439 收窄至 +358，修复方向正是利空多头。</p>
+          <p><span class="lbl">驳"仓单低=逼空"</span> 仓单 550 已连续多日维持，属于常态低位而非新增收紧；且低位仓单也可能只是交割注销后的静态结果，无法证明现货需求端在加速走强，更不足以支撑在极端超买位置继续追涨。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Round 3 -->
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">回应驳斥 + 亮出胜负手 + 可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">回应驳斥</span> 空头称"减仓突破是衰竭"，但空头占比指标显示空头是被动离场，而非多头主动撤退；仓单 550 的静态低位叠加近月 Back+694，正是空头无法交割的软肋。</p>
+          <p><span class="lbl">胜负手1</span> <b>历史新高 + BOLL 上轨突破 + MACD 红柱放大 + EMA 多头排列</b>，趋势动能全面共振；供应端收缩（俄油/欧洲套利货/中东出口三重受限）且库存 6 周去库 178 万桶，现实支撑扎实。</p>
+          <p><span class="lbl">胜负手2</span> 地缘（胡塞袭击沙特机场、霍尔木兹风险）+ 摩根大通上调油价，成本端仍在提供向上弹性；Back 结构下近月具备正套与挤仓红利。</p>
+          <p><span class="lbl">建议</span> 顺势做多：回踩 <b>5313~5350</b>（上轨）轻仓介入，<b>不追高</b>；目标 <b>5593 → 5700</b>；止损收盘跌破 5272（10-14 当日最低）。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">回应驳斥</span> 多头用"钝化"解释极端超买，但 J 值 101.36 已是统计学极值区，任何外部扰动（美俄柴油谈判、原油 SC 夜盘仅盘整）都可能触发快速回抽；且现货升水从 +439 收窄至 +358，多头赖以支撑的基差正在被修复掉。</p>
+          <p><span class="lbl">胜负手1</span> <b>RSI(6) 86.23 + J 101.36 双极端超买 + 92 点上影 + 偏离上轨 188 点</b>，短线回抽的胜率与赔率俱佳；连续两日暴涨后获利盘丰厚。</p>
+          <p><span class="lbl">胜负手2</span> <b>减仓上涨（4 日 -13,344 手）</b>说明增量多头不足，上涨靠空头回补的"一次性燃料"，燃料耗尽即回落；库存绝对水平仍高、生意社提示空间有限。</p>
+          <p><span class="lbl">建议</span> 短线防回抽/试空：<b>5500 上方轻仓试空</b>，目标回抽 <b>5313</b> → 5268；止损 5593 上方。（仅逆势短线，仓位严控）</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">偏多（强势·防回抽）</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="up">61%</span> / <span class="down">39%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">61%</div></div>
+        <div class="stat"><div class="k">触发窗口</div><div class="v" style="font-size:16px">1~3 个交易日</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">41 / 60</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>库存</td><td class="mono up">7</td><td>新加坡连续6周去库（2045.3→1867.2，-178.1万桶）、国内港口库存周降13.25%，偏多；但绝对水平仍近三年高位，扣分</td></tr>
+          <tr><td>仓单</td><td class="mono up">7</td><td>注册仓单仅 550（燃油2704），相对持仓 112010 手极低，近月可交割资源偏紧，偏多</td></tr>
+          <tr><td>期限结构</td><td class="mono up">8</td><td>主连 5501 vs 次主连 4807，backwardation +694；现货 5859 对主连升水 +358，基差为正，近强远弱偏多</td></tr>
+          <tr><td>技术面</td><td class="mono up">6</td><td>突破BOLL上轨5313、刷新历史新高5593、MACD红柱放大、EMA多头排列（利多）；RSI6 86.23、KDJ J 101.36极端超买、偏离上轨188点（利空），综合偏多扣分</td></tr>
+          <tr><td>新闻基本面</td><td class="mono up">8</td><td>供应端收缩（俄油/欧洲套利货/中东出口）、地缘扰动（胡塞袭击沙特机场、霍尔木兹）、摩根大通上调油价，偏多；含高位/长期过剩警示</td></tr>
+          <tr><td>持仓席位</td><td class="mono">5</td><td>仅汇总口径，席位明细缺失；空头占比持续降（10.63→8.58）偏多，但总持仓4日减13344手呈"减仓上涨"，增量多头不足，中性偏多</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>趋势与结构强共振——收盘突破 BOLL 上轨 5313、刷新历史新高 5593、MACD 红柱放大、EMA 多头排列，叠加 backwardation +694、现货升水 +358、库存 6 周去库 178 万桶，多层逻辑互为验证。</li>
+            <li><b>最弱：</b>入场点被动——价格已偏离上轨 188 点且极端超买，理想买点在回踩上轨；且"减仓上涨"暴露增量多头不足，逻辑偏"空头回补+技术驱动"，持续性依赖外盘原油与地缘不放缓。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>RSI(6) 86.23 + KDJ J 101.36 双极端超买、92 点上影、偏离上轨 188 点、连续两日暴涨累计 9.1%，短线回抽的胜率与赔率俱佳。</li>
+            <li><b>最弱：</b>与主趋势对抗——价格刷新历史新高、MACD 红柱放大、Back 结构 + 低仓单均指向多头掌控，逆势短空容错空间极小；且空头占比已降至 8.58%，筹码所剩无几。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">偏多（强势，但极端超买需防高位回抽）—— 主趋势向上，短线先防对 BOLL 上轨的回抽确认</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">回踩 BOLL 上轨 <b>5313~5350</b>（阻力转支撑）轻仓做多；<b>不追高</b>（现价 5501 已偏离上轨 188 点，激进者仅极轻仓）</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>5593</b>（10-14 历史新高）；有效突破后看 <b>5700</b>，进一步 5800</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效跌破 5272</b>（10-14 当日最低）离场；参考第二道防线为前收 5268</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv"><b>1~3 个交易日</b>（2026-10-15 起算）</div></div>
+        <div class="plan-row"><div class="pk">置信度依据</div><div class="pv">胜率多空 <b>61:39</b>，综合置信度 <b>61%</b>。依据：① <b>多空信号共振程度</b>——技术面 5 项多头共振（历史新高/BOLL 上轨突破/MACD 红柱放大/EMA 多头排列/Back 结构），仅量能与超买为瑕疵，共振偏强；② <b>持仓趋势连续性</b>——空头占比连续 4 日下降（离场）偏多，但"减仓上涨"降低资金可信度；③ <b>技术形态成熟度</b>——新高突破形态成熟，但短线极端超买使形态偏"透支"；④ <b>基本面明确程度</b>——供应收缩+地缘+去库方向明确偏多。综合权重后为 61%。置信度定义为：分析结论在下一交易日（2026-10-15）或未来 1~3 个交易日内触发的概率。</div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>① <b>极端超买回抽</b>——RSI(6) 86.23、KDJ J 101.36，收盘偏离上轨 188 点，若外盘原油（SC 夜盘仅盘整）回落或地缘缓和，价格或快速回抽 BOLL 上轨 <b>5313</b> 甚至前收 5268，追高者极易被套。② <b>减仓上涨的脆弱性</b>——总持仓 4 日累计 -13,344 手，涨势依赖空头回补的"一次性燃料"，一旦回补结束而增量多头不接力，上行乏力。③ <b>基本面反证</b>——库存绝对水平仍近三年高位、生意社提示现货空间有限、高盛预计 Q4 原油转供应过剩、美俄柴油贸易谈判可能缓解供应紧张。④ <b>数据缺口</b>——持仓席位明细、完整各月份合约、浙江海洋仓储库存（持续为 0，疑停更）及舟山 180CST 估价未能获取，方向主要依托行情/技术/期限结构/新闻，基本面确认度受限。本质是<b>事件（地缘）+技术突破共振行情，方向可判、幅度难测</b>，务必轻仓、严止损。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes（行情/技术指标/持仓汇总）、edb（新加坡燃料油库存、新加坡高硫/低硫现货价、舟山高硫保税价）、news search_news（华闻/光大/上海中期/生意社/新华财经/申万/摩根大通，2026-10-08~10-14）。行情为日频。<br>
+    数据缺口如实标注：持仓席位明细缺失（仅汇总占比）、各月份合约收盘价不全（仅主连/次主连）、浙江海洋仓储库存数据全为 0（疑停更）、新加坡高硫/低硫现货价为 10-13 口径（10-14 未更新），<b>未作任何推算或补充</b>。<br>
+    生成时间：2026-10-14　|　品种：燃料油 FU（上期所 SHF）　|　主连：FUZL.SHF　|　主力标注：FU2704
+  </div>
+
+</div>
+</body>
+</html>

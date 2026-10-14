@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原油(SC) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* notice */
+  .swap{margin-top:16px;background:linear-gradient(120deg,rgba(169,112,255,.14),rgba(224,179,84,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:16px 20px;font-size:12.8px;color:#dcd2f2}
+  .swap .st{font-weight:700;color:var(--purple);letter-spacing:.3px}
+  .swap b{color:var(--gold)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .bar>i.bearish{background:linear-gradient(90deg,#22c55e,#7ee0a0)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:20px;height:240px;padding:0 8px;justify-content:center}
+  .cs-col{flex:0 1 150px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:74px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-bar.second{background:linear-gradient(180deg,#ffb36b,#b3692a)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:11.5px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+
+  .conf{background:linear-gradient(120deg,rgba(75,141,255,.14),rgba(169,112,255,.10));border:1px solid rgba(75,141,255,.4);border-radius:14px;padding:18px 20px;margin-top:16px}
+  .conf .ct{font-weight:700;color:var(--blue);letter-spacing:.3px;margin-bottom:8px}
+  .conf b{color:var(--gold)}
+  .conf-bar{height:16px;border-radius:10px;background:#232c42;margin-top:12px;overflow:hidden;position:relative}
+  .conf-bar>i{display:block;height:100%;width:58%;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--purple))}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">原油</span>
+      <span class="h-code">SCZL.INE · 上海国际能源交易中心</span>
+      <span class="h-tag">主连 SCZL.INE（当前含权=SC2611）</span>
+      <span class="h-tag">能源化工 · 产业链核心</span>
+      <span class="h-tag">沥青BU / 燃料油FU / 甲醇MA 成本端</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v down">744.6 <small style="font-size:12px">元/桶</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅(vs前结)</div><div class="v down">-1.15%</div></div>
+      <div class="p-item"><div class="k">前结算（10/13）</div><div class="v">753.3</div></div>
+      <div class="p-item"><div class="k">最高 / 最低</div><div class="v">769.3 / 743.9</div></div>
+      <div class="p-item"><div class="k">持仓量（主连口径）</div><div class="v">14,894 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">80,654 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-14（周三收盘后）　|　下一交易日：2026-10-15（周四）　|　数据来源：同花顺 iFinD（主口径）+ 上海国际能源交易中心官方日交易数据 + 公开资讯　|　结算参考价 756.2　|　开盘 749.0　|　全品种持仓 65,885 手（INE，含各月合约）</div>
+  </header>
+
+  <!-- notice -->
+  <div class="swap">
+    <span class="st">◆ 本次分析背景：</span>前一交易日（2026-10-13）报告给出 <b>58% 震荡偏多</b>但方向未命中；10-14 盘面自高位 <b>769.3 冲高回落</b>收阴 <b>-1.15%</b>（收744.6），上沿目标 767.5 被触及后压力确认有效。本报告重点复核 <b>中东地缘 / OPEC+ 产量政策 / 全球需求走弱 / 库存与月差结构</b>，并强化对抗性论证（吸取焦煤JM、碳酸锂LC 多头逻辑未兑现的教训）。
+  </div>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:19px">震荡偏空（高位滞涨）</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="down">空58%</span> / <span class="up">多42%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">58%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">1~3个交易日</div></div>
+      <div class="b-cell"><div class="b-k">第一目标位</div><div class="b-v" style="font-size:20px">734</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>SC 在 <b>767~770 上沿区域三重冲高失败</b>（10-09 高769.9、10-13 高767.5、10-14 高769.3），10-14 留长上影收于当日低位附近；<b>MACD 于零轴上方死叉</b>（DIFF 18.99 &lt; DEA 32.21，柱转绿），<b>近月月差骤然收敛</b>（SC2611-SC2612 由 16.4 缩至 2.2），<b>注册仓单一个多月累积 +42.38%</b>——技术、结构、仓单三条线共振转弱。但下方有 <b>EMA 多头排列（740.68/737.02/722.01）+ BOLL中轨723.50 + backwardation 结构 + 中东地缘（霍尔木兹通行量-43%、盘后胡塞再袭沙特阿美）</b> 支撑。结论：<b>区间上沿做空为主、下沿不追空，警惕盘后地缘升级引发的向上脉冲。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多、1 = 极度利空；缺失项如实标注</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score" style="color:var(--bull)">6 / 10 · 偏多</span></div>
+        <div class="c-body">
+          <b>美国商业原油库存（EIA，周频）：</b>2026-10-02 录得 <b>424,134 千桶</b>（约4.24亿桶），较 09-25 的427,320千桶 <b>下降 3,186 千桶</b>，延续去库；OECD 库存降至2003年以来低位，低库存放大价格弹性。<br>
+          <span style="color:var(--dim)">缺口：INE 交割库/山东港口等本土原油商业库存口径在 iFinD 未取到，本维以美国商业原油库存为全球代理，本地库存缺失。</span>
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="c-note">去库延续 + 低库存 → 偏多，但幅度有限</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score" style="color:var(--bear)">4 / 10 · 偏空</span></div>
+        <div class="c-body">
+          上期能源原油注册仓单 <b>421.6万桶</b>（10-12~10-14 三日持平）。<br>
+          趋势：9-30 <b>296.1万桶</b> → 10-08 <b>494.6万桶</b>(+67.04%) → 10-12 <b>421.6万桶</b>(-73.0万桶)，<b>近一月累计 +125.5万桶(+42.38%)</b>。<br>
+          可交割资源较9月底大幅抬升，削弱近月逼空基础，对近月偏空。
+        </div>
+        <div class="bar"><i class="bearish" style="width:40%"></i></div>
+        <div class="c-note">仓单累积 → 近月可交割供给增加，偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score" style="color:var(--gold)">5 / 10 · 中性</span></div>
+        <div class="c-body">
+          结构：<b>backwardation（近强远弱）</b>。SC2611 <b>744.6</b> &gt; SC2612 <b>742.4</b> &gt; SC2701 <b>724.9</b> &gt; SC2703 <b>688.7</b> &gt; SC2706 <b>647.9</b>。<br>
+          <span style="color:var(--bear)">关键变化：近月价差（2611-2612）由 10-13 的 <b>16.4</b> 骤缩至 <b>2.2</b></span>，近月升水快速收敛，Back 结构走弱，对近月合约偏空。
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">Back 结构利多近月，但近月升水收敛利空 → 相互抵消</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score" style="color:var(--bear)">4 / 10 · 偏空</span></div>
+        <div class="c-body">
+          空：<b>767~770 三重顶</b>（769.9/767.5/769.3）、10-14 长上影射击之星、<b>MACD 零轴上方死叉</b>（DIFF 18.99 &lt; DEA 32.21）。<br>
+          多：<b>EMA5 740.68 &gt; EMA10 737.02 &gt; EMA20 722.01 多头排列</b>，价站 BOLL中轨723.50 上方；RSI(6) 53.06、KDJ K 65.48 未超买。
+        </div>
+        <div class="bar"><i class="bearish" style="width:40%"></i></div>
+        <div class="c-note">顶部形态+死叉偏空 vs 均线多头排列偏多，空方信号更新更领先</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score" style="color:var(--gold)">5 / 10 · 中性</span></div>
+        <div class="c-body">
+          多：霍尔木兹海峡通行量约970万桶/日、较战前 <b>-43%</b>；10-13~14 胡塞武装袭击沙特阿美宰赫兰设施/利雅得机场；OPEC+ 10/11月维持产量配额不变；布伦特现货较近端期货升水约 <b>$20</b>（4月来最高）。<br>
+          空：OPEC 将 2026 需求增速自140万桶/日 <b>下调至18~40万桶/日</b>；沙特9月增产 <b>+210万桶/日至837万桶</b>；G7 释储1亿桶；美伊释放对话信号。
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">地缘利多 vs 需求下修/增产利空，多空拉锯，分歧度高</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score" style="color:var(--bear)">4 / 10 · 偏空</span></div>
+        <div class="c-body">
+          <span style="color:var(--dim)">席位明细（前20名多空会员、净持仓）经多轮查询 <b>均无返回，判定数据缺失，不予虚构</b>。</span><br>
+          可观察的资金移仓（INE官方10-14）：SC2612 <b>+2,742手</b>、SC2701 <b>+501手</b>、SC2611 <b>-143手</b>，全品种持仓 <b>+3,198手</b>——资金明显撤离近月、布局远月。
+        </div>
+        <div class="bar"><i class="bearish" style="width:40%"></i></div>
+        <div class="c-note">席位明细缺失；仅资金移仓方向偏空近月，参考性有限</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>EMA5 <b>740.68</b> &gt; EMA10 <b>737.02</b> &gt; EMA20 <b>722.01</b> → <b>多头排列</b>，价744.6 站上全部均线</li>
+          <li>MACD：DIFF <b>+18.99</b>、DEA <b>+32.21</b> → DIFF 位于DEA下方，<span style="color:var(--bear)">零轴上方死叉</span>，柱转绿</li>
+          <li>BOLL(26,2)：上轨 <b>832.98</b> / 中轨 <b>723.50</b> / 下轨 <b>614.03</b>，价收于中轨上方、远低于上轨</li>
+          <li>中期趋势：均线向上但动能指标钝化，趋势由强转平</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>53.06</b>，<span style="color:var(--sub)">中性（50轴附近）</span></li>
+          <li>KDJ：K <b>65.48</b>，中高位、未超买，但较前期已回落</li>
+          <li>研判：完成冲高后指标回落，动能不再扩张</li>
+          <li>结论：<b>中性偏弱，缺失进一步上攻的指标推力</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>80,654手</b>（10-13 89,483手，环比缩量）</li>
+          <li>持仓量（主连口径）：<b>14,894手</b>（10-13 18,417手，<b>减仓3,523手</b>）</li>
+          <li>价跌 + 减仓 → <b>多头离场/资金移仓</b>，非空头强攻形态</li>
+          <li>研判：<b>缩量减仓下跌，多头主动撤退</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>10-14 区间：开 <b>749.0</b>、高 <b>769.3</b>、低 <b>743.9</b>、收 <b>744.6</b></li>
+          <li>自高点769.3回落 <b>24.7</b> 点，收于当日低位附近 → <b>长上影/射击之星</b></li>
+          <li><b>三重顶</b>：767~770 于 10-09(769.9)、10-13(767.5)、10-14(769.3) 三度冲高失败</li>
+          <li>支撑：738.5（10-13低）→ 734（10-09~11收）→ 713.4（10-12低）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>backwardation（近强远弱）· 近月升水骤敛</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">744.6</div><div class="cs-bar near" style="height:180px"></div><div class="cs-lbl">SC2611<br>（主力/近月）</div></div>
+        <div class="cs-col"><div class="cs-val" style="color:#ffb36b">742.4</div><div class="cs-bar second" style="height:178px"></div><div class="cs-lbl">SC2612<br>（次主连）</div></div>
+        <div class="cs-col"><div class="cs-val">724.9</div><div class="cs-bar" style="height:161px"></div><div class="cs-lbl">SC2701</div></div>
+        <div class="cs-col"><div class="cs-val">688.7</div><div class="cs-bar" style="height:125px"></div><div class="cs-lbl">SC2703</div></div>
+        <div class="cs-col"><div class="cs-val">647.9</div><div class="cs-bar" style="height:86px"></div><div class="cs-lbl">SC2706</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等差缩放示意。曲线自 SC2611 <b>744.6</b> 递减至 SC2706 <b>647.9</b>，呈典型 <b>backwardation（近强远弱）</b>，反映当下现货偏紧、市场对远期供需转松的定价。但需警惕：<b>近月价差 SC2611-SC2612 由 10-13 的 +16.4 骤缩至 10-14 的 +2.2</b>，近月升水几近抹平，Back 结构明显走弱——这是本报告判定"近月偏空"的核心结构信号。10-14 资金亦同步移仓（SC2612 +2,742手、SC2611 -143手，INE官方口径）。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板</h2>
+    <table>
+      <thead><tr><th>项目</th><th>数值</th><th>状态</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>前20名多头持仓 / 占比</td><td class="mono">数据缺失</td><td><span class="pill neu">未提供</span></td><td>iFinD 多轮查询无返回，不虚构</td></tr>
+        <tr><td>前20名空头持仓 / 占比</td><td class="mono">数据缺失</td><td><span class="pill neu">未提供</span></td><td>iFinD 多轮查询无返回，不虚构</td></tr>
+        <tr><td>净多头持仓（第1名）</td><td class="mono">数据缺失</td><td><span class="pill neu">未提供</span></td><td>无法判读主力多空倾向</td></tr>
+        <tr><td>SC2612 持仓变化（远期主力）</td><td class="mono up">+2,742 手</td><td><span class="pill bull">增仓</span></td><td>资金布局远月，INE官方10-14</td></tr>
+        <tr><td>SC2611 持仓变化（近月主力）</td><td class="mono down">-143 手</td><td><span class="pill bear">减仓</span></td><td>资金撤离近月，INE官方10-14</td></tr>
+        <tr><td>全品种持仓合计 / 变化</td><td class="mono">65,885 手 / +3,198</td><td><span class="pill bull">增仓</span></td><td>总量增仓但结构性移向远月</td></tr>
+        <tr><td>主连口径持仓量</td><td class="mono">14,894 手</td><td><span class="pill neu">仅总量</span></td><td>环比 18,417 手 → 减仓 3,523 手</td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：SC 前20名会员多空持仓明细（会员名称、净持仓排名）在 iFinD 期货服务中 <b>未返回</b>，为避免虚构，本面板不列示任何具体席位。方向信号仅以"资金移仓结构（近月减、远月增）"作弱参考，<b>不足以单独作为方向依据</b>。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1 · 地缘供给冲击未解，实物紧张定价</span> 霍尔木兹海峡原油通行量仅约970万桶/日，较战前1710万桶 <b>下降约43%</b>（Kpler）；10-13~14 也门胡塞武装连续袭击 <b>沙特阿美宰赫兰设施、利雅得机场</b>；布伦特现货较近端期货升水约 <b>$20</b>，为今年4月以来最高，实物紧张担忧持续强化。维多集团CEO直言"西方已无更多库存可消耗，若海峡中断油价或冲$200"。</p>
+          <p><span class="lbl">核心2 · 库存低位去化，下有硬支撑</span> EIA 美国商业原油库存 10-02 录得 <b>424,134千桶</b>，周环比 <b>-3,186千桶</b> 延续去库；OECD 库存降至2003年以来最低。低库存显著放大价格对供应风险的弹性。EIA 最新月报上调四季度布伦特均价至 <b>$105</b>。</p>
+          <p><span class="lbl">核心3 · 技术趋势未破坏，结构未反</span> EMA5 <b>740.68</b> &gt; EMA10 <b>737.02</b> &gt; EMA20 <b>722.01</b> 维持多头排列，收盘744.6 仍站上全部均线与 BOLL中轨723.50；SC 维持 <b>backwardation</b>（2611 744.6 &gt; 2612 742.4 &gt; 2701 724.9），近强远弱结构未改，近月现货强势。</p>
+          <p style="color:var(--dim)">目标：站稳744上方后重新挑战 767.5~769.9；加仓区 738~740（EMA5）；止损 收盘跌破722（EMA20）。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1 · 767~770三重顶 + 冲高回落，顶部形态成熟</span> 10-09 高 <b>769.9</b>、10-13 高 <b>767.5</b>、10-14 高 <b>769.3</b>，三次冲击该区域均失败；10-14 收盘744.6 较最高769.3 回落 <b>24.7点</b>，收于当日低位附近（最低743.9），留 <b>长上影射击之星</b>，前结算753.3 之下收阴 <b>-1.15%</b>，上沿压力三次确认有效。</p>
+          <p><span class="lbl">核心2 · MACD零轴上方死叉，动能衰减</span> DIFF <b>18.99</b> &lt; DEA <b>32.21</b>，MACD 柱转绿（约-26.4），红柱收敛至死叉。价格虽在均线上方，但领先动能指标已先行转弱，属"价滞量缩、动能见顶"的典型高位特征。</p>
+          <p><span class="lbl">核心3 · 近月升水骤缩 + 仓单累积，结构转弱</span> SC2611-SC2612 价差由10-13 的 <b>16.4</b> 骤缩至10-14 的 <b>2.2</b>，近月溢价瓦解；注册仓单由9-30 的296.1万桶升至 <b>421.6万桶（+42.38%）</b>，可交割资源增加，近月逼空基础被削弱；叠加 OPEC 将2026 需求增速由140万桶/日 <b>下调至18~40万桶/日</b>、沙特9月 <b>增产210万桶/日</b>。</p>
+          <p style="color:var(--dim)">目标：回落下沿 734，进一步看 713.4；止损 收盘有效站上 770。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"三重顶"</span> 三次冲击767~770未破、且结构仍为 backwardation、布伦特现货维持 $20 升水——这是 <b>缩量蓄势</b> 而非见顶：10-14 成交80,654手、持仓14,894手双双回落，属多头回吐而非空头主动打压，缺乏放量破位的空头证据。</p>
+          <p><span class="lbl">驳"MACD死叉"</span> DIFF 仍为 <b>+18.99（零轴上方为正）</b>，死叉发生在零轴之上属 <b>强势中的整理</b>，并非趋势反转信号；且 MACD 是滞后指标，价格仍站在 EMA 多头排列之上，趋势定义未被破坏。</p>
+          <p><span class="lbl">驳"近月升水收缩"</span> 2611-2612 价差收窄主因是 <b>主力移仓换月</b>（SC2611 将于10月底到期），资金自然迁往 SC2612（+2,742手），属交割临近的技术性现象，<b>不等于基本面转弱</b>；且2612 本身当日 +1.42%，远月补涨反而显示市场对 $95~$100 油价的定价中枢上移。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"地缘利多"</span> 地缘是 <b>双刃剑且溢价在退潮</b>：10-11~12 美伊释放对话与霍尔木兹通航协商信号，10-13 布伦特反跌0.9%至$105.69；更关键的是 <b>基本面在向过剩倾斜</b>——OPEC 将2026需求增长从140万桶/日砍至18~40万桶/日，沙特9月增产210万桶/日，G7 释放1亿桶储备，卡塔尔11月OSP 贴水$8。地缘溢价一旦回吐，盘面将快速回归弱基本面。</p>
+          <p><span class="lbl">驳"库存去库"</span> 单周 -318.6万桶的去库幅度有限，且被 G7 释储与 OPEC+ 实际产量回升所对冲；美国库存处于2014年以来低位恰恰意味着 <b>后续补库空间大、边际利多递减</b>。</p>
+          <p><span class="lbl">驳"EMA多头排列"</span> 均线是滞后确认而非领先信号，价格已在 767~770 连续三次形成 <b>更高不过的顶部</b>，同时 MACD 死叉、量仓双减，正是"均线多头排列 + 领先指标转弱"的经典 <b>顶部背离初期</b>；以滞后均线否定领先信号，是逻辑倒置。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> <b>低库存 + 实物高升水</b> 是硬现实：美国商业原油去库至4.24亿桶、布伦特现货升水$20（4月来最高）、霍尔木兹通行量-43%，供给端的物理约束未被证伪，任何地缘脉冲都会放大上行弹性。</p>
+          <p><span class="lbl">胜负手2</span> 盘后 <b>胡塞武装再度袭击沙特阿美宰赫兰设施与利雅得机场</b>（10-14），布伦特盘中重上$106、WTI破$95，为多头提供新的催化；一旦夜盘/次日跳空高开并收复749，将验证767~770为蓄势平台。</p>
+          <p><span class="lbl">建议</span> 不宜追空：回踩 <b>722~734</b> 分批试多，止损收盘跌破722（EMA20），目标 767.5，突破后看775。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> <b>三重顶 + MACD死叉 + 近月升水骤缩 + 仓单累积 + 需求下修</b> 五重信号共振，且均在 10-14 同日强化：767~770 三度冲高失败、DIFF&lt;DEA、2611-2612价差16.4→2.2、仓单+42.38%、OPEC砍需求。信号的多点共振远强于多头依赖的"均线滞后 + 地缘不可测"。</p>
+          <p><span class="lbl">胜负手2</span> 量价配合显示 <b>多头主动离场</b>（减仓3,523手 + 缩量），而非空头强攻；同时资金移仓远月（SC2612 +2,742手）意味着近月SC2611失去做多资金支撑，回落压力大于上行弹性。</p>
+          <p><span class="lbl">建议</span> 区间上沿做空：<b>反弹至 756~765 区间试空</b>，止损收盘站上770；第一目标 <b>734</b>，第二目标 <b>713~720</b>。下沿不追空。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">震荡偏空（高位滞涨）</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="down">58%</span> / <span class="up">42%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">58%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">28 / 60</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>① 库存</td><td class="mono up">6</td><td>美国商业原油去库（周-318.6万桶）、OECD库存2003年来最低，偏多；本地库存口径缺失</td></tr>
+          <tr><td>② 仓单</td><td class="mono down">4</td><td>注册仓单421.6万桶，近一月累计+42.38%，可交割资源抬升，近月偏空</td></tr>
+          <tr><td>③ 期限结构</td><td class="mono">5</td><td>Backwardation利多近月，但2611-2612价差16.4→2.2骤缩，近月升水收敛利空 → 中性</td></tr>
+          <tr><td>④ 技术面</td><td class="mono down">4</td><td>767~770三重顶+长上影+MACD零轴上方死叉（DIFF18.99&lt;DEA32.21）偏空；EMA多头排列+RSI/KDJ中性部分对冲</td></tr>
+          <tr><td>⑤ 新闻基本面</td><td class="mono">5</td><td>地缘（霍尔木兹-43%、袭沙特阿美、$20现货升水）利多 vs 需求下修/沙特增产/G7释储利空 → 中性</td></tr>
+          <tr><td>⑥ 持仓席位</td><td class="mono down">4</td><td>席位明细缺失；仅资金移仓（近月减、远月增）偏空近月，参考性有限</td></tr>
+          <tr><td colspan="3" style="color:var(--dim);font-size:12px">席位明细与部分库存口径缺失，评分置信度相应打折；六维合计 28/60，空方略占优。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>供给端物理约束——霍尔木兹通行量-43%、布伦特现货升水$20（4月来最高）、美国商业原油持续去库、OPEC+暂停增产，叠加盘后胡塞再袭沙特阿美的新催化，下有硬支撑。</li>
+            <li><b>最弱：</b>入场与信号滞后——依赖EMA均线（滞后指标）与不可测的地缘事件，且价格已三度在767~770受阻；近月升水收敛、仓单累积、需求下修等结构性利空被低估。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>多重信号同日共振——767~770三重顶、MACD零轴上方死叉、2611-2612价差骤缩至2.2、仓单+42.38%、OPEC砍需求至18~40万桶/日，方向一致、证据链完整。</li>
+            <li><b>最弱：</b>对抗强劲基本面与地缘尾部风险——价格仍处EMA多头排列之上、Back结构未实质反转，一旦中东冲突升级（如霍尔木兹全面中断）将出现向上跳空的巨大反向风险，逆势容错空间小。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">震荡偏空（高位滞涨）—— 767~770 上沿三重承压，短线偏向下沿回归；但地缘与低库存限制下行空间，属<b>区间内偏空</b>而非趋势性下跌</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">反弹至 <b>756~765</b> 区间分批试空（贴近上沿、盈亏比佳）；若夜盘因盘后地缘消息跳空高开，则等候 <b>764~770</b> 再介入，<b>不追空</b>。下沿 715~722 不追空。</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>734</b>（10-09~11 收盘支撑）；第二目标 <b>713~720</b>（10-12 低点713.4 区域）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效站上 770</b>（三重顶颈线上破，顶部形态失效）即离场；若盘后地缘冲突显著升级（如霍尔木兹全面中断），立即降低仓位</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv"><b>1~3 个交易日</b>（2026-10-15 起算）</div></div>
+      </div>
+
+      <div class="conf">
+        <div class="ct">◆ 置信度评估</div>
+        <b>置信度 58%（0~100%）　|　预期触发窗口：1~3 个交易日</b>
+        <div class="conf-bar"><i></i></div>
+        <p style="margin-top:12px;font-size:12.8px;color:#cfd9ea">
+          <b>· 多空信号共振程度（中等偏弱）：</b>技术面（三重顶+MACD死叉）、期限结构（近月升水骤缩）、仓单（累积）三条线共振偏空，但库存/地缘偏多形成对冲，整体共振度中等。<br>
+          <b>· 持仓趋势连续性（偏弱）：</b>SC2611 持仓连续下降（27,069→14,894手）叠加资金移仓远月，方向偏空但主要源于换月，趋势信号的可信度打折，且席位明细缺失。<br>
+          <b>· 技术形态成熟度（较高）：</b>767~770 三次冲高失败 + 长上影，顶部形态相对成熟，是本结论的主要支撑。<br>
+          <b>· 基本面明确程度（低）：</b>地缘 vs 需求/增产高度分歧，且盘后出现向上催化（胡塞袭沙特阿美、布伦特重上$106），基本面方向不明确，显著压低置信度。
+        </p>
+        <p style="margin-top:8px;font-size:12px;color:var(--dim)">说明：依据历史校准（置信度≥60% 方向命中率约75%，&lt;60% 约33%），本结论置信度 58% 属"中等偏低"区间，<b>建议降低操作权重、轻仓参与</b>。</p>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>① <b>地缘尾部风险（最需警惕）</b>：10-14 盘后也门胡塞武装袭击沙特阿美宰赫兰设施与利雅得机场，布伦特盘中重上$106、WTI破$95，若霍尔木兹/曼德海峡局势进一步升级，SC 存在向上跳空的巨大反向风险，空单须严格止损。② <b>结构风险</b>：Backwardation 结构尚未反转、低库存放大价格弹性，逆势做空的容错空间小。③ <b>数据缺口风险</b>：SC 前20名持仓席位明细缺失、本土原油库存口径缺失、基差/升贴水数据未取到，基本面确认度不足，方向判断主要依托技术面与期限结构，可信度相应打折。④ <b>事件风险</b>：美伊对话、OPEC+ 产量会议、G7 释储等消息面随时可能引发剧烈波动。本质是<b>高波动、事件驱动叠加技术承压</b>的行情，"方向可判、幅度难测"，务必轻仓、严止损。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes / future_profile / search_news（同花顺 iFinD）、edb 库存:商业原油（美国能源信息署 EIA）、上海国际能源交易中心官方日交易数据、公开财经资讯（新华社、21世纪经济报道、Kpler 等）。行情为日频。<br>
+    数据缺口：SC 前20名持仓席位明细、基差/升贴水率、本土原油商业库存 <b>未取到</b>，已如实标注，<b>未作任何推算或补充</b>；持仓席位方向仅以资金移仓结构作弱参考。<br>
+    生成时间：2026-10-14　|　品种：原油 SC（上海国际能源交易中心 INE）　|　主连：SCZL.INE（当前含权 SC2611）　|　免责声明：AI 生成，不构成投资建议。
+  </div>
+
+</div>
+</body>
+</html>
