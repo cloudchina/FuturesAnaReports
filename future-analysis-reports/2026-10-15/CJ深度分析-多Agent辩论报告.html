@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>红枣(CJ) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Review notice */
+  .swap{margin-top:16px;background:linear-gradient(120deg,rgba(169,112,255,.14),rgba(224,179,84,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:16px 20px;font-size:12.8px;color:#dcd2f2}
+  .swap .st{font-weight:700;color:var(--purple);letter-spacing:.3px}
+  .swap b{color:var(--gold)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(224,179,84,.12),rgba(75,141,255,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:250px;padding:0 8px;justify-content:center}
+  .cs-col{flex:0 1 170px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+  .conf{background:linear-gradient(120deg,rgba(224,179,84,.14),rgba(169,112,255,.08));border:1px solid rgba(224,179,84,.4);border-radius:12px;padding:16px 18px;font-size:13px;margin:18px 0}
+  .conf .big{font-size:26px;font-weight:800;color:var(--gold);font-family:ui-monospace,monospace}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">红枣</span>
+      <span class="h-code">CJZL.CZC · 郑商所</span>
+      <span class="h-tag">主连 CJZL.CZC（主力 CJ2701）</span>
+      <span class="h-tag">多Agent辩论 · 单品种深度分析</span>
+      <span class="h-tag">关联品种：苹果 AP（果品替代）</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v gold">6470 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅（对昨结 6485）</div><div class="v down">-0.23%</div></div>
+      <div class="p-item"><div class="k">较前收 6375</div><div class="v up">+95 / +1.49%</div></div>
+      <div class="p-item"><div class="k">日内最高 / 最低</div><div class="v" style="font-size:18px">6565 / 6370</div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">228,164 <small style="font-size:12px">手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">402,408 <small style="font-size:12px">手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-15（周四收盘后）　|　下一交易日：2026-10-16（周五）　|　数据来源：同花顺 iFinD　|　主力合约：CJ2701（收盘 6470）　|　注：主连涨跌幅以昨结算价 6485 为基准，故收盘 6470 显示 -0.23%，但相对前收 6375 实为反弹阳线</div>
+  </header>
+
+  <!-- 前日复盘 -->
+  <div class="swap">
+    <span class="st">◆ 前日复盘验证（2026-10-14 报告）：</span>本品种前日给出 <b>偏空 · 弱势下行（置信度 66%）</b> 判断，入场"反弹 6550~6620 沽空"、目标 <b>6365 → 6300 → 6250</b>、止损收盘站上 6663.82。<b>复盘结果：方向【命中】</b>——10-15 主连收盘 <b>6470</b>、对昨结算 6485 收阴 <b>-0.23%</b>；日内最低 <b>6370</b>，<b>逼近目标 6365（仅差 5 点）但未破</b>，随后自低位反弹至 6565、收 6470（相对前收 6375 为 <b>+95 / +1.49% 的阳线</b>）。<b>须重点警示：</b>10-14 的 RSI(6) 11.62、KDJ K 5.31 处极端超卖，10-15 已现修复——KDJ K 回升至 <b>7.52</b>、RSI(14) 由 20.11 回升至 <b>24.86</b>；同时空头第 1 名持仓 <b>24881 → 21978（-2903 手）</b> 大幅减仓、总持仓 <b>248633 → 228164（-20469 手）</b>，呈 <b>放量减仓反弹</b>（空头回补主导）。"目标逼近未破 + 极端超卖 + 空头回补"三重信号意味着 <b>空头剩余空间收窄、技术反弹风险显著上升</b>。
+  </div>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:18px">偏空 · 反弹沽空</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="down">空57%</span> / <span class="up">多43%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">58%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">1~3个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v" style="font-size:18px">6370 → 6300</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>红枣中期空头趋势<b>尚未反转</b>——EMA5 <b>6599.21</b> &lt; EMA10 <b>6793.14</b> &lt; EMA20 <b>7073.20</b> &lt; EMA60 <b>7641.87</b> <b>空头排列未破</b>，收盘 6470 仍深居 EMA5 之下；MACD(DIFF) <b>-338.22</b>（前值 -325.70，动能仍在走弱）；结构 CJ2701 6470 &lt; CJ2703 6510 &lt; CJ2705 6645 &lt; CJ2707 6780 呈 <b>contango（近弱远强）</b>，近月最弱。<b>但</b>10-15 出现三点明显变化：① 日内探至 6370（距目标 6365 仅 5 点）<b>未破即反弹</b>，收盘较前收涨 95 点、为阳线；② KDJ K 自 5.31 回升至 <b>7.52</b>、RSI(14) 自 20.11 回升至 <b>24.86</b>，<b>极端超卖开始修复</b>；③ 空头第 1 名 <b>单日减仓 2903 手</b>、总持仓减 20469 手、成交放量至 402408 手，呈 <b>放量减仓反弹</b>（空头回补）。同时基本面慢变量仍偏空（结转库存 &gt; 30 万吨 + 新季稳产 50~60 万吨 + 10 月需求真空），机构（广发/格林大华/中原/南华/一德/中辉）<b>一致偏弱</b>，但广发、格林大华均提示"<b>短期低位震荡企稳</b>""<b>阶段性技术反弹有概率出现</b>"。综合：<b>方向仍偏空，但下行动能被超卖修复与空头回补削弱，策略由"反弹沽空"调整为"逢反弹沽空、不追空、目标空间收窄"。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多；缺失项如实标注</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          旧季<b>结转库存超 30 万吨</b>（期货日报 8-04 / 市场资讯）；Mysteel 36 家样本点物理库存 <b>9450 吨</b>（10-08），<b>周环比 -120 吨（-1.25%）、同比 +2.68%</b>，仍处近年同期高位、去化缓慢。<br>
+          <span style="color:var(--bear)">绝对库存高位 + 去库慢，压制盘面（慢变量、方向偏空）。</span>
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">结转库存高位、去库缓慢 → 偏空（样本点仅边际去化）</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          注册仓单 <b>0</b>（iFinD 10-15）；<b>有效预报数据缺失</b>。<br>
+          <span style="color:var(--dim)">9 月末新季规则性集中注销后 10 月新仓单尚未生成，近月交割抛压阶段性减轻，方向中性。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">仓单 0 为新季规则性注销，方向中性</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          CJ2701 <b>6470</b> &lt; CJ2703 <b>6510</b> &lt; CJ2705 <b>6645</b> &lt; CJ2707 <b>6780</b> → <b>contango（近弱远强）</b>，01-05 价差 <b>-175</b>；10-15 近月 -0.23%，而 2703/2705 <b>逆势收涨（+0.31% / +0.45%）</b>。<br>
+          现货（河北一级灰枣 6600 元/吨，10-13）基差 CJ01 约 <b>-20</b>。<br>
+          <span style="color:var(--bear)">近月最弱、结构自上方压制；但远月抗跌反映远端预期不悲观。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">近弱远强，结构压制近月；远月逆势收涨为边际亮点</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          强空：EMA 空头排列（5=6599.21 &lt; 10=6793.14 &lt; 20=7073.20 &lt; 60=7641.87）；MACD(DIFF) <b>-338.22</b>（续弱）；收盘 6470 低于 BOLL 中轨 7295.77 达 826 点。<br>
+          <span style="color:var(--bull)">修复：KDJ K 5.31→<b>7.52</b>、RSI(14) 20.11→<b>24.86</b> 自极端超卖回升；日内探 6370 未创新低后反弹收阳。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">趋势仍空 vs 超卖修复启动（略上调至 4）</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          利空：旧季结转库存超 30 万吨、<b>新季新疆灰枣稳产 50~60 万吨</b>（无减产）、10 月<b>需求真空期</b>、销区走货清淡；广发/格林大华/中原/南华/一德/中辉<b>一致偏弱</b>，一德"<b>偏空思路</b>"、中原"高库存+新枣临近+备货偏弱三线牵制"。<br>
+          <span style="color:var(--bull)">边际：广发"短期低位震荡企稳"、格林大华"阶段性技术反弹有概率出现"、11 月冬季旺季+春节备货预期提供底部支撑；裂口/烂枣致质量略逊去年。</span>
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">供过于求格局明确、机构一致看弱 → 偏空；旺季预期为边际支撑</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          第 1 名空头 <b>21978 手（占比 9.63%）</b> vs 第 1 名多头 <b>10488 手（占比 4.60%）</b>，空头为多头 <b>2.10 倍</b>（前值 2.26 倍，集中度下降）；空头第 1 名<b>单日大幅减仓 -2903 手</b>，净多头第 1 名 7906 手；持买单第 1 名会员为 <b>中信期货（代客）</b>。<br>
+          <span style="color:var(--bear)">空头仍占优 → 偏空；但空头减仓、总持仓放量减仓 → 空头动能减弱。</span>
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">空头集中度仍高但见松动 → 偏空力度减弱；会员明细仍缺失</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>EMA：<b>5=6599.21 &lt; 10=6793.14 &lt; 20=7073.20 &lt; 60=7641.87</b>，空头排列未破</li>
+          <li>MACD(DIFF)：<b>-338.22</b>（前值 -325.70），零轴下方持续走弱 → 空头动能未衰竭</li>
+          <li>BOLL 中轨 <b>7295.77</b>，收盘 6470 低于中轨 826 点 → 弱势</li>
+          <li>结论：<b>趋势性偏空，方向未反转</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>KDJ：K <b>7.52</b>（前 5.31，<span style="color:var(--bull)">自极端超卖回升</span>）</li>
+          <li>RSI(14)：<b>24.86</b>（前 20.11，<span style="color:var(--bull)">回升至 20 上方</span>）</li>
+          <li>WR(14)：10-14 为 99.10（极端超卖），10-15 数据未返回</li>
+          <li>结论：<b>超卖修复迹象初现，但仍处低位，反弹属修复而非反转</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：<b>402,408 手</b>（10-14 为 319,993，<b>放量 +25.8%</b>）</li>
+          <li>持仓量：<b>228,164 手</b>（10-14 为 248,633，<span style="color:var(--bull)">减仓 -20,469</span>）</li>
+          <li>组合：<b>放量 + 减仓 + 反弹</b> → 空头回补主导，趋势性空头动能衰减</li>
+          <li>研判：<b>中性偏多（短线）</b>——空头平仓推动反弹，持续性待验证</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>10-15 区间：最低 <b>6370</b>、最高 <b>6565</b>、收盘 <b>6470</b></li>
+          <li>较前收 6375 <b>收阳 +95</b>；下影探 6370（距 6365 目标仅 5 点）后反弹，带上影</li>
+          <li>10-14 收盘 6375 为阶段低点，10-15 <b>未创新低</b>；但收盘仍低于 EMA5 6599.21 达 129 点</li>
+          <li>研判：<b>连续下跌后首次止跌收阳，短线有超跌反弹迹象，但收盘未收复 EMA5，反转未确认</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>contango · 近弱远强</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bear)">6470</div><div class="cs-bar near" style="height:180px"></div><div class="cs-lbl">CJ2701<br>（近月 · 主力）</div></div>
+        <div class="cs-col"><div class="cs-val">6510</div><div class="cs-bar" style="height:184px"></div><div class="cs-lbl">CJ2703</div></div>
+        <div class="cs-col"><div class="cs-val">6645</div><div class="cs-bar" style="height:197px"></div><div class="cs-lbl">CJ2705</div></div>
+        <div class="cs-col"><div class="cs-val">6780</div><div class="cs-bar" style="height:211px"></div><div class="cs-lbl">CJ2707<br>（远月）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。近月 CJ2701 <b>6470</b> 为全曲线最低点，逐月递增至 CJ2707 <b>6780</b>，呈 <b>contango（近弱远强）</b>，01-05 价差 <b>-175</b>。10-15 日内近月收 -0.23%、而 CJ2703/CJ2705 <b>逆势收涨 +0.31%/+0.45%</b>，远月抗跌略好于近月。现货（河北一级灰枣 6600 元/吨，10-13）基差 CJ01 约 <b>-20</b>（期货小幅贴水现货）；10-15 现货报价数据缺失。结构含义：<b>近月最弱、市场对远期相对坚挺，但价差幅度有限，不构成强压制</b>。对比关联果品：苹果 AP 需另行跟踪。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板 <small>仅第 1 名/汇总口径，会员明细缺失</small></h2>
+    <table>
+      <thead><tr><th>项目</th><th>2026-10-15</th><th>2026-10-14</th><th>变化</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>第 1 名多头持仓（占比）</td><td class="mono">10488 手（4.60%）</td><td class="mono">11020 手（4.43%）</td><td class="mono down">-532 手</td><td><span class="pill bull">多头小幅减仓</span></td></tr>
+        <tr><td>第 1 名空头持仓（占比）</td><td class="mono">21978 手（9.63%）</td><td class="mono">24881 手（10.01%）</td><td class="mono down">-2903 手</td><td><span class="pill bull">空头大幅回补</span></td></tr>
+        <tr><td>空头 / 多头（第 1 名）比值</td><td class="mono">2.10 倍</td><td class="mono">2.26 倍</td><td class="mono down">收窄</td><td><span class="pill neu">空头集中度下降</span></td></tr>
+        <tr><td>净多头第 1 名</td><td class="mono">7906 手</td><td class="mono">—</td><td class="mono">—</td><td><span class="pill neu">净多第 1 名</span></td></tr>
+        <tr><td>主力持仓量（总量）</td><td class="mono">228164 手</td><td class="mono">248633 手</td><td class="mono down">-20469 手</td><td><span class="pill bull">放量减仓（价涨）</span></td></tr>
+        <tr><td>成交量</td><td class="mono">402408 手</td><td class="mono">319993 手</td><td class="mono up">放量 +25.8%</td><td><span class="pill neu">量能放大</span></td></tr>
+        <tr><td>注册仓单</td><td class="mono">0</td><td class="mono">0</td><td class="mono">—</td><td><span class="pill neu">新季交割前注销</span></td></tr>
+        <tr><td>会员多空席位明细（前 20 名，含名称）</td><td colspan="4" class="mono" style="color:var(--dim)">数据缺失（仅取得持买单第 1 名会员：中信期货（代客））</td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">
+      <b>第 1 名空头连续变化（近 3 个交易日）：</b>空头第 1 名 <b>23530（10-12）→ 24857（10-13）→ 24881（10-14）→ 21978（10-15）</b>，10-15 <b>单日 -2903 手</b> → <span style="color:var(--bull)">由持续增仓转为大幅回补</span>；多头第 1 名 11295（10-13）→ 11020（10-14）→ 10488（10-15），延续小幅减仓。<br>
+      数据限制：iFinD 本次仅返回第 1 名多/空持仓及占比、净多头第 1 名与持买单第 1 名会员，<b>未提供完整前 20 席位与空头会员名称</b>，无法识别产业/券商/量化席位属性，<b>不得虚构席位</b>，持仓维度可信度中等。
+    </div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1 · 极端超卖修复已启动，目标位守住</span> 10-14 RSI(6) 仅 11.62、KDJ K 5.31 为年内极值超卖；10-15 <b>KDJ K 回升至 7.52、RSI(14) 自 20.11 回升至 24.86</b>，修复信号明确。更重要的是，日内最低 <b>6370</b> 距空头目标 6365 <b>仅 5 点却未破</b>，随后强反弹至 6565、收 6470，<b>相对前收 6375 收阳 +95 点</b>。空头连续 20 周下跌后首次止跌收阳，"跌不动"本身就是最强的技术信号。</p>
+          <p><span class="lbl">核心2 · 放量减仓反弹 = 空头回补，拥挤空头开始松动</span> 10-15 成交 <b>402,408 手（放量 +25.8%）</b>、总持仓 <b>248633 → 228164（减仓 -20469 手）</b>，价格却上涨——这是典型的<b>空头主动平仓（减仓上涨）</b>。空头第 1 名 <b>24881 → 21978（单日 -2903 手）</b>、空/多比值由 2.26 降至 <b>2.10 倍</b>。空头此前高度拥挤（占比 10.01%），拥挤度本身是反向指标，一旦回补极易形成踩踏式反弹。</p>
+          <p><span class="lbl">核心3 · 仓单归零 + 旺季预期 + 远期抗跌</span> 注册仓单 <b>0</b>，近月无仓单抛压；现货河北一级灰枣 6600 元/吨、期货 6470 <b>小幅贴水</b>，估值偏低；<b>11 月冬季滋补旺季 + 元旦春节备货</b>将带动刚需回升（广发观点），提供底部支撑；期限结构上 10-15 <b>CJ2703/CJ2705 逆势收涨（+0.31%/+0.45%）</b>，远端预期并不悲观。</p>
+          <p style="color:var(--dim)">目标：6565（10-15 高点）→ 6620（10-13 收盘）→ 6750；试多区 6370~6420；止损收盘跌破 6300。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1 · 供过于求基本面（慢变量、硬约束）</span> 旧季<b>结转库存超 30 万吨</b>、36 家样本库存 9450 吨（<b>同比 +2.68%</b>、仍处近年高位）、去化仅 -1.25%/周；新季新疆灰枣<b>稳产 50~60 万吨</b>（无减产），10 月下旬<b>霜降后集中下树</b>、开秤价或低开低走；10 月处<b>需求真空期</b>。广发/格林大华/中原/南华/一德/中辉机构<b>一致偏弱</b>，中原直言"高库存+新枣临近+备货偏弱三线牵制"。供给宽松 + 需求疲弱双杀，趋势向下的大方向未变。</p>
+          <p><span class="lbl">核心2 · 技术面空头排列未破 + MACD 续弱</span> EMA5 6599.21 &lt; EMA10 6793.14 &lt; EMA20 7073.20 &lt; EMA60 7641.87 <b>完美空头排列</b>，收盘 6470 仍深居 EMA5 之下 129 点；MACD(DIFF) <b>-338.22</b>（前值 -325.70）<b>仍在走弱、无底背离</b>。收盘 6375（10-14）为阶段低点，10-15 收盘 6470 <b>并未收复 EMA5</b>，趋势结构丝毫未改。</p>
+          <p><span class="lbl">核心3 · 反弹是空头回补而非增量做多 + 结构偏空</span> 放量减仓反弹的本质是<b>空头平仓推动</b>，而非新增多头资金进场，<b>缺乏持续性</b>，在下跌趋势中常为"下跌中继"。近月 CJ2701 6470 为全曲线最低、contango 近弱远强，<b>近月始终最弱</b>；且格林大华明确指出"阶段性技术反弹有概率出现，但<b>难以形成真正的底部反转趋势</b>"。</p>
+          <p style="color:var(--dim)">目标：6370 → 6300 → 6250；入场反弹 6560~6620；止损收盘站上 6650（EMA5 上方）。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳"供过于求"</span> 结转 &gt; 30 万吨、新季稳产是<b>已被市场交易了 20 周的旧闻</b>——主力合约已连续 20 周下跌、跌破前低、逼近历史低位区，利空充分 price in。库存是慢变量、超卖修复是快变量，短期边际定价由后者主导；且样本库存仍在<b>周环比去化（-120 吨）</b>，并非持续恶化。</p>
+          <p><span class="lbl">驳"空头排列 + MACD 续弱"</span> 均线是<b>滞后指标</b>，其空头排列正是价格已大跌的结果，而非未来指引。真正的领先指标 KDJ/RSI 已从年内极值 <b>5.31/20.11 回升至 7.52/24.86</b>；日内探 6370（距 6365 仅 5 点）<b>未创新低</b>后放量收阳，是空头动能衰竭的直接证据。</p>
+          <p><span class="lbl">驳"反弹无持续性 + 结构偏空"</span> 放量减仓虽是回补，但正是因为<b>空头极度拥挤（占比 10.01%）</b>，回补一旦启动易演变为踩踏；空头第 1 名单日减 2903 手、比值由 2.26 降至 2.10 即为例证。contango 价差仅 -175、且远月 10-15 逆势收涨，<b>谈不上强压制</b>；季节性上"霜降后下树"更可能触发<b>利空出尽</b>与 11 月旺季预期共振。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳"超卖修复即见底"</span> 超卖修复 ≠ 趋势反转。10-15 收盘 <b>6470 仍在 EMA5 6599.21 之下 129 点</b>、MACD(DIFF) <b>-338.22 较前值 -325.70 反而更弱</b>，动能毫无衰竭；KDJ K 7.52 仍处绝对低位区（&lt;20），距离摆脱弱势所需的中轴金叉相去甚远。<b>止跌收阳只是一次日内技术反抽，未收复任何关键均线。</b></p>
+          <p><span class="lbl">驳"空头回补 = 反转信号"</span> 放量减仓上涨恰是<b>空头获利平仓、落袋为安</b>的表现，而非多头进场——多头第 1 名同期还<b>减仓 -532 手</b>、总持仓大幅流失 20469 手，说明<b>没有增量做多资金</b>。空头在低位兑现浮盈后，一旦反弹至 EMA5/前收压力区（6560~6620），极易二次建仓，反弹即遭压制。</p>
+          <p><span class="lbl">驳"仓单/旺季/远期"</span> 仓单 0 是新季交割规则性注销，<b>并非需求强劲</b>；"期货贴水现货"更可能是<b>期货引领现货继续下行</b>的预期（现货 6.79→6.60 元/公斤持续松动）。11 月旺季是<b>未来时点、且 10 月是真空期</b>，远未到兑现窗口；远月逆势微涨属日内扰动，<b>改变不了总量 90 万吨供给 vs 50~55 万吨消费</b>的宽松大局。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1</span> <b>超卖修复 + 目标位守住 + 放量减仓反弹</b>三重共振：日内 6370 距空头目标 6365 仅 5 点却未破，收盘相对前收收阳 +95；KDJ/RSI 自年内极值回升；空头第 1 名单日回补 2903 手、总持仓减 20469 手。<b>空头动能在物理上已到极限</b>，短线反弹的赔率与弹性俱佳。</p>
+          <p><span class="lbl">胜负手2</span> 估值偏低（期货贴水现货）+ 仓单 0 + 11 月旺季预期 + 远月逆势收涨，构成底部支撑组合；技术性反弹的第一目标即为 EMA5 6599 与前收 6620 压力带。</p>
+          <p><span class="lbl">建议</span> <b>6370~6420 轻仓试多</b>（仓位严控 ≤ 2 成）；目标 <b>6565 → 6620 → 6750</b>；止损收盘<b>跌破 6300</b> 离场。本质是"抢超跌反弹"，快进快出，不赌趋势反转。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1</span> <b>供过于求基本面</b>（结转 &gt;30 万吨 + 新季稳产 50~60 万吨 + 10 月需求真空 + 机构一致偏弱）是慢变量、硬约束，决定趋势向下的大方向，品质、季节性、旺季预期均无法逆转总量宽松。10-15 的反弹恰恰是<b>给空头更好的入场位置</b>。</p>
+          <p><span class="lbl">胜负手2</span> <b>技术面空头结构未破</b>：EMA 完美空头排列 + 收盘 6470 未收复 EMA5 6599.21 + MACD(DIFF) -338.22 续弱 + 反弹为放量减仓（无增量多头）；叠加 contango 近月最弱、近月始终领跌。</p>
+          <p><span class="lbl">建议</span> <b>反弹 6560~6620 分批轻仓沽空</b>（6470 现价附近不追空，防超卖反抽延续）；目标 <b>6370 → 6300 → 6250</b>；止损收盘<b>有效站上 6600（EMA5）</b>，保守者站上 6650 离场。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">偏空 · 反弹沽空</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="down">57%</span> / <span class="up">43%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">58%</div></div>
+        <div class="stat"><div class="k">六维合计</div><div class="v">23 / 60</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>① 库存</td><td class="mono down">3</td><td>旧季结转 &gt;30 万吨、36 家样本 9450 吨（同比 +2.68%、仍处近年高位）、去库仅 -1.25%/周 → 偏空（慢变量）</td></tr>
+          <tr><td>② 仓单</td><td class="mono">5</td><td>注册仓单 0（新季交割前规则性注销），近月交割压力阶段性减轻；有效预报缺失 → 中性</td></tr>
+          <tr><td>③ 期限结构</td><td class="mono down">4</td><td>contango（2701 6470 &lt; 2703 6510 &lt; 2705 6645 &lt; 2707 6780）近弱远强，结构压制近月；但远月逆势收涨、价差有限 → 偏空</td></tr>
+          <tr><td>④ 技术面</td><td class="mono down">4</td><td>EMA 空头排列未破 + MACD -338.22 续弱 + 收盘低于 EMA5（偏空）；但 KDJ 5.31→7.52、RSI 20.11→24.86 超卖修复、日内未创新低收阳（反弹信号）→ 综合偏空但扣分</td></tr>
+          <tr><td>⑤ 新闻基本面</td><td class="mono down">3</td><td>结转库存高 + 新季稳产 50~60 万吨 + 10 月需求真空 + 机构一致偏弱 → 供过于求，偏空；11 月旺季与"短期低位企稳"为边际支撑</td></tr>
+          <tr><td>⑥ 持仓席位</td><td class="mono down">4</td><td>第 1 名空头 21978 手（9.63%）为多头 10488 手（4.60%）的 2.10 倍，空头仍占优；但空头单日大幅回补 -2903 手、比值由 2.26 降至 2.10、总持仓放量减仓 → 偏空但动能减弱（会员明细缺失，扣分）</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>"目标 6365 逼近未破 + 极端超卖修复 + 放量减仓反弹"三重共振——日内 6370 距目标仅 5 点即反弹收阳（+95），KDJ/RSI 自年内极值回升，空头第 1 名单日回补 2903 手、总持仓减 20469 手，空头拥挤度松动，短线反弹的赔率与弹性俱佳。</li>
+            <li><b>最弱：</b>反弹缺基本面支撑与增量资金——供过于求格局未改、机构一致看弱、多头第 1 名同期还在减仓、无新增做多资金；属高难度逆势抢反弹，稍有不慎即被趋势碾压。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>基本面（结转库存 + 新季稳产 + 需求真空）与技术面（空头排列未破 + MACD -338.22 续弱 + 收盘低于 EMA5）、结构（contango 近月最弱）形成 <b>方向一致</b>，机构一致偏弱提供背书，趋势向下的大方向未变。</li>
+            <li><b>最弱：</b>① 极端超卖已开始修复（KDJ 5.31→7.52、RSI 20.11→24.86），继续杀跌的性价比下降；② 放量减仓反弹表明空头主力已在回补（-2903 手），趋势资金出现松动，若反弹站上 EMA5 6599.21，则空头结构面临破坏。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="conf">
+        <div class="k" style="font-size:12px;color:var(--sub)">置信度</div>
+        <div class="big">58%</div>
+        <div style="color:var(--sub);margin-top:6px">预期触发时间窗口：<b style="color:var(--txt)">1~3 个交易日</b>（自 2026-10-16 起算）</div>
+        <div style="color:var(--dim);margin-top:6px;font-size:12px">依据：① 多空信号共振程度——<b>中等偏下</b>：库存/结构/基本面三维明确偏空，但技术面（超卖修复）、持仓面（空头回补）已出现反向松动，六维中仅三维强偏空，较前日"五维一致偏空"明显减弱；② 持仓趋势连续性——<b>转弱</b>：空头第 1 名由连续三日增仓转为单日大幅回补 -2903 手，总持仓放量减少 20469 手，趋势资金松动；③ 技术形态成熟度——<b>低</b>：10-15 首次止跌收阳、未创新低，形态进入"反弹/中继"的分岔口，方向确定性下降；④ 基本面明确程度——<b>高</b>：供过于求逻辑清晰、机构一致。综合：方向仍偏空，但确定性较前日（66%）显著下降，故置信度下调至 <b>58%</b>，并明确"不追空、逢反弹沽空、目标空间收窄"。</div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv"><span class="down">偏空 · 反弹沽空</span> —— 中期供过于求（慢变量）主导趋势未反转，但超卖修复 + 空头回补令下行动能收窄，转为"逢高沽空、不追空"</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">反弹至 <b>6520~6620</b> 分批轻仓沽空（6565 日内高点 / EMA5 6599 / 10-13 收盘 6620 压力区）；<b>6470 现价附近不追空</b>（超卖修复未结束，防反抽延续）</div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>6370</b>（10-15 日内低点）；有效下破后看 <b>6300</b> 整数关口，进一步 6250（空间较前日收窄，分批止盈）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效站上 6600（EMA5 6599.21）</b>视为反弹确认、空头结构受损，离场观望；保守止损设 6650（10-13 结算 6650 上方）</div></div>
+        <div class="plan-row"><div class="pk">仓位与节奏</div><div class="pv">逢反弹沽空为主，单笔仓位 ≤ 2 成；因处超卖修复初期，<b>严禁追空、严禁重仓</b>，目标位分批止盈，破位后不恋战</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv"><b>1~3 个交易日</b>（2026-10-16 起算；若 3 日内不破 6370 且收盘站上 6600，则反弹逻辑接棒，需转观望）</div></div>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>本判断的最大风险是<b>"极端超卖后的技术性反弹延续"</b>——10-15 已现 KDJ 5.31→7.52、RSI 20.11→24.86 的修复，且日内探 6370（距目标 6365 仅 5 点）未破后放量收阳；空头第 1 名单日回补 2903 手、总持仓减 20469 手，若空头拥挤平仓（占比 9.63%）引发踩踏，盘面可能快速反抽至 EMA5 6599.21 甚至 10-13 收盘 6620 / 结算 6650；<b>收盘站上 6600 即视为空头逻辑破坏，须离场</b>。次生风险：① 新季开秤价与产区天气（霜降前降雨/降温是否引发裂果、影响新枣仓单成本）；② 11 月旺季与春节备货预期提前发酵；③ 政策面（储备、进出口）突发扰动；④ 关联果品苹果 AP 情绪外溢。反向看，若新季集中下树兑现、需求持续走弱，下行将首先考验 6370 日内低点，破位后打开 6300/6250 空间。本质是<b>"慢变量强空 vs 快变量超卖修复"</b>的博弈，方向偏空但<b>幅度与节奏难测</b>，务必轻仓、严止损，严禁在超卖修复区裸空或重仓。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes（行情 / EMA·MACD·KDJ·RSI·BOLL 技术指标 / 注册仓单 / 第 1 名多空持仓与净多持仓 / 各合约收盘）、search_news（广发、格林大华、中原、南华、一德、中辉、瑞达、华泰等机构观点）——同花顺 iFinD。行情为日频。<br>
+    数据缺口：① 红枣现货库存、基差率、有效预报本日 iFinD 未直接返回（现货价采用公开资讯 10-13 值）；② 持仓仅取得第 1 名多/空持仓、净多头第 1 名及持买单第 1 名会员（中信期货代客），<b>无完整前 20 席位与空头会员名称明细</b>；③ 10-15 WR 指标与现货报价缺失。<b>以上缺失项均已如实标注，未作任何推算或虚构。</b>主连涨跌幅口径说明：iFinD 主连涨跌幅以昨结算价 6485 为基准，故显示 -0.23%。<br>
+    生成时间：2026-10-15　|　品种：红枣 CJ（郑商所）　|　主连：CJZL.CZC（主力 CJ2701）　|　关联：苹果 AP（CZC）
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>豆粕(M) 深度分析 · 多Agent辩论报告</title>
+<style>
+  :root{
+    --bg:#0b0e14; --bg2:#111621; --card:#151b28; --card2:#1a2233;
+    --line:#26304a; --txt:#e6edf7; --sub:#93a4c0; --dim:#6b7a96;
+    --bull:#ff4d4f; --bullbg:rgba(255,77,79,.12);
+    --bear:#22c55e; --bearbg:rgba(34,197,94,.12);
+    --gold:#e0b354; --blue:#4b8dff; --purple:#a970ff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  h1,h2,h3{line-height:1.35;font-weight:700}
+  .section{margin-top:34px}
+  .sec-title{font-size:19px;margin-bottom:16px;padding-left:12px;border-left:4px solid var(--gold);letter-spacing:.5px}
+  .sec-title small{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px;letter-spacing:0}
+
+  /* Header */
+  header{background:linear-gradient(135deg,#141b2b 0%,#0e1420 60%,#161022 100%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(224,179,84,.16),transparent 70%)}
+  .h-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px}
+  .h-name{font-size:30px;font-weight:800;letter-spacing:1px}
+  .h-code{font-family:ui-monospace,monospace;color:var(--gold);font-size:14px;border:1px solid rgba(224,179,84,.4);border-radius:6px;padding:2px 10px}
+  .h-tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .h-price{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px}
+  .p-item .k{font-size:12px;color:var(--sub)}
+  .p-item .v{font-size:22px;font-weight:700;font-family:ui-monospace,monospace;margin-top:2px}
+  .up{color:var(--bull)} .down{color:var(--bear)} .flat{color:var(--sub)}
+  .h-meta{margin-top:16px;font-size:12px;color:var(--dim)}
+
+  /* Replace notice */
+  .swap{margin-top:16px;background:linear-gradient(120deg,rgba(169,112,255,.14),rgba(224,179,84,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:16px 20px;font-size:12.8px;color:#dcd2f2}
+  .swap .st{font-weight:700;color:var(--purple);letter-spacing:.3px}
+  .swap b{color:var(--gold)}
+
+  /* Banner */
+  .banner{margin-top:16px;background:linear-gradient(120deg,rgba(34,197,94,.10),rgba(224,179,84,.08));border:1px solid rgba(224,179,84,.35);border-radius:16px;padding:22px 26px}
+  .b-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;align-items:center}
+  .b-cell .b-k{font-size:12px;color:var(--sub);margin-bottom:4px}
+  .b-cell .b-v{font-size:24px;font-weight:800;font-family:ui-monospace,monospace}
+  .b-v.gold{color:var(--gold)}
+  .b-sum{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line);color:var(--sub);font-size:13px}
+  .b-sum b{color:var(--txt)}
+
+  /* cards grid */
+  .grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;transition:.2s}
+  .card:hover{border-color:#35406a;transform:translateY(-2px)}
+  .c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .c-name{font-size:15px;font-weight:700}
+  .c-score{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold)}
+  .c-body{font-size:13px;color:var(--sub);min-height:70px}
+  .c-body b{color:var(--txt)}
+  .bar{height:8px;border-radius:6px;background:#232c42;margin-top:12px;overflow:hidden}
+  .bar>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),#ff9d4d)}
+  .c-note{margin-top:9px;font-size:11.5px;color:var(--dim)}
+
+  /* tech panel */
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .t-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .t-card h4{font-size:13.5px;color:var(--gold);margin-bottom:9px;letter-spacing:.4px}
+  .t-card ul{list-style:none;font-size:12.5px;color:var(--sub)}
+  .t-card li{padding:3px 0;border-bottom:1px dashed rgba(38,48,74,.6)}
+  .t-card li:last-child{border:0}
+  .t-card li b{color:var(--txt)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#182034;color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.4px}
+  tr:last-child td{border-bottom:0}
+  td.mono{font-family:ui-monospace,monospace}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .pill.bull{background:var(--bullbg);color:var(--bull)}
+  .pill.bear{background:var(--bearbg);color:var(--bear)}
+  .pill.neu{background:rgba(147,164,192,.14);color:var(--sub)}
+
+  /* term structure chart */
+  .chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px 12px}
+  .cs-row{display:flex;align-items:flex-end;gap:26px;height:230px;padding:0 8px;justify-content:center}
+  .cs-col{flex:0 1 180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .cs-bar{width:100%;max-width:92px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--blue),#2456a8);position:relative;transition:.3s}
+  .cs-bar.spot{background:linear-gradient(180deg,var(--gold),#a87b1e)}
+  .cs-bar.near{background:linear-gradient(180deg,#ff6b6b,#b32a2c)}
+  .cs-val{font-family:ui-monospace,monospace;font-size:13px;font-weight:700;margin-bottom:6px}
+  .cs-lbl{font-size:12px;color:var(--sub);margin-top:8px;text-align:center}
+  .chart-note{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--dim)}
+
+  /* debate */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .round-h{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+  .round-h h3{font-size:15.5px}
+  .round-h .tag{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .duel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:15px}
+  .side{border-radius:12px;padding:15px 16px;font-size:12.8px;line-height:1.75}
+  .side.bull{background:var(--bullbg);border:1px solid rgba(255,77,79,.3)}
+  .side.bear{background:var(--bearbg);border:1px solid rgba(34,197,94,.3)}
+  .side .who{font-weight:700;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:6px}
+  .side.bull .who{color:var(--bull)} .side.bear .who{color:var(--bear)}
+  .side p{color:#cfd9ea;margin-bottom:8px}
+  .side .lbl{color:var(--gold);font-weight:600}
+
+  /* final */
+  .final{background:linear-gradient(135deg,#151b28,#131a2b);border:1px solid rgba(224,179,84,.3);border-radius:16px;padding:24px 26px}
+  .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .k{font-size:12px;color:var(--sub)}
+  .stat .v{font-size:20px;font-weight:800;font-family:ui-monospace,monospace;margin-top:3px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+  .adv{background:var(--card2);border-radius:12px;padding:15px 17px;font-size:12.8px}
+  .adv h4{font-size:13.5px;margin-bottom:8px}
+  .adv.bull h4{color:var(--bull)} .adv.bear h4{color:var(--bear)}
+  .adv ul{margin-left:16px;color:var(--sub)}
+  .adv li{margin:4px 0}
+  .plan{background:#0f1522;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:18px 0}
+  .plan-row{display:flex;border-bottom:1px solid var(--line);font-size:13px}
+  .plan-row:last-child{border-bottom:0}
+  .plan-row .pk{width:130px;flex:none;padding:11px 16px;background:#141b2b;color:var(--sub);font-weight:600}
+  .plan-row .pv{padding:11px 16px;color:var(--txt)}
+  .risk{background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.28);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#e8c3c4;margin-top:8px}
+  .risk b{color:var(--bull)}
+  .conf{background:rgba(224,179,84,.08);border:1px solid rgba(224,179,84,.30);border-radius:12px;padding:16px 18px;font-size:12.8px;color:#efe3c2;margin-top:12px}
+  .conf b{color:var(--gold)}
+
+  .foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dim);text-align:center;line-height:1.9}
+  @media(max-width:700px){.duel,.two{grid-template-columns:1fr}.h-price{gap:20px}.cs-row{gap:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="h-top">
+      <span class="h-name">豆粕</span>
+      <span class="h-code">MZL.DCE · 大商所</span>
+      <span class="h-tag">主连 MZL.DCE（主力 M2701）</span>
+      <span class="h-tag">油脂油料 · 关联 LH / JD</span>
+      <span class="h-tag">由生猪 LH 关联触发</span>
+    </div>
+    <div class="h-price">
+      <div class="p-item"><div class="k">最新收盘价</div><div class="v down">3316 <small style="font-size:12px">元/吨</small></div></div>
+      <div class="p-item"><div class="k">涨跌幅（主连口径）</div><div class="v down">-1.69%</div></div>
+      <div class="p-item"><div class="k">昨收（10/14 主连序列）</div><div class="v">3373</div></div>
+      <div class="p-item"><div class="k">持仓量</div><div class="v">238.29 <small style="font-size:12px">万手</small></div></div>
+      <div class="p-item"><div class="k">成交量</div><div class="v">121.61 <small style="font-size:12px">万手</small></div></div>
+    </div>
+    <div class="h-meta">报告日期：2026-10-15（周四收盘后）　|　数据来源：同花顺 iFinD　|　最高 3376 / 最低 3315；主连收盘序列前值 3373，按日收盘差 -1.69%（-57 点）　|　主力合约 M2701（据 Mysteel / 新浪研报 2026-10-13）</div>
+  </header>
+
+  <!-- 关联说明 -->
+  <div class="swap">
+    <span class="st">◆ 关联品种说明：</span><b>本次为生猪 LH（置信度 53%，低于 60% 阈值）触发的关联品种分析，需评估豆粕 M 自身置信度，用于与 LH 比较决定是否替换。</b>
+    关联逻辑：豆粕 M 是生猪 LH 的<b>蛋白饲料核心原料</b>，成本传导约 <b>5~10 个交易日</b>（关联强度约 0.7）；同时与鸡蛋 JD 相关。生猪养殖利润 → 饲料需求 → 豆粕消费，构成下游传导链。当前生猪持续亏损、能繁母猪缓慢去化，对豆粕需求端形成压制。
+  </div>
+
+  <!-- Banner -->
+  <div class="banner">
+    <div class="b-grid">
+      <div class="b-cell"><div class="b-k">最终方向</div><div class="b-v gold" style="font-size:19px">偏空（震荡下行）</div></div>
+      <div class="b-cell"><div class="b-k">胜率评估</div><div class="b-v"><span class="down">空60%</span> / <span class="up">多40%</span></div></div>
+      <div class="b-cell"><div class="b-k">置信度</div><div class="b-v gold">62%</div></div>
+      <div class="b-cell"><div class="b-k">触发窗口</div><div class="b-v" style="font-size:18px">3~5个交易日</div></div>
+      <div class="b-cell"><div class="b-k">目标位</div><div class="b-v" style="font-size:20px">3280</div></div>
+    </div>
+    <div class="b-sum">
+      <b>核心判断：</b>10-15 豆粕主连收 <b>3316（-1.69%）</b>，放量（121.61 万手）报收<b>大阴线</b>，一举跌破 <b>EMA5 3355.48 / EMA10 3369.17 / EMA20 3370.92</b> 三线并形成 <b>EMA5&lt;EMA10&lt;EMA20 空头排列</b>，同时失守 9 月以来箱体下沿 <b>3327</b>。技术面转向明确：<b>MACD 零轴上方死叉深化</b>（DIF 10.27 &lt; DEA 约 25.32，绿柱 -30.09）、<b>KDJ 死叉</b>（K 28.95 &lt; D 36.48，J 13.91）、RSI(6)=30.14 逼近超卖；量价呈<b>放量下跌</b>。基本面偏空共振：10 月 USDA 上调美豆单产至 <b>53.1 蒲/英亩创历史新高</b>、产量 45.62 亿蒲、期末库存升至 3.15 亿蒲，全球大豆连续增产；全国油厂豆粕库存回升至 <b>117.99 万吨</b>、节前逼近 130 万吨（同比 +9.01%），下游按需补采、生猪亏损压需求；美豆主力回落至 <b>1285 美分</b>、9 月底峰会未释放扩大采购信号。多方依仗 <b>现货转升水（基差 +24）／到港 10 月回落至约 850 万吨／南美天气期权</b> 支撑。持仓层面主力席位空头第 1 名占比 <b>20.92%</b> vs 多头第 1 名 10.87%（1.92 倍），净空倾向延续。策略：<b>反弹沽空为主，破位跟踪，严设止损。</b>
+    </div>
+  </div>
+
+  <!-- 6维 -->
+  <section class="section">
+    <h2 class="sec-title">六维数据全景 <small>评分 1-10，10 = 极度利多；缺失项如实标注</small></h2>
+    <div class="grid6">
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">① 库存</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          全国油厂豆粕库存 <b>117.99 万吨</b>（Mysteel，10 月上旬），节前逼近 <b>130 万吨</b>，<b>同比 +9.01%</b>，处年内高位；库存从 6 月末 74.29 万吨持续攀升至 9-18 的 117.32 万吨（+58.0%）。<br>
+          油厂大豆原料库存、港口大豆库存同步走高、处近三年高位；10 月到港预估回落至约 <b>850~854 万吨</b>（9 月 1019 万吨）。
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">库存高位且回升 → 偏空；但 10 月起到港回落提供中期边际支撑（周频口径，最新为 10 月上旬）</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">② 仓单</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          注册仓单（张）：10-09 <b>47939</b> → 10-12 <b>47939</b> → 10-13 <b>52939</b>（<b>+5000</b>）→ 10-14 <b>52939</b> → 10-15 <b>52939</b>（iFinD，持平）。<br>
+          仓单近一周净增 <b>+5000 张（+10.4%）</b>后连续 3 日持平，可交割资源增加但未见持续抬升。
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">仓单边际抬升后走平 → 中性偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">③ 期限结构</span><span class="c-score">5 / 10</span></div>
+        <div class="c-body">
+          主连 <b>3316</b>（现货 <b>3340</b>，基差 <b>+24</b>，基差率 <b>+0.72%</b>，<b>现货转升水</b>）vs 次主连 <b>2943</b>（价差 <b>+373</b>）→ <b>backwardation（近强远弱）</b>。<br>
+          <span style="color:var(--dim)">基差由 10-14 的 -13 转为 +24，近端现货升水初现、对盘面有修复支撑；但 M1-M5 近强远弱属季节性常态。</span>
+        </div>
+        <div class="bar"><i style="width:50%"></i></div>
+        <div class="c-note">Back 结构 + 基差转正（现货小幅升水）→ 中性略偏多</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">④ 技术面</span><span class="c-score">3 / 10</span></div>
+        <div class="c-body">
+          收盘 <b>3316</b> 跌破 <b>EMA5 3355.48 / EMA10 3369.17 / EMA20 3370.92</b>，形成 <b>EMA5&lt;EMA10&lt;EMA20 空头排列</b>；<b>MACD 死叉深化</b>（DIF 10.27 &lt; DEA 约 25.32，绿柱 -30.09）；<b>KDJ 死叉</b>（K 28.95 &lt; D 36.48，J 13.91 超卖）；<b>RSI(6)=30.14</b> 逼近超卖。<br>
+          <span style="color:var(--dim)">放量下跌（121.61 万手），失守箱体下沿 3327；仅 DIF 仍在零轴上方。</span>
+        </div>
+        <div class="bar"><i style="width:30%"></i></div>
+        <div class="c-note">破位转空 + 空头排列，仅短周期超卖 → 偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑤ 新闻基本面</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          <b>偏空：</b>10 月 USDA 上调美豆单产至 <b>53.1 蒲/英亩（创历史新高）</b>、产量 45.62 亿蒲、期末库存升至 3.15 亿蒲；全球连续增产；美豆主力回落至 <b>1285 美分</b>；9 月底峰会未释放扩大采购信号；国内高库存 + 弱需求（生猪亏损、能繁去化）。<br>
+          <b>偏多：</b>巴西主产区播种期降水偏少、厄尔尼诺转拉尼娜存天气风险；10-12 月到港回落（850/870/950 万吨）；进口成本高位、榨利深亏。
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">USDA 偏空 + 需求弱主导，天气期权为对冲 → 偏空</div>
+      </div>
+
+      <div class="card">
+        <div class="c-head"><span class="c-name">⑥ 持仓席位</span><span class="c-score">4 / 10</span></div>
+        <div class="c-body">
+          多头持仓占比第 1 名 <b>10.8749%</b>（10-15，iFinD；10-14 为 10.4701%）；空头持仓占比第 1 名 <b>20.9212%</b>（10-15；10-14 为 22.3004%）。<br>
+          空头第 1 名约为多头第 1 名的 <b>1.92 倍</b>，套保空压延续；但空头占比回落 -1.38pp、多头占比上升 +0.40pp，边际略有改善。
+        </div>
+        <div class="bar"><i style="width:40%"></i></div>
+        <div class="c-note">主力席位净空倾向（含产业套保属性）→ 偏空；仅第 1 名占比、仅 2 日数据、无席位明细</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 技术面面板 -->
+  <section class="section">
+    <h2 class="sec-title">技术面深度研判 <small>趋势 / 震荡 / 量能 / 形态 四维交叉</small></h2>
+    <div class="tech-grid">
+      <div class="t-card">
+        <h4>趋势指标</h4>
+        <ul>
+          <li>EMA5 <b>3355.48</b> &lt; EMA10 <b>3369.17</b> &lt; EMA20 <b>3370.92</b>（<b>空头排列</b>，EMA5 下穿 EMA10 呈死叉）</li>
+          <li>MACD：DIF <b>+10.27</b>、DEA <b>约 +25.32</b> → <b>零轴上方死叉深化</b>，绿柱由 -24.58 扩至 <b>-30.09</b></li>
+          <li>BOLL(26,2)：<b>中轨 3394.0</b>，价格处中轨下方；<span style="color:var(--dim)">上/下轨数据缺失</span></li>
+          <li>研判：中期均线转空头排列，动能加速走弱 → <b>下行</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>震荡指标</h4>
+        <ul>
+          <li>RSI(6)：<b>30.14</b>，位于 50 中轴<b>下方</b>，逼近超卖区</li>
+          <li>KDJ：K <b>28.95</b> &lt; D <b>36.48</b>，J <b>13.91</b> → <b>死叉</b>且 J 进入超卖</li>
+          <li>研判：短周期指标一致转弱，J 超卖给出短线反抽可能</li>
+          <li>结论：<b>偏空，短线存超卖反抽风险</b></li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>量能分析</h4>
+        <ul>
+          <li>成交量：10-15 <b>121.61 万手</b>（10-14 为 111.69 万手，<b>放量</b>）</li>
+          <li>持仓量：<b>238.29 万手</b>（10-14 240.93 万，<b>-2.64 万手，减仓</b>）</li>
+          <li>价格：10-15 收 <b>3316</b>，较 10-14 的 3373 <b>大跌 57 点</b></li>
+          <li>研判：<b>放量下跌 + 小幅减仓</b>（空头主导、多头离场）→ 空头动能强</li>
+        </ul>
+      </div>
+      <div class="t-card">
+        <h4>形态分析</h4>
+        <ul>
+          <li>近 8 日收盘：3426 → 3402 → 3366 → 3402 → 3383 → 3361 → 3373 → <b>3316</b></li>
+          <li>区间：09-25~10-14 箱体 <b>3327~3420</b>；10-15 收 3316 <b>下破箱体下沿 3327</b></li>
+          <li>形态：<b>箱体破位下行</b>，3315 为当日最低、亦为近月新低</li>
+          <li>研判：破位后下方看 <b>3280（前低平台）/ 3250</b>；反抽 3327~3355 为压力</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 期限结构图 -->
+  <section class="section">
+    <h2 class="sec-title">期限结构 <small>近强远弱 · 季节性 backwardation</small></h2>
+    <div class="chart">
+      <div class="cs-row">
+        <div class="cs-col"><div class="cs-val" style="color:var(--bull)">3316</div><div class="cs-bar near" style="height:170px"></div><div class="cs-lbl">主连 MZL.DCE<br>（主力 M2701 · 基差 +24）</div></div>
+        <div class="cs-col"><div class="cs-val">2943</div><div class="cs-bar" style="height:150px"></div><div class="cs-lbl">次主连 MZM.DCE<br>（价差 +373）</div></div>
+      </div>
+      <div class="chart-note">柱高按价格等比缩放示意。主连 3316 较次主连 2943 升水 <b>+373</b>，呈 <b>backwardation（近强远弱）</b>。需注意：豆粕 1 月合约（南美新豆到港前）天然强于 5 月合约（南美豆集中到港后），<b>M1-M5 近强远弱属季节性常态</b>，并非新增利多。值得注意的是，10-15 现货 3340 高于主连 3316，基差由 10-14 的 -13 转为 <b>+24（基差率 +0.72%）</b>，<b>近端现货转为小幅升水</b>，显示期货跌幅大于现货、盘面略显超跌，对下方构成一定修复支撑。综合看期限结构为<b>中性略偏多</b>信号。</div>
+    </div>
+  </section>
+
+  <!-- 持仓席位 -->
+  <section class="section">
+    <h2 class="sec-title">持仓席位面板 <small>iFinD 仅提供占比，无完整席位明细</small></h2>
+    <table>
+      <thead><tr><th>项目</th><th>数值</th><th>状态</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>多头持仓占比 第1名</td><td class="mono">10.8749%</td><td><span class="pill neu">占比</span></td><td>较 10-14（10.4701%）上升 +0.40pp</td></tr>
+        <tr><td>空头持仓占比 第1名</td><td class="mono down">20.9212%</td><td><span class="pill bear">偏空</span></td><td>单席约占总量 1/5，较 10-14（22.3004%）回落 -1.38pp</td></tr>
+        <tr><td>空头第1名 / 多头第1名 之比</td><td class="mono down">1.92 倍</td><td><span class="pill bear">净空倾向</span></td><td>前位席位仍显著偏空（含产业套保属性），但比值较 10-14 的 2.13 倍收窄</td></tr>
+        <tr><td>持仓量（总量）</td><td class="mono">238.29 万手</td><td><span class="pill neu">减仓</span></td><td>10-13 240.92 万 → 10-14 240.93 万 → 10-15 238.29 万（-2.64 万）</td></tr>
+        <tr><td>前20名净持仓 / 会员席位明细</td><td class="mono">—</td><td><span class="pill neu">数据缺失</span></td><td>iFinD 未返回逐席增减仓与净持仓排名</td></tr>
+      </tbody>
+    </table>
+    <div class="c-note" style="margin-top:10px">数据限制：iFinD 未返回完整前 20 名席位明细（无会员名称）、亦无净持仓排名与逐席增减仓，仅有第 1 名<b>汇总占比</b>，连续数据仅 2 个交易日（10-14、10-15），<b>趋势判断参考性有限，不足以单独作为方向依据</b>，须结合基本面与价量交叉验证。</div>
+  </section>
+
+  <!-- 三轮辩论 -->
+  <section class="section">
+    <h2 class="sec-title">三轮辩论记录</h2>
+
+    <div class="round">
+      <div class="round-h"><h3>第一轮 · 立论陈词</h3><span class="tag">多空各自搭建逻辑地基</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头 · 金牛</div>
+          <p><span class="lbl">核心1 · 现货转升水 + 成本硬底：</span>10-15 现货 <b>3340 元/吨</b> 高于盘面 3316，基差由 -13 翻正至 <b>+24（基差率 +0.72%）</b>，<b>现货升水初现</b>，期货贴水现货为下方提供修复动能；叠加巴西升贴水偏强、进口到港成本高位、<b>盘面榨利持续深度亏损</b>，油厂挺价意愿强，从成本端封杀深跌空间。</p>
+          <p><span class="lbl">核心2 · 到港回落 + 供给前高后低：</span>Mysteel 预估 10 月大豆到港约 <b>850~854 万吨</b>（较 9 月 1019 万吨回落约 16%），11 月约 870 万吨、12 月约 950 万吨，四季度到港较三季度月均千万吨<b>明显回落</b>；榨利深亏抑制远月买船，12/1 月船期采购偏慢，<b>中期供给收紧逻辑逐步兑现</b>。</p>
+          <p><span class="lbl">核心3 · 南美天气期权 + 利空出尽：</span>USDA 上调单产已被市场较充分交易，报告落地后存「<b>利空出尽</b>」修复空间；巴西主产区播种期降水偏少、厄尔尼诺转向拉尼娜，<b>天气题材窗口一旦开启</b>，美豆将获支撑（10/1 当周美豆出口销售净增 54.9 万吨）。</p>
+          <p><span class="lbl">技术：</span>J=13.91 深度超卖、RSI6=30.14 逼近超卖，3315 为当日低点，<b>短线存超跌反抽</b>。目标 <b>3355 → 3394（BOLL 中轨）</b>，时间 1~2 周。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头 · 黑熊</div>
+          <p><span class="lbl">核心1 · USDA 丰产定产 + 供应宽松：</span>10 月 USDA <b>上调美豆单产至 53.1 蒲/英亩（创历史新高）</b>、产量增至 45.62 亿蒲、出口虽上调但期末库存仍增 500 万蒲至 <b>3.15 亿蒲</b>；全球大豆连续增产，9 月到港 1019 万吨、港口与油厂大豆库存同步处近三年高位，原料供应充裕。</p>
+          <p><span class="lbl">核心2 · 库存回升 + 需求疲弱：</span>全国油厂豆粕库存回升至 <b>117.99 万吨</b>、节前逼近 130 万吨（<b>同比 +9.01%</b>）；节后油厂开机率快速恢复（10-13 达 58.22%），豆粕产出重新回升；下游按需补采、随用随采，<b>生猪养殖持续亏损</b>、能繁母猪缓慢去化，现货基差华东 01-80，需求端拖累明显。</p>
+          <p><span class="lbl">核心3 · 技术破位 + 资金偏空：</span>10-15 收 3316 <b>大跌 -1.69%</b>、<b>放量</b>至 121.61 万手，<b>跌破 EMA5/10/20 并形成空头排列</b>（3355.48&lt;3369.17&lt;3370.92）、<b>下破箱体下沿 3327</b>；MACD 死叉深化（绿柱 -30.09）、KDJ 死叉（K28.95&lt;D36.48、J13.91）、RSI6=30.14；主力席位空头第 1 名 20.92% vs 多头 10.87%。</p>
+          <p><span class="lbl">目标：</span><b>3280 → 3250</b>，时间 3~5 日；止损收盘站上 3394（BOLL 中轨）。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第二轮 · 交叉驳斥</h3><span class="tag">逐条拆解对方三大逻辑</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头驳斥</div>
+          <p><span class="lbl">驳「USDA 丰产」</span>报告已落地，市场此前已交易丰产——USDA 上调单产当日美豆仍稳于 <b>1285 美分</b>附近、并未崩跌，说明定价重心在<b>需求与成本</b>；且瑞研普遍定性「<b>利空出尽</b>」，单产大幅调整需待明年 1 月。</p>
+          <p><span class="lbl">驳「库存回升」</span>库存回升主因<b>节后下游采购恢复偏慢</b>（节奏错配），而非需求崩塌；9-18 的 117.32 万吨提货放量已实质转化，且 10 月起到港回落 16%，<b>库存拐点将现</b>，11-12 月基差季节性修复可期。</p>
+          <p><span class="lbl">驳「技术破位」</span>破位伴随 <b>J=13.91 超卖 + 持仓减仓 2.64 万手</b>，属空头宣泄的<b>赶底</b>而非趋势加速；基差已转 <b>+24 现货升水</b>，盘面超跌；3315 下方即迎 3280 成本支撑区，风险报酬对空方不利。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头驳斥</div>
+          <p><span class="lbl">驳「现货升水/成本硬底」</span>基差 +24 仅受现货滞跌、期货先跌所致，<b>现货本身也在走弱</b>（10-13 的 3360 → 10-15 的 3340）；成本托底 ≠ 上涨驱动——榨利深亏恰恰<b>反证下游承接差</b>，且豆油库存 150 万吨高位、油厂仍有开机动力，成本传导不畅。</p>
+          <p><span class="lbl">驳「到港回落」</span>10 月 850 万吨仍属<b>高位</b>，且 9 月千万吨到港的原料正持续转化；油厂开机率已恢复至 58.22% 并向上，<b>供给收缩尚未兑现、当期宽松是现实</b>，Mysteel 明确定性「高库存、弱需求」。</p>
+          <p><span class="lbl">驳「超跌反抽」</span>放量下跌 + EMA 空头排列 + 箱体破位，是<b>趋势转弱</b>而非单纯超卖；RSI6=30 尚未进超卖、J 值低点可再低，超卖不是做多理由；资金面空头第 1 名占比 1.92 倍（含套保）持续压制反弹高度。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-h"><h3>第三轮 · 最终陈词</h3><span class="tag">亮出胜负手与可执行建议</span></div>
+      <div class="duel">
+        <div class="side bull">
+          <div class="who">🐂 多头胜负手</div>
+          <p><span class="lbl">胜负手1 · 基差转正锁定下方：</span>现货升水 +24、进口成本高位、榨利深亏，<b>3315 下方即成本支撑区（3280~3300）</b>；期货贴水现货使盘面深跌需更强利空驱动。</p>
+          <p><span class="lbl">胜负手2 · 到港回落 + 天气期权双催化：</span>10-12 月到港由千万吨降至 850/870/950 万吨、榨利深亏抑制远月买船，叠加巴西播种期干旱风险，一旦天气题材发酵，Back 结构下近月弹性向上。</p>
+          <p><span class="lbl">建议</span>回踩 <b>3300~3315</b> 轻仓试多；止损收盘跌破 <b>3275</b>；目标 <b>3355 / 3394（中轨）</b>。</p>
+        </div>
+        <div class="side bear">
+          <div class="who">🐻 空头胜负手</div>
+          <p><span class="lbl">胜负手1 · 供需宽松是主基调：</span>USDA 丰产创历史新高 + 高库存（117.99 万吨、同比 +9.01%）+ 开机恢复 + 需求亏损，成本只是<b>底不是顶</b>；供给曲线右移压制任何反弹高度。</p>
+          <p><span class="lbl">胜负手2 · 技术破位 + 量价资金共振：</span>放量长阴下破箱体与三均线、EMA5&lt;EMA10&lt;EMA20 空头排列、MACD 死叉深化、KDJ 死叉；主力席位空头第 1 名 20.92% 对多头 10.87%，量价资金同向偏空。</p>
+          <p><span class="lbl">建议</span>反弹 <b>3327~3355</b>（破位回抽 / EMA5）逢高轻仓空；止损收盘站上 <b>3394</b>；目标 <b>3280 / 3250</b>。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终裁决 -->
+  <section class="section">
+    <h2 class="sec-title">总决策官最终裁决 <small>天平 · 中立客观</small></h2>
+    <div class="final">
+      <div class="stat-row">
+        <div class="stat"><div class="k">最终方向</div><div class="v gold" style="font-size:16px">偏空（震荡下行）</div></div>
+        <div class="stat"><div class="k">胜率</div><div class="v"><span class="down">60%</span> / <span class="up">40%</span></div></div>
+        <div class="stat"><div class="k">置信度</div><div class="v gold">62%</div></div>
+        <div class="stat"><div class="k">六维合计（合计 60 分）</div><div class="v">25 / 60</div></div>
+      </div>
+
+      <table style="margin-bottom:6px">
+        <thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>① 库存</td><td class="mono down">4</td><td>全国油厂豆粕库存回升至 117.99 万吨、节前逼近 130 万吨（同比 +9.01%），处年内高位 → 偏空；10 月起到港回落至 850 万吨提供中期支撑，利多打折</td></tr>
+          <tr><td>② 仓单</td><td class="mono">5</td><td>注册仓单 10-13 增 5000 至 52939 张后连续 3 日持平，可交割资源边际抬升但未持续 → 中性偏空</td></tr>
+          <tr><td>③ 期限结构</td><td class="mono">5</td><td>主连 3316 vs 次主连 2943，Back +373；基差由 -13 转 +24（现货升水）显示盘面略超跌 → 中性略偏多</td></tr>
+          <tr><td>④ 技术面</td><td class="mono down">3</td><td>放量长阴下破箱体 3327 与 EMA5/10/20，形成空头排列，MACD 死叉深化、KDJ 死叉；仅 J 超卖存反抽可能 → 偏空</td></tr>
+          <tr><td>⑤ 新闻基本面</td><td class="mono down">4</td><td>USDA 单产创历史新高、库存升、需求弱、美豆回落 1285 美分、采购预期落空主导 → 偏空；巴西天气风险 + 到港回落为对冲</td></tr>
+          <tr><td>⑥ 持仓席位</td><td class="mono down">4</td><td>空头第 1 名占比 20.92% 为多头第 1 名 10.87% 的 1.92 倍，净空倾向延续；但占比回落、仅 2 日数据、无席位明细，可信度中等</td></tr>
+        </tbody>
+      </table>
+
+      <div class="two">
+        <div class="adv bull">
+          <h4>🐂 多头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>基差转正 + 到港回落中期逻辑。现货 3340 升水盘面、基差 +24，进口成本高位、榨利深亏；10-12 月到港由千万吨降至 850/870/950 万吨，远月买船乏力，叠加巴西天气风险，下方空间被实质压缩（3315、3280）。</li>
+            <li><b>最弱：</b>无从「底」到「涨」的即时催化。成本托底 ≠ 上涨驱动，需求端（生猪亏损、库存高位回升）尚未确认改善，且技术面明确破位（空头排列 + 死叉），缺乏向上突破的资金与题材配合。</li>
+          </ul>
+        </div>
+        <div class="adv bear">
+          <h4>🐻 空头 · 最强 / 最弱</h4>
+          <ul>
+            <li><b>最强：</b>供需宽松 + 技术资金共振偏空。USDA 定产创历史新高、库存回升 + 同比 +9.01%、开机恢复、需求亏损，且 10-15 放量长阴下破箱体与三均线、MACD/KDJ 双死叉、主力席位净空 1.92 倍，多维度同向。</li>
+            <li><b>最弱：</b>短线超卖 + 基差托底限制追空空间。J=13.91、RSI6=30.14 逼近超卖，3315 处成本支撑区，且基差转正提示盘面略超跌，反抽风险与「利空出尽」修复风险仍在。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-row"><div class="pk">方向</div><div class="pv">偏空（震荡下行）—— 供需宽松 + 技术破位主导，成本/基差托底限制跌幅，属破位后的偏空跟踪</div></div>
+        <div class="plan-row"><div class="pk">入场策略</div><div class="pv">反弹至 <b>3327~3355</b>（破位回抽 / EMA5）逢高轻仓空；激进者现价 3316 轻仓试空。<b>不追空、不抄底</b></div></div>
+        <div class="plan-row"><div class="pk">目标位</div><div class="pv">第一目标 <b>3280</b>（前低平台 / 成本支撑区上沿）；第二目标 <b>3250</b>（前低延伸）</div></div>
+        <div class="plan-row"><div class="pk">止损位</div><div class="pv">收盘<b>有效站上 3394</b>（BOLL 中轨）离场；参考 <b>3402</b>（10-14 前低平台）为第二道防线</div></div>
+        <div class="plan-row"><div class="pk">时间窗口</div><div class="pv"><b>3~5 个交易日</b>（2026-10-16 起算）</div></div>
+        <div class="plan-row"><div class="pk">主力资金可信度</div><div class="pv">中。空头第 1 名占比 20.92% 具<b>产业套保属性</b>（持仓稳定、非短线冲动），方向意义偏空；但无席位明细与净持仓、连续数据仅 2 日，可信度中等，不作为唯一依据。</div></div>
+      </div>
+
+      <div class="conf">
+        <b>◆ 置信度：62%　|　预期触发窗口：3~5 个交易日</b><br>
+        <b>评估依据：</b>① <b>多空信号共振程度——较高。</b>技术（破位 + 空头排列 + 双死叉）、基本面（USDA 丰产、库存回升、需求弱）、资金（净空 1.92 倍）三方同向偏空，仅基差转正与超卖指标为多方对冲；② <b>技术形态成熟度——高。</b>10-15 放量长阴下破箱体下沿 3327 与三均线，形态由震荡转为下行，方向明确；③ <b>基本面明确程度——中高。</b>「丰产 + 高库存 + 弱需求」偏空基调清晰，但存在天气期权与到港回落的中期对冲，非单边流畅；④ <b>持仓趋势连续性——不足。</b>仅 2 个交易日占比、无席位明细，扣分。综合 → <b>62%</b>（较 10-14 的 55% 上调，因技术破位显著提升了方向确定性）。<b>说明：该置信度高于原品种生猪 LH（53%），若以此替换，置信度提升约 +9pp；但 62% 仍属中等置信度，建议在关联呈现中作为 LH 的替换候选并保留方向一致性（均为偏空）。</b>
+      </div>
+
+      <div class="risk">
+        <b>⚠ 风险提示：</b>本判断的核心风险是「<b>超跌反抽 + 利空出尽修复</b>」。空头风险来自：① J=13.91、RSI6=30.14 逼近超卖，且基差已转为现货升水 +24，盘面略超跌，短线存在技术性反抽至 3327~3355 的可能；② 巴西播种期天气恶化（厄尔尼诺转拉尼娜）或美豆出口超预期，将触发成本端反弹；③ 油厂因榨利深亏主动降开机，或引发豆粕加速去库。多方风险来自：高库存 + 强开机 + 需求亏损的宽松格局一旦延续，跌破 3280 将打开至 3250 的下行空间。关联角度：生猪 LH 偏空（饲料需求弱）与豆粕偏空<b>方向一致</b>，豆粕同时受成本端（美豆）牵制，波动更大、更受外盘扰动，两者不可简单等同。务必<b>轻仓、严止损、破位跟踪但不追空</b>。
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，<b>不构成任何投资建议</b>。<br>
+    数据口径与来源：future_quotes（行情/技术/基差/注册仓单/持仓占比，2026-10-15）、search_news（2026-09-25 ~ 2026-10-15，含 Mysteel / 新浪财经 / 建信期货 / 南华期货等）。<br>
+    数据缺口：① 豆粕库存为周频（最新 10 月上旬 Mysteel 117.99 万吨），日频库存缺失；② 持仓席位仅第 1 名汇总占比、无会员明细名称与净持仓排名，连续数据仅 2 日；③ 各月份单合约（M2601/M2605/M2609）收盘价未返回（显示为空），期限结构以主连/次主连替代；④ BOLL 上轨/下轨数据缺失，仅中轨有效；⑤ MACD 的 DEA 由柱值反推（约 25.32）。以上缺口已如实标注，未作任何编造。<br>
+    关联说明：本品种由生猪 LH（53% 低置信度）触发的关联分析呈现，用于比较是否替换。<br>
+    生成时间：2026-10-15　|　品种：豆粕 M（大连商品交易所）　|　主连：MZL.DCE（主力 M2701）
+  </div>
+
+</div>
+</body>
+</html>
