@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>红枣CJ2701 深度分析-多Agent辩论报告 2026-10-16</title><style>
+:root{--bg:#0b0f14;--bg2:#111823;--card:#151d2a;--card2:#1b2536;--line:#26344a;
+--txt:#dce6f2;--sub:#8ba0bb;--bull:#ff4d5e;--bear:#22c37a;--acc:#f0b429;--acc2:#4aa8ff;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#080b10,#0b1017 40%,#0b0f14);color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+line-height:1.7;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.hd{background:linear-gradient(135deg,#131c2b,#0d141d);border-bottom:1px solid var(--line);padding:26px 0 20px;position:relative}
+.hd .kicker{color:var(--acc2);font-size:12px;letter-spacing:3px;font-weight:600}
+.hd h1{font-size:30px;margin:6px 0 4px;font-weight:800;letter-spacing:1px}
+.hd h1 .code{font-size:15px;color:var(--sub);font-weight:500;margin-left:10px}
+.hd .meta{color:var(--sub);font-size:13px;margin-top:6px}
+.hd .meta b{color:var(--txt)}
+.banner{margin-top:18px;background:linear-gradient(135deg,#1d1520,#161d2a);border:1px solid var(--line);
+border-radius:14px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.banner .dir{font-size:26px;font-weight:800;padding:8px 18px;border-radius:10px;letter-spacing:2px}
+.dir.short{background:rgba(34,195,122,.15);color:var(--bear);border:1px solid rgba(34,195,122,.4)}
+.dir.long{background:rgba(255,77,94,.15);color:var(--bull);border:1px solid rgba(255,77,94,.4)}
+.dir.neu{background:rgba(240,180,41,.15);color:var(--acc);border:1px solid rgba(240,180,41,.4)}
+.banner .win{font-size:13px;color:var(--sub)}
+.banner .win b{font-size:20px;color:var(--txt)}
+.banner .cf{margin-left:auto;text-align:right}
+.banner .cf .num{font-size:30px;font-weight:800;color:var(--acc)}
+.banner .cf .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+section{margin-top:26px}
+.sec-title{font-size:17px;font-weight:700;letter-spacing:1px;padding-left:12px;border-left:4px solid var(--acc);margin-bottom:14px}
+.sec-title span{color:var(--sub);font-size:12px;font-weight:400;margin-left:8px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+.card h4{font-size:14px;color:var(--acc2);margin-bottom:8px;letter-spacing:.5px}
+.card ul{list-style:none;font-size:13px;color:var(--txt)}
+.card li{padding:2px 0 2px 14px;position:relative}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--sub)}
+.bar{height:8px;border-radius:5px;background:linear-gradient(90deg,var(--bull),#3a2a33);margin-top:10px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#ff8a5c,var(--bull));border-radius:5px}
+.bar.bear i{background:linear-gradient(90deg,#4ad99a,var(--bear))}
+.bar .tag{position:absolute;right:6px;top:-16px;font-size:11px;color:var(--sub)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cols4 .c{background:var(--card2);border-radius:10px;padding:12px}
+.cols4 .c h5{font-size:13px;color:var(--acc);margin-bottom:6px}
+.cols4 .c p{font-size:12.5px;color:var(--txt)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.5px}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.ts{display:flex;gap:12px;align-items:flex-end;height:190px;padding:10px 4px}
+.ts .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.ts .b .bar2{width:64%;background:linear-gradient(180deg,var(--acc2),#1c3a5c);border-radius:6px 6px 0 0}
+.ts .b .v{font-size:12px;color:var(--txt);margin-bottom:4px}
+.ts .b .k{font-size:11px;color:var(--sub);margin-top:6px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.db{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.db.bull{border-top:3px solid var(--bull)}
+.db.bear{border-top:3px solid var(--bear)}
+.db h5{font-size:13px;margin-bottom:8px;letter-spacing:.5px}
+.db.bull h5{color:var(--bull)}
+.db.bear h5{color:var(--bear)}
+.db p{font-size:12.8px;color:var(--txt);margin-bottom:6px}
+.rnd{display:flex;gap:8px;align-items:center;margin:18px 0 10px}
+.rnd .n{background:var(--acc);color:#101418;font-weight:800;width:26px;height:26px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;font-size:13px}
+.rnd .t{font-size:15px;font-weight:700}
+.dec{background:linear-gradient(135deg,#121b27,#0f1721);border:1px solid var(--line);border-radius:12px;padding:16px}
+.dec table td:first-child{color:var(--sub);width:150px}
+.risk{background:rgba(255,77,94,.07);border:1px solid rgba(255,77,94,.25);border-radius:12px;padding:14px 16px;font-size:13px;color:#f2c7cd}
+.risk h5{color:var(--bull);font-size:13px;margin-bottom:6px}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;text-align:center}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:rgba(74,168,255,.14);color:var(--acc2);margin-left:8px}
+.badge.warn{background:rgba(240,180,41,.16);color:var(--acc)}
+.kv{display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin-top:8px}
+.kv b{color:var(--txt)}
+@media(max-width:900px){.grid6{grid-template-columns:1fr 1fr}.cols4{grid-template-columns:1fr 1fr}.debate{grid-template-columns:1fr}}
+</style></head><body>
+<div class="hd"><div class="wrap">
+<div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+<h1>红枣 <span class="code">CJ2701 · 郑商所 CZCE</span></h1>
+<div class="meta">报告日期 <b>2026-10-16</b> · 收盘后 · 下一交易日 <b>2026-10-19</b> · 数据来源：同花顺 iFinD / 新浪财经期货行情（真实行情）</div>
+<div class="kv">
+<span>最新价 <b>6420</b></span><span>涨跌 <b>-0.77%</b></span>
+<span>最高/最低 <b>6535 / 6330</b></span>
+<span>成交量 <b>473,883</b></span><span>持仓量 <b>228,437</b></span>
+</div>
+</div></div>
+
+<div class="wrap">
+<div class="banner">
+  <div class="dir neu">偏空</div>
+  <div class="win">胜率评估<br><b>空方 60% / 多方 40%</b></div>
+  <div class="cf"><div class="num">60%</div><div class="lbl">置信度 · 窗口 1~3 个交易日</div></div>
+</div>
+<div class="panel" style="margin-top:14px;font-size:13px">
+<b style="color:var(--acc)">核心判断：</b>价格远低于 EMA5/10/20/60 均线簇、MACD 零轴下绿柱扩大，趋势偏空；新枣即将上市、社会库存偏高、陈枣集中流入、下游刚需采购，供需偏宽松。contango（近弱远强）结构亦压制近月。但仓单已全部注销、河北特级灰枣基差 +395 升水、RSI14 仅 18.9 深度超卖，限制下行。故<b>偏空</b>，置信度 60%。
+</div>
+
+<section><div class="sec-title">六维数据全景 <span>库存 · 仓单 · 期限结构 · 技术面 · 新闻基本面 · 持仓席位</span></div>
+<div class="grid6"><div class="card"><h4>① 库存</h4><ul><li>样本点库存 10-15 报 9350 吨，较 9 月初 10105 吨缓慢去化</li><li>社会库存仍偏高，陈枣集中流入市场</li><li>新枣即将上市，供给压力前移</li></ul><div class="bar bear"><span class="tag">多4/10</span><i style="width:40%"></i></div></div><div class="card"><h4>② 仓单 · 持仓</h4><ul><li>仓单已全部注销，有效预报仅 11 张，仓单压力极低</li><li>CJ2701 持仓 22.84 万手，成交 47.4 万手放量</li><li>放量下跌，空头资金主动</li></ul><div class="bar"><span class="tag">多5/10</span><i style="width:50%"></i></div></div><div class="card"><h4>③ 期限结构</h4><ul><li>CJ2701 6420 < CJ2703 6445 < CJ2705 6580，呈 contango</li><li>近弱远强，压制近月、反映远月成本预期</li><li>期货对现货小幅升水（基差 -395 之一侧）</li></ul><div class="bar"><span class="tag">多6/10</span><i style="width:60%"></i></div></div><div class="card"><h4>④ 技术面</h4><ul><li>价 < EMA5(6539) < EMA10(6725) < EMA20(7019) < EMA60(7764)，空头排列</li><li>MACD -370.92/-323.43，绿柱 -94.98</li><li>RSI6 21.48、RSI14 18.92，KDJ 8.58/8.25 深度超卖</li></ul><div class="bar bear"><span class="tag">多4/10</span><i style="width:40%"></i></div></div><div class="card"><h4>⑤ 新闻基本面</h4><ul><li>新枣即将上市，陈枣集中流入，社会库存偏高</li><li>下游采购以刚需为主，河北销区一级成品理论亏损</li><li>天气转凉滋补需求或带来边际改善</li></ul><div class="bar bear"><span class="tag">多4/10</span><i style="width:40%"></i></div></div><div class="card"><h4>⑥ 持仓席位</h4><ul><li>放量下跌，空头资金占优</li><li>仓单注销降低可交割压力</li><li>席位连续净持仓数据受限</li></ul><div class="bar"><span class="tag">多5/10</span><i style="width:50%"></i></div></div></div></section>
+
+<section><div class="sec-title">技术面深度面板 <span>趋势 / 震荡 / 量能 / 形态</span></div>
+<div class="cols4">
+<div class="c"><h5>趋势指标</h5><p>EMA5/10/20/60 依次为 6539/6725/7019/7764，价格 6420 深居其下，空头排列陡峭，中期趋势向下。</p></div>
+<div class="c"><h5>震荡指标</h5><p>MACD DIF -370.92 / DEA -323.43、绿柱 -94.98；RSI6 21.48、RSI14 18.92；KDJ 8.58/8.25/9.25，深度超卖。</p></div>
+<div class="c"><h5>量能分析</h5><p>成交 47.4 万手、较前日放大，持仓 22.84 万手基本持平，放量阴线显示空头主动增仓。</p></div>
+<div class="c"><h5>形态研判</h5><p>10-16 冲高 6535 后回落收阴（上影较长），在 6330 一带获支撑；6330 为关键短线支撑，跌破将打开下行空间。</p></div>
+</div>
+<div class="panel" style="margin-top:12px;font-size:12.8px">
+<b style="color:var(--acc2)">多指标共振：</b>多头信号 2 个（深度超卖、仓单注销、基差升水）；空头信号 5 个（空头排列、MACD 绿柱、contango、供需宽松、新枣上市）。技术面空头趋势明确，超卖程度较高，短线或反复，但反弹不改变下行方向，宜反弹沽空。</div>
+</section>
+
+<section><div class="sec-title">期限结构 <span>主力及相邻合约收盘（元/吨，SC为元/桶）</span></div>
+<div class="panel"><div class="ts"><div class="b"><div class="v">6420</div><div class="bar2" style="height:30px"></div><div class="k">CJ2701</div></div><div class="b"><div class="v">6445</div><div class="bar2" style="height:50px"></div><div class="k">CJ2703</div></div><div class="b"><div class="v">6580</div><div class="bar2" style="height:160px"></div><div class="k">CJ2705</div></div></div>
+<div style="font-size:12.5px;color:var(--sub);margin-top:8px">期限结构呈 contango（近低远高），近月偏弱、远月受成本与季节性支撑，结构压制近月。</div></div></section>
+
+<section><div class="sec-title">持仓席位面板 <span>主力资金方向可信度</span></div>
+<div class="panel" style="font-size:13px">CJ2701 成交 47.4 万手放量、持仓持平于 22.84 万手，放量阴线显示空头资金主动；仓单全部注销，可交割压力低。席位连续净持仓数据受限，不作绝对判断。</div></section>
+
+<section><div class="sec-title">三轮多空辩论记录</div>
+<div class="rnd"><div class="n">1</div><div class="t">第一轮 · 立论陈词</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头首席分析师</h5><p>① 仓单端：红枣仓单已全部注销、有效预报仅 11 张，交割压力极低，近月估值有修复空间。② 估值端：河北特级灰枣基差 +395 元（期货贴水），现货并未跟随期货大幅走弱，期货向下空间有限。③ 技术端：RSI14 18.9、KDJ J 值接近 9，深度超卖；6330 一带已两次获支撑，随着天气转凉滋补需求启动，具备超跌反弹条件。</p></div>
+<div class="db bear"><h5>🐻 空头首席分析师</h5><p>① 供给端：新枣即将上市，陈枣集中流入，社会库存偏高，供给压力前移。② 需求端：下游采购以刚需为主，销区一级成品理论亏损，接货意愿低，缺乏主动补库。③ 技术端：均线空头排列，MACD 零轴下绿柱扩大，放量阴线，趋势明确向下。期货对现货升水（contango 近月虽贴远月，但对现货仍有升水）压制反弹，方向偏空，目标 6330→6250。</p></div>
+</div>
+<div class="rnd"><div class="n">2</div><div class="t">第二轮 · 交叉驳斥</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头 · 驳斥</h5><p>空头把‘新枣上市’当利空，但新枣上市利空已被价格大幅下跌提前兑现，期货已处历史低位。空头忽略仓单全部注销、基差 +395 的现实——现货不跌，期货难以深跌。技术上深度超卖叠加 6330 的支撑，继续追空的赔率极差，逢低反而是修复机会。</p></div>
+<div class="db bear"><h5>🐻 空头 · 驳斥</h5><p>多头把‘低仓单’当护身符，但红枣注册仓单本非主要矛盾，社会库存与陈枣才是定价核心。多头所谓‘现货坚挺’的基差仅 395 元、且现货利润已转负，难言强势。技术面放量阴线+空头排列+MACD 绿柱，趋势信号远强于超卖，反弹即空。</p></div>
+</div>
+<div class="rnd"><div class="n">3</div><div class="t">第三轮 · 最终陈词</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头 · 终局</h5><p>终局我押注超跌+低仓单：6330 支撑有效、仓单注销、深度超卖，修复行情可期。策略 6300~6350 轻仓试多，目标 6535→6650，止损 6280。</p></div>
+<div class="db bear"><h5>🐻 空头 · 终局</h5><p>终局我押注供需宽松：新枣上市+高库存+弱需求，趋势向下。策略反弹 6480~6540 沽空，目标 6330→6250，止损 6560。</p></div>
+</div>
+</section>
+
+<section><div class="sec-title">总决策官最终裁决 <span>⚖️ 天平 · 中立裁决</span></div>
+<div class="panel">
+<table><thead><tr><th>维度</th><th style="text-align:right">多空评分(多/10)</th><th>裁决理由</th></tr></thead>
+<tbody><tr><td>库存</td><td class="num">4</td><td>高库存，偏空</td></tr><tr><td>仓单持仓</td><td class="num">5</td><td>仓单低但放量下跌</td></tr><tr><td>期限结构</td><td class="num">6</td><td>contango 压制近月</td></tr><tr><td>技术面</td><td class="num">4</td><td>空头排列、超卖</td></tr><tr><td>新闻基本面</td><td class="num">4</td><td>供需宽松</td></tr><tr><td>持仓席位</td><td class="num">5</td><td>空头占优</td></tr></tbody></table>
+<div class="cols4" style="margin-top:16px">
+<div class="c" style="grid-column:span 2"><h5 style="color:var(--bull)">多方最强点</h5><ul style="font-size:12.5px"><li>仓单全部注销、有效预报仅 11 张</li><li>河北特级灰枣基差 +395，期货贴水</li><li>RSI14 18.9 深度超卖，6330 支撑</li></ul></div>
+<div class="c" style="grid-column:span 2"><h5 style="color:var(--bear)">空方最强点</h5><ul style="font-size:12.5px"><li>新枣即将上市，供给前移</li><li>社会库存偏高、下游刚需</li><li>EMA 空头排列，MACD 绿柱</li></ul></div>
+</div>
+</div>
+<div class="dec" style="margin-top:14px">
+<table>
+<tr><td>最终方向</td><td><b>偏空</b></td></tr>
+<tr><td>胜率评估</td><td>空方 60% / 多方 40%</td></tr>
+<tr><td>置信度 / 窗口</td><td><b style="color:var(--acc)">60%</b> · 预期 1~3 个交易日 内触发</td></tr>
+<tr><td>入场策略</td><td>反弹 6480~6540 分批沽空</td></tr>
+<tr><td>目标位</td><td>6330 / 6250</td></tr>
+<tr><td>止损位</td><td>收盘站上 6560</td></tr>
+<tr><td>置信度依据</td><td>基本面偏空与超卖信号并存，趋势信号明确但超卖带来反复，故置信度 60%。</td></tr>
+</table>
+</div>
+<div class="risk" style="margin-top:14px"><h5>风险提示</h5>若新枣上市量不及预期或滋补需求提前启动，红枣可能超跌反弹；空单需防 6560 上方反抽。</div>
+
+<div class="foot">本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），
+仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。<br>2026-10-16 · 红枣 CJ2701</div>
+</div></body></html>

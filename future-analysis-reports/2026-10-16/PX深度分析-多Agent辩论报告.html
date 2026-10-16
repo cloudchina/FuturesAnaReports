@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>对二甲苯PX2611 深度分析-多Agent辩论报告 2026-10-16</title><style>
+:root{--bg:#0b0f14;--bg2:#111823;--card:#151d2a;--card2:#1b2536;--line:#26344a;
+--txt:#dce6f2;--sub:#8ba0bb;--bull:#ff4d5e;--bear:#22c37a;--acc:#f0b429;--acc2:#4aa8ff;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#080b10,#0b1017 40%,#0b0f14);color:var(--txt);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+line-height:1.7;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.hd{background:linear-gradient(135deg,#131c2b,#0d141d);border-bottom:1px solid var(--line);padding:26px 0 20px;position:relative}
+.hd .kicker{color:var(--acc2);font-size:12px;letter-spacing:3px;font-weight:600}
+.hd h1{font-size:30px;margin:6px 0 4px;font-weight:800;letter-spacing:1px}
+.hd h1 .code{font-size:15px;color:var(--sub);font-weight:500;margin-left:10px}
+.hd .meta{color:var(--sub);font-size:13px;margin-top:6px}
+.hd .meta b{color:var(--txt)}
+.banner{margin-top:18px;background:linear-gradient(135deg,#1d1520,#161d2a);border:1px solid var(--line);
+border-radius:14px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.banner .dir{font-size:26px;font-weight:800;padding:8px 18px;border-radius:10px;letter-spacing:2px}
+.dir.short{background:rgba(34,195,122,.15);color:var(--bear);border:1px solid rgba(34,195,122,.4)}
+.dir.long{background:rgba(255,77,94,.15);color:var(--bull);border:1px solid rgba(255,77,94,.4)}
+.dir.neu{background:rgba(240,180,41,.15);color:var(--acc);border:1px solid rgba(240,180,41,.4)}
+.banner .win{font-size:13px;color:var(--sub)}
+.banner .win b{font-size:20px;color:var(--txt)}
+.banner .cf{margin-left:auto;text-align:right}
+.banner .cf .num{font-size:30px;font-weight:800;color:var(--acc)}
+.banner .cf .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+section{margin-top:26px}
+.sec-title{font-size:17px;font-weight:700;letter-spacing:1px;padding-left:12px;border-left:4px solid var(--acc);margin-bottom:14px}
+.sec-title span{color:var(--sub);font-size:12px;font-weight:400;margin-left:8px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+.card h4{font-size:14px;color:var(--acc2);margin-bottom:8px;letter-spacing:.5px}
+.card ul{list-style:none;font-size:13px;color:var(--txt)}
+.card li{padding:2px 0 2px 14px;position:relative}
+.card li:before{content:"▸";position:absolute;left:0;color:var(--sub)}
+.bar{height:8px;border-radius:5px;background:linear-gradient(90deg,var(--bull),#3a2a33);margin-top:10px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#ff8a5c,var(--bull));border-radius:5px}
+.bar.bear i{background:linear-gradient(90deg,#4ad99a,var(--bear))}
+.bar .tag{position:absolute;right:6px;top:-16px;font-size:11px;color:var(--sub)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cols4 .c{background:var(--card2);border-radius:10px;padding:12px}
+.cols4 .c h5{font-size:13px;color:var(--acc);margin-bottom:6px}
+.cols4 .c p{font-size:12.5px;color:var(--txt)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:600;font-size:12px;letter-spacing:.5px}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.ts{display:flex;gap:12px;align-items:flex-end;height:190px;padding:10px 4px}
+.ts .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.ts .b .bar2{width:64%;background:linear-gradient(180deg,var(--acc2),#1c3a5c);border-radius:6px 6px 0 0}
+.ts .b .v{font-size:12px;color:var(--txt);margin-bottom:4px}
+.ts .b .k{font-size:11px;color:var(--sub);margin-top:6px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.db{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.db.bull{border-top:3px solid var(--bull)}
+.db.bear{border-top:3px solid var(--bear)}
+.db h5{font-size:13px;margin-bottom:8px;letter-spacing:.5px}
+.db.bull h5{color:var(--bull)}
+.db.bear h5{color:var(--bear)}
+.db p{font-size:12.8px;color:var(--txt);margin-bottom:6px}
+.rnd{display:flex;gap:8px;align-items:center;margin:18px 0 10px}
+.rnd .n{background:var(--acc);color:#101418;font-weight:800;width:26px;height:26px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;font-size:13px}
+.rnd .t{font-size:15px;font-weight:700}
+.dec{background:linear-gradient(135deg,#121b27,#0f1721);border:1px solid var(--line);border-radius:12px;padding:16px}
+.dec table td:first-child{color:var(--sub);width:150px}
+.risk{background:rgba(255,77,94,.07);border:1px solid rgba(255,77,94,.25);border-radius:12px;padding:14px 16px;font-size:13px;color:#f2c7cd}
+.risk h5{color:var(--bull);font-size:13px;margin-bottom:6px}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;text-align:center}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:rgba(74,168,255,.14);color:var(--acc2);margin-left:8px}
+.badge.warn{background:rgba(240,180,41,.16);color:var(--acc)}
+.kv{display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin-top:8px}
+.kv b{color:var(--txt)}
+@media(max-width:900px){.grid6{grid-template-columns:1fr 1fr}.cols4{grid-template-columns:1fr 1fr}.debate{grid-template-columns:1fr}}
+</style></head><body>
+<div class="hd"><div class="wrap">
+<div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+<h1>对二甲苯 <span class="code">PX2611 · 郑商所 CZCE</span></h1>
+<div class="meta">报告日期 <b>2026-10-16</b> · 收盘后 · 下一交易日 <b>2026-10-19</b> · 数据来源：同花顺 iFinD / 新浪财经期货行情（真实行情）</div>
+<div class="kv">
+<span>最新价 <b>9604</b></span><span>涨跌 <b>+0.23%</b></span>
+<span>最高/最低 <b>9638 / 9478</b></span>
+<span>成交量 <b>103,040</b></span><span>持仓量 <b>43,903</b></span>
+</div>
+</div></div>
+
+<div class="wrap">
+<div class="banner">
+  <div class="dir long">震荡偏多</div>
+  <div class="win">胜率评估<br><b>多方 57% / 空方 43%</b></div>
+  <div class="cf"><div class="num">57%</div><div class="lbl">置信度 · 窗口 1~3 个交易日</div></div>
+</div>
+<div class="panel" style="margin-top:14px;font-size:13px">
+<b style="color:var(--acc)">核心判断：</b>（苯乙烯 EB 的关联品种，强度 0.8，PX→纯苯→苯乙烯）。价 9604 > EMA20(9407) > EMA60(8871)，中期多头结构；纯苯/芳烃前期强势（纯苯 10-13 涨超 4% 创合约新高）、成本端石脑油偏强。但 MACD 红柱转负、短均线走平，动能减弱。综合判断<b>震荡偏多</b>，置信度 57%。
+</div>
+
+<section><div class="sec-title">六维数据全景 <span>库存 · 仓单 · 期限结构 · 技术面 · 新闻基本面 · 持仓席位</span></div>
+<div class="grid6"><div class="card"><h4>① 库存</h4><ul><li>PX 及纯苯港口库存前期下降，流通资源偏紧（市场口径）</li><li>节后纯苯港口库存下降、现货基差偏强</li><li>下游 PTA 开工对 PX 消耗形成支撑</li></ul><div class="bar"><span class="tag">多6/10</span><i style="width:60%"></i></div></div><div class="card"><h4>② 仓单 · 持仓</h4><ul><li>PX2611 持仓 4.39 万手，成交 10.3 万手</li><li>PX2701 持仓 6.84 万手，远月持仓更高</li><li>换月临近，资金分布分散</li></ul><div class="bar"><span class="tag">多6/10</span><i style="width:60%"></i></div></div><div class="card"><h4>③ 期限结构</h4><ul><li>PX2611 9604 > PX2701 9212，呈 backwardation</li><li>近强远弱，反映近月偏紧</li><li>back 结构支撑近月</li></ul><div class="bar"><span class="tag">多6/10</span><i style="width:60%"></i></div></div><div class="card"><h4>④ 技术面</h4><ul><li>价 9604 < EMA5(9629)，> EMA10(9579)、EMA20(9407)、EMA60(8871)</li><li>MACD 251.38/273.57，红柱转负 -44.37</li><li>RSI6 10.86 极低、RSI14 58.98；KDJ 55/56.61/51.77</li></ul><div class="bar"><span class="tag">多5/10</span><i style="width:50%"></i></div></div><div class="card"><h4>⑤ 新闻基本面</h4><ul><li>纯苯 10-13 涨超 4%、主力 2611 创合约上市新高，芳烃链偏强</li><li>成本端石脑油、原油偏强</li><li>下游 PTA/聚酯需求对 PX 形成刚性消耗</li></ul><div class="bar"><span class="tag">多6/10</span><i style="width:60%"></i></div></div><div class="card"><h4>⑥ 持仓席位</h4><ul><li>持仓分散、换月临近，资金参与度中性</li><li>缺乏趋势性单边增仓</li><li>席位连续净持仓数据受限</li></ul><div class="bar"><span class="tag">多5/10</span><i style="width:50%"></i></div></div></div></section>
+
+<section><div class="sec-title">技术面深度面板 <span>趋势 / 震荡 / 量能 / 形态</span></div>
+<div class="cols4">
+<div class="c"><h5>趋势指标</h5><p>EMA5(9629) 微高于价格，EMA10(9579)、EMA20(9407)、EMA60(8871) 依次上行且在下方，短均线走平、中长期多头。</p></div>
+<div class="c"><h5>震荡指标</h5><p>MACD DIF 251.38 / DEA 273.57、红柱转负 -44.37；RSI6 10.86（极低）、RSI14 58.98；KDJ 55/56.61/51.77 中性。</p></div>
+<div class="c"><h5>量能分析</h5><p>成交 10.3 万手，换月期量能中性，价格高位窄幅整理。</p></div>
+<div class="c"><h5>形态研判</h5><p>10-14 触及 9884 后回落，10-15、10-16 于 9500~9640 区间窄幅整理，属高位平台；下方 9440 为支撑。</p></div>
+</div>
+<div class="panel" style="margin-top:12px;font-size:12.8px">
+<b style="color:var(--acc2)">多指标共振：</b>多头信号 4 个（EMA20/60 上行、back 结构、纯苯强势、RSI14 偏强）；空头信号 3 个（MACD 红柱转负、短均线走平、高位滞涨）。技术面多头结构未破但动能减弱，基本面偏强，倾向于回踩不破则震荡偏强。</div>
+</section>
+
+<section><div class="sec-title">期限结构 <span>主力及相邻合约收盘（元/吨，SC为元/桶）</span></div>
+<div class="panel"><div class="ts"><div class="b"><div class="v">9604</div><div class="bar2" style="height:160px"></div><div class="k">PX2611</div></div><div class="b"><div class="v">9212</div><div class="bar2" style="height:30px"></div><div class="k">PX2701</div></div></div>
+<div style="font-size:12.5px;color:var(--sub);margin-top:8px">期限结构 backwardation（近高远低差 392），近月偏紧，支持多头结构。</div></div></section>
+
+<section><div class="sec-title">持仓席位面板 <span>主力资金方向可信度</span></div>
+<div class="panel" style="font-size:13px">PX2611 持仓 4.39 万手、成交 10.3 万手，换月临近、持仓分散；缺乏趋势性单边增仓。分席位连续净持仓数据受限。</div></section>
+
+<section><div class="sec-title">三轮多空辩论记录</div>
+<div class="rnd"><div class="n">1</div><div class="t">第一轮 · 立论陈词</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头首席分析师</h5><p>① 成本端：纯苯/芳烃链前期强势（纯苯创合约新高），石脑油与原油偏强，成本抬升 PX 估值。② 结构端：backwardation（近月升水 392）说明近月偏紧，现货基差偏强。③ 技术端：EMA20/60 上行、RSI14 58.98 偏强。方向偏多，目标 9780→9900。</p></div>
+<div class="db bear"><h5>🐻 空头首席分析师</h5><p>① 技术端：MACD 红柱转负、价格跌破 EMA5，短线动能减弱；10-14 冲高 9884 后滞涨。② 供给端：PX 生产恢复，供应趋于宽松，压制估值。③ 需求端：下游 PTA/聚酯利润承压，对高价 PX 接受度有限。方向震荡偏空，目标 9440。</p></div>
+</div>
+<div class="rnd"><div class="n">2</div><div class="t">第二轮 · 交叉驳斥</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头 · 驳斥</h5><p>空头以‘动能减弱’看空，但 PX 的结构（back）+成本（纯苯强势）均未改变。空头所谓‘供应恢复’需要时间，而近月偏紧是当下现实。技术上仅短线回踩 EMA5，EMA10/20/60 多头排列完好，回踩即买点。</p></div>
+<div class="db bear"><h5>🐻 空头 · 驳斥</h5><p>多头高估了成本传导——纯苯高价向下游传导不畅，PX/PTA 利润已被压缩，继续上涨缺乏下游承接。MACD 红柱转负是动能衰减的明确信号，高位平台随时可能向下突破。短期不宜追多。</p></div>
+</div>
+<div class="rnd"><div class="n">3</div><div class="t">第三轮 · 最终陈词</div></div>
+<div class="debate">
+<div class="db bull"><h5>🐂 多头 · 终局</h5><p>终局我押注成本与结构：纯苯强势+back 结构+中期多头排列，回踩即多。策略回踩 9450~9520 试多，目标 9780→9900，止损 9400。</p></div>
+<div class="db bear"><h5>🐻 空头 · 终局</h5><p>终局我押注动能衰竭：MACD 转负+高位滞涨+下游承接不足，反弹即空。策略 9700~9780 沽空，目标 9440→9350，止损 9850。</p></div>
+</div>
+</section>
+
+<section><div class="sec-title">总决策官最终裁决 <span>⚖️ 天平 · 中立裁决</span></div>
+<div class="panel">
+<table><thead><tr><th>维度</th><th style="text-align:right">多空评分(多/10)</th><th>裁决理由</th></tr></thead>
+<tbody><tr><td>库存</td><td class="num">6</td><td>近月偏紧</td></tr><tr><td>仓单持仓</td><td class="num">6</td><td>换月分散</td></tr><tr><td>期限结构</td><td class="num">6</td><td>back 支撑</td></tr><tr><td>技术面</td><td class="num">5</td><td>多头未破、动能减弱</td></tr><tr><td>新闻基本面</td><td class="num">6</td><td>纯苯强势</td></tr><tr><td>持仓席位</td><td class="num">5</td><td>资金中性</td></tr></tbody></table>
+<div class="cols4" style="margin-top:16px">
+<div class="c" style="grid-column:span 2"><h5 style="color:var(--bull)">多方最强点</h5><ul style="font-size:12.5px"><li>EMA20/60 上行，中期多头结构</li><li>backwardation（+392），近月偏紧</li><li>纯苯/芳烃链强势，成本抬升</li></ul></div>
+<div class="c" style="grid-column:span 2"><h5 style="color:var(--bear)">空方最强点</h5><ul style="font-size:12.5px"><li>MACD 红柱转负，动能减弱</li><li>短均线走平，高位滞涨</li><li>下游 PTA/聚酯利润承压</li></ul></div>
+</div>
+</div>
+<div class="dec" style="margin-top:14px">
+<table>
+<tr><td>最终方向</td><td><b>震荡偏多</b></td></tr>
+<tr><td>胜率评估</td><td>多方 57% / 空方 43%</td></tr>
+<tr><td>置信度 / 窗口</td><td><b style="color:var(--acc)">57%</b> · 预期 1~3 个交易日 内触发</td></tr>
+<tr><td>入场策略</td><td>回踩 9450~9520 分批试多</td></tr>
+<tr><td>目标位</td><td>9780 / 9900</td></tr>
+<tr><td>止损位</td><td>收盘跌破 9400</td></tr>
+<tr><td>置信度依据</td><td>结构+成本利多但技术动能减弱、下游承接不足，多空共振度中等，故置信度 57%（未超过原品种 EB 的 58%，不触发替换）。</td></tr>
+</table>
+</div>
+<div class="risk" style="margin-top:14px"><h5>风险提示</h5>若芳烃链走弱或下游负反馈加剧，PX 可能高位回落；多单需轻仓、回踩再介入并严守 9400 止损。</div>
+
+<div class="foot">本报告由 AI 基于同花顺 iFinD 公开数据自动生成（6维数据 + 多Agent三轮辩论 + 总决策官裁决），
+仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。<br>2026-10-16 · 对二甲苯 PX2611</div>
+</div></body></html>
