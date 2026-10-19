@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原油SC深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e13;--card:#131b24;--card2:#0f1620;--line:#243140;--txt:#dbe4ee;--mut:#8b9bad;--red:#ef4444;--green:#22c55e;--gold:#e8b64c;--blue:#4aa8ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#16222f 0%,#0a0e13 55%),#0a0e13;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.75;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.kicker{color:var(--gold);letter-spacing:.35em;font-size:11px;font-weight:700;text-transform:uppercase}
+.header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px;flex-wrap:wrap}
+.header h1{font-size:30px;letter-spacing:.04em;margin-top:6px}
+.header h1 span{color:var(--mut);font-size:15px;font-weight:400;letter-spacing:.12em;margin-left:10px}
+.price{display:flex;align-items:baseline;gap:12px}
+.price b{font-size:34px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.chg{font-size:15px;font-weight:700;padding:4px 10px;border-radius:6px}
+.up{color:#ff6b6b;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35)}
+.down{color:#4ade80;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35)}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 26px}
+.meta div{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.meta label{display:block;color:var(--mut);font-size:11px;letter-spacing:.12em}
+.meta b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px}
+.banner{background:linear-gradient(120deg,rgba(232,182,76,.16),rgba(74,168,255,.08));border:1px solid rgba(232,182,76,.45);border-radius:16px;padding:22px 24px;margin-bottom:26px}
+.banner-top{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.dirtag{font-size:26px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.conf{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:30px;font-weight:800;color:#fff}
+.conf small{font-size:12px;color:var(--mut);font-weight:400;display:block;letter-spacing:.1em}
+.banner p{margin-top:12px;color:#c8d4e2;font-size:14px}
+.banner .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.banner .grid div{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.banner .grid label{color:var(--mut);font-size:11px;display:block}
+.banner .grid b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
+h2{font-size:19px;letter-spacing:.06em;margin:34px 0 14px;padding-left:12px;border-left:3px solid var(--gold)}
+h3{font-size:15px;margin:18px 0 8px;color:#cfe0f2}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card h4{font-size:13px;color:var(--gold);letter-spacing:.06em;margin-bottom:8px}
+.card ul{list-style:none}
+.card li{font-size:12.5px;color:#c2cfdd;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.05);display:flex;justify-content:space-between;gap:8px}
+.card li:last-child{border:0}
+.card li span:first-child{color:var(--mut)}
+.card li b{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:600;color:#e6eef7}
+.score{margin-top:10px;font-size:11px;color:var(--mut)}
+.sbar{height:7px;border-radius:4px;background:rgba(34,197,94,.5);overflow:hidden;display:flex;margin-top:4px}
+.sbar i{display:block;height:100%;background:rgba(239,68,68,.75)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel h4{color:var(--gold);font-size:13px;letter-spacing:.08em;margin-bottom:10px}
+.panel p{font-size:13px;color:#c2cfdd;margin:6px 0}
+.panel p b{color:#fff}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;margin:2px 4px 2px 0;border:1px solid}
+.tag.b{color:#ff8b8b;border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08)}
+.tag.s{color:#6ee7a0;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.08)}
+.tag.n{color:#9fb3c8;border-color:rgba(159,179,200,.35);background:rgba(159,179,200,.07)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);font-weight:500;font-size:11px;letter-spacing:.08em}
+td b{font-family:ui-monospace,Menlo,Consolas,monospace}
+.term{display:flex;align-items:flex-end;gap:18px;height:190px;padding:14px 8px 0;border-bottom:1px solid var(--line)}
+.term .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px}
+.term .bar i{display:block;width:64%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#4aa8ff,#2b6ea8)}
+.term .bar b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#fff}
+.term .bar span{font-size:11px;color:var(--mut);margin-bottom:4px}
+.round{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 6px}
+.agent{border-radius:12px;padding:16px 18px;border:1px solid}
+.bull{background:linear-gradient(180deg,rgba(239,68,68,.08),rgba(19,27,36,.9));border-color:rgba(239,68,68,.3)}
+.bear{background:linear-gradient(180deg,rgba(34,197,94,.08),rgba(19,27,36,.9));border-color:rgba(34,197,94,.3)}
+.agent h4{font-size:14px;letter-spacing:.06em;margin-bottom:8px}
+.bull h4{color:#ff8b8b}.bear h4{color:#6ee7a0}
+.agent p{font-size:12.8px;color:#c6d2df;margin:6px 0}
+.agent p b{color:#fff}
+.agent ol{margin:6px 0 0 18px;font-size:12.8px;color:#c6d2df}
+.agent li{margin:5px 0}
+.verdict{background:var(--card);border:1px solid rgba(232,182,76,.45);border-radius:14px;padding:20px 22px}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.dec div{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.dec label{color:var(--mut);font-size:11px;display:block}
+.dec b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
+.risk{margin-top:14px;padding:12px 14px;border-left:3px solid var(--red);background:rgba(239,68,68,.07);border-radius:0 8px 8px 0;font-size:12.8px;color:#e6b8b8}
+.note{font-size:11.5px;color:var(--mut);margin-top:8px}
+.footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:11.5px;text-align:center}
+.pill{display:inline-block;background:rgba(74,168,255,.12);border:1px solid rgba(74,168,255,.35);color:#9fd0ff;font-size:11px;padding:2px 9px;border-radius:12px;margin-left:8px}
+svg{width:100%;height:auto;display:block}
+@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}.meta{grid-template-columns:1fr 1fr}.banner .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.cards,.two,.round,.dec{grid-template-columns:1fr}.meta{grid-template-columns:1fr 1fr}.header h1{font-size:23px}.price b{font-size:26px}}
+</style></head><body><div class="wrap">
+<div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+<div class="header">
+ <div><h1>原油 <span>SC · SC2612 · 上期能源</span></h1>
+ <div class="note">报告日期 2026-10-19　|　数据来源：同花顺 iFinD 期货行情/仓单/资讯，新浪财经期货日K（真实收盘价）</div></div>
+ <div class="price"><b>714</b><span class="chg up">+0.25%</span></div>
+</div>
+<div class="meta">
+ <div><label>开盘 / 最高 / 最低</label><b>713 / 740 / 698</b></div>
+ <div><label>持仓量</label><b>33,280</b></div>
+ <div><label>持仓日变化</label><b>+315</b></div>
+ <div><label>成交量</label><b>171,358</b></div>
+</div>
+<div class="banner">
+ <div class="banner-top">
+  <div class="dirtag">震荡</div>
+  <div class="conf">53%<small>置信度 · 窗口 1~3 个交易日</small></div>
+ </div>
+ <p>中东地缘（霍尔木兹半开放、袭船）与OPEC+减产提供风险溢价，但全球库存小幅回升、G7拟释放约1亿桶库存、运费高企压制需求，油价高位宽幅震荡。今日冲高740后回落收713.6，多空分歧加大。</p>
+ <div class="grid">
+  <div><label>胜率评估</label><b>多方 50% / 空方 50%</b></div>
+  <div><label>入场位</label><b>698~705 轻仓试多（735~740 止盈）</b></div>
+  <div><label>目标位</label><b>735 → 740</b></div>
+  <div><label>止损位</label><b>收盘跌破 692</b></div>
+ </div>
+ 
+</div>
+
+<h2>近 30 个交易日价格路径</h2>
+<div class="panel"><svg viewBox="0 0 1120 130" preserveAspectRatio="none"><polygon points="8,116 8.0,112.0 46.1,111.0 84.1,90.4 122.2,94.7 160.3,93.4 198.3,88.2 236.4,80.3 274.5,72.5 312.6,62.3 350.6,46.1 388.7,12.0 426.8,36.5 464.8,40.8 502.9,56.3 541.0,77.5 579.0,79.6 617.1,79.0 655.2,92.3 693.2,71.8 731.3,77.8 769.4,83.5 807.4,83.8 845.5,66.2 883.6,75.3 921.7,72.5 959.7,77.6 997.8,72.2 1035.9,83.2 1073.9,83.6 1112.0,82.9 1112,116" fill="rgba(239,68,68,.12)"/><polyline points="8.0,112.0 46.1,111.0 84.1,90.4 122.2,94.7 160.3,93.4 198.3,88.2 236.4,80.3 274.5,72.5 312.6,62.3 350.6,46.1 388.7,12.0 426.8,36.5 464.8,40.8 502.9,56.3 541.0,77.5 579.0,79.6 617.1,79.0 655.2,92.3 693.2,71.8 731.3,77.8 769.4,83.5 807.4,83.8 845.5,66.2 883.6,75.3 921.7,72.5 959.7,77.6 997.8,72.2 1035.9,83.2 1073.9,83.6 1112.0,82.9" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linejoin="round"/><circle cx="1112.0" cy="82.9" r="4" fill="#ef4444"/></svg></div>
+
+<h2>六维数据全景</h2>
+<div class="cards"><div class="card"><h4>① 库存</h4><ul><li><span>全球原油库存</span><b>小幅回升</b></li><li><span>中东出口</span><b>1,650万桶/日</b></li><li><span>周度过境量</span><b>1,480万桶/日</b></li><li><span>G7释放</span><b>约1亿桶</b></li><li><span>浮仓</span><b>增长</b></li></ul><div class="sbar"><i style="width:50%"></i></div><div class="score">多头 5/10 · 空头 5/10</div></div><div class="card"><h4>② 仓单</h4><ul><li><span>注册仓单</span><b>暂无公开数据</b></li><li><span>总持仓</span><b>33,280手</b></li><li><span>日变化</span><b>+315手</b></li><li><span>成交量</span><b>171,358手</b></li><li><span>品种</span><b>SC2612</b></li></ul><div class="sbar"><i style="width:50%"></i></div><div class="score">多头 5/10 · 空头 5/10</div></div><div class="card"><h4>③ 期限结构</h4><ul><li><span>SC2611</span><b>715.5</b></li><li><span>SC2612</span><b>713.6</b></li><li><span>SC2701</span><b>708.6</b></li><li><span>12-01价差</span><b>+5.0</b></li><li><span>结构</span><b>温和back</b></li></ul><div class="sbar"><i style="width:60%"></i></div><div class="score">多头 6/10 · 空头 4/10</div></div><div class="card"><h4>④ 技术面</h4><ul><li><span>EMA5/10</span><b>719.8/725.6</b></li><li><span>EMA20/60</span><b>723.9/668.7</b></li><li><span>MACD</span><b>-18.55</b></li><li><span>RSI6/14</span><b>42.1/49.8</b></li><li><span>BOLL上轨</span><b>845.4</b></li></ul><div class="sbar"><i style="width:40%"></i></div><div class="score">多头 4/10 · 空头 6/10</div></div><div class="card"><h4>⑤ 新闻基本面</h4><ul><li><span>Brent</span><b>109.86美元(+3.72%)</b></li><li><span>WTI</span><b>101.41美元</b></li><li><span>地缘</span><b>霍尔木兹半开放</b></li><li><span>OPEC+</span><b>维持减产</b></li><li><span>运费</span><b>高企</b></li></ul><div class="sbar"><i style="width:60%"></i></div><div class="score">多头 6/10 · 空头 4/10</div></div><div class="card"><h4>⑥ 持仓席位</h4><ul><li><span>总持仓</span><b>33,280手</b></li><li><span>日变化</span><b>+315手</b></li><li><span>5日变化</span><b>+3,809手</b></li><li><span>量价配合</span><b>高位放量</b></li><li><span>席位数据</span><b>前20名连续数据缺失</b></li></ul><div class="sbar"><i style="width:50%"></i></div><div class="score">多头 5/10 · 空头 5/10</div></div></div>
+
+<h2>技术面深度面板</h2>
+<div class="two">
+ <div class="panel"><h4>趋势与形态</h4>
+  <p><b>趋势判断：</b>短期震荡，中期多头：713.6低于EMA5 719.8/EMA10 725.6/EMA20 723.9，但高于EMA60 668.7。</p>
+  <p><b>关键支撑：</b>706.7（今日低点区） / 698.5（今日低点） / 668.7（EMA60）</p>
+  <p><b>关键压力：</b>725.6（EMA10） / 740（今日高点） / 745.5（BOLL中轨）</p>
+  <p><b>形态研判：</b>10月8日758.5高点后高位震荡，区间698.5~760.8；今日冲高740回落收713.6，收出长上影小阳，740~745为压力，698.5为下沿。</p>
+ </div>
+ <div class="panel"><h4>多指标共振</h4>
+  <p><b>多头信号：</b><span class="tag b">EMA60 仍上行</span><span class="tag b">地缘风险溢价</span><span class="tag b">温和back结构</span></p>
+  <p><b>空头信号：</b><span class="tag s">MACD -18.55 绿柱</span><span class="tag s">全球库存回升</span><span class="tag s">今日冲高740回落</span></p>
+  <p><b>中性信号：</b><span class="tag n">RSI6 42.1 / RSI14 49.8</span><span class="tag n">持仓小幅增加</span></p>
+  <p><b>量能验证：</b>成交17.1万手、持仓+315手，高位放量但价格未突破，多空分歧大。</p>
+  <p><b>综合结论：</b>技术面中性（强度弱），区间698.5~740未破前高抛低吸；地缘消息主导，方向确定性低。</p>
+ </div>
+</div>
+
+<h2>期限结构与持仓席位</h2>
+<div class="two">
+ <div class="panel"><h4>期限结构（2026-10-19 收盘）</h4>
+  <div class="term"><div class="bar"><b>716</b><i style="height:143px"></i><span>SC2611<br>持仓 4,405</span></div><div class="bar"><b>714</b><i style="height:142px"></i><span>SC2612<br>持仓 33,280</span></div><div class="bar"><b>709</b><i style="height:141px"></i><span>SC2701<br>持仓 14,398</span></div></div>
+  <p class="note">温和back结构，近远月价差仅5~7元，反映近端供应略紧但远期预期平稳；地缘溢价主要集中在近月。</p>
+ </div>
+ <div class="panel"><h4>总持仓连续变化（近5个交易日）</h4>
+  <table><thead><tr><th>日期</th><th>收盘</th><th>总持仓</th><th>持仓变化</th></tr></thead><tbody><tr><td>10-13</td><td><b>728</b></td><td><b>27,036</b></td><td class='up'>+5,565</td></tr><tr><td>10-14</td><td><b>742</b></td><td><b>31,641</b></td><td class='up'>+4,605</td></tr><tr><td>10-15</td><td><b>713</b></td><td><b>29,792</b></td><td class='down'>-1,849</td></tr><tr><td>10-16</td><td><b>712</b></td><td><b>32,965</b></td><td class='up'>+3,173</td></tr><tr><td>10-19</td><td><b>714</b></td><td><b>33,280</b></td><td class='up'>+315</td></tr></tbody></table>
+  <p class="note">总持仓5日累计+3,809手，今日+315手，价格高位震荡；持仓规模较小，流动性弱于FU/BU。前20名席位连续数据缺失。</p>
+ </div>
+</div>
+
+<h2>三轮多空辩论</h2>
+<h3>第一轮 · 立论陈词</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头首席分析师 · 立论</h4><ol><li>中东地缘风险未解除：霍尔木兹海峡半开放、袭船频率仍高，沙特与胡塞冲突持续，OPEC+维持减产，供应中断风险溢价支撑油价。</li><li>Brent 10月16日收109.86美元（+3.72%）、WTI 101.41美元，国际油价处近5个月高位；国内SC相对外盘贴水，存在补涨空间。</li><li>SC2611/2612/2701呈back结构，近端偏紧；运费高企抬高到岸成本，期货下方支撑明确。</li></ol></div>
+ <div class="agent bear"><h4>🐻 空头首席分析师 · 立论</h4><ol><li>全球原油库存小幅回升，中东10月出口恢复至1,650万桶/日，G7推动约1亿桶库存加速投放，供应紧张边际缓解。</li><li>需求端疲弱：国内炼厂下游化工品利润偏弱，制约原油深加工需求；高价抑制终端消费，油价继续上行需要新的供应中断。</li><li>技术面冲高740回落收713.6，MACD -18.55，706.7~698.5为下方支撑，区间上沿压力确认。</li></ol></div>
+</div>
+<h3>第二轮 · 交叉驳斥</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头 · 驳斥空方</h4><ol><li>库存回升是季节性检修所致，幅度有限；中东出口恢复依赖霍尔木兹集中放行与高风险航运，物流可靠性未修复，实际供应增量打折。</li><li>G7释放库存是兑现3月已承诺的安排，并非完全新增供应，且投放节奏与油种结构受限，难以持续压制油价。</li><li>地缘风险是尾部期权，一旦海峡封锁，油价将跳涨；在back结构下，持有多头成本低。</li></ol></div>
+ <div class="agent bear"><h4>🐻 空头 · 驳斥多方</h4><ol><li>地缘溢价已经充分定价：Brent从105涨至110，SC却未能突破760.8前高，说明多头对利好钝化。</li><li>现货升贴水与近月月差同步收窄，实货紧张程度下降；运费下降后亚洲采购可能回升，但也意味着到岸成本下移。</li><li>全球库存回升+需求淡季，四季度供应过剩风险上升，油价高位难以持续。</li></ol></div>
+</div>
+<h3>第三轮 · 最终陈词</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头 · 最终陈词</h4><p>698.5~705轻仓试多，目标735~740，收盘跌破692止损。</p><p>若地缘升级突破740，可看760.8前高；但不追高。</p></div>
+ <div class="agent bear"><h4>🐻 空头 · 最终陈词</h4><p>735~740轻仓试空，目标706~698，收盘站上745止损。</p><p>若跌破698.5，可看685；但地缘消息可能随时打断，仓位要轻。</p></div>
+</div>
+
+<h2>总决策官裁决</h2>
+<div class="verdict">
+ <h3>六维多空评分表</h3>
+ <table><thead><tr><th>维度</th><th>多头评分</th><th>空头评分</th><th>裁决理由</th></tr></thead>
+ <tbody><tr><td>库存</td><td><b style='color:#ef4444'>5</b></td><td><b style='color:#22c55e'>5</b></td><td>全球库存小幅回升，中东出口恢复</td></tr><tr><td>仓单</td><td><b style='color:#ef4444'>5</b></td><td><b style='color:#22c55e'>5</b></td><td>注册仓单暂无公开数据</td></tr><tr><td>期限结构</td><td><b style='color:#ef4444'>6</b></td><td><b style='color:#22c55e'>4</b></td><td>715.5&gt;713.6&gt;708.6，温和back</td></tr><tr><td>技术面</td><td><b style='color:#ef4444'>4</b></td><td><b style='color:#22c55e'>6</b></td><td>冲高740回落，MACD -18.55</td></tr><tr><td>新闻基本面</td><td><b style='color:#ef4444'>6</b></td><td><b style='color:#22c55e'>4</b></td><td>地缘/OPEC+支撑 vs 库存回升/需求弱</td></tr><tr><td>持仓席位</td><td><b style='color:#ef4444'>5</b></td><td><b style='color:#22c55e'>5</b></td><td>持仓+315手，高位分歧；席位数据缺失</td></tr></tbody></table>
+ <div class="two" style="margin-top:16px">
+  <div class="panel"><h4>双方最强点 / 最弱点</h4>
+   <p><b style="color:#ef4444">多头最强：</b>地缘风险+OPEC+减产+back结构，下方支撑明确</p>
+   <p><b style="color:#ef4444">多头最弱：</b>对利好钝化，SC未破前高</p>
+   <p><b style="color:#22c55e">空头最强：</b>全球库存回升+G7释储+需求疲弱</p>
+   <p><b style="color:#22c55e">空头最弱：</b>地缘尾部风险大，逆势空风险高</p>
+  </div>
+  <div class="panel"><h4>决策方案</h4>
+   <div class="dec">
+    <div><label>方向</label><b>震荡（698.5~740）</b></div>
+    <div><label>胜率</label><b>多 50% / 空 50%</b></div>
+    <div><label>置信度</label><b>53%</b></div>
+    <div><label>窗口</label><b>1~3 个交易日</b></div>
+    <div><label>入场</label><b>698~705 轻仓试多（735~740 止盈）</b></div>
+    <div><label>止损</label><b>收盘跌破 692</b></div>
+   </div>
+   <p style="margin-top:10px"><b>目标位：</b>735 → 740</p>
+   <p><b>核心逻辑：</b>地缘风险与OPEC+减产提供底部支撑，但库存回升、G7释储与需求疲弱压制上方，油价高位宽幅震荡；区间下沿轻仓试多、上沿止盈。</p>
+  </div>
+ </div>
+ <div class="risk"><b>风险提示：</b>中东局势突然升级或缓和；G7释储节奏超预期；SC流动性较弱，滑点风险。</div>
+</div>
+
+<div class="footer">本报告由 AI 基于同花顺 iFinD 与新浪财经公开数据自动生成，采用 6 维数据收集 + 3 轮多空辩论 + 总决策官裁决框架。<br>
+数据真实可溯源，但市场存在不确定性，本报告仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。</div>
+</div></body></html>

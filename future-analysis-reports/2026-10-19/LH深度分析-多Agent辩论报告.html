@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生猪LH深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e13;--card:#131b24;--card2:#0f1620;--line:#243140;--txt:#dbe4ee;--mut:#8b9bad;--red:#ef4444;--green:#22c55e;--gold:#e8b64c;--blue:#4aa8ff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#16222f 0%,#0a0e13 55%),#0a0e13;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;line-height:1.75;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.kicker{color:var(--gold);letter-spacing:.35em;font-size:11px;font-weight:700;text-transform:uppercase}
+.header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px;flex-wrap:wrap}
+.header h1{font-size:30px;letter-spacing:.04em;margin-top:6px}
+.header h1 span{color:var(--mut);font-size:15px;font-weight:400;letter-spacing:.12em;margin-left:10px}
+.price{display:flex;align-items:baseline;gap:12px}
+.price b{font-size:34px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.chg{font-size:15px;font-weight:700;padding:4px 10px;border-radius:6px}
+.up{color:#ff6b6b;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35)}
+.down{color:#4ade80;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35)}
+.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 26px}
+.meta div{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.meta label{display:block;color:var(--mut);font-size:11px;letter-spacing:.12em}
+.meta b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px}
+.banner{background:linear-gradient(120deg,rgba(232,182,76,.16),rgba(74,168,255,.08));border:1px solid rgba(232,182,76,.45);border-radius:16px;padding:22px 24px;margin-bottom:26px}
+.banner-top{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.dirtag{font-size:26px;font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.conf{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:30px;font-weight:800;color:#fff}
+.conf small{font-size:12px;color:var(--mut);font-weight:400;display:block;letter-spacing:.1em}
+.banner p{margin-top:12px;color:#c8d4e2;font-size:14px}
+.banner .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.banner .grid div{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.banner .grid label{color:var(--mut);font-size:11px;display:block}
+.banner .grid b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
+h2{font-size:19px;letter-spacing:.06em;margin:34px 0 14px;padding-left:12px;border-left:3px solid var(--gold)}
+h3{font-size:15px;margin:18px 0 8px;color:#cfe0f2}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card h4{font-size:13px;color:var(--gold);letter-spacing:.06em;margin-bottom:8px}
+.card ul{list-style:none}
+.card li{font-size:12.5px;color:#c2cfdd;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.05);display:flex;justify-content:space-between;gap:8px}
+.card li:last-child{border:0}
+.card li span:first-child{color:var(--mut)}
+.card li b{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:600;color:#e6eef7}
+.score{margin-top:10px;font-size:11px;color:var(--mut)}
+.sbar{height:7px;border-radius:4px;background:rgba(34,197,94,.5);overflow:hidden;display:flex;margin-top:4px}
+.sbar i{display:block;height:100%;background:rgba(239,68,68,.75)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.panel h4{color:var(--gold);font-size:13px;letter-spacing:.08em;margin-bottom:10px}
+.panel p{font-size:13px;color:#c2cfdd;margin:6px 0}
+.panel p b{color:#fff}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;margin:2px 4px 2px 0;border:1px solid}
+.tag.b{color:#ff8b8b;border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08)}
+.tag.s{color:#6ee7a0;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.08)}
+.tag.n{color:#9fb3c8;border-color:rgba(159,179,200,.35);background:rgba(159,179,200,.07)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);font-weight:500;font-size:11px;letter-spacing:.08em}
+td b{font-family:ui-monospace,Menlo,Consolas,monospace}
+.term{display:flex;align-items:flex-end;gap:18px;height:190px;padding:14px 8px 0;border-bottom:1px solid var(--line)}
+.term .bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px}
+.term .bar i{display:block;width:64%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#4aa8ff,#2b6ea8)}
+.term .bar b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#fff}
+.term .bar span{font-size:11px;color:var(--mut);margin-bottom:4px}
+.round{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 6px}
+.agent{border-radius:12px;padding:16px 18px;border:1px solid}
+.bull{background:linear-gradient(180deg,rgba(239,68,68,.08),rgba(19,27,36,.9));border-color:rgba(239,68,68,.3)}
+.bear{background:linear-gradient(180deg,rgba(34,197,94,.08),rgba(19,27,36,.9));border-color:rgba(34,197,94,.3)}
+.agent h4{font-size:14px;letter-spacing:.06em;margin-bottom:8px}
+.bull h4{color:#ff8b8b}.bear h4{color:#6ee7a0}
+.agent p{font-size:12.8px;color:#c6d2df;margin:6px 0}
+.agent p b{color:#fff}
+.agent ol{margin:6px 0 0 18px;font-size:12.8px;color:#c6d2df}
+.agent li{margin:5px 0}
+.verdict{background:var(--card);border:1px solid rgba(232,182,76,.45);border-radius:14px;padding:20px 22px}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.dec div{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.dec label{color:var(--mut);font-size:11px;display:block}
+.dec b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px}
+.risk{margin-top:14px;padding:12px 14px;border-left:3px solid var(--red);background:rgba(239,68,68,.07);border-radius:0 8px 8px 0;font-size:12.8px;color:#e6b8b8}
+.note{font-size:11.5px;color:var(--mut);margin-top:8px}
+.footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:11.5px;text-align:center}
+.pill{display:inline-block;background:rgba(74,168,255,.12);border:1px solid rgba(74,168,255,.35);color:#9fd0ff;font-size:11px;padding:2px 9px;border-radius:12px;margin-left:8px}
+svg{width:100%;height:auto;display:block}
+@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}.meta{grid-template-columns:1fr 1fr}.banner .grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.cards,.two,.round,.dec{grid-template-columns:1fr}.meta{grid-template-columns:1fr 1fr}.header h1{font-size:23px}.price b{font-size:26px}}
+</style></head><body><div class="wrap">
+<div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+<div class="header">
+ <div><h1>生猪 <span>LH · LH2701 · 大商所</span></h1>
+ <div class="note">报告日期 2026-10-19　|　数据来源：同花顺 iFinD 期货行情/仓单/资讯，新浪财经期货日K（真实收盘价）</div></div>
+ <div class="price"><b>10,215</b><span class="chg down">-2.62%</span></div>
+</div>
+<div class="meta">
+ <div><label>开盘 / 最高 / 最低</label><b>10,445 / 10,475 / 10,210</b></div>
+ <div><label>持仓量</label><b>191,578</b></div>
+ <div><label>持仓日变化</label><b>+9,130</b></div>
+ <div><label>成交量</label><b>143,278</b></div>
+</div>
+<div class="banner">
+ <div class="banner-top">
+  <div class="dirtag">偏空</div>
+  <div class="conf">61%<small>置信度 · 窗口 1~3 个交易日</small></div>
+ </div>
+ <p>10月出栏计划环比增加、出栏均重升至124kg上方，节后消费转淡，供强需弱格局未改；技术面完美空头排列且增仓下行。但 RSI6 13.5、J值3.1 极端超卖，且能繁去化为远月提供支撑，故反弹沽空、不追空。</p>
+ <div class="grid">
+  <div><label>胜率评估</label><b>多方 39% / 空方 61%</b></div>
+  <div><label>入场位</label><b>反弹 10,300~10,360 分批沽空</b></div>
+  <div><label>目标位</label><b>10,130 → 10,000</b></div>
+  <div><label>止损位</label><b>收盘站上 10,480</b></div>
+ </div>
+ 
+</div>
+
+<h2>近 30 个交易日价格路径</h2>
+<div class="panel"><svg viewBox="0 0 1120 130" preserveAspectRatio="none"><polygon points="8,116 8.0,12.0 46.1,21.1 84.1,20.3 122.2,18.5 160.3,18.5 198.3,16.9 236.4,16.1 274.5,21.6 312.6,27.9 350.6,31.7 388.7,35.2 426.8,45.9 464.8,44.7 502.9,41.7 541.0,47.8 579.0,49.6 617.1,44.1 655.2,46.6 693.2,55.7 731.3,70.5 769.4,67.1 807.4,65.3 845.5,75.8 883.6,71.6 921.7,84.8 959.7,96.1 997.8,103.5 1035.9,102.2 1073.9,100.8 1112.0,112.0 1112,116" fill="rgba(34,197,94,.12)"/><polyline points="8.0,12.0 46.1,21.1 84.1,20.3 122.2,18.5 160.3,18.5 198.3,16.9 236.4,16.1 274.5,21.6 312.6,27.9 350.6,31.7 388.7,35.2 426.8,45.9 464.8,44.7 502.9,41.7 541.0,47.8 579.0,49.6 617.1,44.1 655.2,46.6 693.2,55.7 731.3,70.5 769.4,67.1 807.4,65.3 845.5,75.8 883.6,71.6 921.7,84.8 959.7,96.1 997.8,103.5 1035.9,102.2 1073.9,100.8 1112.0,112.0" fill="none" stroke="#22c55e" stroke-width="2.2" stroke-linejoin="round"/><circle cx="1112.0" cy="112.0" r="4" fill="#22c55e"/></svg></div>
+
+<h2>六维数据全景</h2>
+<div class="cards"><div class="card"><h4>① 库存（冻品/产能）</h4><ul><li><span>生猪均价</span><b>9.90元/公斤</b></li><li><span>出栏均重</span><b>约124公斤</b></li><li><span>10月出栏计划</span><b>+1.9%~2.5%</b></li><li><span>能繁去化(9月)</span><b>约 -1%</b></li><li><span>冻品去化</span><b>缓慢</b></li></ul><div class="sbar"><i style="width:40%"></i></div><div class="score">多头 4/10 · 空头 6/10</div></div><div class="card"><h4>② 仓单</h4><ul><li><span>注册仓单</span><b>885手</b></li><li><span>总持仓</span><b>191,578手</b></li><li><span>日变化</span><b>+9,130手</b></li><li><span>成交量</span><b>143,278手</b></li><li><span>仓单压力</span><b>低</b></li></ul><div class="sbar"><i style="width:60%"></i></div><div class="score">多头 6/10 · 空头 4/10</div></div><div class="card"><h4>③ 期限结构</h4><ul><li><span>LH2701</span><b>10,215</b></li><li><span>LH2703</span><b>10,100</b></li><li><span>LH2705</span><b>11,235</b></li><li><span>01-05价差</span><b>-1,020</b></li><li><span>结构</span><b>近弱远强</b></li></ul><div class="sbar"><i style="width:30%"></i></div><div class="score">多头 3/10 · 空头 7/10</div></div><div class="card"><h4>④ 技术面</h4><ul><li><span>EMA5/10</span><b>10,482/10,762</b></li><li><span>EMA20/60</span><b>11,187/12,017</b></li><li><span>MACD</span><b>-181.66</b></li><li><span>RSI6/14</span><b>13.5/18.1</b></li><li><span>KDJ J</span><b>3.1</b></li></ul><div class="sbar"><i style="width:10%"></i></div><div class="score">多头 1/10 · 空头 9/10</div></div><div class="card"><h4>⑤ 新闻基本面</h4><ul><li><span>仔猪价格</span><b>100元/头(10年低)</b></li><li><span>养殖利润</span><b>深度亏损</b></li><li><span>屠宰量</span><b>节后回落</b></li><li><span>二育</span><b>栏舍利用率中性</b></li><li><span>政策</span><b>产能调控持续</b></li></ul><div class="sbar"><i style="width:30%"></i></div><div class="score">多头 3/10 · 空头 7/10</div></div><div class="card"><h4>⑥ 持仓席位</h4><ul><li><span>总持仓</span><b>191,578手</b></li><li><span>日变化</span><b>+9,130手</b></li><li><span>5日变化</span><b>+20,352手</b></li><li><span>量价配合</span><b>增仓下行</b></li><li><span>席位数据</span><b>前20名连续数据缺失</b></li></ul><div class="sbar"><i style="width:30%"></i></div><div class="score">多头 3/10 · 空头 7/10</div></div></div>
+
+<h2>技术面深度面板</h2>
+<div class="two">
+ <div class="panel"><h4>趋势与形态</h4>
+  <p><b>趋势判断：</b>短期与中期均空头：10,215 &lt; EMA5 10,482 &lt; EMA10 10,762 &lt; EMA20 11,187 &lt; EMA60 12,017，均线空头排列且斜率向下。</p>
+  <p><b>关键支撑：</b>10,210（今日低点） / 10,150（BOLL下轨） / 10,000（整数关口）</p>
+  <p><b>关键压力：</b>10,482（EMA5） / 10,762（EMA10） / 10,490~10,615（前两日高点）</p>
+  <p><b>形态研判：</b>7月以来单边下跌，10月8日后加速，今日收 10,215 创阶段新低，收出近乎光头光脚阴线；10,150~10,210 为布林下轨与整数关口共振支撑，若失守将打开 10,000 空间。</p>
+ </div>
+ <div class="panel"><h4>多指标共振</h4>
+  <p><b>多头信号：</b><span class="tag b">RSI6 13.5 极度超卖</span><span class="tag b">KDJ J=3.1 低位</span><span class="tag b">远月2705升水1,020</span></p>
+  <p><b>空头信号：</b><span class="tag s">完美空头排列</span><span class="tag s">MACD 绿柱 -181.66 扩张</span><span class="tag s">增仓下行（OI +9,130）</span></p>
+  <p><b>中性信号：</b><span class="tag n">价格贴近BOLL下轨10,150</span><span class="tag n">现货跌破10元/公斤</span></p>
+  <p><b>量能验证：</b>成交 14.3 万手、持仓 +9,130 手，增仓下行，空头主动增仓；但尾盘未加速，空头亦有兑现。</p>
+  <p><b>综合结论：</b>技术面强空头（强度强），但极端超卖；反弹至 10,300~10,360 沽空优于追空。</p>
+ </div>
+</div>
+
+<h2>期限结构与持仓席位</h2>
+<div class="two">
+ <div class="panel"><h4>期限结构（2026-10-19 收盘）</h4>
+  <div class="term"><div class="bar"><b>10,215</b><i style="height:130px"></i><span>LH2701<br>持仓 191,578</span></div><div class="bar"><b>10,100</b><i style="height:128px"></i><span>LH2703<br>持仓 135,242</span></div><div class="bar"><b>11,235</b><i style="height:143px"></i><span>LH2705<br>持仓 57,207</span></div></div>
+  <p class="note">近弱远强：2701 贴水 2705 达 1,020 元，远月已计入产能去化与周期反转预期；近月缺乏贴水保护，但远月升水限制整体下行斜率。</p>
+ </div>
+ <div class="panel"><h4>总持仓连续变化（近5个交易日）</h4>
+  <table><thead><tr><th>日期</th><th>收盘</th><th>总持仓</th><th>持仓变化</th></tr></thead><tbody><tr><td>10-13</td><td><b>10,605</b></td><td><b>171,226</b></td><td class='up'>+9,703</td></tr><tr><td>10-14</td><td><b>10,425</b></td><td><b>179,320</b></td><td class='up'>+8,094</td></tr><tr><td>10-15</td><td><b>10,455</b></td><td><b>174,324</b></td><td class='down'>-4,996</td></tr><tr><td>10-16</td><td><b>10,490</b></td><td><b>182,448</b></td><td class='up'>+8,124</td></tr><tr><td>10-19</td><td><b>10,215</b></td><td><b>191,578</b></td><td class='up'>+9,130</td></tr></tbody></table>
+  <p class="note">总持仓 5 日累计 +20,352 手，价格同期 -6.5%，为典型增仓下行，空头趋势资金主导；前20名席位连续数据缺失，无法验证产业套保与投机席位结构。</p>
+ </div>
+</div>
+
+<h2>三轮多空辩论</h2>
+<h3>第一轮 · 立论陈词</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头首席分析师 · 立论</h4><ol><li>现货9.90元/公斤已跌破行业完全成本（头部约6.1元/斤，折12.2元/公斤），全行业深度亏损；能繁母猪9月去化近1%、同比6-8%，政策调控持续，周期反转的种子已经埋下。</li><li>期货10,215对现货9,900升水仅315元，较前期明显收敛；仔猪100元/头创10年新低，补栏停滞，10个月后供给拐点确定性上升。</li><li>技术面 RSI6 13.5、J值3.1 极端超卖，价格贴近BOLL下轨10,150；今日低点10,210未破10,130目标，空头继续打压空间有限，易出现超跌反抽。</li></ol></div>
+ <div class="agent bear"><h4>🐻 空头首席分析师 · 立论</h4><ol><li>10月集团猪企出栏计划环比+1.9%~2.5%，出栏均重升至124公斤上方，前期二育猪源尚未完全释放，供给压力集中且后移。</li><li>节后消费转淡，屠宰量环比回落、白条走货差，冻品去化缓慢；需求端短期没有增量，现货反弹乏力。</li><li>能繁去化尚未传导至商品猪出栏（约10个月滞后），当前出栏仍处高位；PSY提升至24-32头，效率提升对冲了部分去化，实际供给基数居高不下。</li></ol></div>
+</div>
+<h3>第二轮 · 交叉驳斥</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头 · 驳斥空方</h4><ol><li>出栏增量已被盘面提前交易：7月6日至10月15日生猪期货跌幅达23%，利空充分定价；期货升水收敛，继续下跌需要新的现货利空。</li><li>深度亏损不可持续，政策收储与能繁去化会改变预期；远月2705升水1,020元说明市场已给周期反转定价，近月继续杀跌的空间被远月锚定。</li><li>超卖不等于立即上涨，但在10,130~10,210追空的盈亏比极差；空头应等反弹。</li></ol></div>
+ <div class="agent bear"><h4>🐻 空头 · 驳斥多方</h4><ol><li>远月升水恰恰说明近月没有贴水保护：2705 11,235 的升水是预期，不是现实；近月交易的是当下供强需弱，不能用远月曲线为近月辩护。</li><li>超卖可以更超卖：RSI6 13.5 在趋势行情中不构成买入信号，10月8日以来每次反抽都被均线压制，逆势抄底已多次失败。</li><li>PSY提升与出栏均重上升是真实的供给增量，能繁去化的影响要到2027年才体现；空头交易的是当下，不是明年。</li></ol></div>
+</div>
+<h3>第三轮 · 最终陈词</h3>
+<div class="round">
+ <div class="agent bull"><h4>🐂 多头 · 最终陈词</h4><p>不追空。10,130~10,210区域若出现放量止跌，可轻仓试多，目标10,400~10,500，收盘跌破10,050止损。</p><p>真正的大机会在远月2705回调后的多配，而非近月逆势。</p></div>
+ <div class="agent bear"><h4>🐻 空头 · 最终陈词</h4><p>反弹10,300~10,360分批沽空，目标10,130→10,000，收盘站上10,480止损。</p><p>若放量跌破10,150，可顺势加空，目标9,800；但需防政策收储消息扰动。</p></div>
+</div>
+
+<h2>总决策官裁决</h2>
+<div class="verdict">
+ <h3>六维多空评分表</h3>
+ <table><thead><tr><th>维度</th><th>多头评分</th><th>空头评分</th><th>裁决理由</th></tr></thead>
+ <tbody><tr><td>库存/产能</td><td><b style='color:#ef4444'>4</b></td><td><b style='color:#22c55e'>6</b></td><td>出栏均重124kg、10月出栏+2%，供给压力大；能繁去化为远月支撑</td></tr><tr><td>仓单</td><td><b style='color:#ef4444'>6</b></td><td><b style='color:#22c55e'>4</b></td><td>注册仓单885手，压力低</td></tr><tr><td>期限结构</td><td><b style='color:#ef4444'>3</b></td><td><b style='color:#22c55e'>7</b></td><td>2701 10,215 &lt; 2703 10,100 &lt; 2705 11,235，近弱远强</td></tr><tr><td>技术面</td><td><b style='color:#ef4444'>1</b></td><td><b style='color:#22c55e'>9</b></td><td>完美空头排列，MACD -181.66，增仓下行</td></tr><tr><td>新闻基本面</td><td><b style='color:#ef4444'>3</b></td><td><b style='color:#22c55e'>7</b></td><td>现货9.90元、需求淡季、出栏增加；亏损与政策提供远期支撑</td></tr><tr><td>持仓席位</td><td><b style='color:#ef4444'>3</b></td><td><b style='color:#22c55e'>7</b></td><td>5日增仓20,352手，增仓下行；前20席位数据缺失</td></tr></tbody></table>
+ <div class="two" style="margin-top:16px">
+  <div class="panel"><h4>双方最强点 / 最弱点</h4>
+   <p><b style="color:#ef4444">多头最强：</b>深度亏损+能繁去化+远月升水，远期周期反转逻辑扎实</p>
+   <p><b style="color:#ef4444">多头最弱：</b>近月供需仍弱，超卖不构成买入信号</p>
+   <p><b style="color:#22c55e">空头最强：</b>供给增量+需求淡季+增仓下行，趋势与基本面共振</p>
+   <p><b style="color:#22c55e">空头最弱：</b>极端超卖下追空赔率差，需防政策与收储扰动</p>
+  </div>
+  <div class="panel"><h4>决策方案</h4>
+   <div class="dec">
+    <div><label>方向</label><b>偏空</b></div>
+    <div><label>胜率</label><b>多 39% / 空 61%</b></div>
+    <div><label>置信度</label><b>61%</b></div>
+    <div><label>窗口</label><b>1~3 个交易日</b></div>
+    <div><label>入场</label><b>反弹 10,300~10,360 分批沽空</b></div>
+    <div><label>止损</label><b>收盘站上 10,480</b></div>
+   </div>
+   <p style="margin-top:10px"><b>目标位：</b>10,130 → 10,000</p>
+   <p><b>核心逻辑：</b>10月出栏增加、均重上升与节后需求转淡构成近月核心矛盾，技术面完美空头排列且增仓下行；但极端超卖与远月升水限制下方空间，故反弹沽空、不追空。</p>
+  </div>
+ </div>
+ <div class="risk"><b>风险提示：</b>政策收储或产能调控加码；现货超跌反弹；若收盘站上10,480，空头逻辑失效。</div>
+</div>
+
+<div class="footer">本报告由 AI 基于同花顺 iFinD 与新浪财经公开数据自动生成，采用 6 维数据收集 + 3 轮多空辩论 + 总决策官裁决框架。<br>
+数据真实可溯源，但市场存在不确定性，本报告仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。</div>
+</div></body></html>
