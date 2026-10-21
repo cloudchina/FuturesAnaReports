@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>对二甲苯PX深度分析 · 多Agent辩论报告</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:170px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+@media(max-width:900px){.grid6,.quad,.two,.debate{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="hd"><div><h1>对二甲苯 <span>PX · PX2701</span></h1>
+<div class="note">郑州商品交易所　|　报告日期 2026-10-21（交易日收盘后）　|　下一交易日 2026-10-22</div></div>
+<div class="meta"><div>收盘价</div><div class="px down">9,330</div>
+<div class="down">跌 -0.43%　高 9,504 / 低 9,062</div>
+<div>持仓 90,182（-9,809）　成交 253,265</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">震荡偏弱</div>
+<div class="note">胜率评估：多方 45% / 空方 55%　|　预期窗口：1~3 个交易日</div></div>
+<div class="conf"><div class="ring" style="--p:55"><b>55%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">预期触发概率<br>1~3 个交易日</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：反弹 9,450~9,550 沽空</div>
+<div style="font-size:13px">目标：9,150 → 9,000</div><div style="font-size:13px">止损：收盘站上 9,700</div></div>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>5/10</span></h3><p>PX 社会库存中性，PTA 开工回落，聚酯负荷边际走弱</p></div>
+<div class="card"><h3>② 仓单 <span>7/10</span></h3><p>1,000 手（注册仓单低位）</p>
+<p class="note">主力持仓 90,182 手（-9,809），成交 253,265 手</p></div>
+<div class="card"><h3>③ 期限结构 <span>6/10</span></h3><p>近高远低，backwardation，近月偏紧</p>
+<p class="note">基差：iFinD 基差率 12.54%，现货升水期货</p></div>
+<div class="card"><h3>④ 技术面 <span>4/10</span></h3><p>价格 9,330 低于 EMA5 9,462、EMA10 9,496、EMA20 9,380，仅高于 EMA60 8,832，短期均线转弱。</p></div>
+<div class="card"><h3>⑤ 新闻基本面 <span>4/10</span></h3>
+<p>供需、政策与机构观点见下方辩论；数据来自 iFinD、隆众、钢联、Mysteel、SMM 及公开资讯。</p></div>
+<div class="card"><h3>⑥ 持仓席位 <span>4/10</span></h3>
+<p>前 20 名净多 5,021 手 / 净空 6,795 手。</p><p class="note">净空占优。</p></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>价格 9,330 低于 EMA5 9,462、EMA10 9,496、EMA20 9,380，仅高于 EMA60 8,832，短期均线转弱。</p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD DIF 207.5 / DEA 278.7，绿柱 -142；RSI6 37.3、RSI14 57.4；BOLL 中轨 9,428。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 253,265 手、持仓减少 9,809 手，减仓下跌，多头离场。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>9,504 冲高回落，9,062 长下影；短线在 9,100~9,500 区间震荡，跌破 9,100 打开下行。</p><p class="note">支撑：9,100 / 9,062 / 9,000；压力：9,428 / 9,504 / 9,550</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag tb">多 基差 12.54%</span><span class="tag tb">多 backwardation</span><span class="tag tb">多 EMA60 8,832 支撑</span><span class="tag ts">空 跌破 EMA5/10/20</span><span class="tag ts">空 MACD 绿柱 -142</span><span class="tag ts">空 减仓下跌</span><span class="tag tn">中 RSI 中性</span><span class="tag tn">中 区间震荡</span></div>
+<p class="note" style="margin-top:8px">技术面偏弱震荡，强度评级：中偏弱。</p></div>
+
+<h2>三、期限结构与基差</h2>
+<div class="card"><div class="term"><div class="tcol"><div class="tval">9,142</div><div class="tbar" style="height:150px"></div><div class="tname">PX2701</div></div><div class="tcol"><div class="tval">8,874</div><div class="tbar" style="height:84px"></div><div class="tname">PX2703</div></div><div class="tcol"><div class="tval">8,718</div><div class="tbar" style="height:45px"></div><div class="tname">PX2705</div></div></div>
+<p class="note" style="margin-top:10px">近高远低，backwardation，近月偏紧；iFinD 基差率 12.54%，现货升水期货</p></div>
+
+<h2>四、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（金牛）</h4><ul><li>现货升水 12.54%，backwardation 结构，近月偏紧，深跌空间有限。</li><li>原油仍处相对高位，PX 加工费低位，成本支撑较强。</li><li>仓单仅 1,000 手，交割压力小。</li></ul></div>
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（黑熊）</h4><ul><li>下游 PTA、聚酯负荷走弱，需求端负反馈；原油今日 -1.48%，成本支撑松动。</li><li>价格跌破 EMA5/10/20，MACD 绿柱 -142，短期趋势转弱。</li><li>今日减仓 9,809 手下跌，多头离场，前 20 名净空 6,795 手高于净多 5,021 手。</li></ul></div>
+</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4><ul><li>对方以需求走弱看空，但 PX 自身加工费低、现货升水 12.5%，估值已偏低。</li><li>仓单仅 1,000 手，近月挤仓风险仍在，不建议深空。</li></ul></div>
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4><ul><li>对方强调估值低，但低加工费可以更低，需求走弱下 PX 仍将跟随原油与 PTA 下行。</li><li>净空持仓占优、减仓下跌，反弹至 9,450~9,550 是沽空机会。</li></ul></div>
+</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4><p>低加工费 + 高基差 + 低仓单，9,100 不破则区间震荡，反弹看 9,500。</p></div>
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4><p>需求走弱 + 原油回落，反弹沽空，目标 9,150~9,000，站上 9,700 止损。</p></div>
+</div>
+
+<h2>五、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>强度</th></tr></thead><tbody><tr><td>库存</td><td class="up">多方 5/10</td><td class="down">空方 5/10</td><td><div class="bar"><i style="width:50%"></i></div></td></tr><tr><td>仓单</td><td class="up">多方 7/10</td><td class="down">空方 3/10</td><td><div class="bar"><i style="width:70%"></i></div></td></tr><tr><td>期限结构</td><td class="up">多方 6/10</td><td class="down">空方 4/10</td><td><div class="bar"><i style="width:60%"></i></div></td></tr><tr><td>技术面</td><td class="up">多方 4/10</td><td class="down">空方 6/10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr><tr><td>基本面</td><td class="up">多方 4/10</td><td class="down">空方 6/10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr><tr><td>持仓</td><td class="up">多方 4/10</td><td class="down">空方 6/10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr></tbody></table>
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">震荡偏弱<br>多方 45% / 空方 55%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">55%<br>1~3 个交易日</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">反弹 9,450~9,550 沽空<br>9,150 → 9,000<br>收盘站上 9,700</div></div>
+</div>
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑</b><br>· 下游 PTA/聚酯走弱，需求负反馈；<br>· 跌破 EMA5/10/20，MACD 绿柱 -142；<br>· 反弹 9,450~9,550 沽空。</div>
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b>　原油大涨、PTA 检修超预期；站上 9,700 止损。</div>
+<div class="note" style="color:#e8b45a;margin-top:10px">【关联与替换】关联品种分析：PX 置信度 55%，低于原品种 MA(57%)，未替换。</div>
+</div>
+
+<div class="foot">
+数据来源：同花顺 iFinD（期货日频行情、技术指标、仓单、前 20 名净持仓，2026-10-21 收盘）＋ 隆众资讯、Mysteel、SMM、
+新华财经、财联社、期货公司公开研报。技术指标（EMA/MACD/RSI/BOLL）基于 iFinD 日线收盘价计算，因样本为近 70 个自然日，
+长周期指标存在一定误差；席位明细不可得处使用前 20 名净持仓汇总，已在文中标注。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，不构成任何投资建议。
+市场有风险，投资需谨慎。
+</div></div></body></html>

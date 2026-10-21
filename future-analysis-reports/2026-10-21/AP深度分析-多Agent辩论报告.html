@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>苹果AP深度分析 · 多Agent辩论报告</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:170px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+@media(max-width:900px){.grid6,.quad,.two,.debate{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="hd"><div><h1>苹果 <span>AP · AP2701</span></h1>
+<div class="note">郑州商品交易所　|　报告日期 2026-10-21（交易日收盘后）　|　下一交易日 2026-10-22</div></div>
+<div class="meta"><div>收盘价</div><div class="px up">5,984</div>
+<div class="up">涨 +1.56%　高 6,050 / 低 5,847</div>
+<div>持仓 169,359（+31,342）　成交 337,036</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">短线偏多（超跌反弹）</div>
+<div class="note">胜率评估：多方 60% / 空方 40%　|　预期窗口：1~2 个交易日</div></div>
+<div class="conf"><div class="ring" style="--p:60"><b>60%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">预期触发概率<br>1~2 个交易日</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：回踩 5,900~5,960 轻仓短多</div>
+<div style="font-size:13px">目标：6,150 → 6,300</div><div style="font-size:13px">止损：收盘跌破 5,780</div></div>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>5/10</span></h3><p>新季苹果陆续上市，产区入库进度与优果率是核心变量；冷库库存处季节性重建阶段</p></div>
+<div class="card"><h3>② 仓单 <span>7/10</span></h3><p>仓单为 0（旧季仓单已注销，新季尚未注册）</p>
+<p class="note">主力持仓 169,359 手（+31,342），成交 337,036 手</p></div>
+<div class="card"><h3>③ 期限结构 <span>5/10</span></h3><p>近高远低，2701 升水远月，近月现货逻辑主导</p>
+<p class="note">基差：iFinD 基差率 42.05%，期货深度贴水现货，为全市场最高基差之一</p></div>
+<div class="card"><h3>④ 技术面 <span>4/10</span></h3><p>价格 5,984 仍低于 EMA5 6,301、EMA10 6,723、EMA20 7,293、EMA60 8,375，中期空头排列；今日自 5,847 反弹。</p></div>
+<div class="card"><h3>⑤ 新闻基本面 <span>3/10</span></h3>
+<p>供需、政策与机构观点见下方辩论；数据来自 iFinD、隆众、钢联、Mysteel、SMM 及公开资讯。</p></div>
+<div class="card"><h3>⑥ 持仓席位 <span>7/10</span></h3>
+<p>前 20 名净多 8,846 手 / 净空 4,644 手。</p><p class="note">净多占优，多头主动进场。</p></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>价格 5,984 仍低于 EMA5 6,301、EMA10 6,723、EMA20 7,293、EMA60 8,375，中期空头排列；今日自 5,847 反弹。</p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD DIF -697 / DEA -576，绿柱 -240；RSI6 15.9、RSI14 16.8，历史级超卖；BOLL 下轨 5,728。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 337,036 手、持仓增加 31,342 手，放量增仓反弹，多头主动进场迹象。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>5,847 探底后放量收阳，5,728（BOLL 下轨）上方止跌，短线反弹形态；上方 6,050~6,150 为压力。</p><p class="note">支撑：5,900 / 5,847 / 5,728；压力：6,050 / 6,150 / 6,300</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag tb">多 RSI6 15.9 历史级超卖</span><span class="tag tb">多 放量增仓反弹</span><span class="tag tb">多 基差 42.05%</span><span class="tag ts">空 均线空头排列</span><span class="tag ts">空 MACD 绿柱 -240</span><span class="tag ts">空 5 日 -12.44%</span><span class="tag tn">中 BOLL 下轨 5,728</span><span class="tag tn">中 新季上市</span></div>
+<p class="note" style="margin-top:8px">技术面超跌反弹，强度评级：中（反弹而非反转）。</p></div>
+
+<h2>三、期限结构与基差</h2>
+<div class="card"><div class="term"><div class="tcol"><div class="tval">5,984</div><div class="tbar" style="height:150px"></div><div class="tname">AP2701</div></div><div class="tcol"><div class="tval">5,719</div><div class="tbar" style="height:45px"></div><div class="tname">AP2703</div></div><div class="tcol"><div class="tval">5,736</div><div class="tbar" style="height:52px"></div><div class="tname">AP2705</div></div></div>
+<p class="note" style="margin-top:10px">近高远低，2701 升水远月，近月现货逻辑主导；iFinD 基差率 42.05%，期货深度贴水现货，为全市场最高基差之一</p></div>
+
+<h2>四、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（金牛）</h4><ul><li>极端超卖：RSI6 15.9、RSI14 16.8，5 日累计 -12.44%，空头拥挤度极高。</li><li>基差 42.05%，期货深度贴水现货，继续下打需要现货补跌，而新季开秤价尚未完全兑现。</li><li>今日放量增仓 31,342 手反弹 1.56%，5,847 长下影，短线资金开始博反弹；仓单为 0，近月无交割压力。</li></ul></div>
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（黑熊）</h4><ul><li>新季苹果集中上市，开秤价与优果率预期偏空，产业套保压力逐步增加。</li><li>需求处于季节性淡季，销区走货一般，替代水果价格偏低。</li><li>中期均线空头排列、MACD 绿柱 -240，反弹属于下跌中继的风险仍在。</li></ul></div>
+</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4><ul><li>对方以新季上市看空，但 5 日 -12.44% 已提前定价开秤压力，基差 42% 意味着期货贴水极深，追空风险收益比差。</li><li>放量增仓反弹与空头回补不同，31,342 手新增持仓说明有多头主动承接，短线动能更强。</li></ul></div>
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4><ul><li>对方强调超卖，但苹果基本面弱势下超卖可以持续；均线空头排列，反弹到 6,050~6,150 正好是套保盘入场区。</li><li>基差 42% 是现货报价滞后与交割品差异，不能简单理解为期货必涨。</li></ul></div>
+</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4><p>历史级超卖 + 42% 基差 + 放量增仓长下影，短线反弹看 6,150~6,300，跌破 5,780 止损。</p></div>
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4><p>新季上市与需求淡季压制，反弹高度有限；6,050~6,150 可逐步止盈，不建议恋战。</p></div>
+</div>
+
+<h2>五、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>强度</th></tr></thead><tbody><tr><td>库存</td><td class="up">多方 5/10</td><td class="down">空方 5/10</td><td><div class="bar"><i style="width:50%"></i></div></td></tr><tr><td>仓单</td><td class="up">多方 7/10</td><td class="down">空方 3/10</td><td><div class="bar"><i style="width:70%"></i></div></td></tr><tr><td>期限结构</td><td class="up">多方 5/10</td><td class="down">空方 5/10</td><td><div class="bar"><i style="width:50%"></i></div></td></tr><tr><td>技术面</td><td class="up">多方 4/10</td><td class="down">空方 6/10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr><tr><td>基本面</td><td class="up">多方 3/10</td><td class="down">空方 7/10</td><td><div class="bar"><i style="width:30%"></i></div></td></tr><tr><td>持仓</td><td class="up">多方 7/10</td><td class="down">空方 3/10</td><td><div class="bar"><i style="width:70%"></i></div></td></tr></tbody></table>
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">短线偏多（超跌反弹）<br>多方 60% / 空方 40%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">60%<br>1~2 个交易日</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">回踩 5,900~5,960 轻仓短多<br>6,150 → 6,300<br>收盘跌破 5,780</div></div>
+</div>
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑</b><br>· RSI6 15.9 历史级超卖、5 日 -12.44%；<br>· 基差 42.05%、仓单为 0，期货深度贴水；<br>· 放量增仓 31,342 手反弹，短线看 6,150~6,300。</div>
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b>　新季开秤价大幅低于预期、产业套保集中入场；跌破 5,780 止损。</div>
+<div class="note" style="color:#e8b45a;margin-top:10px">【关联与替换】★替换品种：由原品种红枣 CJ(59%) 低置信度触发，关联品种 AP(60%) 置信度更高，按规则替换。</div>
+</div>
+
+<div class="foot">
+数据来源：同花顺 iFinD（期货日频行情、技术指标、仓单、前 20 名净持仓，2026-10-21 收盘）＋ 隆众资讯、Mysteel、SMM、
+新华财经、财联社、期货公司公开研报。技术指标（EMA/MACD/RSI/BOLL）基于 iFinD 日线收盘价计算，因样本为近 70 个自然日，
+长周期指标存在一定误差；席位明细不可得处使用前 20 名净持仓汇总，已在文中标注。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，不构成任何投资建议。
+市场有风险，投资需谨慎。
+</div></div></body></html>
