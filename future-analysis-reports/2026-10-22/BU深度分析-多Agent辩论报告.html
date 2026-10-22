@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>沥青BU深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.bar2{display:flex;height:7px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar2 .b{display:block;height:100%;background:linear-gradient(90deg,#ff5d5d,#ff8a4c)}
+.bar2 .s{display:block;height:100%;background:linear-gradient(90deg,#20c997,#1a9e78)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:238px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px;text-align:center}
+.tdsc{font-size:10.5px;color:#7f92a6;margin-top:2px;text-align:center}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.side p{font-size:12.7px;color:#bfcede;margin:8px 0}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.sc{font-size:11px;color:#9fb0c3;font-weight:400}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.kv div{background:#0d151e;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.kv .k{font-size:11px;color:var(--sub)}
+.kv .v{font-size:14px;color:var(--gold);margin-top:2px}
+.spread{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.spread div{background:#0d151e;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.spread .k{font-size:11px;color:var(--sub)}
+.spread .v{font-size:14px;color:#ff8f8f;margin-top:2px}
+.review{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.warn{background:rgba(232,180,90,.06);border:1px solid rgba(232,180,90,.32);border-left:4px solid var(--gold);
+border-radius:9px;padding:13px 15px;margin-top:14px}
+.warn h4{font-size:13.5px;color:var(--gold);margin-bottom:6px}
+.warn p{font-size:12.5px;color:#c8d6e6;margin:4px 0}
+.src{display:block;font-size:10.5px;color:#6f8296;margin-top:7px;line-height:1.5}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.box{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.box h4{font-size:13px;color:var(--gold);margin-bottom:6px}
+.box p{font-size:12.3px;color:#b9c8da}
+.seat td,.seat th{padding:6px 8px;font-size:12.3px}
+.pos{color:#ff8f8f}.neg{color:#5fe0b8}
+.mono{font-variant-numeric:tabular-nums}
+@media(max-width:900px){.grid6,.quad,.two,.debate,.kv,.spread,.review,.mini{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}
+.term{gap:6px;height:200px}.tbar{width:34px}}
+</style></head><body><div class="wrap">
+<div class="hd"><div><h1>沥青 <span>BU · BU2701（主力）</span></h1>
+<div class="note">上海期货交易所　|　报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23</div>
+<div class="note" style="color:#9fb0c3">标的校正：以持仓量最大的 BU2701 为唯一主标的（142,357 手）；近月 BU2611 仅作结构参照，不再作为方向标的。</div></div>
+<div class="meta"><div>收盘价（BU2701）</div><div class="px up">4,533</div>
+<div class="up">+24（+0.53%，对昨结算 4,509）　高 4,543 / 低 4,458</div>
+<div>持仓 142,357（-10,900）　成交 191,929　结算 4,498</div>
+<div style="font-size:11.5px;color:#6f8296">对昨收 4,546 为 -13（-0.29%）</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">震荡偏多（回踩做多，不追高）</div>
+<div class="note">胜率评估：多方 56% / 空方 44%　|　预期窗口：1~3 个交易日</div>
+<div class="note" style="color:#9fb0c3">前日复盘：10-21 报告"偏多 60%"方向（收阳）成立，入场触及、目标 5,100 未达、止损 4,870 未破；但误用 BU2611 作标的，属口径错误，本日已校正。</div></div>
+<div class="conf"><div class="ring" style="--p:56"><b>56%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">六维加权 6.65 / 10<br>信号共振 4 / 6，减仓折扣</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：回踩 4,485~4,515 分批做多</div>
+<div style="font-size:13px">目标：4,600 → 4,665</div><div style="font-size:13px">止损：收盘跌破 4,400</div></div>
+</div>
+
+<h2>一、前日复盘与标的口径校正</h2>
+<div class="review">
+<div class="card"><h3>昨日建议（10-21）</h3><p>标的 BU2611；方向偏多，置信度 60%；入场 4,940~4,980；目标 5,100 / 5,180；止损收盘 4,870。</p></div>
+<div class="card"><h3>今日实际（10-22）</h3><p>BU2611：高 4,996、低 4,885、收 4,969（+0.30%，对昨结算）；入场区间触及，全天未破 4,870。</p></div>
+<div class="card"><h3>结果拆解</h3><p>方向（收阳）成立；T1 5,100 未达，最高距目标 104 点；止损未破，低点高于止损 15 点；盈亏比未兑现，属"看对方向、赚不到钱"。</p></div>
+<div class="card"><h3>复盘评分</h3><p>方向 1/1；点位 0.5/1；标的 0/1；合计 1.5/3。核心失误不在方向，而在合约选择。</p></div>
+</div>
+
+<div class="warn">
+<h4>关键教训：标的口径错误，必须写进流程</h4>
+<p>10-21 BU2611 持仓 96,060 手（前日报告口径），BU2701 持仓 153,257 手，主力已切换至 2701；10-22 BU2701 持仓 142,357 手，仍为全合约最大。两合约价差 436 元（9.62%），用 2611 的 4,940~4,980 价格带指导 2701，相当于把入场位系统性高估约 436 元——同一套结论若机械套用到 2701，实际是在 4,504~4,544 做多，风险收益结构完全不同。</p>
+<p>更深一层：BU2611 的强势来自低库存与可交割资源紧张，是"近月交割博弈"；BU2701 定价的是 2027 年 1 月淡季供需。二者不能互相替代。本报告起，方向、入场、目标、止损全部以 BU2701 为准，2611 仅用于观察曲线与交割扰动。</p>
+</div>
+
+<h2>二、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>多 8 / 空 2</span></h3>
+<p>商业库存 <b>80.2 万吨</b>（隆众，10-19，周 -5.4 万吨 / -6.3%）；厂库 <b>40.1 万吨</b>（10-15，周 -4.5%，同比 -47.9%）；社会库 <b>42.4 万吨</b>（10-15，周 -3.2%，同比 -70.2%）。绝对低位且仍在去化。</p>
+<div class="bar2"><i class="b" style="width:80%"></i><i class="s" style="width:20%"></i></div>
+<span class="src">来源：隆众资讯（厂库 54 家、社会库 104 家口径）；商业库存为隆众周度快讯口径，与厂库+社库时点略有差异。</span></div>
+
+<div class="card"><h3>② 仓单 <span>多 7 / 空 3</span></h3>
+<p>上期所沥青仓单合计 <b>77,500 吨</b>（10-22 仓单日报：厂库 77,500 吨、仓库 0）；较 10-19 的 114,770 吨减少 <b>37,270 吨（-32.5%）</b>。折 7,750 手，占 BU2701 持仓 5.4%。</p>
+<div class="bar2"><i class="b" style="width:70%"></i><i class="s" style="width:30%"></i></div>
+<span class="src">来源：上海期货交易所仓单日报（2026-10-22，经金融界转引）；10-19 数据见上期所仓单日报。</span></div>
+
+<div class="card"><h3>③ 期限结构 <span>多 7 / 空 3</span></h3>
+<p>2611 4,969 / 2612 4,643 / 2701 4,533 / 2702 4,488 / 2703 4,447 / 2706 4,329，逐月递减，深度 backwardation。2611-2701 升水 <b>436 元（9.62%）</b>；山东现货对 2701 升水 <b>1,414.5 元（31.2%）</b>。</p>
+<div class="bar2"><i class="b" style="width:70%"></i><i class="s" style="width:30%"></i></div>
+<span class="src">来源：新浪财经期货日K（倚天财经，10-22 15:00 收盘）；现货为生意社 10-22 参考价 5,947.5 元/吨。</span></div>
+
+<div class="card"><h3>④ 技术面 <span>多 6 / 空 4</span></h3>
+<p>MA5 4,483.6 / MA10 4,472.5 / MA20 4,401.6 / MA60 4,073.6，多头排列；MACD 柱 -16.3（前 -19.3）绿柱收敛；KDJ K52.7 &gt; D47.0；RSI14 56.0。10-22 长下影锤子线，下影 50 点。</p>
+<div class="bar2"><i class="b" style="width:60%"></i><i class="s" style="width:40%"></i></div>
+<span class="src">来源：基于 BU2701 日K（新浪财经/倚天财经）计算；ATR14 185.4，日内波动约 4.1%。</span></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span>多 5 / 空 5</span></h3>
+<p>10 月排产 151.9 万吨（环比 -3.6%、同比 -41.4%）；92 家开工率 22.8%（+0.9pp）；道路改性开工 22%、防水卷材 32%（环比 -8.6%）；山东现货两周 -365 元。SC 713.4（-0.43%）。供需两弱。</p>
+<div class="bar2"><i class="b" style="width:50%"></i><i class="s" style="width:50%"></i></div>
+<span class="src">来源：隆众资讯、生意社、海证期货（10-22 日报）、大越期货（10-20 早报）。</span></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span>多 6 / 空 4</span></h3>
+<p>总持仓 142,357（-10,900，-7.1%）；前 20 多单 109,082（-5,190）、空单 91,305（-7,711），净多 <b>17,777 手</b>。空头减仓力度大于多头，但多空同步撤退。</p>
+<div class="bar2"><i class="b" style="width:60%"></i><i class="s" style="width:40%"></i></div>
+<span class="src">来源：东方财富期货持仓龙虎榜（BU2701，2026-10-22，上期所会员数据）。</span></div>
+</div>
+
+<h2>三、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>价格 4,533 站上全部均线，MA5 4,483.6 &gt; MA10 4,472.5 &gt; MA20 4,401.6 &gt; MA60 4,073.6，标准多头排列，MA20 与 MA60 均向上。中期趋势向上，短期处于 4,458~4,543 的窄幅震荡。<b>强度：中偏强。</b></p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD DIF 91.5 / DEA 99.6 / 柱 -16.3（前 -19.3），零轴上方死叉但绿柱连续收敛；RSI6 59.6、RSI14 56.0，中性偏强未超买；KDJ 52.7 / 47.0 / 64.0，K 上穿 D 形成金叉；BOLL 上轨 4,675.9 / 中轨 4,401.6 / 下轨 4,127.2，价格位于中轨上方 3.0%，带宽 12.5%。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 191,929 手，持仓 142,357 手（-10,900，-7.1%），呈"价涨仓减"。前 20 空单减 7,711 手，多单减 5,190 手，空头撤退更急，属空头回补主导的反弹。量价背离意味着反弹质量一般，需要后续增仓确认。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>10-22 开 4,508、低 4,458、高 4,543、收 4,533：实体 25 点、下影 50 点、上影 10 点，长下影小阳，4,458 被快速买回。20 日箱体 4,053~4,760，当前位于 68% 分位。<b>支撑 4,483 / 4,458 / 4,401；压力 4,543 / 4,600 / 4,676。</b></p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振 <span class="sc">信号 4 多 / 5 空 / 2 中性</span></h3>
+<div><span class="tag tb">多 均线多头排列</span><span class="tag tb">多 长下影锤子线</span><span class="tag tb">多 MACD 绿柱收敛</span><span class="tag tb">多 KDJ 金叉</span><span class="tag ts">空 减仓上涨</span><span class="tag ts">空 收盘低于昨收</span><span class="tag ts">空 MACD 未金叉</span><span class="tag ts">空 20 日横盘</span><span class="tag ts">空 现货连跌</span><span class="tag tn">中 RSI 56</span><span class="tag tn">中 价格居 BOLL 中轨上方</span></div>
+<p class="note">技术面中性偏多，但"减仓 + 收盘低于昨收"削弱了锤子线的可信度，需 10-23 站上 4,543 并增仓确认。强度评级：中。</p></div>
+
+<h2>四、持仓席位面板</h2>
+<div class="two">
+<div class="card"><h3>多头前 10（BU2701，10-22）</h3>
+<table class="seat"><thead><tr><th>席位</th><th>多单</th><th>增减</th></tr></thead><tbody>
+<tr><td>中信期货</td><td class="mono">17,542</td><td class="neg">-2,015</td></tr>
+<tr><td>国泰君安</td><td class="mono">11,091</td><td class="pos">+1,629</td></tr>
+<tr><td>浙商期货</td><td class="mono">10,559</td><td class="neg">-1,703</td></tr>
+<tr><td>永安期货</td><td class="mono">9,192</td><td class="pos">+255</td></tr>
+<tr><td>华泰期货</td><td class="mono">7,873</td><td class="pos">+845</td></tr>
+<tr><td>东证期货</td><td class="mono">7,388</td><td class="neg">-2,693</td></tr>
+<tr><td>高盛期货</td><td class="mono">7,301</td><td class="pos">+1,424</td></tr>
+<tr><td>中信建投</td><td class="mono">6,410</td><td class="neg">-1,316</td></tr>
+<tr><td>中金财富</td><td class="mono">5,144</td><td class="neg">-2,228</td></tr>
+<tr><td>华安期货</td><td class="mono">4,183</td><td class="pos">+499</td></tr>
+<tr><td><b>前 20 合计</b></td><td class="mono"><b>109,082</b></td><td class="neg"><b>-5,190</b></td></tr>
+</tbody></table></div>
+<div class="card"><h3>空头前 10（BU2701，10-22）</h3>
+<table class="seat"><thead><tr><th>席位</th><th>空单</th><th>增减</th></tr></thead><tbody>
+<tr><td>广发期货</td><td class="mono">8,436</td><td class="pos">+1,239</td></tr>
+<tr><td>银河期货</td><td class="mono">8,356</td><td class="neg">-1,156</td></tr>
+<tr><td>国泰君安</td><td class="mono">8,172</td><td class="neg">-340</td></tr>
+<tr><td>永安期货</td><td class="mono">7,216</td><td class="pos">+307</td></tr>
+<tr><td>中信期货</td><td class="mono">6,951</td><td class="neg">-981</td></tr>
+<tr><td>中信建投</td><td class="mono">6,660</td><td class="neg">-798</td></tr>
+<tr><td>国投期货</td><td class="mono">4,917</td><td class="neg">-502</td></tr>
+<tr><td>安粮期货</td><td class="mono">4,681</td><td class="neg">-107</td></tr>
+<tr><td>中泰期货</td><td class="mono">4,571</td><td class="neg">-1,077</td></tr>
+<tr><td>浙商期货</td><td class="mono">3,737</td><td class="neg">-2,529</td></tr>
+<tr><td><b>前 20 合计</b></td><td class="mono"><b>91,305</b></td><td class="neg"><b>-7,711</b></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="mini">
+<div class="box"><h4>净多前列与变化</h4>
+<p>中信 10,591（-1,034）、浙商 6,822（+826）、华泰 5,126（+675）、高盛 4,945（+1,481）、东证 4,176（-2,218）、国泰君安 2,919（+1,969）。头部净多仍在，但中信、东证减仓明显，集中度风险上升。</p></div>
+<div class="box"><h4>持仓量变化解读</h4>
+<p>总持仓 142,357（-10,900，-7.1%），前 20 多空双双减仓（-5,190 / -7,711）。价格收涨而持仓大减，定性为<b>空头回补主导的减仓反弹</b>，而非增量多头入场。净多 17,777 手，占持仓 12.5%，结构偏多但不厚。</p></div>
+</div>
+<p class="note"><b class="gold">席位研判：</b>资金面"偏多但不坚决"。空头减仓幅度是多头的 1.49 倍，短线抛压释放；但多空同步离场说明没有趋势资金愿意在 4,500 一线建立大方向。评级：中性偏多，强度弱。席位连续 3 日变化数据未获取，上述结论仅基于 10-22 单日榜。</p>
+
+<h2>五、期限结构与基差</h2>
+<div class="card"><div class="term">
+<div class="tcol"><div class="tval">4,969</div><div class="tbar" style="height:170px"></div><div class="tname">BU2611</div><div class="tdsc">+0.30%</div></div>
+<div class="tcol"><div class="tval">4,643</div><div class="tbar" style="height:104px"></div><div class="tname">BU2612</div><div class="tdsc">+0.48%</div></div>
+<div class="tcol"><div class="tval">4,533</div><div class="tbar" style="height:81px"></div><div class="tname"><b class="gold">BU2701</b></div><div class="tdsc">主力 · +0.53%</div></div>
+<div class="tcol"><div class="tval">4,488</div><div class="tbar" style="height:72px"></div><div class="tname">BU2702</div><div class="tdsc">+0.79%</div></div>
+<div class="tcol"><div class="tval">4,447</div><div class="tbar" style="height:64px"></div><div class="tname">BU2703</div><div class="tdsc">+0.70%</div></div>
+<div class="tcol"><div class="tval">4,329</div><div class="tbar" style="height:40px"></div><div class="tname">BU2706</div><div class="tdsc">+0.70%</div></div>
+</div>
+<div class="kv">
+<div><div class="k">2611 - 2701</div><div class="v">+436（9.62%）</div></div>
+<div><div class="k">2701 - 2706</div><div class="v">+204（4.50%）</div></div>
+<div><div class="k">山东现货 - 2701</div><div class="v">+1,414.5（31.2%）</div></div>
+<div><div class="k">华东现货 - 2701</div><div class="v">+1,957（43.2%）</div></div>
+</div>
+<p class="note">现货：山东 5,947.5 元/吨（生意社 10-22 参考价；京博 70# 报 5,940~5,950）、华东 6,490 元/吨（隆众 10-21，10-22 更新未获取）。10-22 远月涨幅（+0.70%~+0.79%）大于近月（+0.30%~+0.53%），曲线当日小幅走平，近端强势边际减弱。</p>
+<span class="src">来源：新浪财经期货日K（倚天财经）；生意社沥青频道；隆众资讯；海证期货 10-22 日报。</span>
+</div>
+
+<div class="warn">
+<h4>结构提示：近月 BU2611 深度升水 436 元，不可外推为 2701 的看多理由</h4>
+<p>BU2611 收 4,969，对 BU2701 升水 436 元（9.62%）。2611 最后交易日为 2026-11-16，两周多后进入交割；其升水由低库存、仓单注销与可交割资源紧张支撑，属于近月交割博弈。升水会随交割临近快速收敛，收敛方式既可能是 2611 下跌，也可能是 2701 补涨，不能单向解读。</p>
+<p>对 2701 而言，真正的结构支撑是"全曲线 backwardation + 负 carry"：空头持有远月要承担月差成本。但 31.2% 的山东基差是"当下现货 vs 2027 年 1 月合约"的季节性价差，不是无风险套利，基差修复也可能以现货下跌完成。这一点是本报告把方向定为"震荡偏多"而非"趋势做多"的关键原因。</p>
+</div>
+
+<h2>六、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（多头首席 · 金牛）</h4>
+<p>我方不否认需求在走弱，也不否认今天是一根减仓阳线。但做多 BU2701 的理由从来不是需求繁荣，而是：在供给被原料与低开工锁死、库存处于多年低位、全曲线深度 backwardation 的背景下，4,500 以下的 2701 已经把淡季预期打得过满。</p>
+<p>第一，库存是硬的。隆众 10-19 周度商业库存 80.2 万吨，一周减少 5.4 万吨，降幅 6.3%；10-15 的 54 家厂库 40.1 万吨（周 -4.5%，同比 -47.9%）、104 家社会库 42.4 万吨（周 -3.2%，同比 -70.2%）。注意时间点：这已经是 10 月中旬，北方施工接近尾声，库存却仍在去化而不是累积。空头说"11 月库存拐点"，那是预期；我们看到的是当下的现实。厂库 40 万吨对应的可交割资源并不宽裕，任何一次 300~500 点的下打都会引出下游刚需和贸易商补库。</p>
+<p>第二，供给弹性被低估。10 月国内排产 151.9 万吨，环比 -3.6%、同比 -41.4%；其中地炼 71.6 万吨，环比 -13.6%、同比 -50.9%。92 家炼厂开工率 22.8%，环比虽回升 0.9 个百分点，但这是前期检修装置复产的存量修复，不是产能扩张。胜星 380 万吨常减压装置 10 月 17 日已停产沥青，说明炼厂在利润与原料之间仍在收缩沥青产出。空头拿"利润 402 元/吨"证明供应会起来，但同一份隆众数据里，山东地炼沥青周均价 6,272 元/吨、原料周均价 6,299 元/吨，价差是 -27 元/吨——原料比沥青还贵，拿什么扩产？</p>
+<p>第三，结构给出安全边际。10-22 收盘：2611 4,969、2612 4,643、2701 4,533、2702 4,488、2703 4,447、2706 4,329，六个月份逐月递减，没有一个月是 contango。2611 对 2701 升水 436 元（9.62%），2701 对 2706 升水 204 元。仓单更能说明问题：上期所 10-22 沥青厂库仓单 77,500 吨、仓库仓单 0，合计 77,500 吨；而 10-19 还是 114,770 吨，三个交易日注销 37,270 吨，降幅 32.5%。仓单在注销、曲线在 backwardation、现货山东 5,947.5 元对 2701 升水 1,414.5 元（31.2%）——期货比现货便宜三成，做多的赔率来自现货端，不是来自讲故事。</p>
+<p>第四，技术面刚刚给出止跌信号。4,533 站上 MA5 4,483.6、MA10 4,472.5、MA20 4,401.6、MA60 4,073.6，四条均线多头排列且全部向上；10-22 开 4,508、最低 4,458、收 4,533，收在全日高点附近，留下 50 点的长下影，这是典型的锤子线承接。MACD 虽仍是死叉，但绿柱从 -19.3 收敛到 -16.3，DIF 91.5 仍在零轴上方；KDJ 的 K 值 52.7 已上穿 D 值 47.0，J 值 64.0；RSI14 56.0，离超买还有距离。ATR14 185.4，说明日内 4,458 的下探属于正常波动，而不是趋势破位。</p>
+<p>交易上，我方不建议追 4,533。回踩 4,485~4,515（MA5 / MA10 与今日实体中位共振区）分批做多，收盘跌破 4,400（MA20 与 BOLL 中轨 4,401.6 下方）认错，第一目标 4,600，第二目标 4,665（BOLL 上轨 4,675.9 下方）。以 4,500 的成本计，风险 100 点，报偿 100 / 165 点，赔率 1.0~1.65；若在 4,485 成交，赔率提升至 1.3~2.0。这个位置值得用两成仓位去试。</p></div>
+
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（空头首席 · 黑熊）</h4>
+<p>多头讲了四件事：库存低、供给少、结构 back、技术止跌。这四件事我一件都不否认，但它们全都已经被价格交易过了。真正决定未来 1~3 个交易日的是边际变化，而边际正在往空头这边走。</p>
+<p>第一，需求不是"走弱"，是"正在消失"。隆众口径，道路改性沥青开工率 22%，环比持平；防水卷材开工率 32%，环比下降 8.6%。北方气温下降，施工进入收尾，这是季节性的硬约束，不是情绪。现货已经用脚投票：山东现货 10 月 9 日 6,300 元/吨，10 月 21 日 5,935 元/吨，两周下跌 365 元（-5.8%）；生意社沥青参考价从 10 月 1 日的 6,312.5 元跌到 10 月 22 日的 5,947.5 元，跌幅 5.78%。期货在 4,533，现货在 5,947.5，31.2% 的基差不是"期货低估"，而是"1 月合约对当下现货的季节性贴水"。淡季里基差修复的主要方式是现货下跌，不是期货上涨——这是过去两个月已经发生过一次的事情。</p>
+<p>第二，供给的边际在增加。92 家炼厂开工率 22.8%，环比 +0.9 个百分点；周度产量 37.2 万吨，环比 +1.4 万吨（+3.8%）。上海石化、镇海炼化、山东胜星、金陵石化先后复产，华东主营供应增量已经体现在现货报价上。10 月排产同比 -41.4% 是事实，但环比只降 3.6%；同比是跟去年比，环比才是边际。更关键的是利润：隆众测算生产沥青综合利润周均 402 元/吨，虽然环比减少 143 元，但仍是正利润；同期山东地炼延迟焦化利润 -418 元/吨。沥青比焦化划算 800 元以上，炼厂只要有原料，就有把渣油转向沥青的动机。中东与委内瑞拉原料到港量回升，正是在打开这个开关。</p>
+<p>第三，盘面是"减仓上涨"，不是"增仓突破"。BU2701 持仓从 153,257 手降到 142,357 手，一天减少 10,900 手（-7.1%）；前 20 名多头 109,082 手（-5,190），前 20 名空头 91,305 手（-7,711）。多空同步撤退，空头撤得更快，价格自然被抬起来——这是回补，不是新多建仓。真正的上涨应该看到持仓增加、多头前 20 增仓、成交量放大；今天成交 191,929 手，持仓却少了 7%，量价关系不支持趋势。技术指标也不支持：MACD DIF 91.5 仍在 DEA 99.6 下方，柱状 -16.3 只是"跌得慢了"；20 日涨幅 +0.62%、5 日 +0.51%，这是横盘；4,533 距离 BOLL 上轨 4,675.9 只有 3.1%，距离 MA20 4,401.6 有 2.9%，上方空间并不比下方大。而且今天的收盘 4,533 其实低于昨收 4,546，所谓"+0.53%"是对昨结算 4,509 算的，日线是一根假阳线。</p>
+<p>第四，2611 的升水是陷阱，不是灯塔。2611 收 4,969，对 2701 升水 436 元（9.62%），但 2611 的最后交易日是 11 月 16 日，两周多就要进入交割。这个升水是可交割资源紧张与交割博弈的产物，会随着交割临近快速归零。多头把 2611 的强势当作 2701 的看多理由，等于把"近月挤仓"误读为"全线紧缺"。昨日报告已经犯过一次标的口径错误，今天不能再犯第二次。</p>
+<p>所以，我方认为 4,533 不是做多的位置，而是反弹空的位置：4,600~4,650 分批空，收盘站上 4,700 止损，目标 4,400，第二目标 4,330。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4>
+<p>黑熊的第一条错在把"现货跌"当成"期货还要跌"。现货从 6,300 跌到 5,935，跌了 365 元；而 2701 从 20 日高点 4,760 跌到 4,458，跌了 302 元。现货跌幅更大，基差是在收敛的——只不过是以现货下跌的方式。这说明期货已经提前定价了淡季，而不是"还没定价"。如果现货继续跌，期货未必要跟；如果现货止跌，期货弹性更大。用基差 31% 看空，逻辑上站不住：基差大只说明现货贵，不说明期货会跌。</p>
+<p>第二条错在把"开工回升"等同于"供应过剩"。开工率 22.8%，环比 +0.9 个百分点，但同比仍是极低水平；10 月排产 151.9 万吨，同比 -41.4%，这是产量腰斩，不是"供应恢复"。黑熊说利润 402 元/吨会刺激增产，却回避了同一份数据里的原料价差 -27 元/吨：沥青卖 6,272，原料买 6,299，加工一吨亏 27 元，算上副产品才勉强有 402 元综合利润。这样的利润结构不足以驱动地炼大幅提产，否则开工率不会是 22.8%。</p>
+<p>第三条错在把"减仓"单向解读。是的，今天减仓 10,900 手，但空头减了 7,711 手，多头只减 5,190 手，空头撤退的力度是多头的 1.49 倍。前 20 名净多仍有 17,777 手，净多格局没有被破坏。更重要的是价格行为：如果是纯粹的空头回补，尾盘应该走弱，但 10-22 收在 4,533，接近全日最高 4,543，且最低 4,458 被迅速买回。回补盘打不出这种下影线，承接盘才打得出。</p>
+<p>第四条，2611 升水确实是交割博弈，我方从不建议做多 2611。但 2611 升水的存在证明了一件事：近端可交割资源是紧的。仓单三天注销 37,270 吨、仓库仓单归零，这不是情绪，是库存搬家的真实动作。只要 2611 在交割前不崩，全曲线的 backwardation 就不会反转，2701 的 carry 仍然是负的，空头持仓过夜要付出成本。黑熊把"2611 会收敛"推演成"2701 会下跌"，中间缺了一环：2701 的定价锚是 1 月供需，不是 11 月交割。</p>
+<p>最后回应"假阳线"：4,533 确实低于昨收 4,546，但高于昨结算 4,509，且收盘价高于开盘 4,508 达 25 点，日线是阳线。技术分析看的是开盘、收盘、最高、最低的位置关系，不是涨跌幅的算法。锤子线的意义在于 4,458 被买回，而不是那 13 个点的收盘差。</p></div>
+
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4>
+<p>金牛的第一条自相矛盾：他一方面说"现货跌得比期货多，所以基差在收敛"，另一方面又把 31.2% 的基差当作做多的安全边际。如果基差正在以现货下跌的方式收敛，那基差就不是安全边际，而是正在消失的幻觉。更直白地说：现货 5,947.5 是今天的价格，2701 是 2027 年 1 月交割的价格，两者之间隔着两个多月的淡季、一个春节前的累库周期。用今天的现货去给两个月后的期货定价，是把"基差"当成了"无风险套利"，这是基差交易里最常见的错误。</p>
+<p>第二条，金牛用"原料价差 -27 元"证明炼厂不会增产，但他引用的 402 元/吨是隆众测算的"综合利润"，已经扣除了副产品与原料成本；-27 元只是沥青与原料的单吨价差，不是炼厂的真实盈亏。炼厂算的是综合账：柴油 9,328 元/吨、焦化利润 -418 元/吨，沥青综合利润 402 元/吨，三者比较，沥青仍是最优选择。只要原料到港，炼厂就有动力把开工率从 22.8% 往上推。10 月环比只减 3.6%，11 月排产大概率环比回升——这才是边际。</p>
+<p>第三条，金牛说"空头减仓更多，所以空头更急"。但请看价格：空头减了 7,711 手，价格只涨了 24 点（对结算价），收盘还低于昨收。如果空头真的恐慌，价格应该收在 4,600 以上。事实是空头在 4,458~4,543 的区间里从容撤退，多头也没有接力——总持仓一天少了 10,900 手，这是双方都在离场，不是多方胜利。前 20 净多 17,777 手听起来不少，但对照 142,357 手的持仓，只占 12.5%，而且中信一家就占 10,591 手，集中度高、抗冲击能力差。一旦中信减仓，净多结构会迅速坍塌。</p>
+<p>第四条，关于 2611。金牛说"2701 的定价锚是 1 月供需"，这句话我同意，但他忘了 1 月供需的核心变量是什么：累库。一德期货的判断是总库存拐点在 11 月；海证期货 10-22 的日报写得很清楚——"供需两弱，低库存对绝对价格有较强支撑，单边波动仍以跟随原油为主，走势略弱于原油，前期高估值继续下行，高位振荡，重心略下移"。注意"走势略弱于原油"这六个字：今天 SC 只跌 0.43%，沥青涨 0.53%，沥青相对原油是偏强的，但海证认为这是短期背离，不是趋势反转。</p>
+<p>最后回应"锤子线"。锤子线要成立，需要次日收盘站上 4,543 并放量；今天只是第一天，而且是一根实体只有 25 点、上影 10 点、下影 50 点的小阳线，实体占全幅仅 29%，属于"下影线测试"而非"反转确认"。在 ATR 185.4 的品种上，50 点的下影只有 0.27 个 ATR，把它当成趋势反转的证据，过度解读了。4,533 位于 20 日区间 4,053~4,760 的 68% 分位，上方 4,675.9 是 BOLL 上轨，下方 4,401.6 是 MA20，赔率并不站在多头一边。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4>
+<p>打到第三轮，我方只保留一个胜负手：库存与曲线。需求走弱、减仓上涨、假阳线，这些我都认，但它们解释的是"为什么涨得慢"，不是"为什么会跌"。真正决定方向的，是 4,400~4,500 这个区域有没有实货买盘。答案是有：商业库存 80.2 万吨、厂库同比 -47.9%、社会库同比 -70.2%，仓单三天注销 32.5%，山东现货对 2701 升水 1,414.5 元。这些数字意味着，4,500 以下的 2701 对产业客户是有吸引力的，期货再往下打，会触发期现套利和下游点价买盘。</p>
+<p>黑熊说 11 月会累库，我同意方向，但不同意幅度。10 月排产 151.9 万吨、同比 -41.4%，即便 11 月环比回升 10%，增量也不足 16 万吨；而社会库同比低逾七成，低起点上的累库，很难在两周内把价格打出趋势性下跌。相反，只要原油不崩，沥青向下的空间就被成本和低库存双重封住。</p>
+<p>所以我的方案很明确：不追高，只在 4,485~4,515 接，收盘跌破 4,400 认错，第一目标 4,600，第二目标 4,665。这个方案的本质是：用 100 点的风险，去换 100~165 点的修复空间，赌的是 4,458 的下影线不是孤例，而是区间下沿的第一次测试。如果明天跌破 4,458 并收在 4,430 以下，我承认锤子线失败，方案作废。</p>
+<p>最后说一句：昨日的错误是用错了合约，不是看错了方向。今天我们回到 2701，用 2701 的均线、2701 的持仓、2701 的基差重新定价。方向仍是偏多，但仓位要轻，因为这是一笔"赔率交易"，不是"趋势交易"。触发条件是 10-23 不破 4,458、收盘站上 4,520；若直接低开低走并跌破 4,430，我会主动放弃，不在此位置摊低成本。时间窗口放在 1~3 个交易日，若三天内不能站上 4,600，说明承接只是脉冲，我会减半离场。</p></div>
+
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4>
+<p>我的胜负手也只有一句话：这是淡季里的区间上沿，不是趋势起点。金牛的所有论据都指向"下方有支撑"，我完全同意——所以我不建议在 4,533 追空，也不建议做趋势空。我建议的是：等反弹到 4,600~4,650 再空，因为那里是 20 日区间上沿 4,760 下方的第一道压力、BOLL 上轨 4,675.9 的前哨，也是今日多头成本区上方 100 点的位置。</p>
+<p>为什么敢在上沿空？因为边际在三件事上同时转弱：第一，现货在跌，山东两周 -365 元，生意社参考价 10 月累计 -5.78%，现货没有止跌信号；第二，供应在回，开工 +0.9 个百分点、产量 +1.4 万吨，复产已经发生；第三，持仓在退，一天 -10,900 手，多空同步离场，没有增量资金愿意在这个位置接力。一个没有增量资金的反弹，高度是有限的。</p>
+<p>金牛说"低库存封住下方"，这句话对，但低库存封住的是 4,300~4,400，不是 4,533。从 4,533 到 4,401.6 的 MA20，有 131 点的空间；从 4,533 到 4,675.9 的 BOLL 上轨，只有 143 点。上下空间几乎对称，但胜率不对称——因为现货在跌、库存在往拐点走、持仓在退。对称的赔率加上不对称的胜率，结论就是：不做多，等上沿空。</p>
+<p>具体方案：4,600~4,650 分批空，收盘站上 4,700 止损（突破 BOLL 上轨并站稳，说明我错了），第一目标 4,400，第二目标 4,330（2706 合约 4,329 附近，也是 20 日区间中位下方）。如果明天直接跌破 4,458，说明锤子线失败，可以顺势追空，止损 4,520，目标不变。若 10-23 现货继续下调 20 元以上，我会把入场下移到 4,570~4,600，不再等 4,650。仓位控制在两成以内，因为这是一笔 130~250 点的区间空，不是趋势空。</p>
+<p>最后提醒一句：2611 还有两周多进入交割，升水 436 元。如果 2611 在交割前出现挤仓式上涨，2701 会被动跟涨，这是本方案最大的尾部风险。所以仓位必须轻，且必须在 4,700 设硬止损。</p></div>
+</div>
+
+<h2>七、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分（每项 1~10 分，权重合计 100%）</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>权重</th><th>加权（多）</th><th>强度</th></tr></thead><tbody>
+<tr><td>① 库存</td><td class="up">8</td><td class="down">2</td><td>25%</td><td class="gold">2.00</td><td><div class="bar"><i style="width:80%"></i></div></td></tr>
+<tr><td>② 仓单</td><td class="up">7</td><td class="down">3</td><td>15%</td><td class="gold">1.05</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>③ 期限结构</td><td class="up">7</td><td class="down">3</td><td>15%</td><td class="gold">1.05</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>④ 技术面</td><td class="up">6</td><td class="down">4</td><td>20%</td><td class="gold">1.20</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>⑤ 新闻基本面</td><td class="up">5</td><td class="down">5</td><td>15%</td><td class="gold">0.75</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
+<tr><td>⑥ 持仓席位</td><td class="up">6</td><td class="down">4</td><td>10%</td><td class="gold">0.60</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td><b>合计</b></td><td class="up"><b>—</b></td><td class="down"><b>—</b></td><td><b>100%</b></td><td class="gold"><b>6.65</b></td><td><b>66.5%</b></td></tr>
+</tbody></table>
+
+<p style="margin-top:14px;font-size:12.7px;color:#c3d1e1"><b class="gold">评分理由：</b>① 库存给 8 分——商业库存 80.2 万吨、周降 6.3%，厂库同比 -47.9%、社库同比 -70.2%，绝对低位且仍在去化，是多头最硬的一张牌；扣分在去库速度放缓与 11 月拐点预期。<b>② 仓单</b>给 7 分——三日注销 37,270 吨（-32.5%）、仓库仓单归零，实货在收紧；但 7,750 手仓单仍占持仓 5.4%，不足以逼仓。<b>③ 期限结构</b>给 7 分——全曲线 backwardation、2701 负 carry，对多头有利；但 2611 升水 436 元本身是交割博弈，不能外推。<b>④ 技术面</b>给 6 分——均线多头排列、锤子线、MACD 绿柱收敛、KDJ 金叉；但 MACD 仍在信号线下方、20 日横盘、减仓上涨、收盘低于昨收，只能算"偏多未确认"。<b>⑤ 基本面</b>给 5 分——供给低（多）对需求季节性回落、现货连跌（空），成本高位（多）对沥青弱于原油、裂解压缩（空），打成平手。<b>⑥ 持仓</b>给 6 分——前 20 净多 17,777 手、空头减仓更多；但总持仓 -10,900，多空同步撤退，是存量博弈而非增量做多。</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">震荡偏多（回踩做多）<br>多方 56% / 空方 44%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">56%<br>1~3 个交易日</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">4,485~4,515 分两批<br>4,600 → 4,665<br>收盘跌破 4,400</div></div>
+</div>
+
+<p style="margin-top:14px;font-size:12.7px;color:#c3d1e1"><b class="gold">置信度为何只有 56%：</b>信号共振度 4/6（库存、仓单、结构、持仓偏多；基本面中性；技术面偏多但未确认）；持仓趋势为减仓而非增仓；形态只是锤子线首日，未获次日放量确认；基本面供需两弱、现货仍在下跌，明确度低。四项均不支持 60% 以上的高分，故在加权 66.5% 的基础上做减仓与形态折扣，定为 56%。该置信度定义为：未来 1~3 个交易日内走出"回踩 4,485~4,515 → 触及 4,600"这一路径的概率。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">双方最强 / 最弱：</b>多头最强在库存与仓单注销的硬数据，最弱在把 2611 升水与 2701 混为一谈，以及减仓上涨缺乏增量资金。空头最强在现货下跌、供给回升、持仓撤退的边际逻辑，最弱在低估低库存对下方的封锁，且 4,533 追空只有 131 点空间，赔率不佳。综合看，双方都不支持"趋势"，只支持"区间"。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">决策方案：</b>① 入场：4,515 挂三成、4,490 挂七成，合计不超过两成仓位；若开盘直接跳空至 4,560 以上，放弃入场，不追。② 止损：收盘跌破 4,400（MA20 4,401.6 与 BOLL 中轨下方），约 -2.2%，盘中不设硬止损以免被 ATR 185 的波动扫掉。③ 目标：T1 4,600（+2.2%），减半仓；T2 4,665（BOLL 上轨 4,675.9 下方，+3.7%），剩余仓位移动止损至成本。④ 若 10-23 收盘站上 4,543 且持仓增加，可将仓位提高至三成；若跌破 4,458 并收在 4,430 以下，锤子线失败，多头方案作废，转为观望或按空头 4,400 目标执行。</p>
+
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑（3 条）</b><br>
+· 低库存仍在去化：商业库存 80.2 万吨（周 -6.3%），厂库同比 -47.9%、社库同比 -70.2%，4,500 下方有实货承接；<br>
+· 全曲线 backwardation：2611-2701 升水 436 元（9.62%），2701 负 carry，空头持有成本高，仓单三日注销 32.5% 印证近端资源偏紧；<br>
+· 技术止跌信号：4,458 长下影锤子线 + 均线多头排列 + MACD 绿柱收敛 + KDJ 金叉，4,458 是短线多头防线。</div>
+
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b><br>
+· 原油：SC 713.4（-0.43%），若地缘溢价回吐、SC 跌破 690，沥青成本支撑下移；<br>
+· 2611 交割：11-16 前若 2611 崩跌式收敛，将拖累 2701 情绪；若挤仓式上涨，则 2701 被动跟涨，双向扰动；<br>
+· 累库：一德期货等判断总库存拐点在 11 月，若累库提前或幅度超预期，多头逻辑失效；<br>
+· 交易所风控：上期所自 10-12 起将 BU2610~BU2701 涨跌停板调至 12%、套保保证金 13%、一般持仓 14%，波动放大，仓位需相应下调；<br>
+· 数据风险：本次 iFinD MCP 未授权，行情与技术指标来自新浪财经期货日K（倚天财经），库存/现货/仓单来自隆众、生意社、上期所等公开资讯；部分口径与时点不一致，已在文中逐项标注，"数据未获取"项未做估算。</div>
+</div>
+
+<div class="foot">
+<b>数据来源说明：</b>行情（开高低收、成交、持仓、结算）与技术指标（MA / MACD / RSI / BOLL / KDJ / ATR）均基于 BU2701 日K，数据来自<b>新浪财经期货日K（倚天财经行情，2026-10-22 15:00 收盘）</b>；期限结构六个合约收盘价同源。<br>
+基本面：库存（商业库存 80.2 万吨、厂库 40.1 万吨、社会库 42.4 万吨）来自<b>隆众资讯</b>周度数据（10-15 / 10-19）；现货价格来自<b>生意社</b>沥青频道（10-22 参考价 5,947.5 元/吨）与<b>隆众资讯</b>（10-21 山东 5,935、华北 6,000、华东 6,490、华南 6,280）；仓单来自<b>上海期货交易所仓单日报</b>（10-22，经金融界转引）；开工率、产量、排产、利润来自<b>隆众资讯</b>及<b>海证期货 10-22 日报</b>、<b>大越期货 10-20 早报</b>、<b>迈科期货 10-19 周报</b>；持仓席位来自<b>东方财富期货持仓龙虎榜</b>（BU2701，2026-10-22，上期所会员数据）。<br>
+本次 <b>iFinD MCP 未授权，相关数据未使用</b>。华东现货 10-22 最新报价、厂库/社会库 10-19 绝对值、席位连续 3 日变化<b>数据未获取</b>，文中未做推算。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据收集 + 多 Agent 三轮辩论 + 总决策官裁决），仅供研究参考，<b>不构成任何投资建议</b>。期货杠杆交易风险极大，市场有风险，投资需谨慎。
+</div></div></body></html>

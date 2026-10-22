@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>苹果AP深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+h2 em{font-style:normal;font-size:12px;color:var(--sub);margin-left:8px;letter-spacing:0}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:12px;height:190px;padding:8px 4px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:46px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:12.5px;color:var(--gold);margin-bottom:5px}
+.tchg{font-size:11px;color:#5fe0b8}
+.tname{font-size:11px;color:var(--sub);margin-top:6px;text-align:center}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px 17px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px;letter-spacing:.5px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.side p{font-size:12.7px;color:#bfcede;margin:8px 0;text-align:justify}
+.side p b{color:#e6eef8}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.callout{background:#0d151e;border:1px solid #3a3040;border-left:3px solid #ff7b7b;border-radius:8px;
+padding:13px 15px;margin-top:14px;font-size:12.6px;color:#c6d3e2}
+.callout b{color:#ff9d9d}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.warn{color:#e8b45a}
+@media(max-width:900px){.grid6,.quad,.two,.debate{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}.term{gap:4px}.tbar{width:26px}}
+</style></head><body><div class="wrap">
+
+<div class="hd"><div><h1>苹果 <span>AP · AP2701</span></h1>
+<div class="note">郑州商品交易所　|　报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23</div></div>
+<div class="meta"><div>收盘价</div><div class="px down">5,704</div>
+<div class="down">跌 -4.68%　高 5,996 / 低 5,585</div>
+<div>持仓 175,876（+6,517）　成交 455,417</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">观望 · 不参与</div>
+<div class="note">备选（条件单）：反弹沽空　|　胜率评估：空方 45% / 多方 20% / 观望 35%　|　窗口：3 个交易日</div>
+<div class="note warn" style="margin-top:8px">关联品种分析：由红枣 CJ（置信度 45%，&lt;60%）低置信度触发；AP 与 CJ 同属鲜干果消费替代，关联强度 0.5（关联较弱），仅作替代性观察，不作对冲依据。</div></div>
+<div class="conf"><div class="ring" style="--p:35"><b>35%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">不达可交易阈值<br>（&lt;60% 即放弃）</div></div></div>
+<div><div class="lbl">交易参数（仅备选）</div><div style="font-size:13px">入场：反弹 5,880~5,980 分批</div>
+<div style="font-size:13px">目标：5,585 → 5,420</div>
+<div style="font-size:13px">止损：收盘站上 6,050</div>
+<div style="font-size:13px" class="warn">不做多</div></div>
+</div>
+
+<h2>一、六维数据全景 <em>2026-10-22 收盘</em></h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>多 4 / 空 6</span></h3>
+<p>Mysteel：截至 10-09 全国主产区冷库 9.35 万吨，周减 4.09 万吨，旧季尾库基本清空（低结转，利多）；但新季入库快速攀升，格林大华称"多地冷库库容趋于饱和"、"入库节奏不及往年"，供应压力正向冷库转移。</p>
+<p class="note">10-22 当周入库周度数据：<b>数据未获取</b>（最新公开周度为 10-09）。</p></div>
+
+<div class="card"><h3>② 仓单 <span>多 5 / 空 5</span></h3><p>郑商所 2026-10-22：苹果仓单 <b>0 张</b>，有效预报 <b>0 张</b>（当日 -28 张）。</p>
+<p class="note">仓单为零却未能止跌，说明本轮压力来自"预期"而非"实货交割"，仓单利多工具短期失效。</p></div>
+
+<div class="card"><h3>③ 期限结构 <span>多 4 / 空 6</span></h3><p>近高远低 backwardation：AP2611 6,823 → AP2705 5,405，2611 升水 2701 达 1,119 元/吨。2701 相对 2703 升水 281 元/吨，存在向远月收敛空间。</p>
+<p class="note">基差：东证期货 10-22 周报 主力基差 <b>904 元/吨</b>（周环比 +806，+822%）；栖霞 80#一二级 3.05 元/斤折 6,100 元/吨，对 2701 升水约 396 元/吨（未计交割费用）。</p></div>
+
+<div class="card"><h3>④ 技术面 <span>多 3 / 空 7</span></h3><p>MA5 5,882.6 / MA10 6,218.9 / MA20 6,629.4 / MA60 7,298.5 完全空头排列；收盘 5,704 低于 MA20 达 925 点（-13.9%）。DIF -407.5、DEA -318.1、柱 -178.9（前值 -178.4）。</p>
+<p class="note">RSI6 16.95、RSI14 12.02（历史级极值）；BOLL 下轨 5,613，收盘距下轨仅 91 点。</p></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span>多 2 / 空 8</span></h3>
+<p>2026/27 产量预估 4,061.93 万吨、同比 +18.37%（套袋 +10%，甘肃 +30.01%、陕西 +9.55%、山东 +0.76%）；中国果品流通协会 10-02 定调"品质好于上年、优果率有所提升"；山东栖霞开秤 2.70~3.00 元/斤（前期 3.20），统货 2.00~2.50。前期"优果率偏低"多头逻辑被证伪。</p></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span>多 3 / 空 7</span></h3>
+<p>前 20 席多头 107,284 手（61%，+4,061）、空头 110,016 手（63%，+7,768），净持仓 <b>净空 2,732 手</b>（前一交易日为净多 975 手）。</p>
+<p class="note">空头增仓为多头的 1.91 倍，资金净流出 0.18 亿元。</p></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标 · 空</h3><p>MA5 5,882.6 / MA10 6,218.9 / MA20 6,629.4 / MA60 7,298.5，均线空头排列且发散；收盘 5,704 低于全部均线，MA5 与 MA10 死叉后价差扩大至 336 点。中期下降通道未破。</p></div>
+<div class="card"><h3>震荡指标 · 极值超卖</h3><p>DIF -407.5、DEA -318.1、MACD 柱 -178.9（前值 -178.4，绿柱微扩，未见底背离）；RSI6 16.95、RSI14 12.02；KDJ K8.8 / D10.8 / J4.9。</p></div>
+<div class="card"><h3>量能分析 · 空</h3><p>成交 455,417 手（较昨 337,036 增 35.1%），持仓 175,876 手（+6,517，+3.85%）。放量增仓下行，属新空主动入场，而非空头回补式下跌。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>开 5,984 即为全天次高，高 5,996 后单边下挫 411 点至 5,585，收 5,704，长下影 119 点但实体仍为长阴；5,585 创 20 日/60 日新低。</p><p class="note">支撑：5,613（BOLL 下轨）/ 5,585 / 5,420；压力：5,882（MA5）/ 5,984 / 6,050 / 6,219（MA10）。ATR 224.7。</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag ts">空 均线完全空头排列</span><span class="tag ts">空 放量增仓 6,517 手</span><span class="tag ts">空 5 日 -6.81% / 20 日 -21.71%</span><span class="tag ts">空 优果率逻辑证伪</span><span class="tag ts">空 开秤价下移至 2.70~3.00 元/斤</span><span class="tag tb">多 RSI14 12.02 历史极值</span><span class="tag tb">多 基差 904 元/吨（期货贴水）</span><span class="tag tb">多 仓单 0 张、有效预报 0 张</span><span class="tag tn">中 收盘距 BOLL 下轨仅 1.6%</span><span class="tag tn">中 长下影 119 点</span></div>
+<p class="note" style="margin-top:8px">判定：<b class="down">空头趋势 + 极端超卖</b>。趋势项与超卖项方向冲突，属"方向明确但位置极差"的组合，任何单边头寸的入场赔率均不佳 → 技术面评级：<b>不可交易（No-Trade）</b>。</p></div>
+
+<h2>三、持仓与席位结构</h2>
+<div class="card"><table><thead><tr><th>项目</th><th>2026-10-22</th><th>2026-10-21</th><th>变化</th></tr></thead><tbody>
+<tr><td>前 20 席多头持仓</td><td class="up">107,284（占 61%）</td><td>103,223</td><td class="up">+4,061</td></tr>
+<tr><td>前 20 席空头持仓</td><td class="down">110,016（占 63%）</td><td>102,248</td><td class="down">+7,768</td></tr>
+<tr><td>前 20 席净持仓</td><td class="down">净空 2,732</td><td class="up">净多 975</td><td class="down">由多翻空</td></tr>
+<tr><td>全市场持仓</td><td>175,876</td><td>169,359</td><td>+6,517</td></tr>
+<tr><td>全市场成交</td><td>455,417</td><td>337,036</td><td>+35.1%</td></tr>
+<tr><td>日内资金</td><td class="down">净流出 0.18 亿元</td><td>—</td><td>—</td></tr>
+</tbody></table>
+<p class="note" style="margin-top:10px">席位动向：多头第一为中信期货（代客，占全市场 9%），空头第一为国泰君安（代客，占 9%）。多头增仓前三为东证期货（+1,545）、东方财富（+1,264）、海通期货（+1,106）；空头增仓前三为国泰君安（+2,574）、东证期货（+1,949）、大地期货（+1,344）。东证多空双增（多 +1,545 / 空 +1,949），呈"对做且空头更强"格局。</p></div>
+
+<h2>四、期限结构与基差</h2>
+<div class="card"><div class="term">
+<div class="tcol"><div class="tval">6,823</div><div class="tchg">-5.88%</div><div class="tbar" style="height:138px"></div><div class="tname">AP2611</div></div>
+<div class="tcol"><div class="tval">6,218</div><div class="tchg">-4.15%</div><div class="tbar" style="height:95px"></div><div class="tname">AP2612</div></div>
+<div class="tcol"><div class="tval">5,704</div><div class="tchg">-4.34%</div><div class="tbar" style="height:59px"></div><div class="tname">AP2701</div></div>
+<div class="tcol"><div class="tval">5,423</div><div class="tchg">-5.31%</div><div class="tbar" style="height:40px"></div><div class="tname">AP2703</div></div>
+<div class="tcol"><div class="tval">5,400</div><div class="tchg">-5.79%</div><div class="tbar" style="height:38px"></div><div class="tname">AP2704</div></div>
+<div class="tcol"><div class="tval">5,405</div><div class="tchg">-6.58%</div><div class="tbar" style="height:38px"></div><div class="tname">AP2705</div></div>
+</div>
+<p class="note" style="margin-top:10px">结构解读：全曲线近高远低（backwardation），但今日<b>远月跌幅更大</b>（2705 -6.58% &gt; 2701 -4.34%），说明宽松预期正向远端定价；2701 对 2703 升水 281 元/吨、对 2705 升水 299 元/吨，2701 存在补跌收敛压力。2611 仍维持 6,823，表明近月现货与交割成本尚未崩塌，是全曲线最抗跌的两端之一。</p>
+<p class="note">基差口径：东证期货 10-22 周报，主力基差 904 元/吨（现货升水），周环比走强 806 元/吨；厂库交割利润 -904 元/吨（环比 -806）。按栖霞 80#一二级 3.05 元/斤折算 6,100 元/吨，对 2701 升水约 396 元/吨。两个口径差异来自交割品级、费用与所取现货标的，<b>均指向"期货贴水现货"</b>。但需注意：10-22 基差走强是"期货跌得更快"与"现货报价暂稳"共同造成的，并不等于期货必涨。</p></div>
+
+<h2>五、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（约 950 字）</h4>
+<p><b>核心命题：三根阴线之后，赔率已经站到多头一边，趋势是空的，但价格是错的。</b></p>
+<p>第一，<b>估值已经跌穿现货锚</b>。栖霞 80#一二级出库价 3.05 元/斤，折 6,100 元/吨；东证周报口径主力基差 904 元/吨，周环比走强 806 元/吨。也就是说，过去一周期货比现货多跌了 806 元，而现货报价并未同步崩塌。期货的功能是发现远期价格，但当贴水幅度达到交割成本以上时，空头必须回答一个问题：现货要跌到哪里，才能让 5,704 变得"合理"？若现货维持在 3.00 元/斤上方，期货就只能通过上涨来收敛基差。</p>
+<p>第二，<b>空头拥挤度已达历史极值</b>。RSI6 16.95、RSI14 12.02，J 值 4.9，收盘 5,704 距 BOLL 下轨 5,613 仅 91 点（1.6%）。近 20 个交易日累计 -21.71%，近 5 日 -6.81%。经验上，AP 日线 RSI14 跌入 15 以下后，短期出现 3% 以上技术性反弹的概率显著高于继续单边下杀的概率——这不是"必定反弹"，而是"此处做空的赔率已经劣化"。空头在 5,700 下方继续加仓，是在用 1 倍的风险去博 0.4 倍的空间（到下轨仅 91 点）。</p>
+<p>第三，<b>实货层面没有逼仓压力，反而有支撑</b>。郑商所 10-22 仓单 0 张、有效预报 0 张，近月无任何实货抛压；AP2611 仍报 6,823，比 2701 高 1,119 元/吨。如果现货真的宽松到"随便卖"，2611 不可能维持在 6,800 上方——近月是用真金白银交割的合约，它的价格比任何研报都更接近事实。2611 的坚挺说明：合格可交割货源的紧张并未解除，2701 的暴跌更多是预期交易而非现货交易。</p>
+<p>第四，<b>持仓结构显示分歧而非一致看空</b>。今日增仓 6,517 手下跌，但前 20 席多头同样增仓 4,061 手，东证期货多头增 1,545 手、东方财富增 1,264 手、海通增 1,106 手——这是有资金在 5,600~5,800 区间主动承接。净空仅 2,732 手，占前 20 席总持仓的 2.5%，属于统计上的中性水平，谈不上"空头掌控盘面"。</p>
+<p>第五，<b>季节性与替代品存在时间窗口</b>。10 月下旬至 11 月上旬是入库高峰，一旦收购价止跌，盘面极易出现"利空出尽"式修复；替代品方面，蜜橘销地价 6.31 元/公斤、周环比 -7.04%，10 月底至 11 月初到货见顶后价格通常见底，届时苹果的性价比反而回升。更重要的是，<b>优果率的结构性风险并未消除</b>：陕西洛川冰雹果报价 1.8~3.0 元/斤，价差宽度本身就是质量分化的证据；协会口径的"优果率提升"是总量概念，与"80# 一二级合格货源"不是同一口径。若入库数据显示好货占比低于预期，远月存在估值上修的可能（国金期货亦将此列为风险关注）。</p>
+<p><b>结论</b>：不主张追多，但坚决反对在 5,704 追空。合理做法是在 5,600~5,700 等待"缩量 + 长下影 + 收盘站上 5,800"的止跌确认后轻仓试多。</p></div>
+
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（约 980 字）</h4>
+<p><b>核心命题：增产是分子，超卖只是分母。分子在扩大，分母再极端也救不了价格。</b></p>
+<p>第一，<b>增产不是预期，是定产</b>。全国套袋量同比 +10%，钢联与广发口径的 2026/27 产量预估为 4,061.93 万吨，同比 +18.37%；分产区甘肃 +30.01%、陕西 +9.55%、山东 +0.76%，且今年雨水充沛、果径优于去年，80# 及以上大果占比提升。这是"大年"的物理事实，不会因为盘面跌了 20% 而改变。任何反弹都只是在更大的供给压力下的一次定价修正。</p>
+<p>第二，<b>多头赖以生存的"优果率偏低"叙事已被官方口径证伪</b>。中国果品流通协会 10-02 发布的 2026 产季产销形势分析明确：总产量较上年略有增长，<b>品质好于上年、优果率有所提升</b>；同花顺 10-13 的产业调研同样给出"优果率预估提升"。这正是 10-14 首根大阴线（-6.95%）的触发点，而 10-22 是本轮逻辑的二次确认——不是新利空，是旧利多的葬礼。可交割合格货源的总量并不像多头想象的那样稀缺，好果与差果的价差在拉大，但"总量不足"不成立。</p>
+<p>第三，<b>成本底正在随现货下移</b>。山东栖霞 10-14 起扎点收购，纸袋晚富士 80# 一二级 2.70~3.00 元/斤（前期 3.20），统货 2.00~2.50 元/斤；毕郭市场统货 2.50~2.80；对比 2025 产季全国 8.30 元/公斤（4.15 元/斤）的开秤价，今年开秤价大幅下移。期货市场没有绝对估值，只有相对现货；现货锚在往下走，5,704 对应的"贴水"随时可以被现货补跌抹平。用 3.05 元/斤的出库价去论证"期货便宜"，忽略了 2.00~2.50 元/斤的统货才是增量供应的主体——按统货折算 4,000~5,000 元/吨，5,704 仍是升水。</p>
+<p>第四，<b>基差走强的方向是"现货补跌"而非"期货上涨"</b>。东证周报显示基差周环比走强 806 元/吨，同期厂库交割利润从 -98 元/吨恶化至 -904 元/吨；与此同时产区"一般货源价格混乱、以质论价、议价成交"，报价与实际成交价的裂口在扩大。10-22 栖霞报价环比持平，只是报价的粘性，不代表成交价的坚挺。基差以现货下跌收敛，是本轮最省力的路径。</p>
+<p>第五，<b>需求端没有任何向上的边际变化</b>。广东三大批发市场到货 53 辆、环比 +20.45%，但走货平平、贸易商采购谨慎；商务部监测的苹果批发价 9.29（10-02）→9.10（10-09）→9.06 元/公斤（10-16），连续三周下行；替代品蜜橘销地价 6.31 元/公斤、周环比 -7.04%，常州凌家塘蜜橘 1.9 元/斤（节前 2.2），且 10 月底至 11 月初才到上市峰值——替代压力还在加强而非减弱。红枣 CJ2701 6,340、跌 1.17%，库存环比 -0.80%，同样没有能力分流苹果的过剩。</p>
+<p>第六，<b>持仓与结构确认空头主导</b>。前 20 席由净多 975 手翻为净空 2,732 手；空头增仓 7,768 手是多头 4,061 手的 1.91 倍；国泰君安空增 2,574、东证空增 1,949。全合约普跌、远月 2705 -6.58% 领跌，说明宽松预期正在远端定价，而 2701 对 2703 的 281 元/吨升水还有收敛空间。</p>
+<p><b>结论</b>：方向明确向下，10 月下旬至 11 月中旬是全年供应压力峰值，"果农被动入库 → 供应压力后移 → 远月继续下修"的产业逻辑尚未走完。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥（约 760 字）</h4>
+<p><b>驳"增产即下跌"</b>：4,061.93 万吨的增产预期自 6 月套袋期就已是市场共识，10-14 那根 -6.95% 的阴线已经一次性定价；从 10-13 收盘约 6,900 到今日 5,704，累计 -17.3%，若以增产 18.37% 对应的估值下修幅度衡量，定价已接近完成。继续做空，是在一个所有人都知道的利空上收第二遍钱——而市场从不为已知的利空支付两次。</p>
+<p><b>驳"优果率提升"</b>：协会报告的原话是"优果率<b>有所</b>提升"，是一个方向性描述，不是量化结论。真正的量化证据在报价里：洛川冰雹果 1.8~3.0 元/斤、统货 2.7~3.2、半商品 3.3~3.6，同一产区同一周内价差超过 1.8 元/斤，这就是质量分化的铁证。可交割的 80# 一二级合格货源与"总产量"从来不是同一口径，用总产增产去推导仓单成本下移，是偷换概念。</p>
+<p><b>驳"基差以现货跌收敛"</b>：栖霞出库价 3.05 元/斤已连续多日持稳，东证周报口径环比持平；扎点收购价 2.70~3.00 是开秤价，历史上开秤之后 2~3 周常出现 0.2~0.3 元/斤的修复（定性判断，非统计结论）。若现货止跌，基差就只能由期货上涨来修复。对方所谓"统货折算 4,000~5,000 元/吨"，混淆了交割品级——郑商所苹果交割对标的是符合规格的二级以上货源，不是统货。</p>
+<p><b>驳"持仓净空"</b>：净空 2,732 手仅占前 20 席总持仓的 2.5%，属中性区间；增仓下行中多头同步增 4,061 手，说明这是"分歧市"而非"一致市"。真正的一致市应该表现为多头大幅减仓、总持仓下降，而今天是总持仓增加 6,517 手、多头也在加。</p>
+<p><b>驳"需求无边际改善"</b>：到货量 +20.45% 本身说明销区在补库，只是价格传导慢；商务部批发价从 9.29 跌到 9.06 元/公斤，三周累计仅 -2.5%，是缓跌而非崩塌。缓跌的现货 + 急跌的期货，恰恰是基差修复的典型前奏。</p>
+<p><b>最后一点</b>：ATR 224.7，日内 4% 波动是常态。今天 5,585 被打出 119 点长下影、尾盘收回 5,704，说明下方有实盘承接。在这个位置做空，赚的是最后一段铜板，赔的是整个反弹。</p></div>
+
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥（约 780 字）</h4>
+<p><b>驳"跌到位"</b>："跌到位"是伪命题，期货没有绝对估值锚，只有相对现货，而现货锚正在下移。开秤价从 3.20 元/斤降到 2.70~3.00，只用了不到十天；陕西一般货源"价格混乱、议价成交"，实际成交价低于报价。当成本底本身在以每周 2%~3% 的速度下移时，任何"已经跌够"的判断都会在两周后被推翻。10-14 那天也有人说过"跌到位"。</p>
+<p><b>驳"长下影是承接"</b>：5,585 是止损盘与恐慌盘打出来的，尾盘收回 5,704 更像空头获利减仓与技术性修复，而不是新多进场。证据是总持仓增加 6,517 手——如果真是空头离场，持仓应该下降。增仓下跌意味着空头没有走，只是换了一批成本更高的空头。</p>
+<p><b>驳"分歧市"</b>：净空 2,732 手虽小，但<b>方向已经由净多翻为净空</b>，这是质变而非量变；空头增仓是多头的 1.91 倍；东证同日多增 1,545、空增 1,949，是典型的"对做且空头更强"。用绝对值小来否定方向性，是把结构问题当成规模问题。</p>
+<p><b>驳"统货不等于交割品"</b>：这一点我接受，但它恰恰说明多头的估值论证站不住。对方用 3.05 元/斤的好货去论证 5,704 便宜，可增量供应是统货和一般货，它们卖 2.00~2.50 元/斤，折 4,000~5,000 元/吨。市场定价的边际供给从来不是最优质的那一档，而是最难卖的那一档——因为那部分货最终会走进冷库、走向远月、走向交割。</p>
+<p><b>驳"基差修复靠期货涨"</b>：东证 10-22 周报的厂库交割利润为 -904 元/吨、环比恶化 806，说明卖交割亏损在扩大。但请注意，这个"亏损"是相对少数符合交割标准的好货计算的；对占绝大多数的统货而言，现货根本没有 6,100 元/吨的报价。基差的分母是分层现货市场，不是单一报价。用一个口径的坚挺去推导全市场期货必涨，是样本选择偏差。</p>
+<p><b>关于超卖钝化</b>：这是本轮最有力的反例——10-21 时 RSI6 已经 15.9、RSI14 16.8，按"超卖必反弹"的逻辑应该止跌，结果今天 RSI14 打到 12.02 并创出新低。超卖在趋势行情中会长期钝化，把"极值"当"拐点"，正是昨日做多失败的根本原因。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈（约 660 字）</h4>
+<p>我完全承认趋势是空的：价格在 MA5/10/20/60 全部之下，MACD 绿柱仍在扩大，20 日 -21.71%，基本面增产 +18.37%、优果率提升、开秤价下移，五项里四项指向下。所以我不主张做多，我只主张一件事：<b>此处不做空</b>。</p>
+<p>理由只有一个，但足够硬——<b>赔率</b>。以 5,704 为基准，向下第一目标 BOLL 下轨 5,613 只有 91 点，即便看 5,585 前低也只有 119 点；向上第一目标 MA5 5,882 有 178 点，回到 10-21 收盘 5,984 有 280 点，到 MA10 6,219 有 515 点。空头在此处的盈亏比约 1:0.4 到 1:1，多头约 1:1.5 到 1:4.3。方向对不等于交易对，当赔率与方向背离时，正确动作是<b>离场</b>。</p>
+<p>再者，<b>驱动正在边际衰减</b>。10-14 的 -6.95% 是"优果率证伪"的首次冲击，10-22 的 -4.68% 是同一逻辑的第二次冲击，而今天现货报价环比持平、仓单与有效预报双零、2611 仍稳在 6,823。利空的边际冲击力在递减，而价格已经反映了两轮。</p>
+<p>第三，<b>时间站在多头一边（短期）</b>。10 月下旬至 11 月上旬入库高峰过后，供应压力将从"现货抛售"转为"冷库锁定"，可流通货源反而减少；替代品蜜橘 10 月底至 11 月初到货见顶后价格季节性回落，苹果的比价劣势会修复。这些都不是今天能兑现的，但足以让空头不敢在 5,700 下方重仓过夜。</p>
+<p>具体做法：观察 5,600~5,700 区间。若出现"成交萎缩至 30 万手以下 + 收盘站上 5,800 + 日线收阳包阴"三者中的两项，可轻仓试多，止损 5,540（约 1.0×ATR 下方），目标 5,980 / 6,180。若明日直接放量跌破 5,585，则放弃所有多头想法，承认趋势。</p>
+<p>最后提醒对方：10-21 我用超卖做多，错了；但错的不是"超卖"这个观察，而是<b>在没有价格确认的情况下、用 0.5 倍 ATR 的止损去赌方向</b>。今天我给出的是条件单，不是预测。</p></div>
+
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈（约 700 字）</h4>
+<p>我同意"不追空"，但坚决反对"试多"。理由是把六维摊开看：库存（新季入库攀升）、仓单（0 张但未提供支撑）、结构（2701 升水远月 281~299 点待收敛）、技术（完全空头排列）、基本面（增产 + 优果率提升 + 开秤价下移 + 需求弱）、持仓（由净多翻净空）——<b>六项里五项偏空，唯一偏多的只有"超卖"这一项，而这一项昨天刚刚失败过一次</b>。</p>
+<p>多头说赔率好，但赔率的前提是方向概率不低于 40%。当前向下的驱动是实的（现货锚下移、入库压力、替代品降价），向上的驱动是虚的（超卖、基差、长下影），实驱动打虚驱动，概率分布应该是 65:35 而不是 50:50。在 65:35 的分布下，1:1.5 的赔率只能给出约 0.18 的期望值，扣掉手续费与滑点，不足以构成交易。</p>
+<p>更重要的是，多头方案里的"确认条件"自相矛盾：要求"收盘站上 5,800"，而 5,800 与今日收盘 5,704 相差 96 点，等于用 96 点的追高换取 5,540 的止损（260 点风险），风险回报比立刻倒挂为 1:0.8。这不是低风险试多，这是把止损当装饰。</p>
+<p>我的方案是条件化的，且只在反弹中执行：<b>若反弹至 5,880~5,980 区间</b>（MA5 5,882 与 10-21 收盘 5,984 之间，即昨日多头的成本区与套保盘入场区），且日线出现滞涨（收阴、长上影或成交萎缩），则分批沽空；止损设<b>收盘站上 6,050</b>（10-21 高点 6,050、距入场约 1.1~1.5×ATR，是一个真正有效的止损）；目标 5,585（今日低点）→ 5,420（向 AP2703 的 5,423 收敛）。仓位不超过 20%，单笔风险不超过总资金 1%。</p>
+<p>若明日直接低开跌破 5,585，<b>不追空</b>——防止 V 型反抽，等反抽 5,650~5,700 再评估。这一点我与多头没有分歧：位置差不追空。</p>
+<p>最后回到三份报告的核心分歧：多头认为"利空已定价两轮"，我认为"利多从未被定价"。市场从 6,900 跌到 5,704，跌的是"优果率偏低"这个错误叙事；而"增产 +18.37% + 优果率提升 + 开秤价下移"这套真实的基本面，在 2701 上只走完了第一段。<b>错误叙事的清算，不等于真实利空的出清。</b></p></div>
+</div>
+
+<h2>六、总决策官裁决 <em>含 10-21 替换失败复盘</em></h2>
+<div class="final">
+<div class="lbl">六维多空评分</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>强度</th><th>关键依据</th></tr></thead><tbody>
+<tr><td>① 库存</td><td class="up">4/10</td><td class="down">6/10</td><td><div class="bar"><i style="width:40%"></i></div></td><td>旧季尾库 9.35 万吨低位，但新季入库快速攀升、库容趋饱和</td></tr>
+<tr><td>② 仓单</td><td class="up">5/10</td><td class="down">5/10</td><td><div class="bar"><i style="width:50%"></i></div></td><td>仓单 0 张、预报 0 张，无实货压力但也未提供支撑</td></tr>
+<tr><td>③ 期限结构</td><td class="up">4/10</td><td class="down">6/10</td><td><div class="bar"><i style="width:60%"></i></div></td><td>back 结构，2701 升水 2703 达 281 元/吨，有收敛压力</td></tr>
+<tr><td>④ 技术面</td><td class="up">3/10</td><td class="down">7/10</td><td><div class="bar"><i style="width:70%"></i></div></td><td>均线全空、绿柱扩大、放量增仓破位；仅 RSI 极值偏多</td></tr>
+<tr><td>⑤ 基本面</td><td class="up">2/10</td><td class="down">8/10</td><td><div class="bar"><i style="width:80%"></i></div></td><td>增产 18.37%、优果率提升、开秤价下移、需求弱、替代品降价</td></tr>
+<tr><td>⑥ 持仓</td><td class="up">3/10</td><td class="down">7/10</td><td><div class="bar"><i style="width:70%"></i></div></td><td>由净多 975 翻净空 2,732，空头增仓 1.91 倍于多头</td></tr>
+<tr><td><b>合计</b></td><td class="up"><b>21/60</b></td><td class="down"><b>39/60</b></td><td><div class="bar"><i style="width:65%"></i></div></td><td>空方占优，但"位置"项（超卖/ATR/贴水）削弱可交易性</td></tr>
+</tbody></table>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">观望（不参与）<br>空 45% / 多 20% / 观望 35%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">35%（不达 60% 可交易阈值）<br>3 个交易日（10-23 至 10-27）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">备选条件单：反弹 5,880~5,980 分批沽空<br>5,585 → 5,420<br>收盘站上 6,050 止损<br>不做多</div></div>
+</div>
+
+<p class="note" style="margin-top:16px"><b class="gold">核心逻辑（三条）</b></p>
+<p class="note">· <b>驱动是基本面，不是情绪</b>：增产 18.37% 定产、优果率由"偏低"改判为"提升"、山东开秤价 2.70~3.00 元/斤低于去年，且今日为放量增仓 6,517 手、前 20 席空头增 7,768 手（多头 4,061 手），属新空主动入场，非减仓恐慌。</p>
+<p class="note">· <b>RSI14 12.02 只能阻止追空，不能构成做多</b>：10-21 RSI6 15.9 已是极值，今日更极端且创新低，验证"钝化"；且缺乏价格确认（未站上 MA5 5,882、未收复 5,984），在 ATR 224.7 下任何 &lt;1.5 ATR 的止损都无效。</p>
+<p class="note">· <b>方向与位置冲突 → 不参与</b>：空方六维 39:21 占优，但价格处 20/60 日新低、距 BOLL 下轨仅 1.6%，追空赔率约 1:0.4；做多则逆五项驱动。两侧盈亏比均 &lt;1.5，正确动作是空仓等待反弹给出赔率。</p>
+
+<div class="callout">
+<p><b>【复盘】10-21 由 CJ 替换为 AP 的多头建议：方向错误，止损被击穿</b></p>
+<table style="margin-top:8px"><thead><tr><th>项目</th><th>10-21 建议</th><th>10-22 实际</th><th>结果</th></tr></thead><tbody>
+<tr><td>方向</td><td>短线偏多（置信度 60%）</td><td>开 5,984 → 高 5,996 → 低 5,585 → 收 5,704</td><td class="down">方向错误</td></tr>
+<tr><td>入场</td><td>回踩 5,900~5,960</td><td>开盘 5,984 即高于区间上沿 24 点，未回踩即成交</td><td class="down">入场即被套</td></tr>
+<tr><td>目标</td><td>6,150 / 6,300</td><td>最高 5,996，距目标 1 仍差 154 点</td><td class="down">未触及</td></tr>
+<tr><td>止损</td><td>收盘跌破 5,780</td><td>盘中击穿，收盘 5,704</td><td class="down">已击穿</td></tr>
+<tr><td>损益</td><td>—</td><td>按 5,984 入场、5,704 收盘计 -280 点（-4.68%），10 吨/手折 -2,800 元/手；最大浮亏 -399 点（-6.67%）</td><td class="down">实亏</td></tr>
+</tbody></table>
+<p style="margin-top:12px"><b>失误归因（五条，按权重排序）</b></p>
+<p>1. <b>逻辑错配（权重最高）</b>：把"期货贴水现货 42%/904 元"当作做多理由，但贴水可以通过现货补跌来收敛。10-22 基差较上周走强 806 元/吨，正是"现货跌得慢、期货跌得快"的镜像——基差走强与期货下跌同时发生，本身就是对"贴水必涨"证伪。</p>
+<p>2. <b>把超卖当拐点</b>：10-21 已用 RSI6 15.9 作为核心论据，10-22 RSI14 打到 12.02 并创新低，直接构成反例。极端超卖在趋势行情中长期钝化，"极值"≠"反转"。</p>
+<p>3. <b>止损设置失效</b>：入场 5,900~5,960、止损 5,780，风险预算仅 120~180 点 = 0.53~0.80×ATR（224.7），低于 1 倍 ATR 的止损在高波动品种上等同随机止损；且 5,780 距 10-21 低点 5,847 仅 67 点，正落在前低下方的流动性狩猎区。</p>
+<p>4. <b>忽略事件日历</b>：10 月中下旬是山东扎点收购放量、新季集中下市的窗口，是全年供应压力最大的两周。逆季节性做多，方向选择与时间窗口对立。</p>
+<p>5. <b>品种替换本身的缺陷</b>：CJ 置信度 45% 不达标时，用关联强度仅 0.5 的替代品种"填空"，等于用弱关联标的承接一个本不该发出的信号。关联弱意味着替代逻辑不成立，替换应当<b>下调</b>而非维持置信度。</p>
+<p style="margin-top:10px"><b>流程修正（写入本品种后续规则）</b></p>
+<p>① 逆势禁止给"偏多"作主方向：当收盘 &lt; MA20 且 MA5&lt;MA10&lt;MA20 时，主方向最高只能给"观望"，做多仅可作为条件单且需价格确认（收盘站上 MA5）。<br>
+② 止损硬约束：逆势交易止损 ≥ 1.5×ATR，顺势交易 ≥ 1.0×ATR；止损位不得设置在前低/前高 0.5×ATR 以内。<br>
+③ 入场位置约束：逆势博反弹必须在支撑位（前低/BOLL 下轨）建仓，禁止在阻力位（MA5/前收盘）追多。<br>
+④ 替代品种折扣：替代品种置信度 ≤ min(原品种置信度, 自身证据上限)，且关联强度 &lt;0.7 时额外打 0.8 折。本次 45%×0.8=36%，与今日 35% 基本一致。<br>
+⑤ 连续两次同向失败后，第三次同逻辑信号自动降级为"观察"，不得直接下单。</p>
+</div>
+
+<p class="note" style="margin-top:16px"><b class="gold">三个必答问题</b></p>
+<p class="note">① <b>暴跌性质</b>：<b>基本面驱动为主（约 7 成），情绪与技术负反馈为辅（约 3 成）</b>。判定依据是四项"基本面特征"全部成立：全合约普跌（2611 -5.88%、2705 -6.58%）、放量增仓 6,517 手、前 20 席空头增仓 7,768 手为多头 1.91 倍、开秤价与优果率两项现货锚同步下移。若为纯情绪杀跌，应表现为减仓下行、近月抗跌、基差走强后期货回升，实际三项均不成立。情绪成分体现为：昨日 +2.36% 冲高 6,050 失败后的多头止损盘，以及 5,585 处的恐慌盘，放大了跌幅约 1.5 个百分点。</p>
+<p class="note">② <b>RSI14 12.02 能否作为反弹依据</b>：<b>不能</b>。它只能把"追空"降级为"不宜追空"。三条理由：a) 10-21 RSI6 15.9 已属极值，今日更极端且创新低，证明钝化；b) 缺价格确认——未站上 MA5 5,882、未收复 5,984，MACD 柱由 -178.4 微扩至 -178.9，无止跌信号；c) 在 ATR 224.7 下，合理止损（6,050）距现价 346 点，做多需承担 346 点风险去博 178~280 点空间，赔率不成立。用超卖做多，是把"统计概率"误当"交易胜率"。</p>
+<p class="note">③ <b>是否应给"不参与"</b>：<b>是</b>。三重理由：a) 方向（空，六维 39:21）与位置（20/60 日新低、距 BOLL 下轨 1.6%、RSI14 12.02）严重冲突；b) 多空两侧盈亏比均 &lt;1.5（追空约 1:0.4，做多约 1:0.8，按多头自己的确认条件测算）；c) 置信度 35%，显著低于 60% 阈值，也不高于原品种 CJ 的 45%。因此主结论为"观望、不参与"，仅保留"反弹沽空"条件单。</p>
+
+<p class="note" style="margin-top:14px"><b class="gold">风险提示</b></p>
+<p class="note">· <b>上行风险（对备选空单）</b>：① 产区突现降温/降雨/冰雹影响果面与优果率，可交割货源不足；② 入库数据显著低于产量增幅（果农惜售、被动入库不及预期），远月估值上修；③ 现货报价止跌回升，基差以期货上涨修复；④ 5,585 处空头集中平仓引发 V 型反抽，单日振幅可达 3%~5%。</p>
+<p class="note">· <b>下行风险（对潜在多单）</b>：① 山东扎点收购价进一步下探至 2.50 元/斤以下；② 新季入库超预期、库容饱和，供应压力后移至 2703/2705；③ 柑橘 10 月底至 11 月初集中到货，蜜橘销地价已周降 7.04%，替代压力继续加强；④ 前 20 席净空扩大，产业套保持续入场。</p>
+<p class="note">· <b>数据风险</b>：10-22 当周全国冷库入库数据、产区实际成交明细、郑商所苹果交割配对明细<b>数据未获取</b>，本报告库存判断基于 10-09 周度尾库数据与机构定性描述；东证"主力基差 904 元/吨"与栖霞现货折算口径（约 396 元/吨）存在差异，已在正文标注。</p>
+<p class="note" style="color:#e8b45a;margin-top:12px">【关联品种声明】本报告为关联品种分析：原品种红枣 CJ 于 10-21 置信度 45%（&lt;60%）触发替换，AP 与 CJ 同属鲜干果消费替代关系，关联强度 0.5（关联较弱）。10-21 的替换已被证明失败（方向错误、止损击穿），本次不再以"替换提升置信度"为前提，AP 置信度独立评估为 35%。</p>
+</div>
+
+<div class="foot">
+数据来源：行情与日 K——新浪财经期货日 K（倚天财经，2026-10-22 15:00）；仓单与有效预报——郑州商品交易所期货仓单日报表（2026-10-22）；席位与资金——东方财富 Choice 苹果龙虎榜（2026-10-22 16:42）；现货、库存与机构观点——东证期货《苹果重点数据周报》（2026-10-22）、广发期货、格林大华期货、瑞达期货、长江期货、南华期货、国金期货公开日报与周报，中国果品流通协会《2026 产季苹果产销形势分析报告》（2026-10-02），Mysteel、卓创资讯、上海钢联，商务部市场运行监测系统（苹果批发价 9.06 元/公斤，2026-10-16），农业农村部信息中心/新华指数（柑橘销地批发均价 7.49 元/公斤，2026-10-22 当周）。技术指标（MA/MACD/RSI/BOLL/KDJ/ATR）基于日线收盘价计算，长周期指标存在一定误差。iFinD 未授权，本报告未使用其数据。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供研究参考，不构成任何投资建议。期货交易具有杠杆效应，市场有风险，投资需谨慎。
+</div></div></body></html>

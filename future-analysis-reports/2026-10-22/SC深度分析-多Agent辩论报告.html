@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原油SC深度分析 · 多Agent辩论报告</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:170px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.side p{font-size:12.7px;color:#bfcede;margin:8px 0;text-align:justify}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.src{font-size:10.5px;color:#5f7185;margin-top:6px}
+.rel{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:20px;margin-bottom:10px;
+background:rgba(232,180,90,.1);border:1px solid rgba(232,180,90,.35);color:#e8b45a}
+.rules{font-size:12.5px;color:#bfcede;margin:6px 0 6px 16px}
+@media(max-width:900px){.grid6,.quad,.two,.debate{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="hd"><div><h1>原油 <span>SC · SC2612</span></h1>
+<div class="note">上海国际能源交易中心　|　报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23</div></div>
+<div class="meta"><div>收盘价（元/桶）</div><div class="px up">713.4</div>
+<div class="up">+1.80%（对昨结算 700.8）　对昨收 716.5 为 -0.43%</div>
+<div>高 722.5 / 低 684.4　持仓 33,621（-2,073）　成交 212,329</div></div></div>
+
+<div class="banner">
+<div><span class="rel">关联品种分析：由原品种沥青 BU 置信度 56%（&lt;60%）触发 · BU–SC 关联强度 0.8</span>
+<div class="lbl">最终裁决</div><div class="big">偏多（回踩做多，不追跳空）</div>
+<div class="note">胜率评估：多方 64% / 空方 36%　|　预期窗口：1~3 个交易日（10-23 至 10-27）</div></div>
+<div class="conf"><div class="ring" style="--p:64"><b>64%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">外盘盘后补涨未计价<br>贴水 42.4 元待修复</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：回踩 706~722 分批</div>
+<div style="font-size:13px">目标：740 → 756</div><div style="font-size:13px">止损：收盘跌破 684</div></div>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>9/10</span></h3><p>EIA 10/16 当周商业原油 4.125 亿桶（-310 万桶，三连降），低于五年均值 3%；汽油 2.053 亿桶（-300 万，低 5%）；馏分油 1.043 亿桶（+170 万，低 9%）；SPR 2.827 亿桶，1982 年 10 月以来最低。</p><div class="bar"><i style="width:90%"></i></div><div class="src">来源：EIA WPSR（2026-10-16 周）</div></div>
+<div class="card"><h3>② 仓单 <span>4/10</span></h3><p>SC 注册仓单 494.6 万桶（10-08 单日 +198.5 万桶），约为主力持仓 3,362 万桶的 14.7%。上期能源 10-19 将舟山岙山库容由 35 万 m³ 扩至 70 万 m³。</p><div class="bar"><i style="width:40%"></i></div><div class="src">来源：新浪财经仓单日报、上期能源公告〔2026〕120 号</div></div>
+<div class="card"><h3>③ 期限结构 <span>8/10</span></h3><p>SC2612 713.4 / 2701 702.7 / 2702 691.5 / 2703 679.7，近高远低，2612 对 2703 升水 33.7 元，backwardation 完整。</p><div class="bar"><i style="width:80%"></i></div><div class="src">来源：新浪财经期货日 K（2026-10-22 15:00）</div></div>
+<div class="card"><h3>④ 技术面 <span>6/10</span></h3><p>长下影 + 更高低点（684.4 &gt; 670.0），RSI6 25.8 深度超卖修复，MACD 柱 -14.7（前值 -15.3）收敛；但价格仍在 MA5/10/20（716.5/724.1/727.1）下方。</p><div class="bar"><i style="width:60%"></i></div><div class="src">指标基于 SC2612 日 K 收盘价计算</div></div>
+<div class="card"><h3>⑤ 新闻基本面 <span>7/10</span></h3><p>10-22 15:00 后布伦特 +3.37% 至 112.487、WTI +2.77% 盘中破 100；霍尔木兹 3 船触雷、4 船被击；沙特谢巴油田与达曼机场遇袭。需求端 IEA 2026 年 -260 万桶/日构成对冲。</p><div class="bar"><i style="width:70%"></i></div><div class="src">来源：证券时报、中国基金报、新华社、IEA OMR 2026-10</div></div>
+<div class="card"><h3>⑥ 持仓席位 <span>5/10</span></h3><p>前 20 名净持仓、席位明细：<b>数据未获取</b>。总量看持仓 33,621 手（-2,073），价格上涨而持仓下降，属减仓上行（空头回补）。</p><div class="bar"><i style="width:50%"></i></div><div class="src">来源：上期能源日交易快讯；仅单日总量数据，趋势判断参考性有限</div></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>MA5 716.5 / MA10 724.1 / MA20 727.1 三线在价格上方且 MA20 走平下压，短线仍是空头排列；MA60 654.6 仍向上，中期上升结构未破。DIF 6.6 &lt; DEA 13.9，MACD 柱 -14.7，负值连续但较前值 -15.3 收敛，属零轴上方死叉后的修复初期。</p></div>
+<div class="card"><h3>震荡指标</h3><p>RSI6 25.8（深度超卖）、RSI14 42.5（中性偏弱，未破 40）；KDJ K46.0 / D47.0 / J43.9，J 值自低位拐头；BOLL 中轨 727.1、上轨 767.3、下轨 686.8，10-22 最低 684.4 短暂击穿下轨后收回，下轨支撑有效。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 212,329 手（前一日 271,772 手），持仓 33,621 手（-2,073）。价格 +1.80% 而持仓下降，定性为<b>空头回补主导</b>，而非增量多头进场；量能未放大，突破 727 需增量资金确认。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>10-22 开 696.6、下探 684.4、收 713.4、高 722.5，收盘位于当日振幅上沿 68% 处，形成 29 元长下影；低点 684.4 高于 10-21 的 670.0，构成<b>更高低点</b>，失败破位成立。ATR 40.2，日内波动仍大。</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag tb">多 长下影+更高低点</span><span class="tag tb">多 RSI6 25.8 超卖</span><span class="tag tb">多 MACD 柱收敛</span><span class="tag tb">多 BOLL 下轨支撑</span><span class="tag tb">多 外盘盘后 +3.37%</span><span class="tag ts">空 价格在 MA5/10/20 下方</span><span class="tag ts">空 DIF 6.6 &lt; DEA 13.9</span><span class="tag ts">空 减仓上行无量</span><span class="tag tn">中 KDJ 金叉未确认</span><span class="tag tn">中 20 日 -13.74% 趋势未扭转</span></div>
+<p class="note" style="margin-top:8px">短线技术面偏多（超卖修复 + 形态反转），中期趋势仍偏空（均线压制 + 月线级别下行）。强度评级：中。</p></div>
+<div class="card" style="margin-top:12px"><h3>关键价位表</h3>
+<table><thead><tr><th>类型</th><th>价位（元/桶）</th><th>依据</th></tr></thead><tbody>
+<tr><td>强压力</td><td>767.3</td><td>BOLL 上轨 / 20 日高 832.3 下行通道上沿</td></tr>
+<tr><td>第二压力</td><td>751~756</td><td>832.3→670.0 的 0.5 回撤位 751.2</td></tr>
+<tr><td>第一压力</td><td>740.4</td><td>10-21 最高价 + 0.382 回撤位 732 上沿</td></tr>
+<tr><td>近端阻力</td><td>724.1~727.1</td><td>MA10 / MA20 / BOLL 中轨三线重合</td></tr>
+<tr><td>收盘价</td><td class="gold">713.4</td><td>10-22 收盘（+1.80% 对昨结算）</td></tr>
+<tr><td>第一支撑</td><td>700.8</td><td>10-21 结算价 / 700 整数关口</td></tr>
+<tr><td>第二支撑</td><td>686.8</td><td>BOLL 下轨</td></tr>
+<tr><td>强支撑</td><td>684.4 / 670.0</td><td>10-22 低点 / 10-21 低点（20 日低）</td></tr>
+</tbody></table></div>
+
+<h2>三、持仓与席位</h2>
+<div class="two">
+<div class="card"><h3>总量与仓单</h3>
+<table><thead><tr><th>项目</th><th>数值</th><th>变化</th></tr></thead><tbody>
+<tr><td>主力持仓（SC2612）</td><td>33,621 手</td><td class="down">-2,073</td></tr>
+<tr><td>成交量</td><td>212,329 手</td><td class="down">前一日 271,772</td></tr>
+<tr><td>注册仓单</td><td>494.6 万桶</td><td class="up">10-08 +198.5 万桶</td></tr>
+<tr><td>仓单 / 持仓</td><td>14.7%</td><td>—</td></tr>
+<tr><td>前 20 名净持仓</td><td colspan="2">数据未获取</td></tr>
+<tr><td>席位净多 / 净空明细</td><td colspan="2">数据未获取</td></tr>
+</tbody></table>
+<p class="src">来源：上期能源日交易快讯、新浪财经仓单日报。席位数据缺失，不对单一席位行为作推断。</p></div>
+<div class="card"><h3>资金行为解读</h3>
+<p>① 10-22 价格 +1.80% 而持仓 -2,073 手，属典型<b>减仓上行</b>：空头在 684.4 附近集中回补，而非新多进场。这类反弹的第一阶段弹性好、持续性弱，需要 10-23 出现<b>增仓上行</b>才能确认趋势反转。</p>
+<p>② 33,621 手的持仓处于偏低水平，任何方向的增量资金都会被放大；同时也意味着本轮反弹缺少"筹码沉淀"。</p>
+<p>③ 仓单 494.6 万桶仅为持仓对应量的 14.7%，不足中国单日进口量（906 万桶/日）的六成，交割压力有限；10-19 舟山扩容属中长期可交割能力建设，不改变 11 月合约的可交割量。</p>
+<p>④ 结论：资金面<b>中性偏多</b>，但可信度中等偏低——减仓反弹的证据强度弱于增仓上行。强度评级：弱。</p></div>
+</div>
+
+<h2>四、期限结构</h2>
+<div class="card"><div class="term">
+<div class="tcol"><div class="tval">713.4</div><div class="tbar" style="height:150px"></div><div class="tname">SC2612（+1.80%）</div></div>
+<div class="tcol"><div class="tval">702.7</div><div class="tbar" style="height:117px"></div><div class="tname">SC2701（+1.06%）</div></div>
+<div class="tcol"><div class="tval">691.5</div><div class="tbar" style="height:82px"></div><div class="tname">SC2702（+0.44%）</div></div>
+<div class="tcol"><div class="tval">679.7</div><div class="tbar" style="height:46px"></div><div class="tname">SC2703（+0.28%）</div></div>
+</div>
+<table style="margin-top:14px"><thead><tr><th>价差</th><th>数值（元/桶）</th><th>含义</th></tr></thead><tbody>
+<tr><td>SC2612 − SC2701</td><td>+10.7</td><td>近月升水，月差约 10.7 元</td></tr>
+<tr><td>SC2612 − SC2702</td><td>+21.9</td><td>两个月累计升水 21.9 元</td></tr>
+<tr><td>SC2612 − SC2703</td><td>+33.7</td><td>四个月累计升水 33.7 元，backwardation 完整</td></tr>
+<tr><td>SC2612 对布伦特平价</td><td>-42.4</td><td>112.487 × 6.7195 = 755.8 元，SC 贴水 42.4 元（6.3 美元）</td></tr>
+</tbody></table>
+<p class="note" style="margin-top:10px">近月涨幅（+1.80%）显著高于远月（+0.28%），10-22 的反弹由近端驱动，说明市场定价的是<b>眼前的航运/库存紧张</b>，而非远期供需改善。曲线结构支持"近强远弱"，但也意味着一旦地缘缓和，近月回吐幅度会更大。现货基差（SC 对阿曼/迪拜到岸价）未获取，以布伦特平价替代测算，含品质与地区价差，仅作方向参考。</p>
+<p class="src">来源：新浪财经期货日 K（2026-10-22 15:00）；汇率取中国货币网美元/人民币中间价 6.7195（2026-10-22）。</p></div>
+
+<h2>五、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（金牛首席）</h4>
+<p><b>① 库存：这是当前最硬的多头证据。</b>EIA 10 月 16 日当周商业原油再降 310 万桶至 4.125 亿桶，为连续第三周下降，较五年同期均值低约 3%；汽油降 300 万桶至 2.053 亿桶，低 5%；馏分油虽增 170 万桶，但仍低 9%；战略储备降至 2.827 亿桶，为 1982 年 10 月以来最低，Cushing 仅 2,760 万桶。IEA 10 月月报显示，9 月全球可观测库存再降 1,000 万桶，其中在岸库存降 1.13 亿桶，非 OECD 原油库存降 7,600 万桶、中国占 78%，全球库存较 2 月底低 5.09 亿桶。</p>
+<p><b>② 期限结构：四个合约逐月下移。</b>SC2612 713.4、2701 702.7、2702 691.5、2703 679.7，近月对 2703 升水 33.7 元。若市场相信供应正在恢复，近月应率先坍塌，但事实相反：近月最强、涨幅最大（+1.80% 对 +0.28%）。</p>
+<p><b>③ 技术面：失败破位 + 超卖修复。</b>10-22 开 696.6、下探 684.4 后收 713.4，留下 29 元长下影，收盘位于当日振幅上沿 68%；低点 684.4 高于 10-21 的 670.0，构成更高低点。RSI6 25.8 处深度超卖，MACD 柱由 -15.3 收敛至 -14.7，KDJ 的 J 值 43.9 自低位回升，价格收回 BOLL 下轨 686.8 上方。自 832.3 跌至 670.0 的 19.5% 跌幅、20 日 -13.74%，已把需求端的利空打得较为充分。</p>
+<p><b>④ 新闻：关键变化发生在 SC 收盘之后。</b>10-22 15:00 之后，布伦特 12 月合约拉升 3.37% 至 112.487 美元，WTI 涨 2.77% 并盘中突破 100 美元。伊朗革命卫队称 21 日夜至 22 日有 3 艘船只在霍尔木兹"非法航道"触雷起火、4 艘船在波斯湾北部被击中，并警告对抗范围可能扩至美军基地；沙特阿美谢巴油田遭无人机袭击致 2 人死亡、达曼法赫德国王机场遇袭，美国撤离驻沙使馆部分人员；美以被曝制定中期选举后对伊打击计划。这一批信息尚未计入 713.4。</p>
+<p><b>⑤ 仓单与持仓：不构成压力。</b>SC 仓单 494.6 万桶，仅相当于主力持仓 3,362 万桶的 14.7%。10-22 持仓减 2,073 手而价格上涨，是空头回补而非多头出逃——在 19.5% 的下跌之后，空头回补正是反转的第一阶段。</p>
+<p><b>⑥ 比价：42.4 元的缺口。</b>按 6.7195 中间价，布伦特 112.487 折 755.8 元/桶，SC 713.4 贴水 42.4 元（6.3 美元）。扣除品质贴水后仍偏便宜，补涨空间可计量。</p>
+<p><b>结论：</b>1~3 个交易日偏多。回踩 706~722 分批做多，目标 740 / 756，收盘跌破 684 止损。</p></div>
+
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（黑熊首席）</h4>
+<p><b>① 需求端的崩塌是慢变量，但更持久。</b>IEA 10 月月报将 2026 年全球需求定为 -260 万桶/日，4Q26 为 -250 万桶/日；EIA 为 -198 万桶/日；OPEC 虽仍为正 18 万桶/日，但较上月再下修 20 万桶/日。中国 9 月原油进口 906 万桶/日、同比 -22%，虽连续三个月环比回升，绝对值仍比 2025 年常态低约 270 万桶/日；9 月加工量 1,393.5 万桶/日、同比 -10.4%，全国常减压开工率 71.3%，10 月第二周降至 70.4%，山东地炼仅 60.8%、两周下滑 3.2 个百分点。中金已将中国全年石油需求增速从 -3% 下调至 -5%。IEA 预计 10 月全球炼厂加工量降至 8,130 万桶/日的季节性低点。这样的需求曲线，撑不起 112 美元的布伦特。</p>
+<p><b>② 供应在恢复，而不是恶化。</b>IEA 数据显示，9 月全球供应增 250 万桶/日至 1.023 亿桶/日，OPEC+ 增产 210 万桶/日、由沙特主导；海湾原油出口增 440 万桶/日至 1,390 万桶/日，超过战前水平的 75%；霍尔木兹通行量增 370 万桶/日至 1,090 万桶/日，绕行出口增 97 万桶/日至 560 万桶/日。10 月 4 日 OPEC+ 七国连续第二个月维持 11 月配额不变，但"配额不变"不等于"产量不增"——实际产量已连续三个月回升。</p>
+<p><b>③ 政策端方向明确是压价。</b>美国商业原油库存虽低，但 SPR 已降至 1982 年以来最低，说明抛储空间接近耗尽；中期选举（11 月 3 日）前，白宫释放 31.5 万桶取暖油储备、与俄罗斯达成柴油供应协议、通过巴基斯坦渠道推动美伊复谈，方向都是压低能源成本。美国的政策函数在选举前不对称向下。</p>
+<p><b>④ 技术面仍是空头结构。</b>价格 713.4 位于 MA5 716.5、MA10 724.1、MA20 727.1 之下，三线空头排列且 MA20 走平下压；DIF 6.6 已跌破 DEA 13.9，MACD 柱 -14.7 连续为负；BOLL 中轨 727.1 正是反弹压力；20 日 -13.74%。10-22 的长下影发生在暴跌后的下跌中继位置，更常见的解读是"下跌抵抗"而非"底部反转"。</p>
+<p><b>⑤ 持仓与仓单：没有增量多头。</b>持仓减 2,073 手的价格上涨是减仓反弹；SC 仓单 494.6 万桶且 10 月 8 日单日增 198.5 万桶；上期能源 10 月 19 日将舟山岙山库容由 35 万扩至 70 万立方米，可交割能力上升。供给端在制度层面也在变松。</p>
+<p><b>结论：</b>反弹沽空。732~744 分批，目标 706 / 690，收盘站上 752 止损。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4>
+<p><b>驳"需求崩塌"：</b>请注意时间差。IEA 的 -260 万桶/日是 9 月数据、10 月 14 日发布，而 SC 在 10 月 21—22 日已经用 19.5% 的跌幅（832.3→670.0）为此付过账。中国进口 906 万桶/日看似 -22%，但 6 月是 712 万桶/日的谷底，7—9 月连续三个月环比回升，边际方向是"买回来"而非继续砍。山东地炼 60.8% 的开工率是原料成本高企叠加秋季检修的产物，属于可逆的供给端减产，不是终局需求。用已定价的利空去反驳尚未定价的利多，是错位比较。</p>
+<p><b>驳"供应恢复"：</b>对方引用的 1,390 万桶/日海湾出口、1,090 万桶/日霍尔木兹通行量，全部是 9 月均值。而 10 月 21—22 日发生的是 3 艘船触雷、4 艘船被击、伊朗威胁打击美军基地——恢复曲线已经被打断。IEA 自己在报告里写明"10 月袭击增加，因此对年底的预测基本未作上调"。拿 9 月的恢复去否定 10 月的恶化，在时间上不成立。</p>
+<p><b>驳"技术面仍空"：</b>价格在均线下方我承认，但均线是滞后量。10-22 低点 684.4 高于 10-21 的 670.0，是更高低点；收盘 713.4 收在振幅上沿 68%；RSI6 25.8 处于 20 日最低区；MACD 柱从 -15.3 收窄至 -14.7。四者同向，说明抛压在 684 附近被吸收。对方把"下跌抵抗"当作结论，却没有解释为什么 670.0 的破位会在一天内被完全收复。</p>
+<p><b>驳"没有增量多头"：</b>在 19.5% 的跌幅之后，空头回补恰恰是反转的第一阶段；33,621 手的低持仓意味着一旦新多进场，弹性更大。仓单 494.6 万桶只占持仓的 14.7%，扩库容是 2027 年的产能，不是下周的可交割量——对方把中长期供给能力当成了短期交割压力。</p>
+<p><b>驳"贴水合理"：</b>42.4 元/桶的贴水已超过品质与地区价差所能解释的范围。对方始终没有回答：这个缺口由什么来闭合？如果答案是"中国需求弱"，那么 7—9 月进口的环比回升已经在否定这个答案。</p></div>
+
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4>
+<p><b>驳"外盘补涨是未计价的确定性"：</b>SC 有夜盘（21:00—02:30），10-23 开盘会把 112.49 直接计入，你买到的是已经付过保险费的价格。更关键的是，这已是 2026 年内第四次地缘脉冲：3 月冲 118 后回落至 80 余、7 月冲 105 后回落、9 月冲 110 后回落至 100 附近。布伦特年内涨超 80%，风险溢价处于高位而非低位。在 112 美元追多，是用 1~3 个交易日的窗口去赌一场已经交易了九个月的战争。</p>
+<p><b>驳"库存紧"：</b>310 万桶的降幅里，产量因飓风 Isaias 减少 41 万桶/日、进口减少 29.1 万桶/日、出口减少 110 万桶/日——这是典型的"供应侧扰动型去库"，不是需求拉动。同期馏分油累库 170 万桶、馏分油需求降 59.1 万桶/日、Cushing 累库 98.7 万桶。炼厂开工 93.4% 已接近季节性顶部，10 月下旬进入检修，原油端反而会转为累库。</p>
+<p><b>驳"backwardation 是紧"：</b>月差是战争的结果，不是需求的证据。更值得注意的是，SC 近月升水只有 10.7 元/月，而布伦特现货 Dated 一度较期货高出 27 美元——如果霍尔木兹真的再度硬断，SC 的月差应该更陡而不是这样温和。这说明市场并不认为供应会硬断，只是在为"可能断"付期权费。</p>
+<p><b>驳"贴水待修复"：</b>10-22 SC 收盘 713.4 时布伦特约 108.5，SC 已按当日外盘定价；盘后涨到 112.49，理论补涨约 28 元，对应 741——恰好是 10-21 高点 740.4 与 MA10 上方。也就是说，补涨空间一开盘就打在压力位上，向上是套牢盘，向下是真空。这不是安全垫，是陷阱。</p>
+<p><b>驳"结构性贴水可以买"：</b>中国进口同比 -22%、地炼开工 60.8%、成品油出口配额受限，SC 对布伦特的贴水是"弱需求 + 交割地溢价"的合理定价，不是无风险套利。把结构性的折价当成错误定价来买，是这轮行情里最容易犯的错。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4>
+<p>我接受黑熊关于"跳空已在价格里"的提醒，所以我的方案不是追高，而是回踩做多。胜负手只有两个。</p>
+<p><b>第一，10-22 的长下影与更高低点是可交易的事实。</b>670.0→684.4 的抬升，配上 212,329 手成交与 RSI6 25.8，是恐慌抛售被承接的标准形态。只要 684.4 不失守，空头的下跌结构就没有完成；而空头若要重新掌控，必须在 10-23 直接跌破 684.4——在布伦特 112 美元的背景下，这个概率不高。</p>
+<p><b>第二，地缘与库存的共振是非对称的。</b>EIA 三连降、汽油低于五年均值 5%、馏分油低 9%、SPR 1982 年以来最低、全球库存较 2 月底低 5.09 亿桶——这是实物层面的紧。霍尔木兹 3 艘触雷船、沙特谢巴油田与达曼机场遇袭——这是事件层面的紧。两者同时存在时，下行空间被库存封住，上行空间被事件打开。做多的赔率优于做空。</p>
+<p><b>具体建议：</b>706~722 分批做多，均价约 714；若开盘跳空至 728~738，不追，等回踩 720~724；目标 740（10-21 高点 + 0.382 回撤位 732 上沿）、756（0.5 回撤位 751 上沿）；收盘跌破 684 止损；仓位不超过 30%，因为这是事件驱动的 1~3 日交易，不是趋势仓。若 10-23 出现增仓上行（持仓由 33,621 手回升且价格站稳 727），则把止损上移至成本，让利润奔跑。</p>
+<p>最后提醒裁决官：10-21 的空单目标 700/690 已在 10-22 兑现（最低 684.4）。一个已经兑现的空头目标，不应被用来证明下一段还是空头。市场的任务不是延续上一份报告，而是定价下一组信息。</p></div>
+
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4>
+<p>我也不主张在 713 追空。我的方案是等反弹到 732~744 再空。胜负手同样两个。</p>
+<p><b>第一，112 美元的布伦特已经把最坏情景定价了。</b>IEA 的 Dated 一度 134 美元、布伦特期货 107，现货溢价 27 美元——这是战争溢价，不是供需溢价。一旦美伊通过巴基斯坦渠道复谈、或美国为中期选举达成临时安排，这 27 美元的回吐速度会远快于建立速度。9 月的教训就是：沙特东西管道重启，油价一周从 110 回到 100。</p>
+<p><b>第二，需求端的负反馈正在从"预期"变成"数据"。</b>中国 9 月进口 -22%、加工量 -10.4%、地炼 60.8%；IEA 把 4Q26 需求定为 -250 万桶/日；全球炼厂 10 月加工量 8,130 万桶/日，是季节性低点；记录运费把亚洲炼油利润压到亏损边缘。高价正在杀死自己的需求，这是 2026 年最重要的基本面事实。SC 自身也没有增量多头：持仓 33,621 手、单日 -2,073，仓单 494.6 万桶且库容在扩，对布伦特贴水 42 元是弱需求的合理定价。</p>
+<p><b>具体建议：</b>732~744 分批沽空，均价约 738；目标 706（10-22 收盘下方）、690（10-21 低点上方）；收盘站上 752 止损；仓位 25% 以内，1~3 日。若 684.4 在 10-23 被有效跌破（收盘价），则把剩余仓位加到 690 附近，因为长下影的失败意味着下跌结构重新确立。</p>
+<p>如果 10-23 开盘直接跳空到 740 以上，我会把首笔空单减半，只在 744~752 追加，因为那意味着事件升级而非脉冲。空头不需要在 713 抢跑，只需要在别人为战争付 27 美元保险费的时候，站在卖方。</p></div>
+</div>
+
+<h2>六、总决策官裁决</h2>
+<div class="final">
+<p style="font-size:13px;color:#cfdcea">双方在三个事实上没有分歧：<b>库存确实紧</b>（EIA 三连降、SPR 四十四年最低）、<b>需求确实弱</b>（IEA -260 万桶/日、中国进口 -22%）、<b>外盘盘后确实暴涨</b>（布伦特 +3.37% 至 112.487）。分歧只在于定价顺序：多头认为"外盘的 3.37% 尚未进入 SC"，空头认为"SC 会一次性把溢价付完，且溢价本身不可持续"。</p>
+<p style="font-size:13px;color:#cfdcea">裁决的关键落在一个可计量的事实上：10-22 15:00 SC 收盘 713.4 时，布伦特约 108.5，收盘后升至 112.49。按 6.7195 折算，这段外盘涨幅对应 SC 约 28 元/桶的补涨缺口，理论开盘价 741。同时 SC 相对布伦特平价贴水 42.4 元（6.3 美元），即使扣除中质含硫的品质贴水，仍存在约 20~30 元的折价。这是"必须发生"的机械修复，而不是观点。多头在这一点上占优。</p>
+<p style="font-size:13px;color:#cfdcea">但空头在两点上同样成立：其一，741 恰好是 10-21 高点 740.4 与 MA10 上沿，补涨一开盘就撞压力；其二，需求端的负反馈是慢变量，决定反弹的高度而非方向。因此正确的做法不是"追多"，也不是"抄底"，而是<b>把补涨当作反弹而非反转，在回踩中做多、在压力位减仓</b>。这既尊重了外盘的机械缺口，也尊重了 20 日 -13.74% 的中期下行趋势。</p>
+<p style="font-size:13px;color:#cfdcea"><b>双方强弱项：</b>多头最强点是可计量的比价缺口（42.4 元）与库存的实物紧张，最弱点是依赖一次性事件，且忽略了 SC 有夜盘、跳空会被瞬间定价；空头最强点是对需求负增长的持续追踪与"地缘脉冲均值回归"的历史样本（3 月、7 月、9 月三次冲高均回落），最弱点是无法解释 10-22 的长下影与更高低点，且在布伦特 112 美元时做空的即期风险敞口过大。两相比较，多头在 1~3 日窗口内的时间优势更明显，空头在 2~4 周窗口内的逻辑优势更明显——这正是本报告只给"1~3 日偏多"、不给"趋势反转"的原因。</p>
+<p style="font-size:13px;color:#cfdcea"><b>六维多空评分（10 分制，均分 6.5 → 多方 64%）</b></p>
+<table style="margin-top:8px"><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>权重</th><th>评分理由</th></tr></thead><tbody>
+<tr><td>库存</td><td class="up">9</td><td class="down">1</td><td>1/6</td><td>商业原油三连降、低于五年均值 3%，汽油低 5%、馏分油低 9%，SPR 1982 年以来最低</td></tr>
+<tr><td>仓单</td><td class="up">4</td><td class="down">6</td><td>1/6</td><td>SC 仓单 494.6 万桶且 10-08 大增 198.5 万桶，舟山库容 35→70 万 m³，偏空</td></tr>
+<tr><td>期限结构</td><td class="up">8</td><td class="down">2</td><td>1/6</td><td>四合约逐月下移 33.7 元，近月涨幅最大，backwardation 完整</td></tr>
+<tr><td>技术面</td><td class="up">6</td><td class="down">4</td><td>1/6</td><td>长下影 + 更高低点 + RSI6 25.8 超卖修复（多）；仍在 MA5/10/20 下方、MACD 负值（空）</td></tr>
+<tr><td>基本面</td><td class="up">7</td><td class="down">3</td><td>1/6</td><td>霍尔木兹触雷、沙特遇袭、美以打击计划（多）；IEA -260 万桶/日、中国进口 -22%（空）</td></tr>
+<tr><td>持仓席位</td><td class="up">5</td><td class="down">5</td><td>1/6</td><td>减仓上行=空头回补（中性偏多）；席位明细数据未获取，不给方向溢价</td></tr>
+</tbody></table>
+<p style="font-size:12px;color:var(--sub);margin-top:8px">综合均分 6.5/10，考虑事件驱动的不确定性折减，置信度取 64%。</p>
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">偏多（回踩做多）<br>多方 64% / 空方 36%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">64%<br>1~3 个交易日（10-23~10-27）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">706~722 分批（均价约 714）<br>740 → 756<br>收盘跌破 684</div></div>
+</div>
+<p style="font-size:13px;color:#cfdcea;margin-top:14px"><b class="gold">执行规则（按开盘情形）</b></p>
+<p class="rules">情形 A｜开盘跳空至 728~738：<b>不追</b>，挂 720~724 回踩单，仓位分两笔。</p>
+<p class="rules">情形 B｜开盘 715~725：直接分批建仓，第一笔 1/2，回踩 708 加第二笔。</p>
+<p class="rules">情形 C｜开盘 &gt;740（接近涨停 741.9）：<b>放弃当日做多</b>，等回踩 730 再评估，或改用 2612/2701 月差正套（多近空远）。</p>
+<p class="rules">情形 D｜收盘跌破 684（10-22 低点）：多头逻辑失效，止损离场，不摊平。</p>
+<p style="font-size:13px;color:#cfdcea;margin-top:12px"><b class="gold">核心逻辑（3 条）</b></p>
+<p class="rules">① <b>外盘盘后补涨未计价。</b>10-22 15:00 后布伦特 +3.37% 至 112.487、WTI +2.77% 破 100，对应 SC 约 28 元补涨缺口（理论 741），开盘必须修复。</p>
+<p class="rules">② <b>地缘溢价重新膨胀。</b>霍尔木兹 3 船触雷、4 船被击，伊朗威胁打击美军基地，沙特谢巴油田与达曼机场遇袭，美以被曝制定中期选举后打击计划——供应中断概率上升，backwardation 有加深动能。</p>
+<p class="rules">③ <b>库存紧 + 技术超卖共振。</b>EIA 三连降、SPR 1982 年以来最低，叠加 10-22 长下影、更高低点 684.4、RSI6 25.8，下跌抵抗成立，684 上方多头赔率占优。</p>
+<p style="font-size:13px;color:#cfdcea;margin-top:12px"><b class="gold">风险提示</b></p>
+<p class="rules">① <b>需求负反馈</b>：中国进口 -22%、地炼开工 60.8%、IEA 4Q26 -250 万桶/日，若 10-23 中国现货买盘继续缺席，SC 会高开低走，补涨变"一日游"。</p>
+<p class="rules">② <b>地缘脉冲均值回归</b>：3 月 118、7 月 105、9 月 110 三次冲高均在数日内回落；若美伊通过巴基斯坦渠道复谈，布伦特可能快速回吐 10 美元以上，SC 直接跌破 684。</p>
+<p class="rules">③ <b>政策压价</b>：美国中期选举（11-03）前释放取暖油储备、与俄罗斯达成柴油协议、继续抛售 SPR，政策函数不对称向下。</p>
+<p class="rules">④ <b>数据缺口</b>：SC 席位净持仓、现货基差、SC 对迪拜到岸价均未获取，比价测算含品质与地区价差，仅作方向参考；本报告不构成对交割成本的精确估算。</p>
+<p class="rules">⑤ <b>流动性与展期</b>：SC2612 距最后交易日（11-30）约 27 个交易日，持仓 33,621 手偏低，事件冲击下滑点放大，建议单笔不超过总资金 10%。</p>
+<p class="note" style="color:#e8b45a;margin-top:12px">【关联说明】本报告为<b>关联品种分析</b>：原品种沥青 BU 置信度 56%（&lt;60%）触发替换，BU 与 SC 同属原油产业链、关联强度 0.8。BU 的强势来自重质原油紧缺导致的沥青产量同比 -49%、月度缺口 60 万吨；该逻辑的上游源头正是 SC 的原料端，故以 SC 作为高置信度表达工具。若 SC 因外盘补涨上行，BU 的成本支撑同步增强；若 SC 冲高回落，BU 的相对强势（自身低库存）可能使其跌幅小于 SC，二者不宜简单同向对冲。</p>
+</div>
+
+<div class="foot">
+<b>数据来源</b>：SC 日 K 行情、技术指标（MA/MACD/RSI/BOLL/KDJ/ATR）来自新浪财经期货日 K（倚天财经，2026-10-22 15:00）；EIA 周度石油库存报告（截至 2026-10-16）；IEA《Oil Market Report》2026 年 10 月（10-14 发布）；OPEC 月度石油市场报告；上期能源日交易快讯与公告〔2026〕120 号（10-19）；中国货币网人民币中间价（2026-10-22，6.7195）；卓创资讯原油早评（10-22）；中金公司《中国石油市场月报》（10-21）；华泰期货月报点评（10-19）；国贸期货原油专题（10-14）；证券时报、中国基金报、新华社、新浪财经公开报道（10-21 至 10-22）。<br>
+<b>数据缺口</b>：SC 前 20 名净持仓与席位明细、SC 现货基差、SC 对阿曼/迪拜到岸价、VLCC 运费指数未获取，文中已逐项标注，未作推算填充。Brent–WTI 价差 10.71 美元取 2026-10-20 结算价（Crude Signal）。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，不构成任何投资建议。期货交易具有杠杆效应，市场有风险，投资需谨慎。
+</div></div></body></html>

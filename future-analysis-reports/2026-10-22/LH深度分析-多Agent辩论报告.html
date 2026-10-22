@@ -1,0 +1,358 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生猪LH深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+h3.sub{font-size:14px;color:var(--gold);margin:18px 0 10px;letter-spacing:.5px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.card ul{list-style:none;margin-top:2px}
+.card li{font-size:12.3px;color:#b9c8da;display:flex;justify-content:space-between;
+border-bottom:1px dashed #1c2836;padding:3px 0}
+.card li span:last-child{color:#e4edf8}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.term{display:flex;align-items:flex-end;gap:14px;height:200px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:48px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tbar2{background:linear-gradient(180deg,#5aa9e8,#2b5b85)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tchg{font-size:11px;color:var(--down);margin-bottom:3px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.review{background:linear-gradient(120deg,#1a1712,#101821);border:1px solid #3a3021;border-radius:12px;
+padding:16px 18px;font-size:12.7px;color:#d8cbb8}
+.review b{color:var(--gold)}
+.review .r{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.review .r div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.side{border-radius:11px;padding:15px 16px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side p{font-size:12.7px;color:#c3d2e2;margin:7px 0;text-align:justify}
+.side li{font-size:12.7px;color:#c3d2e2;margin:6px 0 6px 16px}
+.side .concl{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3a4c;font-size:12.6px;color:#e6c98d}
+.round{margin-top:14px}
+.round-tag{font-size:11px;color:var(--sub);letter-spacing:2px;margin:16px 0 8px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.plan .p{background:#0d151e;border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.plan .p h5{font-size:13px;color:#8cc8f2;margin-bottom:6px}
+.plan .p p{font-size:12.5px;color:#bfcede}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.src{font-size:11.5px;color:#7c8fa3}
+@media(max-width:900px){.grid6,.quad,.two,.debate,.plan{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}.review .r{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="wrap">
+
+<div class="hd"><div><h1>生猪 <span>LH · LH2701 · 大商所</span></h1>
+<div class="note">报告日期 2026-10-22（交易日收盘后）　|　下一交易日 2026-10-23　|　6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决</div></div>
+<div class="meta"><div>收盘价（元/吨）</div><div class="px down">9,860</div>
+<div class="down">-2.13%（-215）　高 10,140 / 低 9,785</div>
+<div>结算 9,940　持仓 200,514（+1,012）　成交 246,735</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">偏空 · 反弹沽空为主 / 破位追空为辅</div>
+<div class="note">胜率评估：多方 43% / 空方 57%　|　触发窗口：1~3 个交易日　|　创 20/60 日新低 9,785</div></div>
+<div class="conf"><div class="ring" style="--p:57"><b>57%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">趋势与资金占优<br>但位置极差，不首选追空</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：反弹 9,950~10,050 分批沽空</div>
+<div style="font-size:13px">目标：9,780 → 9,620（备选 9,500）</div><div style="font-size:13px">止损：收盘站上 10,150</div></div>
+</div>
+
+<div class="review">
+<b>前日复盘（对抗性校验）</b>　10-21 报告：偏空、置信度 58%，入场 10,230~10,320，目标 9,950/9,800，止损 10,450。
+10-22 实际：最高 10,140、最低 9,785、收 9,860。<b>方向命中、目标 9,950 触及、止损未触发</b>，但当日最高价低于前收盘 10,145，
+<b>入场区间完全未触达——"看对但无法成交"</b>。
+<div class="r">
+<div><div class="lbl">方向判定</div><div class="up" style="font-size:14px">✓ 命中（-2.13%）</div></div>
+<div><div class="lbl">目标 9,950</div><div class="up" style="font-size:14px">✓ 盘中触及并下破</div></div>
+<div><div class="lbl">止损 10,450</div><div class="up" style="font-size:14px">✓ 未触及（高 10,140）</div></div>
+<div><div class="lbl">入场 10,230~10,320</div><div class="down" style="font-size:14px">✗ 未成交（差 90 点）</div></div>
+</div>
+<p style="margin-top:10px">教训：单边下跌末段，市场常以"低开低走"替代"反弹沽空"，把挂单放在前收盘之上等于放弃成交。本日入场必须下移至
+<b>MA5 10,141 与昨结算 10,075 的缺口区下方</b>，并同步准备"放量破位追空"的 B 方案。</p>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span class="down">多 3 / 空 7</span></h3>
+<ul><li><span>冻品库容率</span><span>31.87%</span></li><li><span>同比</span><span>+14pct</span></li>
+<li><span>钢联出栏均重</span><span>124.33 kg</span></li><li><span>涌益全国均重</span><span>129.34 kg</span></li>
+<li><span>10 月计划出栏</span><span>1,508.18 万头</span></li></ul>
+<p class="note">均重为 2024 年 9 月以来最高，冻品 307,675 吨，库存与体重双高。</p></div>
+
+<div class="card"><h3>② 仓单 <span class="tn">多 5 / 空 5</span></h3>
+<ul><li><span>10-22 仓单</span><span>数据未获取</span></li><li><span>最近可核实（09-09）</span><span>433 手</span></li>
+<li><span>当日增减</span><span>-9 手</span></li><li><span>总持仓</span><span>200,514 手</span></li></ul>
+<p class="note">仓单量极低，交割压力可忽略；10-22 单日明细未披露，不以旧值代替。</p></div>
+
+<div class="card"><h3>③ 期限结构 <span class="down">多 4 / 空 6</span></h3>
+<ul><li><span>LH2611</span><span>9,225（-3.20%）</span></li><li><span>LH2701</span><span>9,860（-2.13%）</span></li>
+<li><span>LH2705</span><span>11,075（-0.67%）</span></li><li><span>LH2709</span><span>13,000（-0.08%）</span></li>
+<li><span>2709-2701</span><span>+3,140</span></li></ul>
+<p class="note">近低远高、陡峭 contango；2611 贴水现货 545，近月最弱。</p></div>
+
+<div class="card"><h3>④ 技术面 <span class="down">多 3 / 空 7</span></h3>
+<ul><li><span>MA5 / MA20</span><span>10,141 / 10,628</span></li><li><span>MACD 柱</span><span>-108.0</span></li>
+<li><span>RSI6 / RSI14</span><span>21.6 / 37.0</span></li><li><span>KDJ · J</span><span>-2.9</span></li>
+<li><span>20/60 日最低</span><span>9,785</span></li></ul>
+<p class="note">空头排列 + 绿柱重新扩张 + 创 60 日新低；但贴下轨、J 负值，超卖。</p></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span class="down">多 4 / 空 6</span></h3>
+<ul><li><span>外三元均价</span><span>9.77 元/kg</span></li><li><span>内三元 / 土杂</span><span>10.13 / 9.66</span></li>
+<li><span>猪粮比</span><span>4.18 : 1</span></li><li><span>自繁自养</span><span>-200~-300 元/头</span></li>
+<li><span>能繁（Q3 末）</span><span>3,602 万头</span></li></ul>
+<p class="note">同比 -10.7%，为 3,750 万头的 96.0%；收储轮换 28,500 吨进行中。</p></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span class="down">多 3 / 空 7</span></h3>
+<ul><li><span>前 10 席多单</span><span>80,601 手</span></li><li><span>前 10 席空单</span><span>91,751 手</span></li>
+<li><span>净空</span><span>11,150 手</span></li><li><span>国泰君安净空</span><span>8,554（+1,022）</span></li>
+<li><span>持仓变化</span><span>+1,012</span></li></ul>
+<p class="note">增仓下跌，空头主力加码而非兑现。</p></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>收盘 9,860 低于 MA5 10,141、MA10 10,428、MA20 10,628、MA60 11,375，空头排列完整；价格低于 MA20 约 7.2%。
+MACD：DIF -363.9、DEA -309.9、柱 -108.0，前值 -85.1，绿柱在短暂收敛后<b>重新扩张</b>，趋势未见底背离。</p></div>
+
+<div class="card"><h3>震荡指标</h3><p>RSI6 21.6、RSI14 37.0，短周期超卖、中周期仍在中性偏弱区；KDJ K 9.4 / D 15.5 / J -2.9，J 值负值钝化。
+BOLL：中轨 10,628、上轨 11,405、下轨 9,852，收盘 9,860 <b>距下轨仅 8 点（0.03 个 ATR）</b>，开口向下。</p></div>
+
+<div class="card"><h3>量能与形态</h3><p>成交 246,735 手，较前日 227,171 手增 19,564 手（+8.6%）；持仓 200,514 手（+1,012），<b>放量增仓下跌</b>。
+日 K 高开 10,115 后单边下行，收 9,860，位于当日区间（9,785~10,140）下沿 21% 处，无下影，弱势收盘。振幅 3.52%，ATR 300.7。</p></div>
+
+<div class="card"><h3>形态与关键价位</h3><p>9,785 同时为 20 日与 60 日最低，跌破即打开 9,620（前低延伸）与 9,500 空间；反弹第一压制为昨结算 10,075 与 MA5 10,141 构成的缺口带。</p>
+<p class="note">支撑：9,785 / 9,620 / 9,500　压力：10,075 / 10,141 / 10,240</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag ts">空 均线空头排列</span><span class="tag ts">空 MACD 绿柱扩张</span><span class="tag ts">空 增仓下跌</span>
+<span class="tag ts">空 创 60 日新低</span><span class="tag ts">空 收盘近最低</span><span class="tag ts">空 席位净空扩大</span>
+<span class="tag tb">多 RSI6 21.6</span><span class="tag tb">多 J 值 -2.9</span><span class="tag tb">多 贴布林下轨</span>
+<span class="tag tn">中 基差近平水</span><span class="tag tn">中 收储轮换进行中</span></div>
+<p class="note" style="margin-top:8px">趋势与资金 6 项偏空、超卖与估值 3 项偏多、2 项中性。技术面判定：<b>趋势强空、位置极差</b>——空头方向正确，但追空的赔率不佳，强度评级：中高。</p></div>
+
+<h2>三、持仓席位（LH2701 · 2026-10-22）</h2>
+<div class="two">
+<div class="card"><h3>多单前 10 名</h3>
+<table><thead><tr><th>会员</th><th>多单</th><th>增减</th></tr></thead><tbody>
+<tr><td>国泰君安</td><td class="num">14,293</td><td class="num up">+972</td></tr>
+<tr><td>中信期货</td><td class="num">12,975</td><td class="num up">+831</td></tr>
+<tr><td>东证期货</td><td class="num">9,548</td><td class="num down">-2,477</td></tr>
+<tr><td>中信建投</td><td class="num">8,530</td><td class="num up">+147</td></tr>
+<tr><td>银河期货</td><td class="num">6,997</td><td class="num down">-231</td></tr>
+<tr><td>永安期货</td><td class="num">6,455</td><td class="num up">+550</td></tr>
+<tr><td>华泰期货</td><td class="num">5,787</td><td class="num down">-224</td></tr>
+<tr><td>中泰期货</td><td class="num">5,555</td><td class="num up">+282</td></tr>
+<tr><td>东方财富</td><td class="num">5,417</td><td class="num up">+598</td></tr>
+<tr><td>方正中期</td><td class="num">5,044</td><td class="num up">+233</td></tr>
+<tr><td><b>合计</b></td><td class="num"><b>80,601</b></td><td class="num">+681</td></tr>
+</tbody></table></div>
+<div class="card"><h3>空单前 10 名</h3>
+<table><thead><tr><th>会员</th><th>空单</th><th>增减</th></tr></thead><tbody>
+<tr><td>国泰君安</td><td class="num">22,847</td><td class="num down">+1,994</td></tr>
+<tr><td>中信期货</td><td class="num">15,102</td><td class="num down">+248</td></tr>
+<tr><td>东证期货</td><td class="num">11,195</td><td class="num down">+296</td></tr>
+<tr><td>中泰期货</td><td class="num">7,516</td><td class="num up">-1,352</td></tr>
+<tr><td>银河期货</td><td class="num">7,227</td><td class="num up">-917</td></tr>
+<tr><td>永安期货</td><td class="num">6,175</td><td class="num up">-67</td></tr>
+<tr><td>中信建投</td><td class="num">6,070</td><td class="num up">-637</td></tr>
+<tr><td>华泰期货</td><td class="num">5,827</td><td class="num up">-15</td></tr>
+<tr><td>中粮期货</td><td class="num">5,330</td><td class="num up">-352</td></tr>
+<tr><td>国投期货</td><td class="num">4,462</td><td class="num down">+19</td></tr>
+<tr><td><b>合计</b></td><td class="num"><b>91,751</b></td><td class="num">-783</td></tr>
+</tbody></table></div>
+</div>
+<p class="note" style="margin-top:10px">多空双边均在榜的席位净持仓：国泰君安 -8,554（净空扩大 1,022）、中信期货 -2,127、东证期货 -1,647、中泰期货 -1,961、银河期货 -230、永安期货 +280、中信建投 +2,460、华泰期货 -40。
+前 10 席多单合计 80,601 手、空单合计 91,751 手，<b>净空 11,150 手</b>，占单合约持仓 5.6%。当日空单第 4~9 名合计减少 3,340 手，空头内部已出现分化，但头部（国泰君安、中信、东证）仍在增空。
+<b>逐笔席位明细未获取</b>，以上为大商所成交持仓榜公开排名汇总。</p>
+
+<h2>四、期限结构与基差</h2>
+<div class="card">
+<div class="term">
+<div class="tcol"><div class="tval">9,225</div><div class="tchg">-3.20%</div><div class="tbar" style="height:40px"></div><div class="tname">LH2611</div></div>
+<div class="tcol"><div class="tval">9,860</div><div class="tchg">-2.13%</div><div class="tbar" style="height:58px"></div><div class="tname">LH2701</div></div>
+<div class="tcol"><div class="tval">9,830</div><div class="tchg">-1.50%</div><div class="tbar" style="height:57px"></div><div class="tname">LH2703</div></div>
+<div class="tcol"><div class="tval">11,075</div><div class="tchg">-0.67%</div><div class="tbar tbar2" style="height:94px"></div><div class="tname">LH2705</div></div>
+<div class="tcol"><div class="tval">12,105</div><div class="tchg">-0.21%</div><div class="tbar tbar2" style="height:124px"></div><div class="tname">LH2707</div></div>
+<div class="tcol"><div class="tval">13,000</div><div class="tchg">-0.08%</div><div class="tbar tbar2" style="height:150px"></div><div class="tname">LH2709</div></div>
+</div>
+<p class="note" style="margin-top:10px">柱高为示意（纵轴自 9,225 起算，非等比例），数值为 10-22 收盘价。</p>
+<table style="margin-top:12px"><thead><tr><th>价差 / 基差</th><th>数值（元/吨）</th><th>含义</th></tr></thead><tbody>
+<tr><td>LH2611 − 现货（9,770）</td><td class="num down">-545</td><td>近月深度贴水，已计价 11 月现货继续下探</td></tr>
+<tr><td>LH2701 − 现货（9,770）</td><td class="num">+90</td><td>基差率 -0.92%，升水基本挤干</td></tr>
+<tr><td>LH2701 − LH2611</td><td class="num up">+635</td><td>近月最弱，1-11 价差仍在走阔</td></tr>
+<tr><td>LH2705 − LH2701</td><td class="num up">+1,215</td><td>远月计价 2027 年产能去化</td></tr>
+<tr><td>LH2709 − LH2701</td><td class="num up">+3,140</td><td>升水幅度 31.8%，陡峭 contango</td></tr>
+</tbody></table>
+<p class="note">现货取中国养猪网 10-22 外三元全国均价 9.77 元/公斤。一周前同口径期货升水约 470 元/吨，本周通过现货下跌 0.4 元/公斤 + 期货下跌 11.4% 完成收敛。
+<b>注意：2701 的"高升水"利空已基本出清，但 2705/2707/2709 的巨幅升水仍在，反套（买远卖近）逻辑未变。</b></p>
+</div>
+
+<h2>五、三轮多空辩论</h2>
+
+<div class="round-tag">第一轮 · 立论陈词</div>
+<div class="debate">
+<div class="side bull"><h4>🐂 多头首席（金牛）· 立论</h4>
+<p>我方先明确立场：并非主张在 9,860 追多，而是主张"9,785 下方不再追空"，并把 9,950~10,050 视为空头最后的、也是风险最高的做空区。理由有六。</p>
+<p><b>一、估值已跌破完全成本，亏损正在从利润表烧到现金流量表。</b>按行业自繁自养完全成本 11.5~12.5 元/公斤折算，盘面 9,860 元/吨贴水完全成本 1,600~2,600 元/吨；行业自 2025 年 9 月起连续亏损逾 13 个月，本周头均亏损 200~300 元，7 公斤仔猪跌至 99.52 元/头，为 2021 年 10 月下旬以来最低。成本本身不是底，但现金流是底——当亏损从利润表传导至现金流，被动去化就会从母猪端蔓延到育肥端，这正是 2027 年合约升水的现实基础。</p>
+<p><b>二、基差已经修复，"挤升水"的做空理由基本失效。</b>10-22 全国外三元均价 9.77 元/公斤，折 9,770 元/吨，LH2701 收 9,860，期货仅升水 90 元/吨、基差率 -0.92%；而一周前同一口径升水约 470 元/吨。近 20 个交易日盘面下跌 11.41%，很大一部分是"期货向现货靠拢"，这部分能量已经释放。更激进的是 LH2611：9,225 元/吨，较现货贴水 545 元/吨，近月已提前计价"11 月现货再跌 0.5 元/公斤"的极端情形。当近月由升水转为深度贴水，继续用"高升水"看空 2701，是把已兑现的逻辑再卖一次。</p>
+<p><b>三、技术面进入"末端加速"，而非"趋势中段"。</b>RSI6 21.6、RSI14 37.0、J 值 -2.9、收盘 9,860 贴住布林下轨 9,852，5 日 -5.69%、20 日 -11.41%，ATR 300.7、当日振幅 3.52%。这种组合在生猪历史上的常见演化是：1~3 个交易日内出现 0.8~1.5 个 ATR 的反抽（约 240~450 点），随后才决定方向。10-20 RSI6 曾低至 10.6、次日仍跌 2.15%，说明超卖可以钝化；但今日是"贴下轨 + J 负值 + 收盘接近最低 + 三连阴"，短线空头兑现的赔率正在快速恶化。</p>
+<p><b>四、供需的边际变量正在转向。</b>10 月 173 家样本企业计划出栏 1,508.18 万头、环比 +1.9%，但日均出栏环比 -0.8%~-1.5%，且上旬进度偏慢；钢联出栏均重 10-02 已环比转跌至 123.73 公斤，涌益 10-15 全国 129.34 公斤仅周环比 +0.16 公斤，增重最快的阶段正在过去。供给的"已知利空"已被 11.41% 的月度跌幅定价，而"未知利多"尚未定价：11 月中下旬腌腊灌肠启动、二育在 9.5 元/公斤下方的滚动进场、以及 10-20 至 10-23 中央储备冻猪肉 28,500 吨的轮换收储。</p>
+<p><b>五、政策与产能构成中期支撑。</b>国家统计局三季度末能繁母猪 3,602 万头，同比减少 433 万头、下降 10.7%，降幅比二季度扩大 4.2 个百分点，仅为正常保有量 3,750 万头的 96.0%。按 10 个月传导，2027 年下半年商品猪供给将明显收缩，这正是 LH2705 升水 1,215 元、LH2707 升水 2,245 元、LH2709 升水 3,140 元的定价来源。远月强势不会直接拉动近月，但会通过买近卖远的反套为近月提供买盘，压缩 2701 的下跌斜率。</p>
+<p><b>六、季节性与政策的时间表站在多头一边。</b>2701 对应春节前合约，11 月中下旬南方腌腊灌肠启动、12 月冬至与元旦备货接续，机构预计 11 月底至 12 月消费环比可提升约 20%。也就是说，空头只剩下 3~5 周的"需求真空期"可以发力，而多头拥有整个旺季的时间价值。与此同时，10-20 至 10-23 中央储备冻猪肉轮换 28,500 吨、农业农村部 10-12 产能常态化精准调控座谈会、大商所 10-20 风险提示函，三者共同构成"政策底"的预期锚。政策不改变供需方向，但会在现货 9.5 元/公斤附近形成明显的下跌抵抗。</p>
+<p class="concl">多头方案：9,800~9,850 轻仓试多，止损 9,720，目标 10,140 / 10,250，仓位 ≤10%。若放量跌破 9,785，我方亦不否认趋势延续，但那时做空的赔率已远不如在 9,950~10,050 埋伏。</p>
+</div>
+
+<div class="side bear"><h4>🐻 空头首席（黑熊）· 立论</h4>
+<p>我方立场清晰：趋势向下，9,785 不是底，反弹才是空头入场机会。分六点陈述。</p>
+<p><b>一、供给是"现实"而非"预期"。</b>10 月钢联 173 家样本企业计划出栏 1,508.18 万头，较 9 月实际 1,480 万头环比 +1.9%；9 月完成度 99%，10 月上旬进度偏慢，意味着下旬必须赶量。日均出栏已升至 32.6 万头，10-14 达 33.2 万头，较 9 月均值增加 6.8%。体重端，钢联样本出栏均重 124.33 公斤，为 2024 年 9 月以来最高；涌益口径全国 129.34 公斤、集团 125.55 公斤、散户 147.72 公斤，同比分别 +1.09 / +1.47 / +4.94 公斤。同样的出栏头数对应多出 2%~4% 的猪肉，这是"减母不减肉"的直接证据。</p>
+<p><b>二、需求没有接棒。</b>10-21 样本屠宰企业开工率 30.4%，周均 34.6%，鲜销率 81.4%，白条走货缓慢，屠企以销定产、压价收购。冻品库容率 31.87%，虽较前期 32.2% 小幅回落，但同比仍高约 14 个百分点，库存 307,675 吨；这意味着现货每反弹 0.2~0.3 元/公斤，就会触发冻品出库套利，反弹空间被制度化地封死。南方腌腊按规律要到 11 月中下旬，未来三周是需求真空期。</p>
+<p><b>三、现货仍在寻底，且跌势在扩散。</b>10-22 中国养猪网外三元 9.77 元/公斤（-0.09）、内三元 10.13（-0.09）、土杂 9.66（-0.08）；瘦肉型标猪 9.62，博亚和讯全国均价 9.53（-0.11）；猪粮比 4.18:1，远低于 5:1 盈亏平衡线，处于过度下跌一级预警区间。现货尚未出现恐慌性抛售，说明出清未完成；能繁 9 月环比仅 -0.52%~-1.13%，去化速度较 8 月放缓，产能出清远未到位。</p>
+<p>此外，规模场并不因惜售而减产。市场把"跌破 10 元后养殖户惜售"当作利多，但惜售只影响散户的节奏，不改变集团场的刚性出栏：9 月 18 家上市猪企出栏 1,478 万头、同比 +6.1%，1-9 月合计 13,730 万头、同比 +7.9%，出栏量仍在扩张。同期白条批发价 15.73 元/公斤、环比 -0.2%，屠企压价收购、以销定产。只要集团场按计划出栏，惜售只会把压力后移，而不会消灭供给。</p>
+<p><b>四、技术面没有任何底部结构。</b>收盘 9,860 低于 MA5 10,141、MA10 10,428、MA20 10,628、MA60 11,375，均线空头排列且向下发散；MACD 的 DIF -363.9、DEA -309.9，绿柱由 -85.1 扩张至 -108.0，是"下跌中继"而非"底背离"；20 日与 60 日最低同为 9,785，今日盘中创 60 日新低且收在最低价上方仅 75 点，属弱势收盘；5 日 -5.69%、20 日 -11.41%，动量仍向下。</p>
+<p><b>五、资金站在空头一边。</b>10-22 LH2701 前 10 席多单 80,601 手、空单 91,751 手，净空 11,150 手；国泰君安多单 14,293（+972）、空单 22,847（+1,994），净空 8,554 手、单日增空 1,022 手；中信期货净空 2,127 手；东证期货多单减 2,477 手。总持仓 200,514 手（+1,012），价格下跌 2.13% 同时增仓，是典型"增仓下跌"——空头没有兑现，反而在加码。</p>
+<p><b>六、期限结构说明近月最弱。</b>LH2611 9,225（-3.20%），较现货贴水 545 元/吨，市场用真金白银定价"11 月现货跌破 9.3"；2701-2611 价差 635 元、2705-2701 价差 1,215 元、2709-2701 价差 3,140 元。陡峭 contango 的背后是"近月讲现实、远月讲故事"，只要近月不企稳，2701 的任何反弹都是空头配置窗口。</p>
+<p class="concl">空头方案：反弹 9,950~10,050 分批沽空，止损收盘 10,150，目标 9,780 / 9,620；若放量增仓跌破 9,785，可减半仓位追空，目标 9,620 / 9,500。按日均屠宰 28 万头、单头约 120 公斤测算，307,675 吨冻品库存约相当于 9 天的全国屠宰量，去库压力将贯穿整个四季度。</p>
+</div>
+</div>
+
+<div class="round-tag">第二轮 · 交叉驳斥</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 多头驳斥</h4>
+<p><b>驳"供给压力"：</b>对方把 10 月计划 +1.9% 当作新增利空，但 20 日 -11.41%、5 日 -5.69% 已经为这份计划定价；且日均出栏环比 -0.8%~-1.5%，说明总量增而节奏缓。对方引用均重 124.33 公斤为两年高位，却回避了该数据已环比转跌（10-02 为 123.73、-0.02%）、涌益周环比仅 +0.16 公斤的事实。增重最快的阶段已过，"下旬赶量"是已知的已知，不构成新的边际利空。</p>
+<p><b>驳"冻品压制"：</b>库容率已从 32.2% 降至 31.87%，单周去库 1,637 吨，为 8 月下旬以来最大单周降幅，库存降至 5 月下旬以来最低。冻品是"反弹时的卖压"，不是"下跌时的驱动"；用它论证趋势下行，混淆了存量与流量。更何况 28,500 吨收储轮换正在消化部分库存。</p>
+<p><b>驳"技术空头"：</b>MACD 绿柱 -108.0 确实较前值 -85.1 扩张，但对比 10-20 的 -201.6 仍只扩张了一半，属于"二次探底"而非"加速段"。价格贴下轨、J 值 -2.9，是末端加速特征。ATR 300.7 意味着日内 200~300 点的反抽只需一根阳线，9,785 下方追空极易被扫损。</p>
+<p><b>驳"席位净空"：</b>国泰君安多单 +972、空单 +1,994，是典型多空双开、以空头对冲现货或远月的产业行为，不是单边看空；前 10 席净空 11,150 手仅占持仓 5.6%，且空单第 4~9 名当日合计减少 3,340 手，空头内部已在分化；中信建投净多 2,460 手，说明并非一边倒。</p>
+<p><b>驳"2611 贴水外推"：</b>2611 临近交割，贴水反映的是交割月仓单与运输成本，不能线性外推到 2701。2701 对应春节前旺季，9,860 仅升水现货 90 元/吨，估值处于该合约上市以来最低区间，用近月贴水论证远月还要跌，是期限错配。</p>
+<p><b>驳"收储无用"：</b>轮换同时放储与收储，净量虽为零，但收储成交价通常高于市场价，且释放"政策底"信号；叠加发改委猪粮比一级预警，后续收储加码的概率在上升。政策不改变方向，但会改变斜率与节奏。</p>
+<p><b>驳"需求真空"：</b>对方用未来三周的真空否定未来三个月的旺季，是窗口错配。屠宰开工率在 10 月底至 11 月初季节性回暖，是近五年的规律；低价猪肉对禽肉、牛羊肉的替代消费也在提供刚性支撑。空头真正能发力的时间只有 3~5 周，而 2701 的时间价值在多头一边。</p>
+<p class="concl">我方承认趋势向下，但强调"位置"：在 9,860 做空，赚的是最后 100~200 点，承担的是 300 点反抽风险，盈亏比不成立。</p>
+</div>
+
+<div class="side bear"><h4>🐻 空头驳斥</h4>
+<p><b>驳"成本支撑"：</b>该逻辑在 2024—2026 年被反复证伪。牧原完全成本已降至 11.5 元/公斤，头部企业融资渠道畅通，亏损可以持续两年以上；成本不是底，现金流才是，而规模场现金流远好于散户。用"贴水完全成本 1,600 元"论证下跌空间有限，等于假设行业会因亏损立刻减产，这与 9 月能繁仅去化 0.52%~1.13% 的事实矛盾。</p>
+<p><b>驳"基差修复"：</b>基差收敛是靠现货下跌完成的（外三元从 10.18 跌至 9.77，-4.0%），不是靠期货上涨。基差修复之后，市场完全可以进入"期货贴水现货"的新阶段——LH2611 已经示范：贴水 545 元仍在跌 3.20%。把"升水挤干"等同于"利空出尽"，是把估值指标当成了方向指标。</p>
+<p><b>驳"超卖"：</b>RSI6 21.6 远高于 10-20 的 10.6，说明超卖程度反而减轻；J 值可以在负值区连续钝化 3~5 日。10-20 RSI6 10.6 之后，10-21 反弹 0.35%、10-22 再跌 2.13%——超卖只带来了 35 点的反弹。用超卖做多，过去一周已经被证伪一次。</p>
+<p><b>驳"能繁去化"：</b>3,602 万头对应的是 2027 年下半年供给，对 1~3 个交易日窗口零影响；且行业 MSY 已提升至 18~18.5 头、头部 23~30 头，数量去化被效率大幅抵消。9 月三方口径去化 0.52%~1.13%，速度比 8 月放缓，说明亏损尚未击穿规模场防线。远月升水 3,140 元已经把这个故事讲得很满，继续用去化看多近月，是拿长逻辑做短交易。</p>
+<p><b>驳"远月升水封杀近月"：</b>2705/2709 升水恰恰证明近月最弱，资金的选择是"买远卖近"的反套，而不是"买近"。2701-2611 价差 635 元仍在走阔，若真有大资金做多近月，该价差应先收敛。</p>
+<p><b>驳"政策底"：</b>28,500 吨轮换约为全国一天的屠宰量（日均 28 万头 × 约 120 公斤 ≈ 3.4 万吨），且同时放储，净投放为零；大商所 10-20 风险提示函是价格波动后的常规操作，历史上从未改变供需趋势。政策只能延缓，不能反转。</p>
+<p><b>驳"赔率不佳"：</b>以 10,000 入场、10,150 止损、9,620 目标计算，风险 150 点、收益 380 点，赔率 2.5:1；即便胜率只有 40%，期望收益仍为正。对方把"可能反抽"等同于"必然反抽"，却忽略了趋势交易本就是以确定的止损换取不确定的空间。真正的风险不是止损 150 点，而是在 9,860 市价追空、止损被放在 10,150 之外。</p>
+<p class="concl">对方所有论据都指向"跌得够多了"，而我方论据指向"货还很多"。前者是情绪，后者是供需。</p>
+</div>
+</div>
+
+<div class="round-tag">第三轮 · 最终陈词</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 多头终陈</h4>
+<p>我方不做趋势反转的判断，只做"位置"的判断。9,785 是本轮下跌的第一个关键位：它同时是 20 日与 60 日最低，也是今日盘中低点。若明日低开后不再创新低、并收复 9,950，则今日的 9,785 具备"插针洗盘"性质，短线反弹目标 10,140（今日高点/MA5 下方）与 10,250（10-21 高点上方），对应 0.9~1.3 个 ATR，完全在正常反抽范围内。</p>
+<p>我方最有力的三点：其一，2701 升水已压缩至 90 元/吨，做空的"估值红利"消失；其二，2611 贴水现货 545 元，近月已把悲观预期打满，一旦现货止跌，近月修复弹性最大，会带动 2701；其三，政策端收储轮换 + 猪粮比一级预警 + 大商所风险提示，构成"下跌抵抗带"。</p>
+<p>具体到明日三种情形：一，高开或平开于 9,900 上方并站稳，说明 9,785 的下影有效，多头可在 9,850 附近轻仓跟进，止损 9,770；二，低开跌破 9,785、但半小时内收回并伴随减仓，属于"空头兑现式破位"，是最佳的多头短线机会，止损 9,720、目标 9,950；三，低开低走、放量增仓，说明趋势延续，多头应无条件回避，不在下跌途中接飞刀。三种情形中，只有前两种值得出手，第三种必须承认判断失效。</p>
+<p>我方也承认：能繁去化是 2027 年的故事，腌腊要等到 11 月中下旬，未来 1~2 周现货仍可能再下一台阶。因此多头方案严格限定为"轻仓、短打、快止损"：9,800~9,850 试多，止损 9,720（跌破今日低点 65 点），目标 10,140 先减半、10,250 全部了结，仓位 ≤10%。若放量跌破 9,785，立即离场，不摊平、不扛单。</p>
+<p>最后回应对方"货还很多"的质问：货确实多，但价格交易的是"预期差"，不是"库存绝对值"。当所有人都知道 10 月出栏增加、冻品 32%、腌腊未启动时，这些利空已经写进 9,860 的价格里；真正会推动下一段行情的，是"下旬赶量是否不及预期""冻品是否继续去库""收储是否加码"这三个未知数。做空者此刻押注的是"已知继续兑现"，做多者押注的是"未知出现偏差"——前者胜率高，后者赔率高，这正是我方只做短多、不做趋势多的原因。</p>
+<p class="concl">一句话：9,860 不是买点，但 9,785 下方是空头的"最后一公里"，收益有限、风险陡增。</p>
+</div>
+
+<div class="side bear"><h4>🐻 空头终陈</h4>
+<p>我方同样承认短线超卖，因此不主张在 9,860 直接市价追空，而是把战场设在 9,950~10,050：这里既是昨结算 10,075 下方的缺口带，也是 MA5 10,141 的前沿，反弹 0.9%~1.9% 即可触达，概率与赔率都优于昨日报告设定的 10,230~10,320（今日最高仅 10,140，完全落空）。</p>
+<p>我方最有力的三点：其一，供给是"正在发生"的——10 月计划 1,508.18 万头、上旬进度偏慢、下旬赶量、均重两年高位，四者叠加；其二，需求真空至少延续到 11 月中旬，冻品 31.87% 会在每次反弹时出库套利，封死上方空间；其三，资金增仓下跌，前 10 席净空 11,150 手、国泰君安单日增空 1,994 手，趋势与资金同向。</p>
+<p>具体到明日三种情形：一，低开直接跌破 9,785 且成交放大、持仓增加，属"破位确认"，按 B 方案执行，仓位减半；二，低开后在 9,800~9,880 横盘、午后无力收复 9,950，属"弱势整理"，尾盘可轻仓预埋，止损 10,000；三，高开反弹至 9,980~10,050，是 A 方案的最佳入场区，分批沽空、不追高。若开盘直接跳空高开于 10,100 上方，则说明空头逻辑受挑战，应等待回踩 10,050 再决定，不在此位置加空。</p>
+<p>目标设定：第一目标 9,780（今日低点下方 5 点，破位即确认），第二目标 9,620（9 月低点延伸 / 1.0 倍 ATR 下移），极端情形看 9,500。止损设在收盘 10,150——站上 MA5 且回补今日跳空，说明空头逻辑被破坏。若明日直接放量（成交 &gt;30 万手）增仓（&gt;5,000 手）跌破 9,785，则启用 B 方案：以 9,750~9,780 追空、仓位减半、止损 9,900、目标 9,620/9,500。</p>
+<p>最后回应对方"位置不好"的指责：位置不好，指的是"市价追空"，不是"反弹沽空"。我方把入场从昨日的 10,230~10,320 下移到 9,950~10,050，正是对昨日"看对做不上"的修正——在 ATR 300、三连阴的末端，反弹 1% 比反弹 3% 更现实。空头最大的敌人不是超卖，而是贪心：想等更高的位置，结果等来的是新低。</p>
+<p>仓位与纪律同样重要：A 方案总仓位不超过 20%，分两批建仓，T1 到位减半、余仓止损上移至成本；B 方案仓位不超过 10%，且只在"放量 + 增仓 + 收盘破位"三条件同时满足时执行。单笔亏损控制在总资金的 1.5% 以内，连续两次止损则暂停交易、等待新的结构。趋势交易赚的是概率，不是一次判断的对错。</p>
+<p class="concl">一句话：反弹是礼物，破位是确认；不猜底，只跟随。</p>
+</div>
+</div>
+
+<h2>六、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分（10 = 极多，1 = 极空）</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>裁决理由</th><th style="width:22%">强度</th></tr></thead><tbody>
+<tr><td>库存</td><td class="up">3/10</td><td class="down">7/10</td><td>冻品 31.87%（同比 +14pct）、均重 124.33/129.34 公斤双高、10 月计划 +1.9%</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>仓单</td><td class="up">5/10</td><td class="down">5/10</td><td>仓单极低（09-09 为 433 手），交割压力可忽略，中性</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
+<tr><td>期限结构</td><td class="up">4/10</td><td class="down">6/10</td><td>2611 贴水 545、2701 仅升水 90，近月最弱；远月升水 1,215~3,140</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>技术面</td><td class="up">3/10</td><td class="down">7/10</td><td>空头排列、绿柱扩张、创 60 日新低；但 RSI6 21.6、J -2.9 超卖</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>基本面</td><td class="up">4/10</td><td class="down">6/10</td><td>现货 9.77、猪粮比 4.18、亏损 200~300 元；能繁 3,602 万头、收储 28,500 吨对冲</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>持仓席位</td><td class="up">3/10</td><td class="down">7/10</td><td>前 10 席净空 11,150、国泰君安净空 8,554（+1,022）、增仓下跌</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+</tbody></table>
+
+<p style="margin-top:16px;font-size:13px;color:#c9d7e6;text-align:justify">
+<b class="gold">裁决理由。</b>今日多空争的不是方向，而是"位置"。方向上，供给端有四重确定性：10 月 173 家样本企业计划出栏 1,508.18 万头（环比 +1.9%）、上旬进度偏慢导致下旬赶量、出栏均重 124.33 公斤为两年高位、日均出栏 32.6 万头较 9 月均值增 6.8%；需求端处于节后真空，屠宰开工 30.4%、鲜销率 81.4%、冻品 31.87% 同比高 14 个百分点，腌腊要到 11 月中下旬。资金端，增仓 1,012 手下跌 2.13%，前 10 席净空 11,150 手且国泰君安单日增空 1,994 手，趋势与资金同向。这三条足以支撑"偏空"的定性，因此空方在 6 个维度中拿下 4 个（库存、期限、技术、席位），基本面小幅占优，综合 57:43。</p>
+<p style="margin-top:10px;font-size:13px;color:#c9d7e6;text-align:justify">
+但"位置"对空头不利：现货已跌至 9.77、猪粮比 4.18 处一级预警，2701 升水从 470 压缩至 90 元/吨，基差率 -0.92%，做空的估值红利基本消失；技术上 RSI6 21.6、J 值 -2.9、收盘距布林下轨仅 8 点，属于"末端加速"。10-20 的教训更直接：当日 RSI6 仅 10.6 的极端超卖，随后两日先反弹 0.35%、再跌 2.13%，超卖只换来 35 点反弹——说明超卖不能作为做多理由；但同样说明，在贴下轨位置市价追空，容易被一根 200~300 点的反抽扫掉止损。两害相权，<b>方向做空、位置等反弹</b>是唯一同时满足胜率与赔率的解。</p>
+<p style="margin-top:10px;font-size:13px;color:#c9d7e6;text-align:justify">
+<b class="gold">关于"破位加速 vs 超卖反抽"。</b>我方判断：9,785 下方大概率仍有 100~200 点的惯性下探（目标 9,620 一线），但"加速下跌"需要三个条件同时成立——放量（成交 &gt;30 万手）、增仓（&gt;5,000 手）、收盘价跌破 9,785。今日成交 246,735 手、增仓仅 1,012 手，属于"缩量增仓"的温和下跌，尚未构成加速特征；同时 2611 已贴水现货 545 元，近月悲观预期打得过满，一旦现货止跌，近月修复会带动 2701 反抽。因此基准情形是<b>"震荡下移、重心缓降"</b>，而非单边崩塌。基于此，A 方案（反弹沽空）为主，B 方案（破位追空）为辅且必须满足三条件。</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">偏空（反弹沽空为主）<br>多方 43% / 空方 57%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">57%<br>1~3 个交易日</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">9,950~10,050 分批沽空<br>9,780 → 9,620（备选 9,500）<br>收盘站上 10,150</div></div>
+</div>
+
+<div class="plan">
+<div class="p"><h5>A 方案（主）：反弹沽空 · 建议仓位 15%~20%</h5>
+<p>入场：9,950~10,050 分两批（各半），均价约 10,000；触发条件为日内反弹且成交不放大。<br>
+止损：收盘站上 10,150（MA5 上方，亏约 150 点 / 1.5%）。<br>
+目标：T1 9,780（今日低点，+220 点）；T2 9,620（+380 点）；盈亏比 1.5~2.5。<br>
+离场纪律：T1 减半、余仓移动止损至成本；若放量长下影并收复 9,950，全部离场。</p></div>
+<div class="p"><h5>B 方案（辅）：破位追空 · 仓位减半（≤10%）</h5>
+<p>触发：成交 &gt;30 万手、持仓增 &gt;5,000 手、收盘（或 30 分钟）跌破 9,785，三者同时满足。<br>
+入场：9,750~9,780；止损 9,900（回到今日收盘上方，亏约 130 点）。<br>
+目标：9,620 → 9,500。<br>
+禁忌：若跌破 9,785 但成交萎缩、持仓下降，视为"空头兑现式破位"，不追空，反手观察 9,700 附近的反抽。</p></div>
+</div>
+
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑（3 条）</b><br>
+· <b>供给现实压顶</b>：10 月计划 1,508.18 万头（+1.9%）、上旬进度偏慢致下旬赶量、均重 124.33/129.34 公斤两年高位，日均出栏 32.6 万头；<br>
+· <b>需求真空 + 冻品封顶</b>：屠宰开工 30.4%、鲜销率 81.4%、冻品库容率 31.87%（同比 +14pct），腌腊需等 11 月中下旬，反弹即遭冻品出库套利；<br>
+· <b>资金增仓做空</b>：增仓 1,012 手下跌 2.13%，前 10 席净空 11,150 手、国泰君安净空 8,554（+1,022），趋势与资金同向；但 2701 升水已压缩至 90 元、技术贴下轨，故等反弹不追空。</div>
+
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b>　① 政策端：中央储备冻猪肉 10-20 至 10-23 轮换 28,500 吨，若收储加码或启动新增收储，盘面可能瞬间反抽；② 供给端：若头部猪企实质性缩量、散户因亏损惜售，或降温引发疫病被动去化，现货可能提前止跌；③ 需求端：腌腊若提前至 11 月初启动，叠加二育进场，反弹幅度可能超过 1.5 个 ATR（450 点），空单需止损；④ 结构端：2611 贴水现货 545 元，若近月交割前修复，可能带动 2701 同步反弹；⑤ 流动性：持仓 20 万手处高位，注意移仓与挤仓风险。<b>收盘站上 10,150，空头逻辑失效。</b></div>
+</div>
+
+<div class="foot">
+数据来源：行情与日 K——新浪财经期货（倚天财经，2026-10-22 15:00 收盘）、大连商品交易所延时行情与仓单日报；现货——中国养猪网（10-22 外三元 9.77、内三元 10.13、土杂 9.66 元/公斤）、博亚和讯（全国均价 9.53）、农业农村部信息中心与上海钢联联合发布的外三元价格指数（2,190.6）；产能与出栏——国家统计局三季度末能繁母猪 3,602 万头、上海钢联 173 家样本企业 10 月计划 1,508.18 万头与出栏均重 124.33 公斤、涌益咨询全国/集团/散户均重 129.34/125.55/147.72 公斤、卓创资讯 9 月能繁环比 -1.13%；库存与开工——上海钢联冻品库存 307,675 吨、库容率 31.87%、样本屠宰开工率 30.4%（10-21）；政策——农业农村部 10-12 生猪产能常态化精准调控座谈会、中央储备冻猪肉 10-20 至 10-23 轮换收储/放储各 28,500 吨、大商所 10-20 市场风险提示函；机构观点——期货日报（10-22，中信建投邓昊然、格林大华张晓君）、大地期货（10-22）、中信期货四季度策略、安粮期货周报（10-19）、开源证券与华安证券周报（10-18）。<br>
+数据缺口：① 10-22 大商所生猪注册仓单明细未获取，最近可核实的仓单日报为 2026-09-09（433 手），已在文中标注，未以旧值代替当日值；② 农业农村部月度能繁母猪存栏（9 月）尚未发布，采用国家统计局三季度末口径 3,602 万头与三方机构 9 月环比数据；③ 前 10 名席位为单合约公开排名，逐笔席位明细未获取。<br>
+本报告由 AI 基于上述公开数据自动生成，采用"6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决"框架，仅供研究参考，不构成任何投资建议。期货交易具有杠杆风险，市场有风险，投资需谨慎。
+</div>
+</div></body></html>

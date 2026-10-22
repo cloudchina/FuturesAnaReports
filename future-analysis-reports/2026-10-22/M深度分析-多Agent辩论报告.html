@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>豆粕M深度分析 · 多Agent辩论报告（2026-10-22）</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+.badge{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:20px;
+background:rgba(90,169,232,.14);border:1px solid rgba(90,169,232,.4);color:#9dcdf2;margin-bottom:6px}
+.linkbar{margin:-6px 0 4px;background:#0d151e;border:1px solid var(--line);border-left:3px solid var(--blue);
+border-radius:10px;padding:12px 15px;font-size:12.5px;color:#b9c8da}
+.linkbar b{color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.card ul{list-style:none;margin-top:2px}
+.card li{display:flex;justify-content:space-between;gap:10px;font-size:12.4px;color:#b9c8da;
+border-bottom:1px dashed rgba(34,48,63,.75);padding:4px 0}
+.card li:last-child{border-bottom:none}
+.card li span:last-child{color:#e6eef8;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.term{display:flex;align-items:flex-end;gap:12px;height:245px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:100%;max-width:56px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tbar.far{background:linear-gradient(180deg,#5aa9e8,#24557c)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px;font-variant-numeric:tabular-nums}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.tspread{font-size:10px;color:#6d7f93;margin-top:2px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:16px 17px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:10px;letter-spacing:.5px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side p{font-size:12.8px;color:#bfcede;margin:9px 0;text-align:justify}
+.side .lead{color:#e6eef8;font-weight:600}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final p{font-size:12.9px;color:#c6d4e3;margin:9px 0;text-align:justify}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.final h3{font-size:14px;color:var(--gold);margin:18px 0 6px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.warn{color:#e8b45a}
+ul.plain{margin-left:18px}
+ul.plain li{font-size:12.8px;color:#c6d4e3;margin:5px 0}
+@media(max-width:900px){.grid6,.quad,.two,.debate{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}.term{gap:6px}
+.banner .big{font-size:22px}}
+</style></head><body><div class="wrap">
+
+<div class="hd"><div><h1>豆粕 <span>M · M2701 · 大商所</span></h1>
+<div class="note">报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23　|　6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决</div></div>
+<div class="meta"><div>收盘价（元/吨）</div><div class="px up">3,249</div>
+<div class="up">+0.19%（+6，对昨收 3,243）</div>
+<div>高 3,261 / 低 3,217　结算 3,240</div>
+<div>持仓 2,249,050（-14,335）　成交 963,910</div></div></div>
+
+<div class="banner">
+<div><div class="badge">关联品种分析：由 LH 低置信度触发（LH 57% &lt; 60%）</div>
+<div class="lbl">最终裁决</div><div class="big">震荡偏弱 · 反弹沽空（不追空）</div>
+<div class="note">胜率评估：多方 44% / 空方 56%　|　触发窗口：2026-10-23 至 10-30（3~8 个交易日）</div></div>
+<div class="conf"><div class="ring" style="--p:58"><b>58%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">趋势与供需占优<br>但 RSI6 8.11，位置极差</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：反弹 3,280~3,310 分批沽空</div>
+<div style="font-size:13px">目标：3,215 → 3,170</div><div style="font-size:13px">止损：收盘站上 3,335</div></div>
+</div>
+
+<div class="linkbar">
+<b>关联逻辑</b>　生猪 LH 原报告置信度 57%（&lt;60%）触发关联品种分析。豆粕是生猪核心蛋白饲料，关联强度 <b>0.70</b>，豆粕价格领先生猪约 <b>5~10 个交易日</b>。
+传导路径：豆粕上涨 → 饲料成本抬升 → 养殖利润压缩 → 压栏/出栏节奏变化；反向则通过存栏去化压制豆粕需求。本次以豆粕自身 6 维数据独立裁决，生猪基本面仅作为需求端交叉验证。<br>
+<span class="note">口径说明：涨跌幅 +0.19% 按昨收 3,243 计算；当日结算价 3,240。全文统一采用“对昨收”口径，特此标注。</span>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span class="down">多 4 / 空 6</span></h3>
+<ul>
+<li><span>豆粕库存（第42周）</span><span>109.6 万吨</span></li>
+<li><span>周环比</span><span>+0.52 万吨</span></li>
+<li><span>大豆库存</span><span>843.01 万吨</span></li>
+<li><span>周环比</span><span>-19.17 万吨</span></li>
+<li><span>未执行合同</span><span>447.90 万吨</span></li>
+<li><span>表观消费</span><span>175.13 万吨</span></li>
+</ul>
+<p class="note">豆粕库存较 9 月底 129.64 万吨回落约 20 万吨，但同比仍偏高；10 月到港约 850 万吨，环比 9 月千万吨级回落。</p></div>
+
+<div class="card"><h3>② 仓单 <span class="down">多 4 / 空 6</span></h3>
+<ul>
+<li><span>注册仓单（10-13）</span><span>52,939 手</span></li>
+<li><span>周增减</span><span>+5,000 手</span></li>
+<li><span>周增幅</span><span>+10.43%</span></li>
+<li><span>月增减</span><span>+8,500 手</span></li>
+<li><span>月增幅</span><span>+19.13%</span></li>
+<li><span>10-22 仓单日报</span><span>数据未获取</span></li>
+</ul>
+<p class="note">仓单连续回升，近月交割压力增加；但 5.29 万手仅占总持仓约 2.4%，权重不宜放大。</p></div>
+
+<div class="card"><h3>③ 期限结构 <span class="down">多 4 / 空 6</span></h3>
+<ul>
+<li><span>M2611</span><span>3,210</span></li>
+<li><span>M2612（驼峰）</span><span>3,259</span></li>
+<li><span>M2701</span><span>3,249</span></li>
+<li><span>M2703</span><span>3,201</span></li>
+<li><span>M2705</span><span>2,878</span></li>
+<li><span>M2707</span><span>2,838</span></li>
+<li><span>M2709</span><span>2,974</span></li>
+</ul>
+<p class="note">2612 驼峰、03 之后断崖；近月受 10 月到港回落支撑，远月计价南美丰产。M2705/2707 较 01 贴水 371/411 元。</p></div>
+
+<div class="card"><h3>④ 技术面 <span class="down">多 3 / 空 7</span></h3>
+<ul>
+<li><span>MA5 / MA10</span><span>3,265.4 / 3,316.2</span></li>
+<li><span>MA20 / MA60</span><span>3,356.4 / 3,286.7</span></li>
+<li><span>RSI6 / RSI14</span><span>8.11 / 22.6</span></li>
+<li><span>MACD 柱（前值）</span><span>-41.5（-42.9）</span></li>
+<li><span>BOLL 下轨 / 中轨</span><span>3,233 / 3,356</span></li>
+<li><span>KDJ（K/D/J）</span><span>13.3 / 18.3 / 3.3</span></li>
+<li><span>ATR / 近20日</span><span>48.1 / -6.61%</span></li>
+</ul>
+<p class="note">四线全部位于价格上方，空头排列；但 RSI6 8.11、J 值 3.3、收盘贴下轨仅 16 点，短线超卖极端。</p></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span class="down">多 3 / 空 7</span></h3>
+<ul>
+<li><span>CBOT 大豆主力</span><span>1,259.25 美分</span></li>
+<li><span>美豆收割率</span><span>64%（预期 66%）</span></li>
+<li><span>美豆出口检验</span><span>200.2 万吨</span></li>
+<li><span>巴西播种进度</span><span>30.1%</span></li>
+<li><span>USDA 美豆单产</span><span>53.1 蒲/英亩</span></li>
+<li><span>第43周压榨预估</span><span>252.64 万吨</span></li>
+<li><span>日照现货</span><span>3,310 / 3,270</span></li>
+<li><span>生猪均价</span><span>9.80 元/公斤</span></li>
+</ul>
+<p class="note">美豆创纪录产量与巴西快速播种压制成本；对冲项为中国持续采购、出口检验创 2024/11 以来新高、马托偏干。</p></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span class="down">多 4 / 空 6</span></h3>
+<ul>
+<li><span>总持仓</span><span>2,249,050（-14,335）</span></li>
+<li><span>成交量</span><span>963,910</span></li>
+<li><span>中信 多单（10-21）</span><span>235,468（-6,261）</span></li>
+<li><span>国泰君安 多单</span><span>228,063（-15,211）</span></li>
+<li><span>东证 多单</span><span>186,078（+15,180）</span></li>
+<li><span>前20净空（10-12）</span><span>587,587 手</span></li>
+<li><span>中粮净空（10-12）</span><span>492,621 手</span></li>
+<li><span>10-22 席位明细</span><span>数据未获取</span></li>
+</ul>
+<p class="note">多头主力分歧（中信、国君减，东证、银河增）；产业净空压顶，但空头拥挤亦是反弹燃料。</p></div>
+</div>
+<p class="note">数据来源：新浪财经期货日 K（倚天财经，2026-10-22 15:00）、大商所公开行情、Mysteel/钢联、USDA、CONAB、博亚和讯、饲料行业信息网、东方财富龙虎榜及期货公司公开研报。库存为第 42 周（10-10 至 10-16）口径。</p>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标 <span class="down">空</span></h3>
+<p>收盘 3,249 低于 MA5 3,265.4、MA10 3,316.2、MA20 3,356.4，亦低于 MA60 3,286.7，四线空头排列且向下。</p>
+<p class="note">MACD：DIF -21.2、DEA -0.5、柱 -41.5（前 -42.9），零轴下方，负柱略收敛。BOLL 中轨 3,356、下轨 3,233，开口向下，价格贴下轨运行。</p></div>
+
+<div class="card"><h3>震荡指标 <span class="up">超卖</span></h3>
+<p>RSI6 8.11、RSI14 22.6，双双进入超卖区；KDJ 的 K 13.3、D 18.3、J 3.3，J 值极端钝化。</p>
+<p class="note">超卖是状态而非买入信号：趋势行情中 RSI6 可在 10 以下停留 3~5 日。但当前位置继续追空，需承受均值回归波动。</p></div>
+
+<div class="card"><h3>量能分析 <span class="tn">中性偏空</span></h3>
+<p>成交 963,910 手，较 10-21 的 1,264,547 手缩量 24%；持仓 2,249,050 手，减少 14,335 手。</p>
+<p class="note">缩量、减仓、收阳、长下影：抛压衰竭，但无新增多头。10-21 放量 126 万手、减仓 58,525 手，已确认多头离场。</p></div>
+
+<div class="card"><h3>形态与关键价位 <span class="down">下降通道</span></h3>
+<p>3,217 创近 20 日新低后收回，下影 32 点；高点 3,288（10-21）→3,261（10-22）逐级下移，下降通道完好。</p>
+<p class="note">支撑：3,217 / 3,200 / 3,170；压力：3,265（MA5）/ 3,316（MA10）/ 3,356（BOLL 中轨）。ATR 48.1，日均波动约 1.5%。</p></div>
+</div>
+
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div>
+<span class="tag ts">空 四线空头排列</span><span class="tag ts">空 MACD 零轴下方</span><span class="tag ts">空 20日 -6.61%</span><span class="tag ts">空 高点逐级下移</span><span class="tag ts">空 压榨回升</span><span class="tag ts">空 豆粕库存同比高</span>
+<span class="tag tb">多 RSI6 8.11 极端超卖</span><span class="tag tb">多 J 值 3.3</span><span class="tag tb">多 收盘贴 BOLL 下轨</span><span class="tag tb">多 3,217 长下影</span><span class="tag tb">多 基差收敛至平水</span><span class="tag tb">多 美豆出口检验强劲</span>
+<span class="tag tn">中 减仓缩量</span><span class="tag tn">中 仓单回升</span><span class="tag tn">中 期限结构驼峰</span><span class="tag tn">中 10月到港回落</span>
+</div>
+<p class="note" style="margin-top:8px">技术面结论：<b class="down">趋势偏空、短线超卖</b>，强度评级“中偏空”。策略含义是“等反弹沽空”，而非“低位追空”。</p></div>
+
+<h2>三、持仓与席位</h2>
+<div class="card">
+<table>
+<thead><tr><th>项目</th><th>数值（手）</th><th>变化</th><th>解读</th></tr></thead>
+<tbody>
+<tr><td>M2701 总持仓</td><td class="num">2,249,050</td><td class="num down">-14,335</td><td>连续两日减仓，多头离场为主</td></tr>
+<tr><td>M2701 成交量</td><td class="num">963,910</td><td class="num down">-300,637</td><td>缩量 24%，追空意愿不足</td></tr>
+<tr><td>成交 / 持仓</td><td class="num">0.43</td><td class="num">—</td><td>活跃度下降，趋势动能减弱</td></tr>
+<tr><td>中信期货 多单（10-21）</td><td class="num">235,468</td><td class="num down">-6,261</td><td>券商系多头减仓</td></tr>
+<tr><td>国泰君安 多单（10-21）</td><td class="num">228,063</td><td class="num down">-15,211</td><td>多头主力大幅撤退</td></tr>
+<tr><td>东证期货 多单（10-21）</td><td class="num">186,078</td><td class="num up">+15,180</td><td>逆势加多，分歧加大</td></tr>
+<tr><td>高盛期货 多单（10-21）</td><td class="num">136,492</td><td class="num down">-5,264</td><td>外资席位减仓</td></tr>
+<tr><td>银河期货 多单（10-21）</td><td class="num">109,177</td><td class="num up">+9,027</td><td>逆势加多</td></tr>
+<tr><td>前 20 名净持仓（10-12，全合约）</td><td class="num">-587,587</td><td class="num down">-106,100</td><td>净空扩大，多空比 0.84</td></tr>
+<tr><td>中粮期货 净空（10-12）</td><td class="num">492,621</td><td class="num down">-10,151</td><td>产业套保盘压顶</td></tr>
+<tr><td>国投期货 净空（10-12）</td><td class="num">194,825</td><td class="num down">-13,519</td><td>产业空头维持高位</td></tr>
+</tbody></table>
+<p class="note">说明：10-22 收盘后席位明细尚未更新，上表多头席位为 10-21 数据，前 20 名净持仓为 10-12 数据，仅用于结构判断；连续 3 日以上的同向变化数据未获取，趋势结论参考性有限。10-22 的量价判断以总持仓 -14,335、成交缩量 24% 为依据。</p>
+</div>
+
+<h2>四、期限结构与基差</h2>
+<div class="card">
+<div class="term">
+<div class="tcol"><div class="tval">3,210</div><div class="tbar" style="height:156px"></div><div class="tname">M2611</div><div class="tspread">-39</div></div>
+<div class="tcol"><div class="tval">3,259</div><div class="tbar" style="height:170px"></div><div class="tname">M2612</div><div class="tspread">+10</div></div>
+<div class="tcol"><div class="tval">3,249</div><div class="tbar" style="height:167px"></div><div class="tname">M2701</div><div class="tspread">基准</div></div>
+<div class="tcol"><div class="tval">3,201</div><div class="tbar" style="height:153px"></div><div class="tname">M2703</div><div class="tspread">-48</div></div>
+<div class="tcol"><div class="tval">2,878</div><div class="tbar far" style="height:62px"></div><div class="tname">M2705</div><div class="tspread">-371</div></div>
+<div class="tcol"><div class="tval">2,838</div><div class="tbar far" style="height:51px"></div><div class="tname">M2707</div><div class="tspread">-411</div></div>
+<div class="tcol"><div class="tval">2,974</div><div class="tbar far" style="height:89px"></div><div class="tname">M2709</div><div class="tspread">-275</div></div>
+</div>
+<table style="margin-top:14px">
+<thead><tr><th>价差 / 基差</th><th>数值（元/吨）</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td>M2611 − M2701</td><td class="num">-39</td><td>近月 2611 贴水 01，11 月交割压力已部分反映</td></tr>
+<tr><td>M2612 − M2701</td><td class="num">+10</td><td>2612 为驼峰，12 月供应偏紧</td></tr>
+<tr><td>M2701 − M2703</td><td class="num">+48</td><td>01 升水 03，近强远弱</td></tr>
+<tr><td>M2703 − M2705</td><td class="num">+323</td><td>断崖式下移，05 计价南美创纪录丰产</td></tr>
+<tr><td>M2705 − M2707</td><td class="num">+40</td><td>05 仍升水 07，远月继续下压</td></tr>
+<tr><td>M2707 → M2709</td><td class="num">+136</td><td>09 回升，天气与种植成本升水</td></tr>
+<tr><td>张家港现货基差</td><td class="num">-19 ~ -9</td><td>现货 3,230~3,240，基本平水</td></tr>
+<tr><td>日照现货基差</td><td class="num">+21 ~ +61</td><td>工厂 3,270~3,310，现货升水</td></tr>
+<tr><td>广东现货基差</td><td class="num">-29 ~ -19</td><td>现货 3,220~3,230，小幅贴水</td></tr>
+<tr><td>全国均价基差</td><td class="num">+72 ~ +104</td><td>均价 3,321~3,353，区域升水明显</td></tr>
+</tbody></table>
+<p class="note">结构判断：2612 驼峰 + 03 后断崖，是“近月到港回落、远月南美丰产”的组合，而非全曲线 backwardation。华东基差从 10 月初 -62 收敛至 -10 附近，日照转升水，现货端对期货形成支撑；但 05/07 的深度贴水说明远月下行趋势未止，01 难以独立走强。</p>
+</div>
+
+<h2>五、三轮多空辩论</h2>
+
+<div class="debate">
+<div class="side bull"><h4>第一轮 · 多头立论（金牛）｜3,217 长下影 + RSI6 8.1，空头正在透支最后一口气</h4>
+<p><span class="lead">一、技术面：极端超卖与长下影同时出现。</span>今日 M2701 开 3,236、低 3,217、高 3,261、收 3,249，日线是一根带 32 点下影的小阳线。请注意三个细节：第一，3,217 是近 20 个交易日新低，但空头未能守住，收盘拉回 32 点；第二，RSI6 仅 8.11、RSI14 22.6、KDJ 的 J 值 3.3，三者同时进入极端超卖，这种组合在近两年日线级别屈指可数；第三，收盘 3,249 距 BOLL 下轨 3,233 只有 16 点，属于“贴轨不破轨”。均线确实是空头排列（MA5 3,265.4、MA10 3,316.2、MA20 3,356.4、MA60 3,286.7），但均线是滞后指标，在 RSI6 低于 10 的位置继续追空，等于用 80 点止损去博 30 点空间，风险收益比并不站在空头一边。MACD 柱 -41.5 较前值 -42.9 收敛 1.4，DIF -21.2 与 DEA -0.5 的负离差没有再扩大，动能正在钝化。</p>
+<p><span class="lead">二、量能：缩量减仓收阳，抛压衰竭。</span>今日成交 963,910 手，较 10-21 的 1,264,547 手缩量 24%，持仓 2,249,050 手减少 14,335 手。缩量、减仓、收阳、长下影，四个特征组合在一起，说明 3,217 一线的抛压已经衰竭，空头在低位选择兑现而非加码。若是趋势性下跌，今日应在放量中直接击穿 3,217 并收在 3,200 下方；实际却是空头平仓把价格推回 3,249。前 20 名净空在 10-12 达到 -587,587 手，空头交易已相当拥挤，一旦反弹，回补盘会放大涨幅。</p>
+<p><span class="lead">三、成本与基差：盘面已低于现货与成本线。</span>盘面 3,249 已跌破 MA60 3,286.7，也低于全国 43% 蛋白豆粕均价 3,321~3,353 元/吨（10-19 至 10-22，钢联/中辉口径）。张家港现货 3,230~3,240，基差仅 -19~-9；日照工厂 3,270~3,310，基差 +21~+61；广东 3,220~3,230，基差 -29~-19。10 月初华东基差一度 -62，如今已收敛至平水附近，说明现货比期货抗跌。油厂大豆压榨利润 -227.71 元/吨（中辉 10-22），负榨利意味着油厂没有继续降价甩货的空间，只能通过降开机或挺价传导。10 月进口大豆到港约 850 万吨，较 9 月千万吨级明显回落；第 42 周大豆库存 843.01 万吨，周降 19.17 万吨，供给压力正在边际减轻。</p>
+<p><span class="lead">四、外盘：利空落地，出口与压榨双引擎仍在。</span>CBOT 大豆主力 1,259.25 美分/蒲，10 月 USDA 报告把单产上调至 53.1 蒲/英亩、产量 45.62 亿蒲，利空已经落地。更关键的是出口：10 月 15 日当周美豆出口检验 200.2 万吨，为 2024 年 11 月以来最大单周，其中对中国 128.2 万吨；本年度累计检验 715.9 万吨，同比 +26.6%。中国买家 10 月 16 日单日采购 55.8 万吨、10 月 19 日再买 11.4 万吨并对未知目的地销售 26.1 万吨。收割率 64%，低于市场预期 66%，优良率 57% 较去年同期低 4 个百分点。出口与压榨的双引擎仍在，美豆下方空间有限。</p>
+<p><span class="lead">五、南美与需求：远月已充分计价，近月需求未塌。</span>巴西播种 30.1%（10-16，CONAB），快于五年均值 26.4%，但马托格罗索未来 15 天降水低于常年、气温偏高 1~4℃，土壤墒情偏紧，出苗期并非高枕无忧；阿根廷在超强厄尔尼诺下播种偏慢。远月 M2705 2,878、M2707 2,838 已较 M2701 贴水 371/411 元，南美创纪录丰产的利空被计价得相当充分。需求端，能繁母猪 3,602 万头、同比 -10.7% 确实是中期利空，但传导至商品猪出栏有 10 个月时滞，2026 年四季度至 2027 年一季度生猪供给仍不算少；10 月集团猪企出栏计划环比增加、出栏均重上升，短期饲料消费并未塌陷，第 42 周豆粕表观消费 175.13 万吨、环比 +58.57 万吨即是证据。</p>
+<p><span class="lead">结论：</span>3,215~3,225 是空头的强弩之末，3,249 附近做多的赔率优于追空。目标先看 MA5 3,265，再看 3,300~3,320（MA10 下方与 BOLL 中轨之间）；止损 3,208（3,217 下方 9 点）。时间窗口 3~5 个交易日。</p>
+</div>
+
+<div class="side bear"><h4>第一轮 · 空头立论（黑熊）｜反弹不是底，3,249 只是下跌中继</h4>
+<p><span class="lead">一、趋势：四条均线全部压在头上。</span>先看事实：收盘 3,249 低于 MA5 3,265.4、MA10 3,316.2、MA20 3,356.4，也低于 MA60 3,286.7，四条均线全部在价格上方且依次向下，这是标准的空头排列；20 日涨跌 -6.61%，10-21 单日 -1.36% 并放量 126 万手、减仓 58,525 手，属于破位下跌。MACD 的 DIF -21.2、DEA -0.5、柱 -41.5，全部在零轴下方，柱体虽从 -42.9 收敛到 -41.5，但仍是最深一档的负值，谈“动能衰竭”为时过早。BOLL 中轨 3,356、下轨 3,233，价格贴着下轨运行、开口向下，这是弱势趋势的典型形态，不是底部形态。</p>
+<p><span class="lead">二、量能与形态：缩量减仓的阳线是空头回补，不是新多进场。</span>今日成交 963,910 手，比昨日少 30 万手，持仓减少 14,335 手，价格只涨 6 个点（对昨收）。反弹最高 3,261，连 MA5 3,265 都没有碰到，更谈不上挑战 3,288 的前高。高点 3,288（10-21）→3,261（10-22）逐级下移，低点 3,232→3,217 逐级下移，下降通道完好。所谓“长下影”只有 32 点，而当日振幅 44 点、ATR 48.1，下影长度连 1 倍 ATR 都不到，谈不上反转信号。减仓 1.43 万手只占 224.9 万手持仓的 0.64%，属于正常换手，不足以证明空头撤退。</p>
+<p><span class="lead">三、供给：压榨二次回升就在下周。</span>第 42 周国内油厂压榨 222.34 万吨，环比 +101.41 万吨，开机率 60.35%；Mysteel 预估第 43 周压榨 252.64 万吨、开机率 68.58%，即未来一周豆粕产出还要增加约 30 万吨。豆粕库存 109.6 万吨、环比 +0.52 万吨，同比仍高于去年；未执行合同 447.90 万吨、环比 -70.33 万吨，说明下游在主动缩减远期头寸，不愿接货。大豆库存 843.01 万吨虽周降 19.17 万吨，但仍在历史同期高位。供给端不是“边际减轻”，而是“压榨利润驱动下的被动后移”。</p>
+<p><span class="lead">四、外盘与南美：没有减产故事，只有丰产兑现。</span>USDA 10 月报告把美豆单产提到 53.1 蒲/英亩的历史新高，产量 45.62 亿蒲、期末库存 3.15 亿蒲，库消比 6.87%，是“宽松但不过剩”——这恰恰意味着没有减产故事可讲。收割率 64%，未来 15 天中西部转干，收割将加速；巴西播种 30.1%，马托格罗索 60.8%，远快于五年均值，阿根廷面积与产量双增（USDA 上调至 5,250 万吨）。南美丰产预期是 2027 年 05/07 合约的定价核心，M2705 2,878、M2707 2,838 不是“跌够了”，而是“还没有跌完”。</p>
+<p><span class="lead">五、价格行为与需求：利多不涨，现货补跌。</span>最能说明问题的是 10-21 的 CBOT：出口检验 200 万吨、中国大举采购的利多之下，美豆仍然收低，因为收割压力和创纪录产量压过一切。利多不涨，就是最大的利空。国内现货同样在跌：10-22 日照工厂报价 3,310/3,270，跌 25 元；广东 3,220~3,230，跌 10~20 元；天津 3,270~3,300，跌 15 元。基差从 -62 收敛到 -10，不是期货向现货靠拢，而是现货向期货补跌。需求端，能繁母猪 3,602 万头、同比 -10.7%，首次实质性跌破 3,750 万头保有量，猪价 9.80 元/公斤、自繁自养亏损，饲料企业物理库存 8.23 天、随用随采；第 42 周表观消费的回升只是节后补库的一次性脉冲，不构成趋势。</p>
+<p><span class="lead">结论：</span>反弹是空头给的机会。3,280~3,310 是 MA10 3,316 下方的反抽区，也是产业套保较舒服的价位；目标 3,180，第二目标 3,120，止损收盘站上 3,330。时间窗口 3~8 个交易日。</p>
+</div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>第二轮 · 多头驳斥｜你描述的是过去，我交易的是赔率</h4>
+<p><span class="lead">驳“四线全在价格上方、空头排列”。</span>我完全承认。但均线是收盘价的移动平均，20 日跌 6.61% 之后，MA5 必然在价格上方，这不是新信息，而是已经发生的下跌。真正的问题是：在 RSI6 8.11、J 值 3.3、价格贴 BOLL 下轨的位置，向下的空间还有多少？对方给的止损是 3,330，入场 3,280~3,310，风险 20~50 点；目标 3,180/3,120，收益 100~190 点，看似 3:1，但前提是价格能先反弹到 3,280。今天最高只有 3,261，连 MA5 都没到，这个“完美入场”很可能等不到。反过来，我在 3,249 附近做多、止损 3,208，风险 41 点；目标 3,300，收益 51 点，赔率并不差，且成交概率更高。</p>
+<p><span class="lead">驳“缩量减仓是空头回补，不是新多”。</span>请把 10-21 和 10-22 连起来看：10-21 放量 126 万手、减仓 5.85 万手、跌 1.36%，是恐慌离场；10-22 缩量 96 万手、再减 1.43 万手、收阳，是抛压衰竭。若真是下跌中继，空头应该在 3,217 下方继续加仓，持仓应该增加而不是减少。持仓连续两日下降而价格止跌，恰恰说明空头在兑现，而不是在蓄势。</p>
+<p><span class="lead">驳“压榨回升至 252.64 万吨是铁证”。</span>压榨量是油厂基于榨利和豆油需求的决策。当前榨利 -227.71 元/吨，油厂继续提高开机的空间有限；而且 10 月到港 850 万吨、环比大幅回落，大豆库存 843 万吨周降 19 万吨，原料端并不支持无限压榨。更重要的是，豆粕库存已从 9 月底的 129.64 万吨降到 109.6 万吨，去库方向没有变，只是速度慢。把“排产预估”当成“已经发生的库存累积”，是拿预期当现实。</p>
+<p><span class="lead">驳“巴西丰产所以 05/07 没跌完”。</span>这是把远月的利空拿来砸近月。M2705 2,878、M2707 2,838 已较 M2701 贴水 371/411 元，贴水幅度本身就包含了南美丰产预期；而 01 合约交易的是 11-12 月到港和国内库存，不是巴西产量。用 05 的逻辑做空 01，是典型的跨期错配。</p>
+<p><span class="lead">驳“利多不涨是最大利空”。</span>10-21 CBOT 收低只有 7.75 美分，11 月合约仍在 1,253.5 美分，出口检验创 2024 年 11 月以来新高、中国采购持续，价格却没有破位，这叫“利空钝化”而非“利多不涨”。国内也一样：现货每天跌 10~25 元，期货却只跌 6 点，基差在修复，说明期货已经提前反映了现货的下跌。至于“能繁去化 10.7%”，能繁降到 3,602 万头，意味着 2027 年二季度之后生猪供给减少，但豆粕需求看的是当前存栏、出栏体重和饲料配方。10 月集团出栏计划环比增加、出栏均重上升，短期豆粕消费没有塌；把 10 个月后的故事拿到今天交易，是空头最常见的叙事陷阱。</p>
+</div>
+
+<div class="side bear"><h4>第二轮 · 空头驳斥｜超卖可以更超卖，贴水可以更贴水</h4>
+<p><span class="lead">驳“RSI6 8.11 就该买”。</span>请问 8.11 之后一定反弹吗？趋势行情中 RSI6 可以在 10 以下停留三到五天，价格还能再跌 1.5%。更关键的是，对方的止损 3,208 距离今日低点 3,217 只有 9 点，而 ATR 是 48.1——这意味着正常波动就能打掉止损。这不是“风险可控”，而是“止损无效”。用 9 点缓冲去对抗 48 点的日均波动，仓位管理上不成立。</p>
+<p><span class="lead">驳“缩量减仓是抛压衰竭”。</span>如果抛压衰竭，为什么今天最高只有 3,261，连 MA5 3,265 都过不去？为什么全天高点从 3,288 降到 3,261？减仓 1.43 万手对应 224.9 万手持仓，只占 0.64%，属于正常换手，不足以证明空头撤退。10-12 全合约前 20 名净空 587,587 手的格局未见扭转，中粮等产业席位仍持有 49.26 万手净空，套保盘才是压制反弹的真正力量。</p>
+<p><span class="lead">驳“负榨利限制开机”。</span>第 42 周压榨从 120.93 万吨跳到 222.34 万吨，开机率从 32.82% 升到 60.35%，这正是在“负榨利”背景下发生的——因为油厂卖的是豆油，豆油库存 150 万吨、价格有韧性，粕是副产品，只要豆油能覆盖，油厂就会继续压榨。第 43 周预估 252.64 万吨、68.58%，这是钢联的排产调研，不是我的猜测。豆粕库存 109.6 万吨只是从 129.64 万吨的节前高点回落，同比仍高，且下周大概率重新累积。</p>
+<p><span class="lead">驳“05 贴水 371/411 元，利空已计价”。</span>贴水大不等于见底。更别忘了，01 合约自身也有压力：11 月大豆到港虽然降到 850 万吨，但油厂大豆库存 843 万吨，足够压榨一个多月；而豆粕未执行合同 447.90 万吨、环比大降 70.33 万吨，说明下游根本不急。至于“基差收敛”，10-22 日照跌 25 元、广东跌 10~20 元、天津跌 15 元，现货每天都在跌，基差收敛是现货补跌的结果，不是期货向现货回归。把现货下跌解读成“现货抗跌”，是选择性失明。</p>
+<p><span class="lead">驳“利多钝化”与“能繁是 10 个月后的故事”。</span>10-21 CBOT 在出口检验 200 万吨的利多下收低 7.75 美分，这不叫钝化，叫“卖压大于买盘”。10-22 亚洲时段美豆 1,259.25 美分、仅 +0.08%，连一根像样的反弹都没有。外盘不涨，国内 01 就没有成本推力。至于能繁去化，期货交易的就是预期，01 合约的估值里必须包含 2027 年一季度饲料需求下台阶的预期；当前猪价 9.80 元/公斤、养殖亏损，饲料厂只会压缩库存天数，不会建立多头头寸。表观消费 175.13 万吨的环比回升，是国庆后补库的一次性动作，下周就会回落。</p>
+</div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>第三轮 · 多头终陈｜先赢赔率，再谈方向</h4>
+<p>三轮下来，我和黑熊其实只有一个分歧：现在这个位置，是“顺势追空”还是“等反弹再空”。黑熊的产业逻辑我大部分接受——压榨回升、库存偏高、巴西丰产、生猪去化，这些都是真的，也都是压在 01 合约上面的中期利空。但交易不是判断题，是赔率题。</p>
+<p>今天收盘 3,249，20 日低点 3,217 就在脚下 32 点，RSI6 8.11、J 值 3.3、价格贴 BOLL 下轨，这是过去两年都不多见的极端位置。在这个位置做空，止损必须放在 3,265 上方，风险 16~40 点；目标 3,180，收益 69 点——赔率不到 2:1，还要承担超卖反弹被扫损的风险。相反，在 3,240~3,250 轻仓做多，止损 3,208，风险 32~42 点，第一目标 3,285、第二目标 3,310，收益 36~61 点，赔率 1.5:1 以上，顺的是“均值回归”这个短线最确定的力。</p>
+<p>我的胜负手只有两个。第一，3,217 的长下影是空头在 20 日新低处的失败突破。空头动用了 126 万手的量在 10-21 砸盘，10-22 却没能把价格留在 3,217 下方，说明这个位置的买盘是真实的。第二，基差已从 -62 收敛到 -10 附近，日照甚至升水 21~61 元，现货在告诉期货“你不该这么便宜”。期货可以贴水，但不能无限贴水，尤其在油厂榨利 -227.71 元/吨、10 月到港环比回落的背景下。</p>
+<p>操作上：3,240~3,252 轻仓试多，仓位不超过 25%，止损 3,208（收盘价），目标 3,285 减半、3,310 全部了结。如果价格不涨反跌、收盘跌破 3,217，我认错离场，并把方向盘交给黑熊——那时候 3,180 才是合理目标。时间窗口 3~5 个交易日。</p>
+<p>还有一层关联逻辑，黑熊没有提。这次分析是由生猪 LH 置信度 57% 触发的——换句话说，连生猪自己的模型都不敢对需求端下重注。豆粕领先生猪 5~10 个交易日，如果豆粕在 3,217 止跌，接下来生猪的饲料成本压力会边际缓和，养殖端的恐慌出栏反而可能收敛。把“生猪去化”当成豆粕的单边死空逻辑，等于把一个 57% 置信度的结论当成 90% 的确定性来用，这在方法论上就站不住。</p>
+<p>我不否认中期看空。压榨回升、巴西丰产、能繁去化，这些我都认。但中期看空不等于今天必须在 3,249 卖出。交易是“方向 × 位置 × 时间”的三维问题，黑熊只给了我方向，位置和时间都站在我这边。</p>
+<p>黑熊，你说反弹是“礼物”。我同意。但这个礼物，应该由空头在 3,285~3,310 拆开，而不是在 3,249 抢着拆。你把最好的赔率让给了我。</p>
+</div>
+
+<div class="side bear"><h4>第三轮 · 空头终陈｜让反弹发生，然后在 3,300 等它</h4>
+<p>金牛，你最后一句话很漂亮，但你把因果关系说反了。不是我把赔率让给你，而是你把“反弹”当成了“反转”。今天 3,249 的阳线，最高 3,261，连 MA5 3,265 都没有触碰；10-21 的高点 3,288 还在头顶；MA10 3,316、MA20 3,356 像天花板一样压着。这叫下跌中继，不叫底部。真正的底部，需要放量突破 MA10、需要持仓增加、需要现货基差转正并持续走强，这三条今天一条都没有。</p>
+<p>我的胜负手也只有两个。第一，供给的二次冲击还没有到来。第 42 周压榨 222.34 万吨只是恢复，第 43 周预估 252.64 万吨、开机 68.58%，意味着未来五到七个交易日豆粕产出再增 30 万吨；而豆粕库存 109.6 万吨、同比仍高，未执行合同 447.90 万吨、环比 -70.33 万吨，下游不接货。供给增、需求缩，库存只能重新累积。第二，外盘没有给国内成本推力。美豆 1,259.25 美分，在出口检验 200 万吨、中国持续采购的利多下，10-21 仍收低；巴西播种 30.1%、马托 60.8%，阿根廷产量上调至 5,250 万吨，南美丰产的故事才刚刚开始。成本下移叠加国内高库存，01 合约拿什么涨？</p>
+<p>至于你说的“基差收敛”，我再强调一次：10-22 日照跌 25 元、广东跌 10~20 元、天津跌 15 元，现货每天都在跌，基差收敛是现货补跌的结果，不是期货向现货回归。而 RSI6 8.11 的“极端超卖”，在趋势行情里可以连续出现，超卖是状态，不是信号；10-21 价格仍下跌 1.36%，就是最近的例子。</p>
+<p>所以我的方案不变，而且更精确：不在 3,249 追空，等反弹到 3,280~3,310——这是 MA10 3,316 下方的反抽区、也是产业套保较舒服的区间——分两批沽空，仓位 40%。第一目标 3,215（今日低点下方），第二目标 3,170（T1 下方延伸位），止损收盘站上 3,335。若价格不反弹而直接收盘跌破 3,217，则在 3,200~3,210 追空，仓位降至 30%，目标不变。</p>
+<p>再补一条时间表，让方案可验证：10-23 至 10-24 观察第 43 周排产是否兑现，10-27 前后看油厂豆粕库存是否重回 112 万吨上方，10-29 看巴西马托格罗索墒情与美豆周度出口。如果这三项里有两项偏空，3,170 就不只是目标，而是路径。反之，若库存连续两周下降、美豆站上 1,300 美分，我会主动降到 20% 仓位，而不是死扛 3,335 的止损。</p>
+<p>金牛，你说 3,217 是空头的失败突破。我说，那只是空头在等一个更好的价格。3,300 见。</p>
+</div>
+</div>
+
+<h2>六、总决策官裁决</h2>
+<div class="final">
+<h3>1. 双方最强点与最弱点</h3>
+<p><b class="up">多头最强</b>：位置与赔率。RSI6 8.11、J 值 3.3、收盘贴 BOLL 下轨仅 16 点、3,217 长下影，以及基差从 -62 收敛到 -10、日照升水 21~61 元，这是可验证的短期均值回归力量。<b class="up">多头最弱</b>：把“超卖”当“反转”，且忽视 3,261 高点未过 MA5 3,265 这一事实；中期供需没有提供任何向上驱动。</p>
+<p><b class="down">空头最强</b>：供给二次冲击与趋势结构。第 43 周压榨预估 252.64 万吨、开机 68.58%，豆粕库存 109.6 万吨同比仍高、未执行合同周降 70.33 万吨；均线空头排列、MACD 零轴下方、20 日 -6.61%。<b class="down">空头最弱</b>：入场位设在 3,280~3,310，而今日高点仅 3,261，存在“看对方向却无法成交”的执行风险；同时 58 万手净空本身是反弹燃料。</p>
+
+<h3>2. 六维多空评分</h3>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>裁决理由</th><th style="width:20%">强度（多→空）</th></tr></thead><tbody>
+<tr><td>库存</td><td class="up">4/10</td><td class="down">6/10</td><td>豆粕 109.6 万吨、环比 +0.52、同比偏高，但较 9 月底 129.64 万吨去库约 20 万吨；大豆 843.01 万吨周降 19.17 万吨</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>仓单</td><td class="up">4/10</td><td class="down">6/10</td><td>52,939 手（10-13），周增 5,000 手、月增 8,500 手（+19.13%）；绝对量仅占持仓 2.4%，10-22 日报未获取</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>期限结构</td><td class="up">4/10</td><td class="down">6/10</td><td>2612 驼峰、03 后断崖；近月受到港回落支撑，远月被南美丰产压制，对 01 是“近稳远空”</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>技术面</td><td class="up">3/10</td><td class="down">7/10</td><td>四线空头排列、MACD 零轴下方、20 日 -6.61%；但 RSI6 8.11、J 3.3、贴下轨，短线反弹风险高</td><td><div class="bar"><i style="width:30%"></i></div></td></tr>
+<tr><td>基本面</td><td class="up">3/10</td><td class="down">7/10</td><td>美豆单产 53.1 蒲/英亩创纪录、巴西播种 30.1%、阿根廷 5,250 万吨、压榨回升、生猪亏损；对冲项为出口检验 200.2 万吨、中国采购、马托偏干、负榨利</td><td><div class="bar"><i style="width:30%"></i></div></td></tr>
+<tr><td>持仓席位</td><td class="up">4/10</td><td class="down">6/10</td><td>总持仓 -14,335、成交缩量 24%；多头主力分歧（中信 -6,261、国君 -15,211，东证 +15,180）；前 20 净空 587,587 手</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+</tbody></table>
+<p class="note">合计：多方 22/60（36.7%），空方 38/60（63.3%）。</p>
+
+<h3>3. 裁决</h3>
+<p><b class="gold">方向</b>：震荡偏弱，反弹沽空（不在 3,249 追空）。<b class="gold">胜率</b>：多方 44% / 空方 56%。说明：六维原始评分空方 63.3%，但 RSI6 8.11 的短线均值回归概率、以及“入场高于今日高点”的执行折损，合计下调 7 个百分点。<b class="gold">置信度</b>：58%。<b class="gold">窗口</b>：2026-10-23 至 2026-10-30，3~8 个交易日。</p>
+<p><b class="gold">入场</b>：反弹 3,280~3,310 分两批沽空（3,280~3,290 建 20%，3,300~3,310 建 20%）；若收盘跌破 3,217，B 方案于 3,200~3,210 追空 30%。<b class="gold">目标</b>：T1 3,215（今日低点下方，减半）；T2 3,170（T1 下方延伸位，对应约 2.4% 的补跌空间）。<b class="gold">止损</b>：收盘站上 3,335（MA10 3,316 上方约 19 点、入场中枢 3,295 上方 40 点）。<b class="gold">仓位</b>：合计不超过 40%，单笔风险控制在权益 1.5% 以内。</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">震荡偏弱 · 反弹沽空<br>多方 44% / 空方 56%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">58%<br>3~8 个交易日（10/23-10/30）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">3,280~3,310 分批沽空<br>3,215 → 3,170<br>收盘站上 3,335</div></div>
+</div>
+
+<h3>4. 核心逻辑三条</h3>
+<ul class="plain">
+<li><b>趋势未反转</b>：3,249 低于 MA5 3,265.4、MA10 3,316.2、MA20 3,356.4、MA60 3,286.7，MACD 零轴下方、柱 -41.5；反弹第一压力 3,265、第二压力 3,316，高点 3,288→3,261 逐级下移。</li>
+<li><b>供给二次冲击</b>：第 43 周压榨预估 252.64 万吨、开机 68.58%（+8.23pct），豆粕库存 109.6 万吨同比偏高、未执行合同周降 70.33 万吨，11 月上旬库存大概率重新累积。</li>
+<li><b>成本与远月双压</b>：美豆创纪录产量 45.62 亿蒲、巴西播种 30.1% 快于五年均值 26.4%、阿根廷 5,250 万吨；M2705/2707 较 01 贴水 371/411 元，远月下行未止，01 难以独立走强。</li>
+</ul>
+
+<h3>5. 风险提示</h3>
+<ul class="plain">
+<li><b>采购超预期</b>：美豆出口检验已创 2024 年 11 月以来新高，若周度净销售继续放量、中国储备轮换加码，CBOT 可能突破 1,300 美分，带动连粕补涨。</li>
+<li><b>南美天气</b>：马托格罗索未来 15 天降水低于常年、气温偏高 1~4℃，若干旱延续至 11 月，05 合约天气升水会反向传导至 01。</li>
+<li><b>空头回补踩踏</b>：RSI6 8.11、10-12 前 20 名净空 587,587 手，若出现单日增仓上行并突破 3,265，可能触发踩踏式反弹至 3,316。</li>
+<li><b>油厂主动降开机</b>：榨利 -227.71 元/吨，若开机率不及 68.58% 的排产预估，去库加速会削弱空头核心逻辑。</li>
+<li><b>生猪二育与压栏</b>：能繁去化定调中期利空，但短期压栏、二次育肥可能阶段性抬升饲料需求，削弱“需求塌陷”叙事。</li>
+<li><b>政策与宏观</b>：中美贸易与关税、汇率波动、大宗商品系统性风险，均可能使止损跳空失效。</li>
+</ul>
+
+<h3>6. 执行纪律</h3>
+<p>若 3 个交易日内未触及 3,280，且收盘仍在 3,249 上方震荡，则降低计划仓位至 20% 并等待；若收盘跌破 3,217，按 B 方案执行，不追高、不摊平。目标位到达后必须移动止损至成本，严禁在 3,215 下方继续加空。</p>
+
+<p class="note" style="color:#e8b45a;margin-top:14px">【关联与独立性说明】本报告为关联品种分析：原品种生猪 LH 置信度 57%（&lt;60%）触发，豆粕与生猪关联强度 0.70、豆粕领先约 5~10 个交易日。裁决以豆粕自身 6 维数据为主，生猪基本面仅用于需求端交叉验证；未采用未授权数据源。</p>
+</div>
+
+<div class="foot">
+数据来源：新浪财经期货日 K（倚天财经，2026-10-22 15:00）；大商所公开延时行情与仓单数据（仓单为 2026-10-13）；Mysteel/钢联（第 42 周压榨、库存、开机率，第 43 周排产预估）；USDA 作物生长报告与出口检验/销售数据（截至 2026-10-18、10-15）；CONAB 巴西播种进度（2026-10-16）；USDA FAS 阿根廷油籽报告（2026-10-07）；博亚和讯、饲料行业信息网现货报价（2026-10-20 至 10-22）；东方财富期货龙虎榜（2026-10-21）；光大期货、华泰期货、国元期货、中辉期货、国信期货、上海中期、新世纪期货公开研报。技术指标（MA/MACD/RSI/BOLL/KDJ/ATR）基于日线收盘价计算，不同软件口径可能存在差异。<br>
+口径说明：涨跌幅 +0.19% 按昨收 3,243 计算，当日结算价 3,240；全文价格单位元/吨，持仓与成交单位手。<br>
+本报告由 AI 基于公开数据自动生成，采用“6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决”框架，仅供研究参考，不构成任何投资建议。期货交易具有杠杆风险，市场有风险，投资需谨慎。
+</div>
+</div></body></html>

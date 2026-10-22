@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>玉米C深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+h3.sub{font-size:14px;color:var(--gold);margin:18px 0 10px;letter-spacing:.5px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.card ul{list-style:none;margin-top:2px}
+.card li{font-size:12.3px;color:#b9c8da;display:flex;justify-content:space-between;
+border-bottom:1px dashed #1c2836;padding:3px 0;gap:8px}
+.card li span:last-child{color:#e4edf8;text-align:right;white-space:nowrap}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+td.num{font-variant-numeric:tabular-nums;text-align:right}
+.term{display:flex;align-items:flex-end;gap:14px;height:220px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:50px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tbar2{background:linear-gradient(180deg,#5aa9e8,#2b5b85)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tchg{font-size:11px;color:var(--sub);margin-bottom:3px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.review{background:linear-gradient(120deg,#1a1712,#101821);border:1px solid #3a3021;border-radius:12px;
+padding:16px 18px;font-size:12.7px;color:#d8cbb8}
+.review b{color:var(--gold)}
+.review .r{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.review .r div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.side{border-radius:11px;padding:15px 16px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side p{font-size:12.7px;color:#c3d2e2;margin:7px 0;text-align:justify}
+.side li{font-size:12.7px;color:#c3d2e2;margin:6px 0 6px 16px}
+.side .concl{margin-top:9px;padding-top:8px;border-top:1px dashed #2a3a4c;font-size:12.6px;color:#e6c98d}
+.round{margin-top:14px}
+.round-tag{font-size:11px;color:var(--sub);letter-spacing:2px;margin:16px 0 8px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.plan .p{background:#0d151e;border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.plan .p h5{font-size:13px;color:#8cc8f2;margin-bottom:6px}
+.plan .p p{font-size:12.5px;color:#bfcede}
+.badge{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:20px;
+background:rgba(232,180,90,.12);border:1px solid rgba(232,180,90,.4);color:var(--gold);margin-bottom:8px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.src{font-size:11.5px;color:#7c8fa3}
+@media(max-width:900px){.grid6,.quad,.two,.debate,.plan{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}.review .r{grid-template-columns:1fr 1fr}
+.term{height:180px;gap:6px}.tbar{width:32px}}
+</style></head><body><div class="wrap">
+
+<div class="hd"><div><h1>玉米 <span>C · C2701 · 大商所</span></h1>
+<div class="note">报告日期 2026-10-22（交易日收盘后）　|　下一交易日 2026-10-23　|　6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决</div></div>
+<div class="meta"><div>收盘价（元/吨）</div><div class="px up">2,218</div>
+<div class="up">+1.28%（+28，对昨结算）　高 2,218 / 低 2,184</div>
+<div>结算 2,203　持仓 1,263,579（+21,487）　成交 744,240</div></div></div>
+
+<div class="banner">
+<div><div class="badge">关联品种分析：由生猪 LH 置信度 57%（&lt;60%）触发 · 关联强度 0.75 · 玉米领先约 5~10 个交易日</div>
+<div class="lbl">最终裁决</div><div class="big">偏空 · 反弹沽空（不追空）</div>
+<div class="note">胜率评估：多方 44% / 空方 56%　|　触发窗口：2~5 个交易日　|　当日收于日内最高，短线仍有惯性</div></div>
+<div class="conf"><div class="ring" style="--p:56"><b>56%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">基本面与估值偏空<br>但技术短线转强，降级参与</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：2,228~2,242 分批沽空</div>
+<div style="font-size:13px">目标：2,186 → 2,165</div><div style="font-size:13px">止损：收盘站上 2,256</div></div>
+</div>
+
+<div class="review">
+<b>前日复盘（对抗性校验）</b>　10-21 报告：偏空、置信度 55%，入场 2,205~2,225 沽空，目标 2,140/2,100，止损 2,260。
+10-22 实际：开 2,189、最高 2,218、最低 2,184、收 2,218，较昨结算 +1.28%（对昨收 +1.46%），持仓 +21,487 手。
+最高价进入 2,205~2,225 区间，<b>空单已被动成交</b>，按均价 2,210 计浮亏约 8 元/吨；<b>止损 2,260 未触及，目标未兑现</b>。
+<div class="r">
+<div><div class="lbl">方向判定</div><div class="up" style="font-size:14px">✗ 未兑现（+1.28%）</div></div>
+<div><div class="lbl">入场 2,205~2,225</div><div class="up" style="font-size:14px">✓ 已成交（2,205~2,218）</div></div>
+<div><div class="lbl">止损 2,260</div><div class="up" style="font-size:14px">✓ 未触及（高 2,218）</div></div>
+<div><div class="lbl">目标 2,140</div><div class="down" style="font-size:14px">✗ 未触及</div></div>
+</div>
+<p style="margin-top:10px">教训：在“卖压后置 + 天气扰动”的窗口，把沽空区间设在昨收上方仅 19 点，很容易在上冲途中被动成交。本次调整为
+<b>右侧确认 + 分批</b>：第一批 2,228~2,232（20 日高点 2,227 上方），第二批 2,238~2,242，止损上移至 2,256；
+若开盘直接跳空至 2,250 以上则放弃当日沽空。</p>
+</div>
+
+<h2>一、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span class="down">多 3 / 空 7</span></h3>
+<ul><li><span>北方四港库存</span><span>187.1 万吨（+19.7，10-15）</span></li>
+<li><span>锦州港库存</span><span>100 万吨（10-22）</span></li>
+<li><span>广东港内贸</span><span>28.4 万吨（+14.9，10-15）</span></li>
+<li><span>深加工企业库存</span><span>256.9 万吨（+5.46%，10-15）</span></li>
+<li><span>饲料企业库存</span><span>24.95 天（10-15，同比 +2.09%）</span></li></ul>
+<p class="note">港口、深加工、饲料三环节同步累库，10 月为年内库存压力峰值。</p></div>
+
+<div class="card"><h3>② 仓单 <span class="down">多 4 / 空 6</span></h3>
+<ul><li><span>最近可核实（10-19）</span><span>80,990 手（+4,000）</span></li>
+<li><span>折实物量</span><span>80.99 万吨</span></li>
+<li><span>仓单 / 单边持仓</span><span>6.4%</span></li>
+<li><span>持仓覆盖倍数</span><span>15.6 倍</span></li>
+<li><span>10-22 单日明细</span><span>数据未获取</span></li></ul>
+<p class="note">自 76,990 手跳增，增量主体为物产中大化工（+4,000 手），卖保注册启动。</p></div>
+
+<div class="card"><h3>③ 期限结构 <span class="down">多 3 / 空 7</span></h3>
+<ul><li><span>C2611 / C2701</span><span>2,187 / 2,218</span></li>
+<li><span>11-1 价差</span><span>+31</span></li>
+<li><span>1-5 价差</span><span>+69</span></li>
+<li><span>1-9 价差</span><span>+102（年化约 6.9%）</span></li>
+<li><span>基差（北港现货）</span><span>-73 ~ -48</span></li></ul>
+<p class="note">近低远高 contango，接近满仓储成本（4 个月约 70~80 元），未给额外看涨溢价；01 对现货升水 2.2%~3.4%。</p></div>
+
+<div class="card"><h3>④ 技术面 <span class="up">多 7 / 空 3</span></h3>
+<ul><li><span>MA5 / MA10 / MA20</span><span>2,196.8 / 2,194.4 / 2,187.2</span></li>
+<li><span>MA60</span><span>2,237.7</span></li>
+<li><span>MACD 柱</span><span>+10.8（前值 +7.6）</span></li>
+<li><span>RSI6 / RSI14</span><span>51.3 / 60.2</span></li>
+<li><span>BOLL 上 / 中 / 下</span><span>2,219 / 2,187 / 2,155</span></li></ul>
+<p class="note">双底 2,184 + 零轴下金叉 + 增仓上行；但收盘正贴上轨，MA60 未破。</p></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span class="down">多 4 / 空 6</span></h3>
+<ul><li><span>中储粮 10-22 采购 / 销售</span><span>95,532 / 80,622 吨</span></li>
+<li><span>10-21 采购成交率</span><span>54%</span></li>
+<li><span>山东晨间到货</span><span>136 车（前周千车级）</span></li>
+<li><span>黑龙江晨间到车</span><span>1,209 车</span></li>
+<li><span>淀粉开机率</span><span>58.79%（+0.68pct）</span></li></ul>
+<p class="note">政策托底与华北降雨支撑现货，东北上量与外盘宽松压制反弹；9 月进口玉米 43 万吨（+663.6%）。</p></div>
+
+<div class="card"><h3>⑥ 持仓 / 席位 <span class="up">多 6 / 空 4</span></h3>
+<ul><li><span>总持仓</span><span>1,263,579（+21,487）</span></li>
+<li><span>成交量</span><span>744,240（+68.1%）</span></li>
+<li><span>量仓比</span><span>0.59</span></li>
+<li><span>主动买 / 主动卖</span><span>41.82 万 / 32.61 万</span></li>
+<li><span>前 20 席位明细</span><span>数据未获取</span></li></ul>
+<p class="note">增仓上行、主动买盘占 56.2%；尾盘 14:59 多笔空平，回补贡献部分涨幅。</p></div>
+</div>
+
+<h2>二、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>收 2,218 站上 MA5 2,196.8、MA10 2,194.4、MA20 2,187.2，短周期均线由压力转支撑；但 MA60 2,237.7 仍在头顶，中期均线尚未修复，属“短多中空”。</p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD DIF -9.9 / DEA -15.3，柱 +10.8（前值 +7.6），零轴下方金叉且红柱连续放大；RSI6 51.3、RSI14 60.2；KDJ 69.0/66.5/73.9，未进极端区；BOLL 上轨 2,219 正被贴合。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 744,240 手（+68.1%），持仓 +21,487 手至 1,263,579 手，量仓比 0.59；主动买 41.82 万手、主动卖 32.61 万手，买盘占 56.2%，增仓上行成立。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>2,184 在 10-21、10-22 两次探底不破，构成双底；今日光头阳线收于 2,218，突破 2,196~2,205 平台。</p>
+<p class="note">压力：2,219 / 2,227 / 2,237.7　支撑：2,196 / 2,184 / 2,155 / 2,141</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag tb">多 双底 2,184</span><span class="tag tb">多 MACD 红柱扩张</span><span class="tag tb">多 增仓 +21,487</span><span class="tag tb">多 站上 MA20</span><span class="tag ts">空 收盘贴上轨 2,219</span><span class="tag ts">空 MA60 2,237.7 压制</span><span class="tag ts">空 期货升水 48~73</span><span class="tag ts">空 仓单 +4,000 手</span><span class="tag tn">中 contango 近满仓储</span></div>
+<p class="note" style="margin-top:8px">技术面短周期偏多、中期偏空，强度评级：中偏强（仅限 2~3 日）。</p></div>
+
+<h2>三、持仓、资金与席位</h2>
+<div class="two">
+<div class="card"><h3>量仓价配合</h3>
+<table><tbody>
+<tr><td>收盘 / 结算</td><td class="num">2,218 / 2,203</td></tr>
+<tr><td>涨跌（对昨结算 2,190）</td><td class="num up">+28（+1.28%）</td></tr>
+<tr><td>成交量</td><td class="num">744,240（+68.1%）</td></tr>
+<tr><td>持仓量</td><td class="num">1,263,579（+21,487）</td></tr>
+<tr><td>量仓比</td><td class="num">0.59</td></tr>
+<tr><td>成交额</td><td class="num">约 164.0 亿元</td></tr>
+</tbody></table>
+<p class="note">价升、量增、仓增，资金主动进攻；但 0.59 的量仓比说明换手成分仍高。</p></div>
+<div class="card"><h3>资金结构与推断</h3>
+<p>主动买盘 41.82 万手、主动卖盘 32.61 万手，买盘占比 56.2%，日内买盘主导。尾盘 14:59 出现多笔“空平”推动价格收于 2,218，说明空头回补是收盘前的主要推力之一。</p>
+<p class="note" style="margin-top:8px">前 20 名席位明细 10-22 数据未获取，不以旧值代替；仓单/持仓 6.4%，产业卖保尚未形成压倒性优势。</p>
+<p class="note">第三方快讯对持仓口径存在 1,254,579 与 1,263,579 两种记录，本报告采用与“+21,487”自洽的 1,263,579。</p></div>
+</div>
+
+<h2>四、期限结构与基差</h2>
+<div class="card">
+<div class="term">
+<div class="tcol"><div class="tval">2,187</div><div class="tchg">基差 -17~-42</div><div class="tbar tbar2" style="height:37px"></div><div class="tname">C2611</div></div>
+<div class="tcol"><div class="tval">2,218</div><div class="tchg">主力</div><div class="tbar" style="height:68px"></div><div class="tname">C2701</div></div>
+<div class="tcol"><div class="tval">2,242</div><div class="tchg">+24</div><div class="tbar" style="height:92px"></div><div class="tname">C2703</div></div>
+<div class="tcol"><div class="tval">2,287</div><div class="tchg">+69（对 01）</div><div class="tbar" style="height:137px"></div><div class="tname">C2705</div></div>
+<div class="tcol"><div class="tval">2,304</div><div class="tchg">+17</div><div class="tbar" style="height:154px"></div><div class="tname">C2707</div></div>
+<div class="tcol"><div class="tval">2,320</div><div class="tchg">+16</div><div class="tbar" style="height:170px"></div><div class="tname">C2709</div></div>
+</div>
+<table style="margin-top:14px"><thead><tr><th>价差组合</th><th>数值</th><th>含义</th></tr></thead><tbody>
+<tr><td>11-01</td><td class="num">+31</td><td>近月贴水远月，11 月交割前现货无溢价</td></tr>
+<tr><td>01-03</td><td class="num">+24</td><td>正常 carry</td></tr>
+<tr><td>03-05</td><td class="num">+45</td><td>5 月合约升水最陡，对应东北后熟与备货</td></tr>
+<tr><td>05-07 / 07-09</td><td class="num">+17 / +16</td><td>远月平坦化</td></tr>
+<tr><td>01-05 / 01-09</td><td class="num">+69 / +102</td><td>4 个月 carry 约 69 元，接近满仓储成本</td></tr>
+</tbody></table>
+<p class="note" style="margin-top:10px">基差测算：北港 14.5% 水分干粮 2,140~2,150、生意社基准价 2,170，对 C2701 2,218 的基差为 -73 ~ -48 元/吨（期货升水 2.2%~3.4%）。contango 属“满仓储成本”结构，本身不构成额外看涨信号；但期货升水已给出卖保利润，是本次偏空裁决的核心估值依据。</p>
+<p class="src">来源：大商所日行情（2026-10-22 收盘）；北方粮网（10-22 现货）；生意社（10-22 基准价 2,170）。</p>
+</div>
+
+<h2>五、三轮多空辩论</h2>
+
+<div class="round-tag">ROUND 1 · 立论</div>
+<div class="debate">
+<div class="side bull"><h4>🐂 多头立论（金牛）</h4>
+<p>10 月 22 日的盘面给出的第一个信号，是“该跌不跌”。当天现货端几乎没有利好：锦州港 14.5% 水分干粮主流报价 2,140~2,150 元/吨，较前一日再落 5~10 元；东北黑吉深加工主流收购 2,000~2,200 元/吨，企业压价收粮的态度明确；CBOT 玉米连续下挫至两个半月低位。在这样的现货背景下，C2701 开盘 2,189、最低仅回踩 2,184，随后一路走高并以全日最高价 2,218 收盘，较昨结算 2,190 上涨 1.28%（对昨收 2,186 为 +1.46%），成交 744,240 手、较前一日 442,800 手放大 68.1%，持仓增加 21,487 手至 1,263,579 手。价格、成交量、持仓量三者同向上升，说明这不是单纯的减仓反弹，而是有增量资金在利空最密集的时候进场建多。农产品的底部往往不是在利好中出现，而是在“利空出尽”的那一根放量长阳里出现。</p>
+<p>技术形态支持这一判断。2,184 在 10 月 21 日与 22 日两次被触及而未破，构成日内级别的双底；收盘价一举收复 MA5 2,196.8、MA10 2,194.4、MA20 2,187.2，把 10 月中旬以来压制盘面的短周期均线由压力转为支撑。MACD 在零轴下方完成金叉后，红柱由前值 +7.6 扩张至 +10.8，DIF -9.9 与 DEA -15.3 的负向缺口快速收敛；RSI14 升至 60.2，处在强势区但未超买；KDJ 为 K69.0/D66.5/J73.9，J 值距离 90 以上的极端区仍有空间；ATR 23.4，今日 34 点振幅约合 1.45 倍 ATR，属于有效突破而非噪声。布林带中轨 2,187 已由下行转为走平，价格收在上轨 2,219 附近，是典型的“沿上轨运行”起步形态，而不是超买见顶形态。</p>
+<p>估值与政策提供了下方缓冲。北港 14 水折干价已落至 2,100~2,150 元/吨，黑龙江东部潮粮折干逼近种植端底线，继续下跌需要农户在成本线以下恐慌抛售，而这在 10 月下旬并不常见。政策端，中储粮 10 月 22 日粮油竞价安排为采购 95,532 吨、销售 80,622 吨，净采购方向明确；10 月 21 日地方储备玉米竞价采购计划 9.39 万吨、成交 5.02 万吨，成交率 54%，购销双向计划 1.46 万吨、成交 0.49 万吨；上周中储粮 16 场采购计划 15.99 万吨、成交 9.95 万吨、成交率 62.22%。轮换收购已经从“挂牌”进入“实际成交”，政策底由报价变成成交量，这对 2,100~2,150 的现货区间是实质性托底。</p>
+<p>天气与替代品给出了边际增量。华北黄淮连续秋雨，10 月 21 日山东深加工晨间到货仅 136 车，而此前动辄千车，物流阻断倒逼企业大范围提价，华北主流收购区间上移至 2,140~2,240 元/吨。小麦价格普涨后，玉麦价差自高位回落，部分饲料企业重新询价玉米，替代压力边际减弱。饲料企业库存 24.95 天、环比增加 0.83 天、同比增加 2.09%，看似偏高，但在新粮水分高、不宜久存的季节，25 天左右正是滚动补库的合理水平，一旦价格企稳，补库会从“随用随采”转向“小步快跑”。淀粉开机率回升至 58.79%、环比 +0.68 个百分点，淀粉库存 136.8 万吨、周环比下降 0.4 万吨，也说明深加工并未主动减产。</p>
+<p>季节性同样不站在空方一边。C2701 对应元旦、春节前的备货窗口，11 月东北上市峰值过后，农户惜售、储备收购扩围、下游节前备货三者容易共振；过去多年 C01 合约在 11 月至 12 月的重心普遍高于 10 月低点。关联层面，生猪 LH 当日下跌 2.13%、置信度仅 57%，说明市场对猪价的分歧极大；玉米领先生猪约 5~10 个交易日，若玉米先行走强，往往对应饲料企业提前备货，而不是需求崩塌。</p>
+<div class="concl">结论：2,184 双底与 2,218 放量长阳完成短期筑底的第一击，回踩 2,200~2,210 做多，目标 2,240（MA60 与平台下沿）→ 2,262，收盘跌破 2,184 止损。</div></div>
+
+<div class="side bear"><h4>🐻 空头立论（黑熊）</h4>
+<p>多头把“该跌不跌”当成强势，但在空头看来，这恰恰是期货脱离现货的升水扩张。10 月 22 日北港 14.5% 水分干粮主流 2,140~2,150 元/吨、15% 水分 2,120~2,130 元/吨，较前一日回落 5~10 元；生意社玉米基准价 2,170 元/吨；而 C2701 收于 2,218 元/吨，对北港现货升水 48~73 元/吨，升水率 2.2%~3.4%。连最接近交割的 C2611 也收在 2,187，高于可交割现货成本。对拥有烘干塔、仓库和交割资格的产业客户而言，这已经是“买现货、抛期货”的窗口：10 月 19 日仓单从 76,990 手跳增至 80,990 手（+4,000 手），增量集中在物产中大化工，说明卖保注册已经启动。期货升水越大，后续反弹越容易被套保盘压回。</p>
+<p>供给端的压力远未结束。东北三省新季玉米收割进度约 52%（黑龙江 55%、吉林 43%、辽宁 68%），11 月初黑龙江才基本收完；10 月 21 日黑龙江晨间到车 1,209 车，基层潮粮变现意愿强烈。更关键的是天气：22 日起东北大部转晴回暖，23~24 日出现抢收窗口，华北同步放晴。本周的反弹本质上是降雨“借”来的平静——雨一停、车一流，山东门前的到货量会从 136 车迅速回到千车级，深加工的提价难以维持。高水分玉米在气温未全面封冻前有霉变风险，地趴粮的集中抛售只是被推迟，不是被消除。</p>
+<p>库存数据是空头最硬的证据。北方四港玉米库存 187.1 万吨，周环比增加 19.7 万吨，当周下海量仅 23.7 万吨、环比减少 8.8 万吨，说明到货多于走货；锦州港港内加港外库存已达 100 万吨。广东港内贸玉米库存 28.4 万吨、周环比增加 14.9 万吨，南北即期发运持续倒挂，贸易商主动锁货意愿低。深加工企业库存 256.9 万吨、环比增加 13.3 万吨（+5.46%），华北增量最突出；饲料企业 24.95 天、同比高 2.09%。港口、深加工、饲料三个环节同时累库，这在季节性上通常对应价格的下跌段而非上涨段。</p>
+<p>需求端没有能力消化这批库存。淀粉行业开机率 58.79%、环比仅升 0.68 个百分点，吉林淀粉对冲副产品利润 -6 元/吨、山东 -19 元/吨，只有黑龙江 +37 元/吨，亏损状态下企业只会压价按需采购，不会主动建库。生猪养殖持续亏损，LH2701 当日再跌 2.13%，能繁去化预期强化，饲料配方中玉米占比下降；小麦、高粱、大麦等替代谷物库存充足，饲用替代的总量并未因小麦阶段性上涨而消失。饲料企业 24.95 天的库存已经覆盖到 11 月中旬，补库的边际增量有限。</p>
+<p>外盘与平衡表同样偏空。USDA 10 月报告把美玉米单产从 178.5 蒲/英亩上调至 181.2 蒲，产量升至 160.34 亿蒲（约 4.07 亿吨），期末库存升至 18.49 亿蒲（约 4,697 万吨），CBOT 玉米跌至两个半月低位。国内农业农村部 10 月平衡表预估 2026/27 年度产量 3.06 亿吨，因替代谷物挤压把饲用消费下调至 2.005 亿吨，年度结余由 9 月预测的 34 万吨转为 514 万吨——由紧平衡转为明显过剩。进口端，9 月玉米及玉米粉进口 43 万吨、同比增 663.6%，1~9 月累计 211 万吨，量在恢复。</p>
+<p>技术面也不支持“反转”。今日收盘 2,218 正好贴在布林上轨 2,219，2,227 是 20 日高点，MA60 2,237.7 仍在上方压着，中期均线系统没有修复；RSI6 仅 51.3，短周期动能并不强；持仓增加 2.1 万手，但成交 74.4 万手对应量仓比 0.59，换手特征明显，且尾盘 14:59 连续多笔“空平”推动价格收在高点——这是回补，不是新多进攻。10 月以来盘面多次在 2,200~2,220 冲高失败，本次是第一次收在 2,200 上方，但尚未突破 2,227。</p>
+<div class="concl">结论：2,228~2,242 是空头愿意分批介入的区域，第一目标 2,186，第二目标 2,165，收盘站上 2,256 止损。</div></div>
+</div>
+
+<div class="round-tag">ROUND 2 · 驳斥</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 多头驳斥</h4>
+<p>对方的核心论据是“期货升水 70 元”，但升水不等于高估。C2701 是 1 月合约，要承担 11 月至 1 月的仓储、资金与损耗，按玉米仓储费与 4% 左右的资金成本测算，这段合理持仓成本约 40~55 元/吨，加上北港到交割库的短驳、检验与水分升贴水，48~73 元的升水只是“合理 carry”，并没有留下无风险套利空间。C2611 高于可交割现货成本 17~42 元，也是同样道理。真正触发大规模卖保的，是升水覆盖全部成本后仍有剩余，目前还不具备。</p>
+<p>对方说仓单跳增 4,000 手是卖保启动，但 80,990 手折 80.99 万吨，仅相当于单边持仓的 6.4%，覆盖倍数 15.6 倍；且增量集中于单一主体，更像个体套保安排，而非行业性抛压。11 月合约交割后仓单集中注销，01 合约面对的是递减的仓单压力，用 11 月前的仓单增量推演 1 月合约，时间错配。</p>
+<p>库存高是事实，但要区分“静态高”与“边际变化”。北港下海量下降 8.8 万吨，是南北倒挂导致贸易流中断，不是需求消失；一旦华北降雨结束、优质粮源紧张，南方饲企会重新转向东北，港口库存去化会很快。深加工库存增加 13.3 万吨、其中华北增量为主，恰恰是降雨导致无法晾晒的被动累库，天气一转晴就会被消化。</p>
+<p>对方用 24.95 天库存论证“没有补库空间”，但同比只高 2.09%，且这是在价格下跌过程中形成的；25 天附近属于安全线，价格一旦确认底部，补库会带来额外需求。开机率连续两周回升、淀粉库存小幅下降 0.4 万吨，说明深加工并没有主动减产，需求并未塌方。</p>
+<p>技术面上，对方强调 MA60 与 2,227 的压力，却忽略了 2,184 双底、放量增仓、MACD 红柱连续扩张这三个更强的短周期信号。压力位本来就是用来被测试的，第一次测试受阻很正常，只要回踩不破 2,196，多头结构就成立。</p>
+<p>还有一个被对方忽略的时间差：10 月 22 日中储粮采购 95,532 吨、销售 80,622 吨，净采购 1.49 万吨，这是连续数周采购成交率维持在五成以上；政策买盘的价格通常对应北港折干成本 2,100~2,150。期货若跌回 2,150 以下，会直接与政策买盘竞争粮源，空头的下方空间并不像他描述的那么开阔。</p>
+<div class="concl">结论：回调 2,200~2,210 做多，止损 2,184，目标 2,240 → 2,262，赔率约 1.5~2.0，值得试错。</div></div>
+
+<div class="side bear"><h4>🐻 空头驳斥</h4>
+<p>对方说升水只是 carry，但 carry 只有在“现货能顺利交割、卖方有库容”时才成立。当前北港 100 万吨库存、烘干能力充足，交割库容并不紧张，卖保的摩擦成本很低；一旦盘面继续高于 2,230，注册仓单的边际收益会迅速上升。10 月 19 日单日 +4,000 手已经用行为证明了这一点，这不是“个体安排”四个字可以解释的。</p>
+<p>对方把仓单占比 6.4% 说成不高，但玉米单边持仓中有大量投机与套利头寸，真正可交割的卖方力量并不需要覆盖全部持仓。仓单的边际变化比存量更重要：从 76,990 到 80,990 只用了一个交易日，若按这个速度，两周内就可能突破 10 万手，届时盘面将被迫向下寻找承接。物产中大化工一次性注册 4,000 手、对应 4 万吨，正好是一船北港粮的规模；这类有库容、有船期的产业客户一旦开始滚动注册，仓单增速往往快于价格下跌的速度。</p>
+<p>对方说港口库存是“被动累库”，但被动累库同样是库存，且下海量下降 8.8 万吨意味着南方采购并没有承接；广东内贸库存一周增加 14.9 万吨，说明货已经到了销区却卖不动。库存不会因为形成原因不同而失去压制作用。相反，被动累库往往伴随贸易商亏损出货，杀价更坚决。</p>
+<p>对方用饲料 25 天库存论证补库空间，但同比 +2.09%、环比 +3.44% 正是“已经补过”的证据；在生猪亏损、能繁去化的背景下，饲料产量增速下行的方向没有改变。开机率回升是原料便宜带来的被动开机，不是需求好转，吉林、山东的负利润说明行业在用亏损换开工，这种开工不可持续。</p>
+<p>政策方面，对方把中储粮净采购当作底部，但 10 月 13 日黑龙江轮出成交率仅 23.09%，说明挂牌价并不能托住市场；10 月 21 日采购成交率 54%，也只说明卖方愿意在低位出货。3.06 亿吨产量面前，单日 9.55 万吨的采购量是杯水车薪，政策只能减缓下跌斜率，不能改变方向。</p>
+<p>技术面，对方强调双底，但 2,184 只是两日内的低点，20 日低点 2,141 才是真正的需求区；今天的阳线没有突破 2,227，且收在布林上轨，属于“用力过猛”的位置。10 月以来每次放量阳线之后都出现回落，这次需要至少两天的站稳来验证。</p>
+<div class="concl">结论：维持 2,228~2,242 沽空，跌破 2,196 加仓，目标 2,186/2,165，收盘站上 2,256 止损。</div></div>
+</div>
+
+<div class="round-tag">ROUND 3 · 终陈</div>
+<div class="debate round">
+<div class="side bull"><h4>🐂 多头终陈</h4>
+<p>三轮交锋后，多头承认三件事：现货确实弱、库存确实高、MA60 确实没破。但这三点都是“已知的慢变量”，而 10 月 22 日的盘面给出的是“未知的快变量”——在现货最弱、外盘最低、情绪最悲观的一天，C2701 用 74.4 万手成交、2.1 万手增仓收出光头阳线，收在 2,218 的日内最高。这种“利空出尽”的价格行为，在农产品上通常对应阶段底部的第一根确认 K 线。</p>
+<p>多头的路径假设是：23~24 日东北抢收带来一波回调，但回调在 2,196~2,205（MA5/MA10 与突破平台）获得支撑；随后华北优质粮源紧张、中储粮采购继续、饲料企业从 25 天库存启动小规模补库，价格在 11 月上旬测试 2,240 的 MA60，若突破则打开 2,262 的空间。即便只有 60% 的兑现度，从 2,205 到 2,240 也有 35 点空间。</p>
+<p>多头也明确错误边界：若 10 月 23~27 日收盘跌回 2,186 以下，说明 2,218 的长阳是诱多，双底失效，多头逻辑作废；若仓单在两周内增至 10 万手以上、或北港库存突破 210 万吨，则卖保压力足以压过政策托底。在这两个条件出现之前，多头愿意在 2,200~2,210 试错，风险 16~26 点，收益 30~52 点，赔率 1.5~2.0。</p>
+<p>还要提醒空头一个容易被忽略的变量：玉米领先生猪 5~10 个交易日。当前 LH 已跌至 9,860、创 20/60 日新低，而玉米却在同一天放量收高，二者的背离说明饲料端的悲观预期已经打得很满。若玉米继续走强，养殖端会提前锁定原料成本，反而给玉米带来新的买盘。</p>
+<p>从赔率上看，2,205 入场、2,184 止损是 21 点风险，2,240 是第一目标 35 点、2,262 是第二目标 57 点，即便只用半仓，风险收益比也在 1.7 以上；而空头在 2,228~2,242 入场、2,256 止损，风险 14~28 点，第一目标 2,186 只有 42~56 点，赔率并不比多头更优。在 56% 对 44% 的胜率差距下，赔率才是决定期望值的另一半。若 10-23 高开低走、收盘跌回 2,205 下方，多头会主动减仓，不会死扛。</p>
+<p>最后补充一个细节：今日 34 点振幅对应 1.45 倍 ATR，收盘没有任何回吐，这种“光头收最高”的 K 线在统计上对次日开盘有正向惯性；空头若在 2,228 以下提前埋伏，很容易被次日跳空高开扫掉止损。等它冲到 2,235 上方再空，至少能让止损放在一个有意义的价位上。</p>
+<div class="concl">一句话：多头不赌趋势反转，只赌 2,184 双底之上的第一段修复；2,205 附近进，2,240/2,262 出，2,184 认错。</div></div>
+
+<div class="side bear"><h4>🐻 空头终陈</h4>
+<p>空头同样承认三件事：今天的长阳是有效的、技术面短线转强、2,184 暂时守住。但空头认为，这三件事只改变了“节奏”，没有改变“方向”。交易上可以避其锋芒，但不能因为一根阳线就推翻供需。</p>
+<p>第一，供给曲线还在往上走。东北收割 52%，11 月初才收完；天气转晴后 23~24 日抢收，黑龙江晨间 1,209 车的到车量会转化为深加工门前的排队。10 月下旬到 11 月中旬是年内供给压力最大的四周，任何反弹都会遇到卖粮盘。今天的上涨发生在降雨阻断到货的窗口里，属于“供给暂时缺席”，而不是“供给消失”。</p>
+<p>第二，估值已经给出卖保利润。C2701 对北港现货升水 48~73 元，覆盖了持仓成本；仓单单日 +4,000 手是产业客户用行动投票。只要盘面维持在 2,220 以上，注册仓单的动力就会持续，反弹高度会被“仓单 + 套保”封住。这是空头最确定的一条逻辑，也是唯一不需要预测天气的逻辑。</p>
+<p>第三，需求端没有增量。淀粉亏损、生猪亏损、饲料库存 25 天、替代谷物充足，四个条件同时成立时，下游只会压价，不会追涨。今天现货不跟涨就是最好的证明——期货涨 28 元，北港反而跌 5~10 元，山东的提价是到货不足逼出来的，不是需求拉动。</p>
+<p>空头的路径假设是：23 日高开在 2,225~2,235，触及 2,227 的 20 日高点后回落，周内跌回 2,196 下方，下周测试 2,186，若破则看 2,165。若价格直接站上 2,256，说明有新的政策或天气变量介入，空头认错离场，不做无谓抵抗。</p>
+<p>从交易结构看，空头的止损 2,256 距离第二批入场 2,242 只有 14 点、距离第一批 2,232 也只有 24 点，而第一目标 2,186 对应 46~56 点，赔率约 2:1；即便胜率只有 56%，期望值依然为正。反过来，多头在 2,205 入场、2,184 止损，风险 21 点，若只看到 2,240，收益 35 点，赔率 1.7，并不占优。最后提醒一句：10 月 22 日增加的 2.1 万手持仓中，包含大量卖出套保，这部分头寸不会因为一根阳线而离场，反而会在 2,230 上方继续加码。</p>
+<div class="concl">一句话：这不是反转，是下跌趋势中第二次给空头的上车机会；2,228~2,242 分批空，2,186/2,165 止盈，2,256 认错。</div></div>
+</div>
+
+<h2>六、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分（10 分制，分数越高越有利于该方向）</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>多方强度</th></tr></thead><tbody>
+<tr><td>库存 / 供需</td><td class="up">3 / 10</td><td class="down">7 / 10</td><td><div class="bar"><i style="width:30%"></i></div></td></tr>
+<tr><td>仓单 / 交割</td><td class="up">4 / 10</td><td class="down">6 / 10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>期限结构 / 基差</td><td class="up">3 / 10</td><td class="down">7 / 10</td><td><div class="bar"><i style="width:30%"></i></div></td></tr>
+<tr><td>技术面</td><td class="up">7 / 10</td><td class="down">3 / 10</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>基本面 / 政策</td><td class="up">4 / 10</td><td class="down">6 / 10</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>持仓 / 资金</td><td class="up">6 / 10</td><td class="down">4 / 10</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+</tbody></table>
+
+<p style="margin-top:14px;font-size:12.7px;color:#c3d2e2;text-align:justify">
+裁决结论：<b class="gold">方向偏空，但性质是“反弹沽空”而非“追空”；置信度 56%，低于 60% 的可用阈值，属于“可参与、须轻仓”的级别。</b><br><br>
+多空记分是 27 : 33，空方仅领先 6 分，远不是一边倒。多头赢在技术面（7:3）、资金面（6:4）与政策边际；空头赢在库存（7:3）、基差估值（7:3）与供需节奏。之所以最终仍偏向空方，是因为空头的三条论据都具备“可验证、可量化、不依赖预测”的特征：其一，C2701 对北港现货升水 48~73 元/吨，已覆盖 11 月至 1 月的持仓成本，产业客户卖出套保即可锁定利润，10 月 19 日仓单单日增加 4,000 手至 80,990 手，是行为层面的确认；其二，供给峰值的时间表尚未走完，东北收割 52%、11 月初才结束，且 23~24 日天气转晴后将出现抢收窗口，本周反弹建立在“降雨阻断到货”的临时条件上；其三，10 月 22 日出现最关键的背离——期货涨 28 元、北港现货反跌 5~10 元、山东 136 车的到货是物流阻断而非需求扩张，上涨由盘面资金与空头回补驱动，缺少产业买盘承接。<br><br>
+但为什么不给更高置信度、也不建议追空？第一，技术面确实完成了短线转向：2,184 双底、收复 MA5/10/20、MACD 零轴下金叉且红柱由 +7.6 扩张至 +10.8、增仓 2.1 万手，次日惯性上冲的概率不低，追空容易买在低点；第二，中储粮 10 月 22 日净采购 1.49 万吨（采购 95,532 吨、销售 80,622 吨），10 月 21 日采购成交率 54%、上周 62.22%，政策托底是真实存在的；第三，价格自 2,141 已反弹 3.6%，14 水折干 2,100~2,150 接近种植成本，下方空间被压缩；第四，生猪 LH 置信度仅 57%，关联强度 0.75 的传导本身不稳定，不宜把关联信号当作独立驱动；第五，单日长阳之后 2~3 日的方向不确定性最高，56% 的置信度已经反映了这一点。<br><br>
+权重上，本裁决给库存与基差估值各 25%、技术面 20%、政策 15%、仓单与资金各 7.5%。若把技术权重提高到 35%，结论会翻成短线偏多——这也解释了为什么今天不少模型给出多头信号。决策官选择不翻多，是因为技术信号的有效期通常只有 2~3 个交易日，而库存与基差的压制要持续到 11 月中旬，两者的时间维度并不匹配；用短周期信号去覆盖中周期矛盾，是这类报告最容易犯的错误。<br><br>
+后续验证清单有五项：① 10-23 锦州港 15% 水分收购价能否守住 2,120 元/吨；② 山东晨间到车是否回到 600 车以上；③ 北港四港库存是否突破 200 万吨；④ 仓单能否在两周内突破 9 万手；⑤ 中储粮采购成交率能否维持 50% 以上。五项中若有三项偏空，维持原判；若有三项偏多，提前离场，不等止损。<br><br>
+参数上，入场设在 2,228~2,242 分两批（2,228~2,232 为第一批，2,238~2,242 为第二批），恰好覆盖 20 日高点 2,227 与布林上轨上方的“过度反应区”；若 10-23 开盘直接跳空至 2,250 以上，则放弃当日沽空，等待回落至 2,230 下方重新评估。第一目标 2,186（10-21 收盘与突破平台），第二目标 2,165（成本区上沿、10 月低点 2,141 上方），止损为“收盘站上 2,256”，对应第二批入场约 14 点、第一批约 28 点，单笔风险控制在权益的 1% 以内，仓位不超过 20%。持有窗口 2~5 个交易日，最长不超过 10-29；若 10-27 收盘仍未跌破 2,205，减半仓，把剩余仓位止损下移至 2,242。备选方案：若放量收盘站上 2,256，空单离场，转为 2,240~2,280 区间震荡思路，不追多。
+</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">偏空 · 反弹沽空<br>多方 44% / 空方 56%</div></div>
+<div><div class="lbl">置信度 / 触发窗口</div><div class="val">56%<br>2~5 个交易日（10-23 ~ 10-29）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">2,228~2,242 分批沽空<br>2,186 → 2,165<br>收盘站上 2,256</div></div>
+</div>
+
+<div class="plan">
+<div class="p"><h5>核心逻辑 · 三条</h5>
+<p>① <b>估值约束</b>：C2701 对北港现货升水 48~73 元/吨，覆盖 11 月至 1 月持仓成本，卖保窗口打开；仓单自 76,990 手增至 80,990 手（+4,000），产业客户已用行动投票。<br>
+② <b>供给未竟</b>：东北收割仅 52%，11 月初才结束；23~24 日转晴抢收，黑龙江晨间 1,209 车待释放；北港四港 187.1 万吨（+19.7）、锦州港 100 万吨，库存压制反弹高度。<br>
+③ <b>现货背离</b>：10-22 期货 +28 元而北港现货 -5~-10 元，山东 136 车到货是降雨阻断而非需求；淀粉亏损（吉林 -6、山东 -19）、生猪亏损、饲料 24.95 天库存，下游无追涨能力。</p></div>
+<div class="p"><h5>风险提示</h5>
+<p>· 中储粮扩大收购库点或提高挂牌价，政策托底升级；<br>
+· 东北提前封冻、农户惜售，潮粮卖压后移至 11 月下旬；<br>
+· 华北小麦继续大涨，带动谷物重心上移、替代回流；<br>
+· CBOT 空头回补或南美天气炒作，外盘反弹；<br>
+· 仓单注册不及预期，卖保压力证伪；<br>
+· 生猪超预期反弹带动饲料补库。<br>
+<b>应对</b>：收盘站上 2,256 无条件离场；单笔风险 ≤1% 权益，仓位 ≤20%。</p></div>
+</div>
+
+<div class="note" style="margin-top:14px"><b class="gold">关联说明</b>　本报告为“关联品种分析”：原品种生猪 LH 2026-10-22 裁决置信度 57%，低于 60% 阈值，故触发以玉米 C 作为关联品种补充分析。玉米是生猪核心饲料原料（约占配合饲料成本 60%），关联强度 0.75，玉米价格领先生猪约 5~10 个交易日。二者当日出现背离（LH -2.13%、C +1.28%），本报告据此判断饲料端悲观预期已充分计入，但玉米自身仍受新作上市压制，故维持“反弹沽空”。</div>
+</div>
+
+<div class="foot">
+<b>数据来源</b>：行情与技术指标——新浪财经期货日 K（倚天财经，2026-10-22 15:00 收盘）；现货与港口——北方粮网（2026-10-22）、生意社（2026-10-22 基准价 2,170 元/吨）；库存、开机率、利润——Mysteel／钢联数据（经华泰期货 2026-10-19、广发期货 2026-10-19 周报转引）；收割进度——华龙期货 2026-10-19 周报、行业调研（东北三省约 52%）；政策与拍卖——中储粮网 2026-10-22 竞价公告汇总、格林期货 2026-10-22；仓单——大商所仓单日报（经第三方汇总，最近可核实日 2026-10-19）；平衡表——农业农村部 CASDE 2026 年 9 月、USDA 2026 年 10 月供需报告；机构观点——华泰期货、广发期货、华龙期货、创元期货、格林期货、国信期货公开日评／周报。<br>
+<b>数据缺口</b>：10-22 前 20 名席位明细、10-22 单日仓单明细、东北“售粮进度”百分比、10 月进口玉米拍卖场次与成交——均为“数据未获取”，文中未以旧值替代或推算。商业终端（iFinD）未获授权，本报告未使用其数据；技术指标基于日线收盘价计算，样本与参数不同可能存在偏差。<br><br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。
+</div></div></body></html>

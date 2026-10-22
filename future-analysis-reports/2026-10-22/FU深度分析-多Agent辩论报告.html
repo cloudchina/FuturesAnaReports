@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>燃料油FU深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.bar2{display:flex;height:7px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar2 .b{display:block;height:100%;background:linear-gradient(90deg,#ff5d5d,#ff8a4c)}
+.bar2 .s{display:block;height:100%;background:linear-gradient(90deg,#20c997,#1a9e78)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:238px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px;text-align:center}
+.tdsc{font-size:10.5px;color:#7f92a6;margin-top:2px;text-align:center}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.side p{font-size:12.7px;color:#bfcede;margin:8px 0}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.sc{font-size:11px;color:#9fb0c3;font-weight:400}
+.kv{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.kv div{background:#0d151e;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.kv .k{font-size:11px;color:var(--sub)}
+.kv .v{font-size:14px;color:var(--gold);margin-top:2px}
+.spread{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.spread div{background:#0d151e;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.spread .k{font-size:11px;color:var(--sub)}
+.spread .v{font-size:14px;color:#ff8f8f;margin-top:2px}
+.review{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.warn{background:rgba(232,180,90,.06);border:1px solid rgba(232,180,90,.32);border-left:4px solid var(--gold);
+border-radius:9px;padding:13px 15px;margin-top:14px}
+.warn h4{font-size:13.5px;color:var(--gold);margin-bottom:6px}
+.warn p{font-size:12.5px;color:#c8d6e6;margin:4px 0}
+.src{display:block;font-size:10.5px;color:#6f8296;margin-top:7px;line-height:1.5}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.box{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:12px 14px}
+.box h4{font-size:13px;color:var(--gold);margin-bottom:6px}
+.box p{font-size:12.3px;color:#b9c8da}
+.seat td,.seat th{padding:6px 8px;font-size:12.3px}
+.pos{color:#ff8f8f}.neg{color:#5fe0b8}
+.mono{font-variant-numeric:tabular-nums}
+.fund td,.fund th{padding:7px 8px;font-size:12.2px;vertical-align:top}
+.fund td:nth-child(1){color:var(--gold);white-space:nowrap}
+.fund td:nth-child(3){color:#8093a8;font-size:11.3px}
+@media(max-width:900px){.grid6,.quad,.two,.debate,.kv,.spread,.review,.mini{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}
+.term{gap:6px;height:200px}.tbar{width:34px}}
+</style></head><body><div class="wrap">
+<div class="hd"><div><h1>燃料油 <span>FU · FU2701（主力）</span></h1>
+<div class="note">上海期货交易所　|　报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23</div>
+<div class="note" style="color:#9fb0c3">标的：FU2701 为持仓量最大合约（240,578 手）；FU2611 仅作近月结构与交割博弈参照，不作为方向标的。</div></div>
+<div class="meta"><div>收盘价（FU2701）</div><div class="px up">4,911</div>
+<div class="up">+115（+2.40%，对昨结算 4,796）　高 4,973 / 低 4,669</div>
+<div>持仓 240,578（+12,790）　成交 689,827　结算 4,812</div>
+<div style="font-size:11.5px;color:#6f8296">对昨收 4,815 为 +96（+1.99%）　成交额 332.0 亿元</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">偏多（回踩做多，不追跳空）</div>
+<div class="note">胜率评估：多方 62% / 空方 38%　|　预期窗口：1~3 个交易日</div>
+<div class="note" style="color:#9fb0c3">关联品种分析：由 BU 低置信度（56%）触发 · BU-FU 关联强度 0.8</div>
+<div class="note" style="color:#9fb0c3">前日复盘：10-20 多单于 10-21 大跌中击穿止损离场；10-22 反弹 +2.40%、增仓 1.28 万手。</div></div>
+<div class="conf"><div class="ring" style="--p:62"><b>62%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">六维加权 6.40 / 10<br>信号共振 4 / 6，事件驱动折扣</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：回踩 4,860~4,930 分批做多</div>
+<div style="font-size:13px">目标：5,120 → 5,280</div><div style="font-size:13px">止损：收盘跌破 4,700</div></div>
+</div>
+
+<h2>一、复盘与关联品种说明</h2>
+<div class="review">
+<div class="card"><h3>10-20 持仓</h3><p>FU 多单（方向偏多）。具体入场与止损参数未在本次委托中给出，按纪律于 10-21 击穿止损后离场。</p></div>
+<div class="card"><h3>10-21 实际</h3><p>开 4,951、高 5,013、低 4,578、收 4,815（日内 -3.23%）；自高点回落 435 点（-8.68%），单日振幅 8.74%，止损被击穿。</p></div>
+<div class="card"><h3>结果拆解</h3><p>方向判断被单日反转否定；止损离场本身正确——10-21 自 5,013 直落 4,578，任何 5,000 上方的多单浮亏都超过 8%。亏损可控，但入场位置偏高。</p></div>
+<div class="card"><h3>复盘评分</h3><p>方向 0/1；风控 1/1；位置 0.5/1；合计 1.5/3。核心教训：在 ATR 近 300 的品种上，顺势追高的容错极低。</p></div>
+</div>
+
+<div class="warn">
+<h4>关联品种分析为什么选 FU：BU 置信度 56%（&lt;60%）触发</h4>
+<p>本日沥青 BU 的结论为"震荡偏多、置信度 56%"，未达到 60% 的可用阈值。BU 与 FU 同属原油产业链，关联强度 0.8（高相关），但两者的矛盾结构不同：BU 是"低库存 vs 需求淡季"，方向偏多却缺乏催化；FU 是"近月挤仓 + 成本脉冲 vs 远月淡季"，短期信号更锐利。按关联品种规则，在 BU 置信不足时转向关联度最高的 FU 寻找更清晰的表达工具。</p>
+<p>需要说清的是，FU 的弹性大于 BU（ATR 294.6 对 185.4，日内波动约 6.0% 对 4.1%），这意味着同样的方向判断，FU 的止损更宽、仓位必须更轻。关联分析不是"换个品种把亏损赚回来"，而是"换一个定价更清晰的标的表达同一个产业链逻辑"，仓位应低于 BU 方案，且必须接受 10-30 交割后月差坍塌的尾部风险。</p>
+</div>
+
+<h2>二、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>多 4 / 空 6</span></h3>
+<p>新加坡残渣燃料油 <b>1,885.8 万桶</b>（10-21 当周，环比 <b>+81.5 万桶 / +4.5%</b>），结束连续 6 周去库；前值 1,804.3 万桶为 9 周低点。全球高硫浮仓 418.3 万吨（周 -0.7%）、泛新加坡高硫 136.2 万吨（-11.3%）仍在去化。</p>
+<div class="bar2"><i class="b" style="width:40%"></i><i class="s" style="width:60%"></i></div>
+<span class="src">来源：新加坡企业发展局（ESG），经汇通网 2026-10-22 16:02 转引；全球/泛新加坡浮仓见浙商期货 2026-10-19 周报。</span></div>
+
+<div class="card"><h3>② 仓单 <span>多 8 / 空 2</span></h3>
+<p>上期所 FU 仓单 10-16 一度降至 <b>0</b>，10-19 回升至 <b>约 4 万吨</b>（折 4,000 手）；10-22 日度公布值再度显示 0（第三方转引口径存疑，未获交易所日报确认）。对照 FU2611 持仓约 4.1 万手（约 41 万吨），覆盖率不足 <b>10%</b>。</p>
+<div class="bar2"><i class="b" style="width:80%"></i><i class="s" style="width:20%"></i></div>
+<span class="src">来源：期货日报/华联期货 2026-10-22（"上周五降至 0、本周一回升至 4 万吨"）；金投网 2026-10-22 仓单日度页。</span></div>
+
+<div class="card"><h3>③ 期限结构 <span>多 8 / 空 2</span></h3>
+<p>2611 5,868 / 2612 5,234 / 2701 4,911 / 2702 4,703 / 2703 4,527 / 2704 4,360 / 2705 4,235，逐月递减。<b>2611-2701 升水 957 元（19.49%）</b>，2612-2701 升水 323 元（6.58%），深度 backwardation。</p>
+<div class="bar2"><i class="b" style="width:80%"></i><i class="s" style="width:20%"></i></div>
+<span class="src">来源：新浪财经期货日K（倚天财经，2026-10-22 15:00 收盘）；七个合约同源。</span></div>
+
+<div class="card"><h3>④ 技术面 <span>多 6 / 空 4</span></h3>
+<p>MA5 4,887.6 / MA10 4,823.8 / MA20 4,608.1 / MA60 4,037.6，多头排列；MACD 柱 -1.0（前 +6.6）刚死叉；RSI6 61.8、RSI14 62.3；KDJ 63.8/59.7/71.8；BOLL 上轨 5,233 / 中轨 4,608 / 下轨 3,983；ATR 294.6（约 6.0%）。</p>
+<div class="bar2"><i class="b" style="width:60%"></i><i class="s" style="width:40%"></i></div>
+<span class="src">来源：基于 FU2701 日K（新浪财经/倚天财经）计算；20 日高 5,223、低 4,057，近 20 日 +9.43%。</span></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span>多 6 / 空 4</span></h3>
+<p>中东+俄罗斯高硫供应月度减量约 180 万吨；俄萨拉托夫+梁赞合计 54 万桶/日受袭；10 月俄出口 221.7 万吨、中东 147.9 万吨。S380 裂解修复至 <b>12.03 美元/桶</b>。中东/南亚发电进入淡季。</p>
+<div class="bar2"><i class="b" style="width:60%"></i><i class="s" style="width:40%"></i></div>
+<span class="src">来源：浙商期货 2026-10-19；维多集团评估经华联期货/期货日报 2026-10-22 转引；一德期货 2026-10-08 四季报。</span></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span>多 7 / 空 3</span></h3>
+<p>总持仓 240,578（<b>+12,790</b>）；前 10 多单 124,313（+7,646）、空单 108,347（+7,131），净多 <b>15,966 手</b>（+515）。多空同步增仓、多头略强，属分歧放大中的增仓上行。</p>
+<div class="bar2"><i class="b" style="width:70%"></i><i class="s" style="width:30%"></i></div>
+<span class="src">来源：新浪财经 FU2701 持仓龙虎榜（上期所会员数据，2026-10-22）；前 20 名明细未获取，此处为前 10 名口径。</span></div>
+</div>
+
+<h2>三、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>收 4,911，站上 MA5 4,887.6（+0.48%）、MA10 4,823.8（+1.81%）、MA20 4,608.1（+6.58%）、MA60 4,037.6（+21.6%），四线多头排列且 MA20/MA60 向上。10-21 低点 4,578、10-22 低点 4,669，低点抬高 91 点，短线上升结构成立。<b>强度：中偏强。</b></p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD DIF 226.6 / DEA 227.1 / 柱 -1.0（前 +6.6），零轴上方刚死叉；RSI6 61.8、RSI14 62.3，偏强未超买；KDJ 63.8 / 59.7 / 71.8，K&gt;D 且 J 未极端；BOLL 上轨 5,233 / 中轨 4,608 / 下轨 3,983，带宽 27.1%，为极端波动状态。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 689,827 手、持仓 240,578 手（+12,790，+5.6%），换手率 2.87 倍，呈"价涨仓增"。前 10 多单 +7,646、空单 +7,131，多头增量略大于空头，属新资金进场而非单纯回补；但双方同步加仓，说明分歧在放大，不是一致看多。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>10-22 开 4,700、低 4,669、高 4,973、收 4,911：实体 211 点、下影 31 点、上影 62 点，中阳线；收盘位于全日振幅 80% 分位。20 日区间 4,057~5,223，当前 73.2% 分位。<b>支撑 4,823 / 4,669 / 4,608；压力 4,973 / 5,013 / 5,223。</b></p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振 <span class="sc">信号 6 多 / 5 空 / 2 中性</span></h3>
+<div><span class="tag tb">多 均线多头排列</span><span class="tag tb">多 增仓上行</span><span class="tag tb">多 低点抬高</span><span class="tag tb">多 站上 MA5</span><span class="tag tb">多 收盘近高位</span><span class="tag tb">多 RSI 未超买</span><span class="tag ts">空 MACD 刚死叉</span><span class="tag ts">空 未收复 10-21 开盘 4,951</span><span class="tag ts">空 5,000~5,013 密集压力</span><span class="tag ts">空 ATR 6% 波动极端</span><span class="tag ts">空 20 日高 5,223 未破</span><span class="tag tn">中 KDJ 高位</span><span class="tag tn">中 持仓分歧放大</span></div>
+<p class="note">技术面偏多但未确认：均线与量价支持继续反弹，MACD 与上方套牢区压制高度。需 10-23 站稳 4,973 并增仓，才能打开 5,120 空间。强度评级：中。</p></div>
+
+<h2>四、持仓席位面板</h2>
+<div class="two">
+<div class="card"><h3>多头前 10（FU2701，10-22）</h3>
+<table class="seat"><thead><tr><th>席位</th><th>多单</th><th>增减</th></tr></thead><tbody>
+<tr><td>中信期货</td><td class="mono">29,952</td><td class="pos">+1,434</td></tr>
+<tr><td>国泰君安</td><td class="mono">24,178</td><td class="pos">+1,608</td></tr>
+<tr><td>银河期货</td><td class="mono">15,687</td><td class="pos">+754</td></tr>
+<tr><td>东证期货</td><td class="mono">13,521</td><td class="pos">+1,214</td></tr>
+<tr><td>华泰期货</td><td class="mono">8,347</td><td class="pos">+279</td></tr>
+<tr><td>永安期货</td><td class="mono">7,804</td><td class="pos">+1,351</td></tr>
+<tr><td>中金财富</td><td class="mono">6,521</td><td class="pos">+397</td></tr>
+<tr><td>浙商期货</td><td class="mono">6,474</td><td class="pos">+282</td></tr>
+<tr><td>中信建投</td><td class="mono">6,456</td><td class="neg">-912</td></tr>
+<tr><td>高盛期货</td><td class="mono">5,373</td><td class="pos">+1,239</td></tr>
+<tr><td><b>前 10 合计</b></td><td class="mono"><b>124,313</b></td><td class="pos"><b>+7,646</b></td></tr>
+</tbody></table></div>
+<div class="card"><h3>空头前 10（FU2701，10-22）</h3>
+<table class="seat"><thead><tr><th>席位</th><th>空单</th><th>增减</th></tr></thead><tbody>
+<tr><td>国泰君安</td><td class="mono">27,198</td><td class="pos">+630</td></tr>
+<tr><td>东证期货</td><td class="mono">17,363</td><td class="pos">+2,481</td></tr>
+<tr><td>中信期货</td><td class="mono">14,369</td><td class="neg">-421</td></tr>
+<tr><td>永安期货</td><td class="mono">10,072</td><td class="pos">+633</td></tr>
+<tr><td>华泰期货</td><td class="mono">8,637</td><td class="pos">+1,976</td></tr>
+<tr><td>广发期货</td><td class="mono">8,528</td><td class="pos">+281</td></tr>
+<tr><td>银河期货</td><td class="mono">5,908</td><td class="pos">+54</td></tr>
+<tr><td>中信建投</td><td class="mono">5,606</td><td class="pos">+254</td></tr>
+<tr><td>东方财富</td><td class="mono">5,361</td><td class="pos">+625</td></tr>
+<tr><td>国联期货</td><td class="mono">5,305</td><td class="pos">+618</td></tr>
+<tr><td><b>前 10 合计</b></td><td class="mono"><b>108,347</b></td><td class="pos"><b>+7,131</b></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="mini">
+<div class="box"><h4>净多结构与集中度</h4>
+<p>前 10 净多 15,966 手（+515），仅占总持仓 6.6%。中信 15,583、国泰君安 -3,020、银河 9,779、东证 -3,842、永安 -2,268、华泰 -290。多头集中在中信、国泰君安、银河三家，空头则分布在国泰君安、东证、中信、永安。东证单日空单 +2,481，是本日最明显的空头增量。</p></div>
+<div class="box"><h4>持仓量变化解读</h4>
+<p>总持仓 240,578（+12,790，+5.6%），价格 +2.40%，定性为<b>增仓上行</b>。但多空前 10 同步加仓（+7,646 / +7,131），净多只增加 515 手，说明这不是单边逼空，而是分歧放大。真正的多头确认信号是：价格站稳 4,973 后持仓继续增加、且净多突破 2 万手。</p></div>
+</div>
+<p class="note"><b class="gold">席位研判：</b>资金面"偏多但不厚"。多头增量略胜空头，净多占持仓仅 6.6%，且空头在东证、华泰两家加仓近 4,500 手，说明 5,000 上方已有产业与机构在做卖出套保/投机空。评级：中性偏多，强度中偏弱。席位连续多日变化数据未获取，上述结论仅基于 10-22 单日榜。</p>
+
+<h2>五、期限结构与交割博弈</h2>
+<div class="card"><div class="term">
+<div class="tcol"><div class="tval">5,868</div><div class="tbar" style="height:165px"></div><div class="tname">FU2611</div><div class="tdsc">+3.06%</div></div>
+<div class="tcol"><div class="tval">5,234</div><div class="tbar" style="height:114px"></div><div class="tname">FU2612</div><div class="tdsc">+3.07%</div></div>
+<div class="tcol"><div class="tval">4,911</div><div class="tbar" style="height:88px"></div><div class="tname"><b class="gold">FU2701</b></div><div class="tdsc">主力 · +2.40%</div></div>
+<div class="tcol"><div class="tval">4,703</div><div class="tbar" style="height:71px"></div><div class="tname">FU2702</div><div class="tdsc">+2.37%</div></div>
+<div class="tcol"><div class="tval">4,527</div><div class="tbar" style="height:57px"></div><div class="tname">FU2703</div><div class="tdsc">+2.72%</div></div>
+<div class="tcol"><div class="tval">4,360</div><div class="tbar" style="height:44px"></div><div class="tname">FU2704</div><div class="tdsc">+2.52%</div></div>
+<div class="tcol"><div class="tval">4,235</div><div class="tbar" style="height:34px"></div><div class="tname">FU2705</div><div class="tdsc">+2.67%</div></div>
+</div>
+<div class="kv">
+<div><div class="k">2611 - 2701</div><div class="v">+957（19.49%）</div></div>
+<div><div class="k">2611 - 2612</div><div class="v">+634（12.11%）</div></div>
+<div><div class="k">2612 - 2701</div><div class="v">+323（6.58%）</div></div>
+<div><div class="k">2701 - 2705</div><div class="v">+676（15.96%）</div></div>
+</div>
+<p class="note">七个合约全线上涨且近月领涨（2611 +3.06%、2612 +3.07% 高于 2701 +2.40%），曲线当日进一步走陡，近端紧张在加强。2611 最后交易日为 2026-10-30，仅剩 6 个交易日；其持仓约 4.1 万手（约 41 万吨），而确认口径的仓单仅约 4 万吨，理论覆盖率不足 10%。</p>
+<span class="src">来源：新浪财经期货日K（倚天财经，2026-10-22 15:00）；上期所合约参数（FU2611 到期日 2026-10-30）；仓单见期货日报/华联期货 2026-10-22。</span>
+</div>
+
+<div class="warn">
+<h4>结构提示：2611 升水是"交割博弈"，不能直接外推为 2701 的趋势</h4>
+<p>2611 收 5,868，对 2701 升水 957 元（19.49%），1 吨近月比远月贵近两成。这个价差由三件事支撑：仓单一度归零、可交割保税货源稀缺、10-30 前必须了结的持仓仍有 4.1 万手。它是真实的，但它是"到期权"——10-30 之后，这个升水就失去载体。</p>
+<p>对 2701 而言，真正有意义的不是 957 元的绝对水平，而是曲线形态：全曲线 backwardation 意味着空头持有远月要承担月差成本，这对多头有利；但 2701 定价的是 2026 年 12 月至 2027 年 1 月的供需，届时俄罗斯炼厂可能修复、中东发电处于淡季、新加坡库存可能已回补。因此本报告把 2611 的强势当作"短期情绪与近端紧张的证据"，而不是"2701 的目标位"。这也是把方向定为"偏多、但不追高、目标 5,120/5,280 而非 5,868"的原因。</p>
+<p>交易所的动作值得重视：自 10-13 起，FU2611、FU2612、FU2701 日内开仓上限 1,500 手；FU2611 涨跌停板 20%、一般持仓保证金 22%。限仓与提保通常出现在交易所判断"近月存在过度投机"之时，它既证明紧张是真的，也意味着流动性与持仓上限会限制多头合力，且不排除进一步加码风控。</p>
+</div>
+
+<h2>六、基本面核查（逐项来源）</h2>
+<div class="card">
+<table class="fund"><thead><tr><th>项目</th><th>最新数据与变化</th><th>来源与时点</th></tr></thead><tbody>
+<tr><td>新加坡高硫库存</td><td>残渣燃料油 1,885.8 万桶，环比 +81.5 万桶（+4.5%），结束 6 连降；前值 1,804.3 万桶为 9 周低点，同比 -28%。当周进口 +75%、出口增至 3 倍以上。</td><td>新加坡企业发展局（ESG），经汇通网 2026-10-22 16:02 转引；前值见 ESG 2026-10-15。</td></tr>
+<tr><td>高硫裂解价差</td><td>新加坡 380 裂解 10-16 报 12.03 美元/桶，较 9-24 的 -0.09 美元/桶修复 12.1 美元；估值分由 3.4 升至 4.5/10，已脱离区间下沿。</td><td>浙商期货《高硫裂解估值快速回升》2026-10-19。</td></tr>
+<tr><td>全球/区域浮仓</td><td>全球高硫浮仓 418.3 万吨（周 -0.7%）；泛新加坡高硫 136.2 万吨（-11.3%），仍在去化。</td><td>浙商期货 2026-10-19（Kpler 口径）。</td></tr>
+<tr><td>上期所 FU 仓单</td><td>10-16 降至 0；10-19 回升至约 4 万吨（4,000 手）；10-22 第三方日度页显示 0，口径存疑，待交易所仓单日报确认。</td><td>期货日报/华联期货 2026-10-22；金投网 2026-10-22；上期所仓单日报（10-22 明细未获取）。</td></tr>
+<tr><td>俄罗斯炼厂与出口</td><td>10-14 萨拉托夫（约 14 万桶/日）与梁赞（约 40 万桶/日）再遭无人机袭击，合计 54 万桶/日受影响；10 月俄燃料油出口 221.7 万吨。维多评估俄缺口约 100 万吨/月。</td><td>浙商期货 2026-10-19；维多集团评估经华联期货/期货日报 2026-10-22 转引。</td></tr>
+<tr><td>中东供应与发电</td><td>10 月中东燃料油出口 147.9 万吨，处低位；中东+俄罗斯合计月度减量约 180 万吨，全球高硫较正常水平每月少至少 80 万吨。中东/南亚发电需求随气温下降季节性走弱。</td><td>浙商期货 2026-10-19；华联期货 2026-10-22；一德期货 2026-10-08。</td></tr>
+<tr><td>船燃需求 / 运价</td><td>新加坡 9 月高硫船燃销量 199.3 万吨（同比 +4.0%），占比 42.2%；中国 10 月高硫进口 61.1 万吨（9 月全月 13.7 万吨）；BDI 2,680（10-21，+3.36%，同比 +28%）；CCFI 1,922.64（10-16，+0.5%）。舟山加注量数据未获取。</td><td>浙商期货 2026-10-19；东方财富 BDI 数据；上海航运交易所 CCFI 2026-10-16。</td></tr>
+<tr><td>原油成本端</td><td>SC 主力 10-22 收 713.4 元/桶；国内收盘后布伦特 112.49 美元（+3.37%）、WTI 100.01 美元（+2.95%）。触发：伊朗革命卫队霍尔木兹表态、沙特谢巴油田遇袭、美撤驻沙使馆部分人员。</td><td>任务给定行情（SC）；财联社/证券时报/中国基金报 2026-10-22。</td></tr>
+<tr><td>机构观点</td><td>华泰：高硫中性，强 Back 已定价，关注地缘与边际转向；浙商：裂解修复到位，追多性价比下降，不建议做空裂解；华联：供应偏紧暂难扭转，以短线思路为主；一德：四季度低硫强于高硫。</td><td>华泰期货 2026-10-22；浙商期货 2026-10-19；华联期货/期货日报 2026-10-22；一德期货 2026-10-08。</td></tr>
+<tr><td>未获取项</td><td>舟山保税船燃加注量、上期所 10-22 仓单日报明细、FU 前 20 名完整席位、新加坡低硫裂解最新值。</td><td>数据未获取，未做估算。</td></tr>
+</tbody></table>
+<p class="note">核查结论：<b>短期供给紧、成本强、近月挤</b>（三项偏多）；<b>库存边际转累、裂解估值修复到位、发电淡季</b>（三项偏空）。基本面因此给 6/10，而非 8/10。</p>
+</div>
+
+<h2>七、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（多头首席 · 金牛）</h4>
+<p>10-21 的大阴线把我昨天的多单打了止损，但止损只说明位置错了，不说明方向错了。10-22 低点从 4,578 抬到 4,669、收盘 4,911 站上全部均线、持仓增 12,790 手，这是洗盘后的新多进场，不是反抽。</p>
+<p>第一，供给缺口是物理性的。中东与俄罗斯约占全球高硫供应 55%，燃料油又"没法绕路"：船型小、保险贵、无备用航线，霍尔木兹与红海扰动对它的冲击大于原油。维多评估全球高硫每月少至少 80 万吨，中东+俄罗斯减量约 180 万吨/月；10-14 萨拉托夫（14 万桶/日）与梁赞（40 万桶/日）再遭袭，合计 54 万桶/日受影响；10 月俄出口仅 221.7 万吨、中东 147.9 万吨。这是已停产的装置，不是预期。</p>
+<p>第二，2611 的交割博弈给出最硬的近端定价。2611 收 5,868，对 2701 升水 957 元（19.49%）；最后交易日 10-30 只剩 6 个交易日，持仓约 4.1 万手（41 万吨），而仓单 10-16 归零、10-19 才回到约 4 万吨，覆盖率不足 10%，6 天内补足 31 万吨保税 RMG380 几乎不可能。交易所 10-13 起限仓 1,500 手/日、2611 保证金 22%，等于官方确认了近月紧张。</p>
+<p>第三，成本端刚完成向上突破。10-22 SC 收 713.4 元/桶；国内收盘后布伦特 +3.37% 至 112.49、WTI +2.95% 至 100.01，触发点是伊朗的霍尔木兹表态、沙特谢巴油田遇袭、美撤驻沙使馆人员。战争第九个月仍无解，高盛已把 12 月布伦特预测上调至 90 美元。燃料油成本占比高、供给弹性低，原油每涨 10 美元，FU 的估值抬升大于沥青，这是选 FU 而非 BU 的理由。</p>
+<p>第四，船燃需求没有想象中差。新加坡 9 月高硫船燃销量 199.3 万吨（+4.0%），占比 42.2% 创新高；中国 10 月高硫进口 61.1 万吨，远高于 9 月全月 13.7 万吨；BDI 2,680（同比 +28%）。脱硫塔经济性仍在，市场把"发电淡季"等同于"需求崩塌"，忽略了船燃占比已升至 42%。</p>
+<p>第五，技术面完成"洗盘—抬高低点—增仓"闭环。4,911 站上 MA5 4,887.6、MA10 4,823.8、MA20 4,608.1、MA60 4,037.6；RSI6 61.8、RSI14 62.3 未超买；KDJ 63.8/59.7/71.8 仍有余量。ATR 294.6 说明 4,669 的下探只是正常波动。</p>
+<p>方案：不追跳空，4,860~4,930 回踩分批接，收盘跌破 4,700 认错，目标 5,120 / 5,280，赌 4,669 成为新的 higher low。</p></div>
+
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（空头首席 · 黑熊）</h4>
+<p>金牛讲的五件事——供给缺、挤仓、成本涨、船燃好、均线多——我大部分不否认。问题是：这些有多少还没被 4,911 定价？大部分已经定价，而新的边际正在往空头走。</p>
+<p>第一，新加坡库存 6 周来首次累库，这是最重要的边际变化。ESG 数据：截至 10-21 当周残渣燃料油 1,885.8 万桶，环比 +81.5 万桶（+4.5%），结束 6 连降；前值 1,804.3 万桶为 9 周低点。当周进口 +75%、出口增至 3 倍以上，东亚 10 月供应充足。绝对水平仍低，但交易的是方向——6 连降后的首次回升，往往就是拐点的第一根钉子。</p>
+<p>第二，高硫裂解已修复到位，"便宜"这个前提消失。新加坡 380 裂解从 9-24 的 -0.09 美元/桶修复至 10-16 的 +12.03 美元，累计 +12.1 美元，估值分 3.4→4.5/10。浙商期货的判断是"追多性价比下降"。多头买的不是"低估的高硫"，而是"修复到位的高硫 + 地缘情绪"。一旦原油回落，高硫没有裂解扩张作对冲，跌幅会更大。</p>
+<p>第三，需求进入季节性下行。气温下降后，中东与南亚高硫发电需求将大幅减少，这是四季度最确定的季节性。一德期货明确"四季度低硫强于高硫"；华泰 10-22 也指出"发电厂需求季节性下滑"已经出现。多头用 9 月船燃数据论证需求强，但 9 月是季末补库高点。</p>
+<p>第四，2611 的升水是"到期权"，不能外推到 2701。10-30 交割完成后，957 元升水就失去载体。仓单已从 0 回到 4 万吨，说明卖方在组织货源；距离交割 6 个交易日，覆盖率从 10% 升到 30%~50% 并非不可能。2701 承接的是 11-12 月的供应恢复与淡季，没有理由维持 19.49% 的升水。</p>
+<p>第五，技术面是"高位死叉 + 巨幅波动"。MACD DIF 226.6、DEA 227.1、柱 -1.0（前 +6.6），刚死叉；10-21 从 5,013 砸到 4,578，单日振幅 8.74%，说明 5,000~5,013 抛压极重；10-22 收 4,911，仍未收复 10-21 开盘 4,951，反弹只到崩盘区间中部。ATR 294.6 约合 6%，多头仓位在正常波动中就可能被扫损。</p>
+<p>第六，原油的地缘溢价处于极值。布伦特 112.49，已高于高盛 12 月目标 90 美元约 25%；油价年内涨超 80%，冲突已 9 个月，霍尔木兹出口恢复至接近战前。地缘的边际信息更可能指向缓和：美伊谈判、G7 放储、中期选举前压价，任一落地都会让油价回吐 10~20 美元。</p>
+<p>所以我不在 4,911 追空，而是等 5,000~5,050 逢高空 2701，收盘站上 5,230 止损，目标 4,700、再看 4,580。现在追空是逆着未定价的催化，等冲高才是空头的位置。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4>
+<p>黑熊把周度物流节奏当成了趋势。1,885.8 万桶仍低于上月周均，10-14 当周同比 -28%；全球高硫浮仓 418.3 万吨（-0.7%）、泛新加坡 136.2 万吨（-11.3%）仍在去化。当周进口 +75%、出口增至 3 倍，是套利窗口打开后的船期集中到港，不是产地增产。若 10-28 当周继续累库，我承认拐点；只凭一周宣布拐点，是把噪音当信号。</p>
+<p>第二，"裂解修复到位"不等于"价格要跌"。12.03 美元是从 -0.09 修复上来的，仍低于柴油裂解高位。更重要的是，裂解交易的是"高硫相对原油"，FU 单边交易的是"高硫绝对价格"。裂解不扩张，只要原油上涨，FU 依然能涨——10-22 裂解没继续走扩，FU 照样 +2.40%。黑熊把相对估值套到绝对价格上，是偷换标的。</p>
+<p>第三，2611 不是"到期权"，而是"现货紧张的证明"。4 万吨仓单对应 41 万吨持仓，覆盖率不足 10%；6 天补足 31 万吨 RMG380 需每天注册 5 万吨以上，而 10-16 至 10-19 仅注册 4 万吨。即便交割顺利完成，现货紧张也会通过 2612（5,234，+3.07%）传导。10-22 全曲线同涨、近月领涨，正说明是重定价而非单合约逼仓。</p>
+<p>第四，"油价高于投行目标"是最危险的锚。高盛刚把 12 月预测从 85 上调到 90，并称"上行风险显著"；在战争第 9 个月、沙特能源设施持续遇袭时，用一份不断被上调的目标价做空，是把静态估值当动态基本面。SC 未跟涨是收盘时点早于布伦特，10-23 会补。</p>
+<p>第五，技术死叉是"高位钝化"。DIF 226.6、DEA 227.1 都在极高位，柱 -1.0 是零轴上方初次翻绿，强趋势中常快速二次金叉；价格站上所有均线、低点抬高、增仓上行，MACD 不是主导变量。10-21 的 -3.23% 是拥挤多头的一次清洗。</p></div>
+
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4>
+<p>金牛说"一周累库是噪音"，那 6 连降时你们为什么把它当趋势？库存从 2,000 万桶以上降到 1,804 万桶用了 6 周，一周回补 81.5 万桶，回补速度是去化速度的数倍。进口 +75%、出口增至 3 倍，说明区域价差已把货吸过来，这是供给对高价的正常反应。</p>
+<p>第二，"裂解不扩张、绝对价格也能涨"只在原油单边上涨时成立。但原油正处于地缘溢价极值：布伦特 112.49，高于高盛 12 月目标 25%，年内涨超 80%，霍尔木兹出口已恢复至接近战前。此时做多 FU，本质是做多"地缘继续升级"的尾部事件。一旦缓和，原油回吐 10~20 美元，FU 跌回 4,600 只需一个交易日——10-21 已演示过一次。</p>
+<p>第三，关于仓单，金牛只看到"覆盖率不足 10%"，没看到"从 0 到 4 万吨只用了一个交易日"。10-16 还是 0，10-19 就是 4 万吨，交割货源的组织速度远快于他的假设；到 10-30 还有 6 个交易日，覆盖率达到 30%~50% 并非不可能。而且 2701 的多头既拿不到现货，也吃不到挤仓升水，只承担挤仓失败后的反噬。</p>
+<p>第四，增仓 12,790 手不是"新多进场"的证据。前 10 多单 +7,646、空单 +7,131，几乎等量加仓，净多只增 515 手；换手率 2.87 倍，是短线资金主导的高换手。东证空单 +2,481、华泰 +1,976，说明机构在 4,900 上方已开始布局空头。净多仅占持仓 6.6%，结构一点也不"厚"。</p>
+<p>第五，船燃"创新高"是 9 月数据。10 月新加坡进口 +75%、出口增至 3 倍，说明供应在回流；BDI 虽在 10-21 反弹至 2,680，但 10-13 至 10-16 曾连跌四日（2,801→2,511）。用 9 月销量证明 11 月需求，与用 2611 升水证明 2701 强势，是同一个错误。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4>
+<p>打到第三轮，我只保留一个胜负手：4,669 这个低点。10-21 的低点是 4,578，10-22 的低点是 4,669，抬高 91 点；10-22 收盘 4,911，站上所有均线，持仓增加 12,790 手。这不是"反抽"，反抽不会增仓、不会抬高低点、不会收在全日 80% 分位。只要 4,669 不破，多头结构就成立。</p>
+<p>我承认黑熊的两个判断：库存拐点可能正在形成，裂解的便宜已经消失。所以我不做趋势多，只做 1~3 个交易日的节奏多；目标也不贪，5,120 是第一目标（10-21 开盘 4,951 上方、5,000 整数关之上），5,280 是第二目标（20 日高 5,223 与 BOLL 上轨 5,233 之上）。这两个位置都不是"新历史高点"，只是把 10-21 的跌幅修复掉。</p>
+<p>为什么敢在这个位置接？因为赔率。回踩 4,860~4,930 建仓，收盘跌破 4,700 认错，风险约 190~230 点；到 5,120 是 190~260 点，到 5,280 是 350~420 点。以 4,895 的成本算，风险 195 点，报偿 225 / 385 点，赔率 1.15 / 1.97。这不是一笔高胜率交易，但是一笔正期望交易。10-21 的止损已经证明：在这个品种上，位置比方向重要。</p>
+<p>触发条件写清楚：10-23 若跳空高开至 5,030 以上，不追，等回补至 4,950~4,980 或首次回踩 MA5 4,888；若平开或低开，在 4,860~4,930 分两批接；若直接跌破 4,700 并收盘在 4,669 下方，说明 higher low 失败，方案作废，不摊成本。时间窗口 1~3 个交易日，三天内站不上 5,120，减半离场。</p>
+<p>最后一句：昨天的亏损来自"在 5,000 上方追多"，不是来自"看多"。今天我用回踩、轻仓、宽止损来修正它。如果黑熊说这叫"执迷不悟"，那我认；但 4,669 之上的增仓中阳，值得用两成仓位去试一次。</p></div>
+
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4>
+<p>我的胜负手也只有一句话：多头买的是"已经发生的事"，空头卖的是"正在发生的变化"。已经发生的是：中东与俄罗斯减量 180 万吨/月、2611 升水 957 元、9 月船燃创新高、10-22 增仓 1.28 万手。正在发生的是：新加坡 6 连降终结、裂解从 -0.09 修复到 12.03、仓单从 0 回到 4 万吨、中东发电进入淡季、原油地缘溢价达到极值。五个边际同时转向，价格却还在用旧叙事定价。</p>
+<p>我不否认短线可能高开。布伦特盘后 +3.37%，10-23 FU 大概率跳空，这是多头唯一的、也是最后的顺风。但请注意：10-21 的高点是 5,013，10-22 的高点是 4,973，两个高点在降低；10-22 收盘 4,911 甚至没有收复 10-21 的开盘价 4,951。这叫"反弹"，不叫"反转"。真正的反转应该收复 5,013，而不是在 4,973 止步。</p>
+<p>所以我的方案是"等冲高、不追空"：5,000~5,050 分批空 2701，收盘站上 5,230 止损（20 日高 5,223 与 BOLL 上轨 5,233 之上），第一目标 4,700（MA20 4,608 上方），第二目标 4,580（10-21 低点）。以 5,025 的成本算，风险 205 点，报偿 325 / 445 点，赔率 1.59 / 2.17。如果 10-23 高开直接冲到 5,100 以上，我会把首笔仓位减半，等二次冲高再空。</p>
+<p>另一个更干净的表达是月差：买入 2701、卖出 2611，赌 957 元的升水在 10-30 后收敛。这个头寸不承担原油单边的方向风险，只承担"挤仓是否延续"的风险；缺点是保证金占用高、流动性在 2611 上快速衰减，只适合小仓位。</p>
+<p>最后提醒多头一句：10-30 是这条曲线的分水岭。交割前，2611 的紧张会撑着全曲线；交割后，支撑消失，2701 要独自面对 11-12 月的累库与淡季。你可以现在做多，但必须在 10-30 之前离开，别把"交割博弈"持有成"淡季抗单"。</p></div>
+</div>
+
+<h2>八、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分（每项 1~10 分，权重合计 100%）</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>权重</th><th>加权（多）</th><th>强度</th></tr></thead><tbody>
+<tr><td>① 库存</td><td class="up">4</td><td class="down">6</td><td>20%</td><td class="gold">0.80</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>② 仓单</td><td class="up">8</td><td class="down">2</td><td>15%</td><td class="gold">1.20</td><td><div class="bar"><i style="width:80%"></i></div></td></tr>
+<tr><td>③ 期限结构</td><td class="up">8</td><td class="down">2</td><td>20%</td><td class="gold">1.60</td><td><div class="bar"><i style="width:80%"></i></div></td></tr>
+<tr><td>④ 技术面</td><td class="up">6</td><td class="down">4</td><td>20%</td><td class="gold">1.20</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>⑤ 新闻基本面</td><td class="up">6</td><td class="down">4</td><td>15%</td><td class="gold">0.90</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>⑥ 持仓席位</td><td class="up">7</td><td class="down">3</td><td>10%</td><td class="gold">0.70</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td><b>合计</b></td><td class="up"><b>—</b></td><td class="down"><b>—</b></td><td><b>100%</b></td><td class="gold"><b>6.40</b></td><td><b>64.0%</b></td></tr>
+</tbody></table>
+
+<p style="margin-top:14px;font-size:12.7px;color:#c3d1e1"><b class="gold">评分理由：</b>①库存 4 分——新加坡单周 +81.5 万桶、6 连降终结，是六维中唯一明确转空的硬数据，浮仓仍在去化故不至更低。②仓单 8 分——约 4 万吨对 2611 约 41 万吨持仓，覆盖率不足 10%，是挤仓核心燃料。③结构 8 分——七合约全涨、近月领涨，2611-2701 升水 957 元（19.49%）。④技术 6 分——增仓、低点抬高、均线多头，但 MACD 刚死叉、4,951 未收复。⑤基本面 6 分——供给减量 180 万吨/月、俄炼厂 54 万桶/日停摆，对裂解修复到位与发电淡季。⑥持仓 7 分——净多 15,966 手（+515），但仅占持仓 6.6%，空头同步加仓 7,131 手。</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">偏多（回踩做多）<br>多方 62% / 空方 38%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">62%<br>1~3 个交易日（10-23 至 10-27）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">4,860~4,930 分两批<br>5,120 → 5,280<br>收盘跌破 4,700</div></div>
+</div>
+
+<p style="margin-top:14px;font-size:12.7px;color:#c3d1e1"><b class="gold">裁决逻辑：</b>短期三个变量向上——原油盘后跳涨（布伦特 112.49、+3.37%）、2611 交割博弈（4.1 万手对约 4 万吨仓单）、10-22 增仓 12,790 手且低点抬高；中期三个变量向下——新加坡 6 连降终结、S380 裂解修复至 12.03、中东与南亚发电进入淡季。短期定方向，中期定高度，故裁决"偏多但不做趋势多"，目标只修复 10-21 跌幅（5,120/5,280），而非挑战 2611 的 5,868。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">置信度为何只有 62%（加权 64.0%）：</b>一是事件驱动，涨幅取决于 10-23 开盘后的原油，而布伦特已高于高盛 12 月目标 90 美元约 25%；二是技术背离，MACD 刚死叉、4,951 未收复、5,000~5,013 为套牢区；三是 ATR 294.6（约 6%），止损易被正常波动扫掉；四是 2611 挤仓是"到期权"，10-30 后可能反向；五是限仓 1,500 手/日、保证金 22%，多头合力受限。该置信度指 1~3 日内走通"回踩 4,860~4,930 → 触及 5,120"的概率。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">双方最强 / 最弱：</b>多头最强在 2611 挤仓与增仓抬高低点，最弱在把近月紧张当远月趋势；空头最强在库存、裂解、淡季的边际转向，最弱在低估 10-30 前的挤仓惯性。双方都不支持趋势，只支持短期偏多、中期见好就收。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">决策方案：</b>①入场 4,920 挂三成、4,870 挂七成，合计不超过两成仓；跳空高开至 5,030 以上则放弃追多，等回补 4,950~4,980 或回踩 MA5 4,888。②止损收盘跌破 4,700（10-22 低点 4,669 下方），盘中不设硬止损，单笔风险≤总资金 1.5%。③T1 5,120 减半，T2 5,280 余仓移动止损至成本。④10-23 收盘站上 4,973 且净多破 2 万手可加至三成；跌破 4,700 或仓单单日增 3 万吨则作废。⑤10-30 前必须全部离场。</p>
+
+<p style="margin-top:12px;font-size:12.7px;color:#c3d1e1"><b class="gold">关联品种处理：</b>BU 置信 56% 未达阈值，FU 作为关联度 0.8 的替代，短期信号更锐利，但 ATR 6.0%（对 BU 4.1%）且多一层交割风险，故仓位更低、单笔风险更严，并须在 10-30 前了结。10-30 后若 2611-2701 价差自 957 收敛至 700 以下，视为挤仓结束，多头同步离场。观察：仓单是否破 10 万吨、新加坡 10-28 是否连续累库、SC 是否守住 680、交易所是否再收紧。</p>
+
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑（3 条）</b><br>
+· <b>供给硬缺口 + 成本脉冲</b>：中东与俄罗斯月度减量约 180 万吨，俄萨拉托夫+梁赞 54 万桶/日仍停；10-22 盘后布伦特 +3.37% 至 112.49，成本端重新抬升。<br>
+· <b>2611 交割博弈</b>：约 4.1 万手持仓对约 4 万吨仓单，覆盖率不足 10%，最后交易日 10-30，957 元升水（19.49%）叠加交易所限仓提保，近月紧张为全曲线提供支撑。<br>
+· <b>量价与技术共振</b>：增仓 12,790 手上行、低点 4,669 抬高、站上全部均线；4,669 是多头防线，上看 5,120 / 5,280。</div>
+
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b><br>
+· <b>原油回吐</b>：布伦特 112.49 已高于高盛 12 月目标 90 美元约 25%，G7 放储、美伊谈判、美中期选举后政策任一落地，油价可能回吐 10~20 美元，FU 同步下杀。<br>
+· <b>交割后月差坍塌</b>：10-30 后 2611 的 957 元升水失去载体，若以 2611 下跌方式收敛，将拖累 2701 情绪。<br>
+· <b>库存与仓单反转</b>：新加坡若连续两周累库、上期所仓单升至 10 万吨以上，挤仓与低库存逻辑同时失效。<br>
+· <b>交易所风控</b>：FU2611 涨跌停 20%、保证金 22%，2611/2612/2701 日内开仓限 1,500 手，不排除进一步加码，流动性与持仓上限会放大滑点。<br>
+· <b>波动率风险</b>：ATR 294.6 约合 6%，10-21 单日振幅 8.74%；止损设 4,700 仍可能被跳空穿越，仓位必须轻。<br>
+· <b>数据风险</b>：iFinD 未授权，相关数据未使用；行情与技术指标来自新浪财经期货日K（倚天财经），仓单 10-22 明细与舟山船燃加注量<b>数据未获取</b>，已在文中逐项标注，未做估算。</div>
+</div>
+
+<div class="foot">
+<b>数据来源说明：</b>行情（开高低收、成交、持仓、结算）与技术指标（MA / MACD / RSI / BOLL / KDJ / ATR）均基于 <b>FU2701 日K</b>，数据来自<b>新浪财经期货日K（倚天财经行情，2026-10-22 15:00 收盘）</b>；期限结构七个合约收盘价同源；合约到期日来自<b>上海期货交易所燃料油合约参数</b>（FU2611 到期 2026-10-30）。<br>
+基本面：新加坡库存来自<b>新加坡企业发展局（ESG）</b>，经<b>汇通网</b>（2026-10-22 16:02）转引；裂解价差、全球/泛新加坡浮仓、俄罗斯与中东出口、新加坡与中国进口数据来自<b>浙商期货《高硫裂解估值快速回升 新加坡船燃总量微降》</b>（2026-10-19）；供应减量评估来自<b>维多集团</b>，经<b>华联期货/期货日报</b>（2026-10-22）转引；仓单来自<b>期货日报/华联期货</b>（2026-10-22）与<b>金投网</b>仓单日度页（2026-10-22）；BDI 来自<b>东方财富数据中心</b>，CCFI 来自<b>上海航运交易所</b>（2026-10-16）；机构观点来自<b>华泰期货</b>（2026-10-22）、<b>浙商期货</b>（2026-10-19）、<b>一德期货</b>（2026-10-08）；持仓席位来自<b>新浪财经 FU2701 持仓龙虎榜</b>（上期所会员数据，2026-10-22，前 10 名口径）。<br>
+本次 <b>iFinD 未授权，相关数据未使用</b>。上期所 10-22 仓单日报明细、FU 前 20 名完整席位、舟山保税船燃加注量、新加坡低硫裂解最新值<b>数据未获取</b>，文中未做推算。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据收集 + 多 Agent 三轮辩论 + 总决策官裁决），仅供研究参考，<b>不构成任何投资建议</b>。期货杠杆交易风险极大，市场有风险，投资需谨慎。
+</div></div></body></html>

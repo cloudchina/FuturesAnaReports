@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>甲醇MA深度分析 · 多Agent辩论报告 · 2026-10-22</title><style>
+:root{--bg:#080c11;--card:#111923;--card2:#152030;--line:#22303f;--txt:#dce6f2;--sub:#8b9cb0;
+--up:#ff5d5d;--down:#20c997;--gold:#e8b45a;--blue:#5aa9e8;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#05080c,#0a1017 40%,#070b10);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;line-height:1.75;padding:28px 16px;
+font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;
+border-bottom:1px solid var(--line);padding-bottom:18px}
+.hd h1{font-size:30px;letter-spacing:2px}
+.hd h1 span{color:var(--gold);font-size:17px;margin-left:10px;letter-spacing:1px}
+.meta{color:var(--sub);font-size:13px;text-align:right}
+.px{font-size:34px;font-weight:700;margin-top:4px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.banner{margin:20px 0;background:linear-gradient(120deg,#132033,#0e1722 60%);border:1px solid #2b3d52;
+border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+.banner .big{font-size:25px;font-weight:700;color:var(--gold)}
+.banner .lbl{font-size:12px;color:var(--sub);letter-spacing:1px}
+.conf{display:flex;align-items:center;gap:14px}
+.ring{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+background:conic-gradient(var(--gold) 0 calc(var(--p)*1%),#243140 0);position:relative}
+.ring:after{content:"";position:absolute;inset:7px;background:#0c141d;border-radius:50%}
+.ring b{position:relative;z-index:2;font-size:19px;color:var(--gold)}
+h2{font-size:19px;margin:30px 0 14px;padding-left:11px;border-left:4px solid var(--gold);letter-spacing:1px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:7px;display:flex;justify-content:space-between;gap:8px}
+.card p{font-size:12.5px;color:#b9c8da}
+.bar{height:6px;background:#22303f;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#e8b45a,#ff8a4c)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:2px 4px 2px 0}
+.tb{background:rgba(255,93,93,.13);color:#ff8f8f;border:1px solid rgba(255,93,93,.3)}
+.ts{background:rgba(32,201,151,.12);color:#5fe0b8;border:1px solid rgba(32,201,151,.3)}
+.tn{background:rgba(90,169,232,.12);color:#8cc8f2;border:1px solid rgba(90,169,232,.3)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--sub);font-weight:500;font-size:12px}
+.term{display:flex;align-items:flex-end;gap:16px;height:232px;padding:8px 6px 0}
+.tcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.tbar{width:52px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#e8b45a,#8a5f1f)}
+.tval{font-size:13px;color:var(--gold);margin-bottom:5px}
+.tname{font-size:11px;color:var(--sub);margin-top:7px}
+.tdsc{font-size:10.5px;color:#7f92a6;margin-top:2px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.side{border-radius:11px;padding:15px;border:1px solid}
+.bull{background:rgba(255,93,93,.05);border-color:rgba(255,93,93,.25)}
+.bear{background:rgba(32,201,151,.05);border-color:rgba(32,201,151,.25)}
+.side h4{font-size:14px;margin-bottom:9px}
+.bull h4{color:#ff8f8f} .bear h4{color:#5fe0b8}
+.side li{font-size:12.7px;color:#bfcede;margin:6px 0 6px 16px}
+.side p{font-size:12.7px;color:#bfcede;margin:7px 0}
+.round{margin-top:14px}
+.final{background:linear-gradient(120deg,#1a2431,#101821);border:1px solid #33465c;border-radius:13px;padding:20px}
+.final .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.final .row div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.final .lbl{font-size:11px;color:var(--sub)}
+.final .val{font-size:14.5px;color:var(--gold);margin-top:3px}
+.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:14px;font-size:11.5px;color:#6d7f93}
+.note{font-size:12px;color:var(--sub);margin-top:8px}
+.sc{font-size:11px;color:#9fb0c3;font-weight:400}
+.review{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.review .col{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 15px}
+.review .k{font-size:11px;color:var(--gold);letter-spacing:1px;margin-bottom:6px}
+.review p{font-size:12.4px;color:#b9c8da}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.strip div{background:#0d151e;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+.strip .k{font-size:11px;color:var(--sub)}
+.strip .v{font-size:14px;color:var(--gold);margin-top:2px}
+.split{display:grid;grid-template-columns:1.15fr 1fr;gap:14px}
+@media(max-width:900px){.grid6,.quad,.two,.debate,.review,.strip,.split{grid-template-columns:1fr}
+.banner{grid-template-columns:1fr}.final .row{grid-template-columns:1fr}.term{gap:6px}.tbar{width:30px}}
+</style></head><body><div class="wrap">
+
+<div class="hd"><div><h1>甲醇 <span>MA · MA2701</span></h1>
+<div class="note">郑州商品交易所　|　报告日期 2026-10-22（周四，交易日收盘后）　|　下一交易日 2026-10-23</div></div>
+<div class="meta"><div>收盘价</div><div class="px up">3,191</div>
+<div class="up">+2.60%　开 3,104 / 高 3,239 / 低 3,081</div>
+<div>持仓 931,496（+55,348）　成交 2,794,504</div>
+<div class="sc">昨结算 3,110　|　数据：新浪财经期货日K（倚天财经，15:00）</div></div></div>
+
+<div class="banner">
+<div><div class="lbl">最终裁决</div><div class="big">震荡偏多 · 回踩做多</div>
+<div class="note">胜率评估：多方 61% / 空方 39%　|　触发窗口：1~3 个交易日（10-23~10-27）</div>
+<div class="note">不追高：3,239~3,260 为今日高点与压力带，等待回踩或放量突破确认</div></div>
+<div class="conf"><div class="ring" style="--p:61"><b>61%</b></div>
+<div><div class="lbl">置信度</div><div style="font-size:13px;color:#cfdcea">预期触发概率<br>1~3 个交易日</div></div></div>
+<div><div class="lbl">交易参数</div><div style="font-size:13px">入场：3,120~3,165 回踩多</div>
+<div style="font-size:13px">目标：3,260 → 3,330</div><div style="font-size:13px">止损：收盘跌破 3,075</div></div>
+</div>
+
+<h2>一、昨日复盘：被 SC 替换，但 MA 的方向与入场都对了</h2>
+<div class="review">
+<div class="col"><div class="k">10-21 报告原判</div><p>震荡偏多（超跌反弹），置信度 57%，入场 3,090~3,130，目标 3,250/3,350，止损 3,030。因置信度低于 60% 触发关联分析，最终被原油 SC（58%）替换呈现。</p></div>
+<div class="col"><div class="k">10-22 实际行情</div><p>10-21 开 3,170 / 高 3,193 / 低 3,016 / 收 3,130，持仓 876,148；10-22 开 3,104、高 3,239、低 3,081、收 3,191（+2.60%，按昨结算 3,110 计；对 10-21 收盘 3,130 为 +1.95%）。方向命中；入场 3,104 触及；目标 1 差 11 元未达；止损 3,030 未触及。持仓 931,496（+55,348），属增仓上行。</p></div>
+<div class="col"><div class="k">复盘结论</div><p>原品种并不弱于 SC，问题在替换门槛过低（仅高 1 个百分点）。今日独立评估 MA，不因昨日被替换而降权；同时把第一目标压缩到 3,260，避免再次“差一点”。</p></div>
+</div>
+<p class="note">对抗性提示：昨日“MA 被 SC 替换”属于替换机制的误判——MA 方向与入场均正确。今日既要正视 MA 的强势，也要警惕“增仓 5.5 万手”背后空头同步进场、净多反而下降的结构性矛盾。</p>
+
+<h2>二、六维数据全景</h2>
+<div class="grid6">
+<div class="card"><h3>① 库存 <span>多方 7.5/10</span></h3>
+<p>港口库存 36.38 万吨（10-21，隆众），周环比 -0.34 万吨；华东累库 +1.75 万吨、华南去库 -2.09 万吨。10-08 曾 30.51 万吨历史低位，10-14 回补至 36.72 万吨，随后一周窄幅去化至 36.38 万吨。</p>
+<p class="note">绝对库存仍低，但“加速去库”阶段已结束；华东转累是边际警示。华东/华南绝对量数据未获取。</p>
+<div class="bar"><i style="width:75%"></i></div></div>
+
+<div class="card"><h3>② 仓单 <span>多方 7/10</span></h3>
+<p>最近可得 6,583 吨（10-19，国泰君安期货引用，约 658 张，10 吨/张）；仓单/持仓仅约 0.07%。11 月第 15 个交易日前完税仓单集中注销，近月可交割货源偏紧。</p>
+<p class="note">10-22 郑商所仓单日报数据未获取；仓单极低对近月构成支撑，但对 2701 的传导弱于 2611。</p>
+<div class="bar"><i style="width:70%"></i></div></div>
+
+<div class="card"><h3>③ 期限结构 <span>多方 8/10</span></h3>
+<p>2611 3,545（+4.30%）＞2612 3,342（+4.08%）＞2701 3,191（+2.60%）＞2702 3,103（+1.94%）＞2703 3,037（+1.47%）＞2705 2,904（+0.52%）。</p>
+<p class="note">2611 对 2701 升水 354 元，2701 对 2705 升水 287 元，深度 backwardation；近月强、远月弱。</p>
+<div class="bar"><i style="width:80%"></i></div></div>
+
+<div class="card"><h3>④ 技术面 <span>多方 6/10</span></h3>
+<p>收 3,191，站上 MA5 3,162.6，仍低于 MA10 3,204.7；MA20 3,087、MA60 2,926 向上。MACD DIF 53.7 / DEA 57.6、柱 -7.7（前值 -8.8）绿柱收敛；RSI6 36.6、RSI14 64.0；KDJ K44.7/D49.4/J35.2；BOLL 中轨 3,087、上轨 3,365.7。</p>
+<div class="bar"><i style="width:60%"></i></div></div>
+
+<div class="card"><h3>⑤ 新闻基本面 <span>多方 4/10</span></h3>
+<p>伊朗开工约 37%、日产 1.3 万吨，10 月进口预估 45~70 万吨（机构分歧），11 月冬季限气；但港口 MTO 10-19 已全停、C/MTO 开工不足六成，宝丰新装置 10 月底投产、宁夏下旬外销，供需双弱。</p>
+<p class="note">秋检损失量、10-22 当日 MTO/甲醛/醋酸最新开工数据未获取；引用值均标注日期。</p>
+<div class="bar"><i style="width:40%"></i></div></div>
+
+<div class="card"><h3>⑥ 持仓席位 <span>多方 5/10</span></h3>
+<p>前 20 席多单 668,028（+24,787，占全市场 72%），空单 552,729（+41,468，占 59%），净多 115,299（-16,681）。中粮多 +19,792 / 空 +20,689 双向开仓；浙商空 +15,634、东证空 +7,050。</p>
+<p class="note">增仓上涨，但净多下降、空头增仓更多，趋势启动需进一步确认。</p>
+<div class="bar"><i style="width:50%"></i></div></div>
+</div>
+
+<h2>三、技术面深度面板</h2>
+<div class="quad">
+<div class="card"><h3>趋势指标</h3><p>价格 3,191 位于 MA5 3,162.6 之上、MA10 3,204.7 之下；MA5 下穿 MA10，短线均线仍偏空。MA20 3,087 与 MA60 2,926 持续向上，中期上行结构未破，今日属于“中期多头、短期修复”的组合。</p></div>
+<div class="card"><h3>震荡指标</h3><p>MACD 在零轴上方死叉，绿柱 -7.7 较前值 -8.8 收敛；RSI6 36.6 自低位回升、RSI14 64.0 中性偏强；KDJ K44.7＜D49.4、J35.2，仍属弱修复；BOLL 中轨 3,087 失而复得，上轨 3,365.7 为中期目标参考。</p></div>
+<div class="card"><h3>量能分析</h3><p>成交 279.5 万手，较昨日 314.9 万手缩量约 11.2%；持仓 +55,348 手至 931,496 手。增仓上涨，但量能未同步放大，3,239 的突破需要补量确认，否则易形成多头集中兑现。</p></div>
+<div class="card"><h3>形态与关键价位</h3><p>3,081 回踩 MA20 3,087 后收回，收 3,191，形成阳包阴；3,239 冲高回落，留 48 元上影。20 日高 3,402 / 低 2,821；5 日 +0.66%、20 日 +4.55%；ATR 124.9。</p>
+<p class="note">支撑：3,150 / 3,081 / 3,030；压力：3,205 / 3,239 / 3,260 / 3,330。</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>多指标共振</h3>
+<div><span class="tag tb">多 阳包阴</span><span class="tag tb">多 站稳 BOLL 中轨</span><span class="tag tb">多 增仓 5.53 万手</span><span class="tag tb">多 MACD 绿柱收敛</span><span class="tag tb">多 深度 backwardation</span><span class="tag tb">多 仓单极低</span><span class="tag ts">空 收盘低于 MA10</span><span class="tag ts">空 MA5＜MA10</span><span class="tag ts">空 MACD 死叉</span><span class="tag ts">空 KDJ K＜D</span><span class="tag ts">空 净多 -1.67 万手</span><span class="tag ts">空 量能缩 11%</span><span class="tag tn">中 RSI6 36.6</span><span class="tag tn">中 3,239 上影 48 元</span></div>
+<p class="note" style="margin-top:8px">技术面综合：短线止跌转强，但突破未完成；强度评级“中等偏多”，不是强趋势。</p></div>
+
+<h2>四、持仓席位面板</h2>
+<div class="split">
+<div class="card"><h3>前 20 席多空结构（10-22）</h3>
+<table><thead><tr><th>项目</th><th>数值（手）</th><th>环比</th><th>占全市场</th></tr></thead><tbody>
+<tr><td>前 20 多单</td><td class="up">668,028</td><td class="up">+24,787</td><td>72%</td></tr>
+<tr><td>前 20 空单</td><td class="down">552,729</td><td class="down">+41,468</td><td>59%</td></tr>
+<tr><td>净多持仓</td><td class="gold">115,299</td><td class="down">-16,681</td><td>—</td></tr>
+<tr><td>多头第一</td><td>国泰君安（代客）</td><td>—</td><td>12%</td></tr>
+<tr><td>空头第一</td><td>国泰君安（代客）</td><td>—</td><td>7%</td></tr>
+</tbody></table>
+<p class="note">数据来源：东方财富研究中心龙虎榜（2026-10-22 16:42，郑商所持仓排名）。</p></div>
+<div class="card"><h3>席位动向与解读</h3>
+<table><thead><tr><th>席位</th><th>方向</th><th>增减（手）</th><th>解读</th></tr></thead><tbody>
+<tr><td>中粮期货（代客）</td><td>多 / 空</td><td class="up">+19,792 / +20,689</td><td>双向对锁，套保为主</td></tr>
+<tr><td>中信建投（代客）</td><td>多</td><td class="up">+9,066</td><td>券商系增持多单</td></tr>
+<tr><td>海通期货（代客）</td><td>多</td><td class="up">+5,546</td><td>多头跟进</td></tr>
+<tr><td>浙商期货（代客）</td><td>空</td><td class="down">+15,634</td><td>空头明显加仓</td></tr>
+<tr><td>东证期货（代客）</td><td>空</td><td class="down">+7,050</td><td>量化/券商系沽空</td></tr>
+</tbody></table>
+<p class="note">增仓上涨但净多下降：今日更像“多头推动 + 空头套保进场 + 近月挤仓”的组合，而非干净的趋势启动。</p></div>
+</div>
+<div class="card" style="margin-top:12px"><h3>“5.5 万手增仓”怎么读？</h3>
+<p>① 趋势启动说：低位增仓上涨、阳包阴、持仓创阶段新高，说明增量资金愿意在 3,100 上方承接；② 多头兑现说：前 20 席净多减少 16,681 手，空头增仓 41,468 手高于多头 24,787 手，中粮双向各约 2 万手，国泰君安多头占全市场 12%，多头拥挤度高；③ 裁判倾向：暂按“偏多但需确认”处理——只有 2701 站稳 3,205（MA10）并放量突破 3,239，同时净多回升，才确认趋势启动；若 3,239 二次冲关失败且持仓继续增加，则按“多头集中兑现”对待，回踩 3,100/3,080。</p></div>
+
+<h2>五、期限结构与基差</h2>
+<div class="card">
+<div class="term">
+<div class="tcol"><div class="tval">3,545</div><div class="tbar" style="height:150px"></div><div class="tname">MA2611</div><div class="tdsc">+4.30%</div></div>
+<div class="tcol"><div class="tval">3,342</div><div class="tbar" style="height:112px"></div><div class="tname">MA2612</div><div class="tdsc">+4.08%</div></div>
+<div class="tcol"><div class="tval">3,191</div><div class="tbar" style="height:84px"></div><div class="tname">MA2701</div><div class="tdsc">+2.60%</div></div>
+<div class="tcol"><div class="tval">3,103</div><div class="tbar" style="height:68px"></div><div class="tname">MA2702</div><div class="tdsc">+1.94%</div></div>
+<div class="tcol"><div class="tval">3,037</div><div class="tbar" style="height:55px"></div><div class="tname">MA2703</div><div class="tdsc">+1.47%</div></div>
+<div class="tcol"><div class="tval">2,904</div><div class="tbar" style="height:30px"></div><div class="tname">MA2705</div><div class="tdsc">+0.52%</div></div>
+</div>
+<p class="note" style="margin-top:10px">柱高按收盘价线性映射并设最小高度；近高远低，深度 backwardation。2611 对 2701 升水 354 元，2701 对 2705 升水 287 元，2611 对 2705 升水 641 元。</p>
+</div>
+<div class="strip">
+<div><div class="k">2611 - 2701</div><div class="v">+354 元</div></div>
+<div><div class="k">2701 - 2705</div><div class="v">+287 元</div></div>
+<div><div class="k">太仓基差（对 2701）</div><div class="v">约 +802 元</div></div>
+<div><div class="k">仓单 / 持仓</div><div class="v">约 0.07%</div></div>
+</div>
+<p class="note">基差口径：生意社太仓进口甲醇现货参考价 3,993.33 元/吨（10-22 16:00，+1.18%）－ MA2701 3,191 = +802 元/吨。10-21 隆众太仓现货小单 3,950~3,980 元/吨、对 2611 基差 +550 元；不同合约/口径的基差不可直接混用。内蒙古北线 3,105 元/吨（10-21），对 2701 贴水约 86 元，区域分化明显。</p>
+
+<h2>六、关联品种与基本面跟踪</h2>
+<div class="grid6">
+<div class="card"><h3>原油 SC <span>成本端</span></h3><p>10-22 收 713.4 元/桶（-0.43%），日内最低 684.4 后收回。Kpler 称中东石油运输量已恢复至战前水平，地缘溢价边际减弱，但霍尔木兹通行仍未完全正常。</p></div>
+<div class="card"><h3>聚丙烯 PP <span>MTO 利润</span></h3><p>PP2701 收 9,376（+1.17%），PP2611 收 10,265（+1.67%）。按 PP2701－3×MA2701 计算，盘面 PP-3MA 约 -197 元/吨，较昨日约 -122 元继续走弱，外采 MTO 亏损加深。</p></div>
+<div class="card"><h3>尿素 UR <span>情绪参考</span></h3><p>UR2701 收 1,682（-0.18%），企业库存 173.63 万吨（10-21，周 +13.18 万吨）。尿素偏弱，说明化工板块并非全面共振，MA 的强势更多来自自身近月结构。</p></div>
+<div class="card"><h3>进口与伊朗 <span>供给</span></h3><p>伊朗开工约 37%、日产 1.3 万吨；9 月装船约 24 万吨；10 月国内进口预估 45~70 万吨（金联创/银河/盛达口径分歧），正常月份 80~100 万吨。11 月冬季限气，弹性更小。</p></div>
+<div class="card"><h3>下游开工 <span>需求</span></h3><p>港口外采 MTO 10-19 全停，C/MTO 行业开工不足六成，10 月 MTO 开工预期 73.5%；甲醛 30.32%（10-08）、二甲醚 7.21%、醋酸约 85%（9-25，10-22 生意社判断“明确下跌”）、MTBE 57%（9-03）。</p></div>
+<div class="card"><h3>国内供应 <span>边际增量</span></h3><p>10-15 当周开工 75.32%（金联创口径，较节前 -1.38pct）；宝丰新装置 10 月底投产、或外销，宁夏企业 10 月下旬外销；长青 60 万吨检修，但重启多于检修。秋检损失量数据未获取。</p></div>
+</div>
+<p class="note">交易所风控：郑商所 10-22 公告，自 2026-10-26 结算时起，甲醇 2612、2701 合约交易保证金标准调整为 9%，涨跌停板幅度调整为 8%。</p>
+<p class="note">新闻与机构观点：恒力期货——“沿海烯烃需求退出为高位回调提供空间，但进口结构性紧缺未消除，甲醇难以脱离 Back 结构，预计回调但难深跌，高位宽幅震荡”；金信期货——“进口缩减与下游负反馈博弈，高位震荡，若局势缓和地缘溢价出清，价格可能较快回落”；国泰君安期货（10-19）——“步入震荡格局，建议观察并买看跌期权对冲地缘风险”。</p>
+
+<h2>七、三轮多空辩论</h2>
+<div class="debate">
+<div class="side bull"><h4>🐂 第一轮 · 多头立论（金牛）</h4>
+<p>各位，今天的盘面不是普通反弹，而是近月交割逻辑的再定价。</p>
+<p>第一，库存与进口的双重紧约束仍在。港口库存 36.38 万吨（10-21，隆众），虽然只比上周少 0.34 万吨，但这是在 10-08 30.51 万吨历史低位、10-14 回补 6.21 万吨之后的第二次窄幅去化；本周显性外轮仅 4.93 万吨，江苏沿江还有在靠外轮未计入。伊朗开工率约 37%、日产 1.3 万吨，9 月装船 24 万吨，10 月国内进口预估 45~70 万吨，仅为正常 80~100 万吨的一半上下；11 月伊朗冬季限气，进口弹性更小。36 万吨港口库存对应 93 万手持仓，仓单仅 6,583 吨（约 658 张），仓单/持仓 0.07%，11 月又逢完税仓单集中注销，近月根本没有足够的可交割货源。</p>
+<p>第二，期限结构已经把答案写得很清楚：2611 收 3,545（+4.30%），2612 3,342（+4.08%），2701 3,191（+2.60%），2705 2,904（+0.52%）；2611 对 2701 升水 354 元，2611 对 2705 升水 641 元，这是典型的现货紧张型 backwardation，不是普通近强远弱。太仓现货 3,993 元/吨，对 2701 基差约 +802 元；内地竞拍同步溢价：神华包头 3,130 元全部成交、榆林兖矿 3,120 元全部成交、内蒙古新奥 3,140 元成交，现货端没有崩。</p>
+<p>第三，技术面给出止跌确认：今日开 3,104、低 3,081（回踩 MA20 3,087 后收回）、高 3,239、收 3,191，阳包阴；持仓增加 55,348 手至 931,496 手，MACD 绿柱由 -8.8 收敛至 -7.7，RSI14 64.0 未超买，BOLL 中轨 3,087 失而复得。5 日 +0.66%、20 日 +4.55%，下跌动能已经衰竭。我的结论：回踩 3,120~3,165 做多，目标 3,260、3,330，收盘跌破 3,075 止损。</p></div>
+
+<div class="side bear"><h4>🐻 第一轮 · 空头立论（黑熊）</h4>
+<p>对方把“低库存”当成信仰，但库存低是过去半年进口断崖的结果，不是未来上涨的理由。</p>
+<p>第一，需求端的负反馈已经全面兑现，而且还在扩大。10 月 19 日南京诚志停车后，港口外采 MTO 已全数停车，C/MTO 行业开工不足六成，10 月 MTO 开工预期仅 73.5%；外采 MTO 亏损 1,800~2,000 元/吨，峰值一度超过 4,000 元/吨。甲醛开工 30.32%（10-08），二甲醚 7.21%，醋酸虽在 85% 附近但 10-22 生意社已给出“明确下跌”判断，MTBE 57%（9-03）。甲醇价格每涨 100 元，下游就多一分停车/降负，这是教科书式的需求破坏。</p>
+<p>第二，供应在回来。国内甲醇开工 75.32%（10-15 当周，较节前 -1.38pct，但绝对水平不低），宝丰新装置 10 月底投产并可能外销，宁夏企业 10 月下旬外销，长青 60 万吨检修也难改“重启多于检修”的格局；港口库存 10-14 已回补 6.21 万吨，10-21 仅 -0.34 万吨，华东反而累库 +1.75 万吨，去库动能明显衰竭。</p>
+<p>第三，盘面结构是“近月挤仓、远月不跟”。2611 大涨 4.30%，但 2705 只涨 0.52%；2611 对 2701 升水 354 元，这是交割前的仓单博弈，不是需求好转。今日 2701 增仓 5.53 万手，但前 20 席净多反而减少 16,681 手至 115,299 手，空头增仓 41,468 手、多头增仓 24,787 手，空头进场更强；中粮多 +19,792、空 +20,689，是典型的双向套保，不是单边看多。技术面收盘 3,191 仍在 MA10 3,204.7 之下，MA5 3,162.6 下穿 MA10，MACD 零轴上方死叉、绿柱 -7.7，KDJ K44.7＜D49.4，3,239 冲高回落留 48 元上影。我的判断：3,239~3,260 是沽空区，目标 3,080、3,030，收盘站上 3,250 止损。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第二轮 · 多头驳斥</h4>
+<p>逐条回应。第一，空头说 MTO 全停、需求崩塌，但这是 10-19 就已经发生的事实，盘面 10-20 至 10-21 已从 3,402 跌到 3,016，跌幅 11.3%，利空已经被交易；今天还能增仓 5.53 万手收出阳包阴，说明边际卖压枯竭。MTO 利润在 PP 反弹后并非继续恶化到无法承受，一旦原料回落或 PP 走强，重启就是向上的期权。</p>
+<p>第二，空头说库存转累，但 36.38 万吨仍是历史低位区，华东 +1.75 万吨是国产船货与汽运补充的短期节奏，华南 -2.09 万吨才是真实消耗；10 月进口 45~70 万吨、11 月仓单注销、伊朗冬季限气，这三个约束没有消失。</p>
+<p>第三，空头说 2611 是挤仓、远月不跟，但 2701 不是 2705：1 月合约覆盖冬季限气与春节前备货，2611-2701 的 354 元升水只要收敛一半，2701 就有 170 元空间；今天 2701 涨 2.60%、2612 涨 4.08%，不是 2705 的 0.52%，说明市场对近端的定价是连续的。</p>
+<p>第四，空头说净多下降、空头增仓更多，但净多仍有 11.5 万手，多头占全市场 72%，中粮双开是套保不是方向；增仓上涨在低位出现，历史上多数是趋势启动而非见顶。你们把“空头套保”当成“空头看空”，这是偷换概念。更何况，今天 2611 涨 4.30%、2612 涨 4.08%，近月曲线整体上移，说明紧张不是 2611 一个合约的孤立现象；你们用 2705 的 0.52% 代表全局，才是以偏概全。</p></div>
+
+<div class="side bear"><h4>🐻 第二轮 · 空头驳斥</h4>
+<p>逐条回应。第一，“利空已交易”不等于“利空出尽”。10-19 MTO 全停是事实，但 10-22 的上涨恰恰是甲醇自己把 MTO 亏损重新拉大：PP2701 只涨 1.17%，MA2701 涨 2.60%，盘面 PP-3MA 从昨日约 -122 元扩大到 -197 元，外采 MTO 的亏损不是修复而是加深。价格越涨，停车越难重启，这是负反馈的自我强化，不是期权。</p>
+<p>第二，“库存低位”要结合需求看。36.38 万吨对应的港口表需已经因 MTO 全停而塌陷，库存天数未必低；华东 +1.75 万吨是拐点信号，10-14 已经 +6.21 万吨，连续两周回补，去库逻辑正在失效。</p>
+<p>第三，“2701 覆盖冬季限气”是想象。2701 交易的是 2027 年 1 月供应，伊朗若在 11 月后复航，进口恢复叠加宝丰、宁夏新增供应，2701 的基本面比 2611 差得多；2611-2701 的 354 元升水更可能通过 2611 交割回归、2701 补跌来收敛，而不是 2701 补涨。</p>
+<p>第四，“增仓上涨=趋势启动”是单一指标误读。今天量能 279.5 万手，比昨日 314.9 万手缩 11.2%，价格冲高 3,239 后收 3,191、留 48 元上影；净多 -16,681、空头 +41,468，国泰君安多头占全市场 12%，多头拥挤度极高。增仓、缩量、长上影、净多下降同时出现，这是多头集中兑现的典型组合，不是趋势启动。如果明天不能快速收复 3,205，今天的阳线就会被定义为下跌中继，而不是反转。</p></div>
+</div>
+
+<div class="debate round">
+<div class="side bull"><h4>🐂 第三轮 · 多头终陈</h4>
+<p>终局我只讲三点。第一，近月紧张的客观性。36.38 万吨港口库存、6,583 吨仓单（10-19）、2611 对 2701 升水 354 元、太仓基差 +802 元，这些不是情绪，是交割月前的硬约束；只要 11 月仓单注销和伊朗低开工不解决，2701 下方 3,080~3,100 就是强支撑。</p>
+<p>第二，今天的价量仓是确认信号。3,081 回踩 MA20 3,087 后收回，收 3,191 站上 MA5 3,162.6，阳包阴，持仓 +5.53 万手，MACD 绿柱收敛，5 日转正 +0.66%，这是从 3,402 下跌以来第一次“低点抬高 + 收盘抬高”。</p>
+<p>第三，交易上不追高。3,239 是今日高点，3,260 是前高压力，直接在 3,191 追多，盈亏比只有 69:116；回踩 3,120~3,165 再买，止损 3,075，目标 3,260/3,330，盈亏比 2:1 以上。若放量突破 3,245，再用半仓追多。空头说需求崩塌，我承认；但期货交易的是边际变化，MTO 该停的已经停了，接下来只有“重启”或“维持”，没有更坏。我的最终建议：3,120~3,165 做多，3,260 减半，3,330 止盈，收盘破 3,075 离场。我也提醒多头：不要把 2611 的 4.30% 直接线性外推到 2701，2701 的目标只能给到 3,260/3,330，而不是 3,545。若 3,120 回踩不到，宁可错过，也不追 3,191 以上的第一根阳线。</p></div>
+
+<div class="side bear"><h4>🐻 第三轮 · 空头终陈</h4>
+<p>终局我也只讲三点。第一，需求端的“更坏”还没有结束。港口 MTO 全停只是开始，内地外采 MTO 仍在降负，甲醛 30.32%、二甲醚 7.21%，醋酸 10-22 已被生意社判定“明确下跌”；甲醇每涨一轮，下游就再停一套，负反馈是动态的，不是静态的“该停都停了”。</p>
+<p>第二，供应和进口的边际在转松。国内开工 75.32%，宝丰 10 月底投产、宁夏下旬外销，11 月后霍尔木兹若复航，伊朗浮仓和复产货源会集中到港；Kpler 已显示中东石油运输恢复到战前水平，地缘溢价正在被削弱，SC 今天收 713.4（-0.43%）、日内一度 684.4，成本端并不稳。</p>
+<p>第三，盘面已经给出“冲高回落”的证据。3,239 触及后收 3,191，上影 48 元；收盘低于 MA10 3,204.7，MA5 下穿 MA10，MACD 死叉绿柱，KDJ K＜D；持仓增 5.53 万手但净多 -16,681，空头增 41,468 手，中粮双向各 2 万手，国泰君安多头占 12%。这是多头拥挤 + 空头套保进场的组合，一旦 3,239 二次冲关失败，多头止盈会触发向 3,100/3,080 的回踩。我的最终建议：3,220~3,245 轻仓沽空，目标 3,100、3,060，收盘站上 3,255 止损；若跌破 3,081，加仓看 3,030。若价格意外站稳 3,260，则说明近月紧张向 2701 传导超预期，空单必须无条件离场，不参与逼仓。</p></div>
+</div>
+
+<h2>八、总决策官裁决</h2>
+<div class="final">
+<div class="lbl">六维多空评分（10 = 极多，1 = 极空）</div>
+<table><thead><tr><th>维度</th><th>多方</th><th>空方</th><th>裁判理由</th><th>强度</th></tr></thead><tbody>
+<tr><td>库存</td><td class="up">7.5/10</td><td class="down">2.5/10</td><td>36.38 万吨绝对低位；但周降幅仅 0.34 万吨、华东转累，去库放缓</td><td><div class="bar"><i style="width:75%"></i></div></td></tr>
+<tr><td>仓单</td><td class="up">7/10</td><td class="down">3/10</td><td>6,583 吨（10-19）极低、11 月注销；10-22 日报缺失，近月强于远月</td><td><div class="bar"><i style="width:70%"></i></div></td></tr>
+<tr><td>期限结构</td><td class="up">8/10</td><td class="down">2/10</td><td>2611-2701 升水 354 元，深度 backwardation，近月硬约束</td><td><div class="bar"><i style="width:80%"></i></div></td></tr>
+<tr><td>技术面</td><td class="up">6/10</td><td class="down">4/10</td><td>阳包阴、增仓 5.53 万手、绿柱收敛；但收盘低于 MA10、MACD 死叉</td><td><div class="bar"><i style="width:60%"></i></div></td></tr>
+<tr><td>基本面</td><td class="up">4/10</td><td class="down">6/10</td><td>进口紧 vs 港口 MTO 全停、宝丰/宁夏增量、醋酸转弱</td><td><div class="bar"><i style="width:40%"></i></div></td></tr>
+<tr><td>持仓</td><td class="up">5/10</td><td class="down">5/10</td><td>增仓上涨，但净多 -16,681、空头增仓更多、中粮双向套保</td><td><div class="bar"><i style="width:50%"></i></div></td></tr>
+</tbody></table>
+<p class="note">合计：多方 37.5/60，空方 22.5/60。多方占优但不压倒，故“偏多”而非“强多”。</p>
+
+<div class="row">
+<div><div class="lbl">方向 / 胜率</div><div class="val">震荡偏多 · 回踩做多<br>多方 61% / 空方 39%</div></div>
+<div><div class="lbl">置信度 / 窗口</div><div class="val">61%<br>1~3 个交易日（10-23~10-27）</div></div>
+<div><div class="lbl">入场 / 目标 / 止损</div><div class="val" style="font-size:13px">3,120~3,165 回踩多<br>3,260 → 3,330<br>收盘跌破 3,075</div></div>
+</div>
+
+<p style="margin-top:14px;font-size:12.8px;color:#c3d1e0">裁判意见：双方最强点都很清楚。多头最强的是“近月硬约束”——36.38 万吨港口库存、6,583 吨仓单（10-19）、2611 对 2701 升水 354 元、太仓基差 +802 元，这些是交割月前的客观事实；空头最强的是“需求负反馈 + 持仓结构”——港口 MTO 全停、C/MTO 开工不足六成、今日 PP-3MA 扩大到 -197 元，且增仓 5.53 万手的同时前 20 席净多减少 16,681 手、空头增仓 41,468 手，说明今天的上涨更像“近月挤仓 + 空头回补 + 地缘情绪”，而不是需求驱动的趋势启动。</p>
+<p style="margin-top:8px;font-size:12.8px;color:#c3d1e0">因此，我不接受多头的“趋势启动”定性，也不接受空头的“立即转空”。理由有三：其一，2701 不是 2611，近月紧张对 2701 的传导是“基差修复”而非“逼仓”，354 元升水不可能全部由 2701 补涨完成；其二，2701 也不是 2705，1 月合约仍有冬季限气与春节前备货支撑，深跌同样缺乏驱动；其三，今日收盘 3,191 低于 MA10 3,204.7，说明突破尚未完成，但 3,081 回踩 MA20 3,087 后收回、阳包阴、持仓 +5.53 万手，又说明下方承接真实。结论是：震荡偏多，回踩做多，不追高。</p>
+
+<div class="note" style="margin-top:14px"><b class="gold">核心逻辑 3 条</b><br>
+· 港口 36.38 万吨 + 10 月进口 45~70 万吨 + 伊朗开工 37%，近月紧张未解，2611-2701 升水 354 元，2701 有基差修复空间；<br>
+· 今日 +2.60%、增仓 5.53 万手、阳包阴、站稳 BOLL 中轨，MACD 绿柱收敛，短线转强；<br>
+· 但港口 MTO 全停、PP-3MA 扩至 -197 元、净多减少 16,681 手，上方 3,239/3,260 压力明确，只做回踩不做追高。</div>
+
+<div class="note" style="margin-top:10px"><b class="gold">风险提示</b>　① 伊朗局势缓和/霍尔木兹复航，进口恢复，2611 挤仓逻辑瓦解，2701 可能补跌；② MTO 停车扩大、醋酸/甲醛继续走弱，需求负反馈超预期；③ 宝丰新装置投产、宁夏外销、国内开工回升，供应压力提前兑现；④ 若收盘跌破 3,075，多单止损，反手观察 3,030/2,980；⑤ 郑商所自 10-26 结算时起将 MA2612/2701 保证金上调至 9%、涨跌停板扩至 8%，杠杆下降、波动放大，需降低仓位；⑥ 昨日“替换机制”教训：本报告不因 MA 曾被 SC 替换而降低权重，但也不因昨日方向命中而抬高置信度。</div>
+
+<div class="note" style="color:#e8b45a;margin-top:10px">【关联与替换】本日 MA 置信度 61%，高于 60% 阈值，不触发关联替换；建议独立呈现。若后续关联品种置信度未高出 MA 5 个百分点以上，不应替换。</div>
+</div>
+
+<h2>九、免责声明</h2>
+<div class="card"><p>本报告由 AI 基于公开数据自动生成，采用“6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决”框架，仅用于研究交流，不构成任何投资建议或交易承诺。报告中的数据来自新浪财经期货日K（倚天财经）、郑州商品交易所、隆众资讯、金联创、东方财富研究中心、生意社、瑞达期货、国泰君安期货等公开渠道，可能存在延迟、口径差异或统计误差；标注“数据未获取”的项目不应被视为不存在。期货交易具有杠杆效应，价格波动可能导致本金损失，投资者应结合自身风险承受能力独立决策，并自行承担交易结果。市场有风险，投资需谨慎。</p></div>
+
+<div class="foot">
+数据来源：新浪财经期货日K（倚天财经，2026-10-22 15:00 收盘）、郑州商品交易所、隆众资讯、金联创、国泰君安期货（2026-10-19）、东方财富研究中心/龙虎榜（2026-10-22 16:42）、生意社（2026-10-22）、瑞达期货（2026-10-22 晨会）、恒力期货、金信期货、银河期货、盛达期货、Kpler/财联社、证券时报。周度数据存在口径差异（隆众/金联创/卓创样本不同），已在文中标注日期；未获取项已标注“数据未获取”。iFinD 本次未授权，未采用其数据。<br>
+本报告由 AI 基于公开数据自动生成（6 维数据 + 多 Agent 三轮辩论 + 总决策官裁决），仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。
+</div></div></body></html>
