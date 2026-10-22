@@ -1,6 +1,6 @@
 # 品种关联图谱（静态部分）
 #
-# 关系为**无序对称关系**：分析 HC 时 RB 是关联方，分析 RB 时 HC 也是关联方，
+# 关系为**无序对称关系**（【二评 / 决策 4】）：分析 HC 时 RB 是关联方，分析 RB 时 HC 也是关联方，
 # 同一条记录互为镜像，不重复存储、不重复计算。
 
 relations:
@@ -58,49 +58,3 @@ relations:
     strength: 0.85
     lead: M
     lead_hint: 豆粕主导菜粕定价
-
-  # ===== 以下为补充：覆盖6个目标品种的关联关系 =====
-
-  - members: [C, LH]
-    type: upstream        # 玉米 → 生猪（饲料成本）
-    strength: 0.75
-    lead: C
-    lead_hint: 玉米是生猪核心饲料原料，成本传导约 5~10 个交易日
-
-  - members: [M, LH]
-    type: upstream        # 豆粕 → 生猪（饲料成本）
-    strength: 0.7
-    lead: M
-    lead_hint: 豆粕是生猪蛋白饲料核心，成本传导约 5~10 个交易日
-
-  - members: [LH, JD]
-    type: macro           # 生猪-鸡蛋（禽畜蛋白替代）
-    strength: 0.65
-    note: 同为蛋白消费，消费端有一定替代效应，但各自独立基本面主导
-
-  - members: [C, JD]
-    type: upstream        # 玉米 → 鸡蛋（饲料成本）
-    strength: 0.75
-    lead: C
-    lead_hint: 玉米是蛋鸡核心饲料，成本传导约 3~5 个交易日
-
-  - members: [M, JD]
-    type: upstream        # 豆粕 → 鸡蛋（饲料成本）
-    strength: 0.7
-    lead: M
-    lead_hint: 豆粕是蛋鸡蛋白饲料，成本传导约 3~5 个交易日
-
-  - members: [CJ, AP]
-    type: substitute      # 红枣-苹果（果品替代）
-    strength: 0.5
-    note: 同为鲜干果消费，季节性消费有一定替代，关联较弱
-
-  - members: [BU, MA]
-    type: chain           # 沥青-甲醇（烯烃/煤化工链交叉）
-    strength: 0.7
-    note: 同属原油/煤化工链，成本端和需求端有交叉
-
-  - members: [EB, V]
-    type: chain           # 苯乙烯-PVC（氯碱链交叉）
-    strength: 0.65
-    note: 苯乙烯与PVC同属氯碱-烯烃链，原料端有交叉
