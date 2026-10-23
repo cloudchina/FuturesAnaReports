@@ -1,0 +1,11 @@
+CODE=LC
+DIRECTION=反弹沽空（轻仓·偏空）
+CONFIDENCE=58
+WINDOW=2026-10-26至2026-10-30（下一交易日起3-5日）
+ENTRY=97500-99000（反弹至此区间分批沽空）；93000下方禁止追空
+TARGET=94500-95000（约2%内）
+STOP=100500（突破10万关口严格离场）
+CORE_LOGIC=强现实去库与弱预期复产/需求下滑背离，超卖反弹后逢高布空、轻仓严格止损
+REPLACED=NO
+RELATED_CONF=无
+HTML=LC深度分析-多Agent辩论报告.html

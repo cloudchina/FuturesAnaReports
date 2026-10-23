@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>碳酸锂 LC 深度分析 · 多Agent三轮辩论报告（2026-10-23）</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#161d2e; --panel2:#1c2740; --line:#2a3550;
+    --txt:#e6edf3; --sub:#9fb0c8; --dim:#6b7a93;
+    --up:#ff5c6c; --down:#3fd07a; --warn:#ffb454; --info:#5aa9ff;
+    --bull:#ff7a86; --bear:#56e0a0; --acc:#7b8cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;line-height:1.7;font-size:15px;padding:0 0 60px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  header{background:linear-gradient(135deg,#1a2238,#10182a);border-bottom:2px solid var(--line);padding:30px 0 24px;margin-bottom:22px}
+  header .wrap{display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px;justify-content:space-between}
+  h1{font-size:26px;font-weight:800;letter-spacing:.5px}
+  h1 .code{color:var(--info)}
+  .sub{color:var(--sub);font-size:13px;margin-top:6px}
+  .closebox{text-align:right}
+  .closebox .px{font-size:30px;font-weight:800;color:var(--up)}
+  .closebox .px.down{color:var(--down)}
+  .closebox .lbl{color:var(--sub);font-size:12px}
+  h2{font-size:19px;margin:34px 0 14px;padding-left:12px;border-left:4px solid var(--acc);font-weight:700}
+  h3{font-size:15.5px;margin:16px 0 8px;color:var(--info);font-weight:700}
+  .banner{background:linear-gradient(135deg,#241a2e,#1a1426);border:1px solid #3a2d50;border-radius:14px;padding:20px 24px;display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-bottom:8px}
+  .banner .verdict{font-size:22px;font-weight:800;color:var(--warn)}
+  .banner .kv{font-size:12.5px;color:var(--sub)}
+  .banner .kv b{color:var(--txt);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .card h3{margin-top:0}
+  .card .src{font-size:11px;color:var(--dim);margin-top:10px;border-top:1px dashed var(--line);padding-top:7px}
+  .kvrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1f2940;font-size:13.5px}
+  .kvrow:last-child{border-bottom:none}
+  .kvrow .k{color:var(--sub)} .kvrow .v{color:var(--txt);font-weight:600}
+  .v.up{color:var(--up)} .v.down{color:var(--down)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:center}
+  th{background:var(--panel2);color:var(--info);font-weight:700}
+  td.l{text-align:left}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:700}
+  .pill.bull{background:rgba(255,92,108,.16);color:var(--bull)}
+  .pill.bear{background:rgba(63,208,122,.16);color:var(--bear)}
+  .pill.neu{background:rgba(122,140,255,.16);color:var(--acc)}
+  .debate{border:1px solid var(--line);border-radius:12px;padding:4px 0;margin-bottom:14px;overflow:hidden}
+  .debate .rnd{background:var(--panel2);padding:10px 18px;font-weight:700;color:var(--acc);font-size:14px}
+  .debate .body{padding:14px 18px}
+  .spk{margin:12px 0}
+  .spk .who{font-weight:800;font-size:14px;margin-bottom:4px}
+  .spk.bull .who{color:var(--bull)} .spk.bear .who{color:var(--bear)}
+  .spk p{font-size:13.5px;color:#d6deea;margin:5px 0}
+  .spk .tag{font-size:11px;color:var(--dim)}
+  .score td.bull{color:var(--bull);font-weight:700} .score td.bear{color:var(--bear);font-weight:700}
+  .note{font-size:12px;color:var(--warn);background:rgba(255,180,84,.08);border:1px solid #4a3a20;border-radius:8px;padding:9px 12px;margin:10px 0}
+  .disclaim{font-size:11.5px;color:var(--dim);border-top:1px solid var(--line);margin-top:36px;padding-top:16px}
+  .hl{color:var(--warn);font-weight:700}
+  .flag{color:var(--up);font-weight:700}
+  .ok{color:var(--down);font-weight:700}
+  ul.sq{margin:6px 0 6px 18px;font-size:13.5px;color:#d6deea}
+  ul.sq li{margin:4px 0}
+  .mini{font-size:11.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <h1><span class="code">碳酸锂 LC</span> 深度分析报告 · 多Agent三轮辩论 + 总决策官裁决</h1>
+      <div class="sub">交易所：广州期货交易所（GFEX）｜报告日期：2026-10-23（周五·收盘后）｜下一交易日：2026-10-26（周一）</div>
+      <div class="sub">数据来源：长江有色网 / 东方财富 / 同花顺 / 金融界 / 北方有色网 / SMM / Mysteel / 广期所 / 华鑫期货 / 财联社 / 中国能源报（均经 WebSearch 获取，逐条标注）</div>
+    </div>
+    <div class="closebox">
+      <div class="px">97,280<span style="font-size:15px"> 元/吨</span></div>
+      <div class="lbl">主连 LC2701 收盘 · <span style="color:var(--up)">+2.94%</span>（超跌反弹）</div>
+      <div class="lbl">日内最低 90,880（历史新低）· 最高 97,520</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 裁决 Banner -->
+  <div class="banner">
+    <div>
+      <div class="verdict">⚖ 总决策官裁决：反弹沽空（轻仓 · 偏空）</div>
+      <div class="kv">关联替换：<b style="color:var(--down)">无（YAML 无 LC 关联记录，保留原品种）</b></div>
+    </div>
+    <div class="kv">方向 <b style="color:var(--warn)">反弹沽空</b></div>
+    <div class="kv">胜率/置信度 <b style="color:var(--warn)">58%</b></div>
+    <div class="kv">入场 <b>97,500–99,000（反弹至此区间分批沽空）</b></div>
+    <div class="kv">目标 <b style="color:var(--down)">94,500–95,000（≈2% 内）</b></div>
+    <div class="kv">止损 <b style="color:var(--up)">100,500（突破 10 万关口严格离场）</b></div>
+    <div class="kv">铁律 <b class="flag">93,000 下方禁止追空 · 全程轻仓</b></div>
+    <div class="kv">触发窗口 <b>2026-10-26 → 2026-10-30（3–5 日）</b></div>
+  </div>
+  <div class="note">⚠ 趋势上下文：LC 窗口方向命中率 62.5%，但 2026-10-22 沽空被超跌反弹打错（连败 1）；RSI 仍深度超卖。今日只做反弹沽空、93,000 下方不追空，目标压缩至 2% 以内，严格止损。碳酸锂趋势最强但超卖最深，任何方向均须轻仓。</div>
+
+  <!-- 6 大维度 -->
+  <h2>一、六维基本面 · 数据与来源</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>① 库存（社会 / 冶炼厂 / 周环比）</h3>
+      <div class="kvrow"><span class="k">总库存（新口径）</span><span class="v down">130,279 吨 · 环比 −4,093</span></div>
+      <div class="kvrow"><span class="k">周度总产量</span><span class="v">26,375 吨 · 环比 +845</span></div>
+      <div class="kvrow"><span class="k">　辉石 / 云母 / 盐湖 / 回收</span><span class="v">14,967(+814)/3,184(+29)/5,741(+20)/2,483(−17)</span></div>
+      <div class="kvrow"><span class="k">港口锂矿库存</span><span class="v up">39.2 万吨 · 环比 +4.5 万吨</span></div>
+      <div class="kvrow"><span class="k">　镇江港</span><span class="v up">28.2 万吨 · 环比 +6 万吨</span></div>
+      <div class="kvrow"><span class="k">SMM 口径（10/15 周）</span><span class="v down">134,372 吨 · −5,145</span></div>
+      <div class="kvrow"><span class="k">　上游/正极厂/贸易/电芯</span><span class="v">+773 / −3,343 / −3,275 / +700</span></div>
+      <div class="src">来源：北方有色网《2026-10-23 锂市场日报》、SMM / 华泰期货周报、Mysteel（港口库存，经东方财富转载）</div>
+    </div>
+
+    <div class="card">
+      <h3>② 仓单（注册 / 预报 / 变化）</h3>
+      <div class="kvrow"><span class="k">10-22 注册仓单</span><span class="v down">20,952 手 · 环比 −743</span></div>
+      <div class="kvrow"><span class="k">10-21 注册仓单</span><span class="v down">21,695 手 · 环比 −1,477</span></div>
+      <div class="kvrow"><span class="k">10-19 注册仓单</span><span class="v down">23,552 手 · 环比 −2,088</span></div>
+      <div class="kvrow"><span class="k">9 月高点 → 当前</span><span class="v down">49,797 → 20,952（去化≈40%）</span></div>
+      <div class="kvrow"><span class="k">10-23 当日仓单</span><span class="v flag">未获取</span></div>
+      <div class="kvrow"><span class="k">总持仓（主连 10-23）</span><span class="v">44.1 万手 · 日减 10,445（减仓反弹）</span></div>
+      <div class="note" style="margin:8px 0 0">可交割货源持续去化→近月偏紧；价格反弹后仓单或回流，边际支撑减弱。</div>
+      <div class="src">来源：新华财经（10-22/10-19）、99 期货仓单日报（10-21）、华鑫期货（9 月高点）、东方财富行情</div>
+    </div>
+
+    <div class="card">
+      <h3>③ 期限结构（合约 / 基差 / 结构）</h3>
+      <table>
+        <tr><th>合约</th><th>收盘</th><th>涨跌</th></tr>
+        <tr><td>LC2611</td><td>99,600</td><td class="up">+2.74%</td></tr>
+        <tr><td>主连 LC2701</td><td>97,280</td><td class="up">+2.94%</td></tr>
+        <tr><td>LC2702</td><td>95,700</td><td class="up">+3.55%</td></tr>
+        <tr><td>LC2704</td><td>94,100</td><td class="up">+2.98%</td></tr>
+        <tr><td>LC2709</td><td>93,660</td><td class="up">+2.97%</td></tr>
+        <tr><td>LC2707</td><td>93,220</td><td class="up">+2.96%</td></tr>
+      </table>
+      <div class="kvrow" style="margin-top:8px"><span class="k">月差 LC2701−LC2705</span><span class="v">+2,820 元/吨（近强远弱）</span></div>
+      <div class="kvrow"><span class="k">基差（现货−期货）</span><span class="v">≈ −780（期货微升水）</span></div>
+      <div class="kvrow"><span class="k">前一日基差</span><span class="v">+5,120（期货深度贴水）</span></div>
+      <div class="src">来源：东方财富行情中心（各合约，10-23）、同花顺期市早餐（月差，反映 10-22）、长江有色网（现货 96,500）</div>
+    </div>
+
+    <div class="card">
+      <h3>④ 技术面（趋势 / 震荡 / 量能 / 形态）</h3>
+      <div class="kvrow"><span class="k">均线系统</span><span class="v up">空头排列（南华/东财）</span></div>
+      <div class="kvrow"><span class="k">RSI</span><span class="v flag">深度超卖（具体数值未获取）</span></div>
+      <div class="kvrow"><span class="k">MACD / KDJ / WR / BOLL</span><span class="v flag">具体数值未获取</span></div>
+      <div class="kvrow"><span class="k">累计跌幅</span><span class="v">自 5/13 高点 209,880 跌 >55%</span></div>
+      <div class="kvrow"><span class="k">10-23 形态</span><span class="v">探底 90,880（历史新低）→ 减仓反弹 +3%，收 97,280</span></div>
+      <div class="kvrow"><span class="k">量能解读</span><span class="v">减仓 1.0 万手反弹＝空头获利平仓，非新增多头承接</span></div>
+      <div class="src">来源：南华期货 / 东方财富技术描述、用户趋势上下文（RSI 深度超卖）、东方财富行情（高低点/持仓）</div>
+    </div>
+
+    <div class="card">
+      <h3>⑤ 新闻基本面（矿端 / 排产 / 宏观）</h3>
+      <ul class="sq">
+        <li><b>枧下窝：</b>10-22 宜春环评拟批准公示，公示期至 10-28，复产审批推进<b>但未复产</b>（同花顺/财联社）</li>
+        <li><b>茜坑：</b>江特电机 10-11 安全设计通过审查，理论 LCE≈1.5–2 万吨/年（财联社）</li>
+        <li><b>智利：</b>10-23 拟新招标 5 锂矿，5–10 年锂年产量 30→70 万吨（北方有色网/东财）</li>
+        <li><b>欧盟配额：</b>混动汽车首年进口上限 35 万辆、+6%/年、4 年，最快 2026-12-1 生效，打击 LFP 需求（中国能源报/SMM）</li>
+        <li><b>排产：</b>11 月锂电排产≈323GWh 环比 −5%；9 月新能源乘用车零售 108.4 万 同比 −16.7%（大东时代/乘联会）</li>
+        <li><b>机构：</b>高盛 2027 均价≈10 万、2028≈8.4 万；中信证券 Q4 区间 10–15 万（财联社）</li>
+        <li><b>监管：</b>广期所 10-22 发布风险提示函（东方财富）</li>
+      </ul>
+      <div class="src">来源：财联社、中国能源报、SMM、北方有色网、同花顺、乘联会、广期所公告（综合 WebSearch）</div>
+    </div>
+
+    <div class="card">
+      <h3>⑥ 持仓席位（前 20 多空净持仓）</h3>
+      <div class="kvrow"><span class="k">10-23 前 20 多 / 空</span><span class="v">51.54 万 / 53.81 万</span></div>
+      <div class="kvrow"><span class="k">净持仓</span><span class="v up">−2.27 万手（较上日 −2,041）</span></div>
+      <div class="kvrow"><span class="k">多空比</span><span class="v">0.96（仍净空）</span></div>
+      <div class="kvrow"><span class="k">净多前三</span><span class="v">国君 47,555(+3,220)/中信 31,081(+775)/中泰 10,117</span></div>
+      <div class="kvrow"><span class="k">净空前三</span><span class="v">东证 23,337(−644)/银河 19,548(+408)/一德 12,806</span></div>
+      <div class="kvrow"><span class="k">趋势（9 月初→10-23）</span><span class="v down">净空 −6 万 → −2.27 万；前 5 已转净多</span></div>
+      <div class="src">来源：同花顺财经持仓分析（10-23）、华鑫期货（席位净持仓序列）、东方财富龙虎榜（10-20）</div>
+    </div>
+
+  </div>
+
+  <!-- 技术面板 -->
+  <h2>二、技术面板（独立研判）</h2>
+  <div class="card">
+    <h3>趋势 / 震荡 / 量能 综合</h3>
+    <div class="kvrow"><span class="k">主趋势</span><span class="v up">空头（均线空头排列，自 5 月高点累跌 >55%）</span></div>
+    <div class="kvrow"><span class="k">短线节奏</span><span class="v">10-23 探历史新低 90,880 后减仓反弹 +3%，属超卖空头回补</span></div>
+    <div class="kvrow"><span class="k">RSI / KDJ / WR</span><span class="v flag">深度超卖区，具体数值未获取</span></div>
+    <div class="kvrow"><span class="k">MACD / BOLL</span><span class="v flag">空方动能，具体数值未获取</span></div>
+    <div class="kvrow"><span class="k">量能</span><span class="v">反弹日减仓 1.0 万手 → 无新增多头承接，反弹持续性存疑</span></div>
+    <div class="kvrow"><span class="k">关键位</span><span class="v">支撑 90,880（前低）/93,000；压力 97,500–99,000 / 100,500（10 万关口）</span></div>
+    <div class="note">判定：<b>空头趋势未改，但处于深度超卖后的技术性反弹段</b>。减仓反弹≠趋势反转，追空赔率差（RSI 超卖），反弹沽空胜率高于低位追空。</div>
+  </div>
+
+  <!-- 持仓面板 -->
+  <h2>三、持仓面板（席位结构）</h2>
+  <div class="card">
+    <h3>前 20 席位净持仓与主力动向（2026-10-23）</h3>
+    <table>
+      <tr><th>方向</th><th>会员</th><th>净持仓（手）</th><th>日内增减</th><th>近一年盈利（万）</th></tr>
+      <tr><td class="bull">净多</td><td class="l">国泰君安</td><td>47,555</td><td class="down">+3,220</td><td>−99,697</td></tr>
+      <tr><td class="bull">净多</td><td class="l">中信期货</td><td>31,081</td><td class="down">+775</td><td>−480,294</td></tr>
+      <tr><td class="bull">净多</td><td class="l">中泰期货</td><td>10,117</td><td>−103</td><td>−110,538</td></tr>
+      <tr><td class="bear">净空</td><td class="l">东证期货</td><td>23,337</td><td class="down">−644</td><td class="ok">+191,726</td></tr>
+      <tr><td class="bear">净空</td><td class="l">银河期货</td><td>19,548</td><td class="up">+408</td><td>−51,389</td></tr>
+      <tr><td class="bear">净空</td><td class="l">一德期货</td><td>12,806</td><td class="down">−264</td><td class="ok">+96,436</td></tr>
+    </table>
+    <div class="src">来源：同花顺财经《持仓分析》（2026-10-23）。注：净多头部（国君/中信）近一年多为亏损，套保/配置盘特征；东证为年内盈利最高机构。</div>
+    <div class="note">结构信号：<b>头部（前 5）已转净多、整体净空自 9 月 −6 万收窄至 −2.27 万</b>；价格下跌伴随空头兑现而非加码（价量相关系数≈−0.27，华鑫期货）。说明主动做空力量边际减弱，但绝对仍净空——对空头“追空”不利，对“反弹沽空”有利（反弹后空头可重新加仓）。</div>
+  </div>
+
+  <!-- 期限结构 -->
+  <h2>四、期限结构与基差</h2>
+  <div class="card">
+    <h3>远月曲线 · 近强远弱（Backwardation）</h3>
+    <div class="kvrow"><span class="k">曲线形态</span><span class="v">2611(99,600)＞2701(97,280)＞2702(95,700)＞2704(94,100)＞2709(93,660)＞2707(93,220)</span></div>
+    <div class="kvrow"><span class="k">月差 2701−2705</span><span class="v">+2,820 元/吨（back 结构，近月溢价）</span></div>
+    <div class="kvrow"><span class="k">现货−期货基差</span><span class="v">≈ −780（反弹后期货微升水，近平）；前一日 +5,120（深度贴水）</span></div>
+    <div class="kvrow"><span class="k">解读</span><span class="v">近月去库+仓单去化支撑 back；远月弱预期压低曲线→中长期偏空定价未改</span></div>
+    <div class="src">来源：东方财富行情中心、同花顺期市早餐、长江有色网（现货 96,500）</div>
+  </div>
+
+  <!-- 三轮辩论 -->
+  <h2>五、多Agent三轮辩论</h2>
+
+  <div class="debate">
+    <div class="rnd">第一轮 · 立论（🐂 多头 vs 🐻 空头）</div>
+    <div class="body">
+      <div class="spk bull">
+        <div class="who">🐂 多头立论</div>
+        <p><b>核心逻辑一：强现实——去库与仓单去化未被证伪，近月仍有支撑。</b>更新口径后总库存连续降至 13.03 万吨（周环比 −4,093 吨），SMM 口径更早一周亦去化 5,145 吨；广期所注册仓单自 9 月高点 49,797 手持续流出至 10-22 的 20,952 手，去化约 40%。可交割货源偏紧叠加 LC2701−LC2705 月差 +2,820 元的 back 结构，说明近月供需并非全面宽松，现货端“紧而不缺”（中信期货）。去库是真实流转，不是预期。</p>
+        <p><b>核心逻辑二：极端超卖+空头边际兑现，反弹具备动能。</b>RSI 深度超卖（用户上下文），10-23 主力探至 90,880 历史新低后减仓 1.0 万手反弹 +3% 收 97,280；华鑫期货测算价格涨跌幅与前 20 净持仓变化相关系数约 −0.27，即下跌多伴随空头兑现而非加码——10-12 单日重挫 10.48% 净空仅扩 2,471 手，9-11、9-28 大跌日净空反收窄 8,000+ 手。净空自 9 月初 −6 万手收敛至 −2.27 万手、前 5 席位已转净多，空头“进攻意愿”边际减弱，超卖反弹可持续。</p>
+        <p><b>核心逻辑三：成本支撑与政策托底构成下行边界。</b>银河期货指出现货 10 万以下已进入成本支撑区间；新型电池“十五五”规划（七部门印发）提供中长期政策支撑；商务部就欧盟混动配额明确“系在 2025 年基础上向上安排，确保出口空间稳定增长”，并非单边利空。枧下窝仅公示未复产、茜坑理论产能仅 1.5–2 万吨/年，远期供给增量存在时间滞后，当前下跌已部分 price-in 弱预期。</p>
+        <p class="tag">结论：超卖反弹+去库未证伪+成本支撑 → 偏多，轻仓博反弹。</p>
+      </div>
+      <div class="spk bear">
+        <div class="who">🐻 空头立论</div>
+        <p><b>核心逻辑一：弱预期主导——矿端复产与海外扩产确定性高。</b>枧下窝环评拟批准公示（公示期至 10-28）推进复产审批；茜坑安全设计过审（LCE≈1.5–2 万吨/年）；智利 10-23 宣布拟新招标 5 个锂矿、5–10 年内年产量由 30 万吨提至 70 万吨；港口锂矿库存 39.2 万吨（环比 +4.5 万，镇江港 +6 万）持续累库。远期供给宽松从“预期”走向“兑现路径”，是压制盘面定价主线的核心变量。</p>
+        <p><b>核心逻辑二：需求证伪——排产下滑+欧盟配额打击 LFP。</b>大东时代智库测算 11 月锂电全市场排产约 323GWh（环比 −5%），弱于预期；乘联会 9 月新能源乘用车零售 108.4 万辆（同比 −16.7%），10 月 1–18 日零售 52 万辆（同比 −13%、环比 −2%）；欧盟拟设混动进口上限 35 万辆/年（+6%）、最快 2026-12-1 生效，直接削弱磷酸铁锂出口与需求持续性预期。“金九银十”被证伪，旺季尾声后需求延续性受质疑。</p>
+        <p><b>核心逻辑三：机构看空+技术空头，反弹即布空窗口。</b>高盛预测 2027 现货均价≈10 万、2028≈8.4 万；中信证券下调 Q4 区间至 10–15 万、2027 全球转过剩 3.8 万吨。技术上均线空头排列、自 5 月高点累跌 >55%，10-23 反弹为减仓空头回补（非新增多头承接），量能不支持反转。广发期货“若反弹仍可考虑布空”、多家机构维持震荡偏弱——反弹是逢高布空机会而非转多信号。</p>
+        <p class="tag">结论：弱预期+需求证伪+机构看空 → 反弹沽空，偏空。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="debate">
+    <div class="rnd">第二轮 · 交叉驳斥</div>
+    <div class="body">
+      <div class="spk bull">
+        <div class="who">🐂 多头驳空头</div>
+        <p>空头将“弱预期”当作既定事实，但关键变量均有时间滞后与不确定性：枧下窝仅处于环评公示（至 10-28），<b>不等于已复产</b>，正式批文与复产后实际增量仍需等待；茜坑 LCE 仅 1.5–2 万吨/年，量级有限；智利 70 万吨目标在 5–10 年之后，对当下无定价压力。更关键的是，<b>现实去库与仓单去化并未被证伪</b>——总库存连降至 13 万、仓单去化 40%，back 结构仍在。机构看空（高盛/中信）属预期判断，部分已被 55% 的跌幅计入；当预期过度一致时，边际利空对价格的边际冲击递减。空头所谓“反弹布空”忽视了 RSI 深度超卖下反弹的惯性——减仓反弹后若现货企稳，空头再入场成本更高。</p>
+      </div>
+      <div class="spk bear">
+        <div class="who">🐻 空头驳多头</div>
+        <p>多头依赖的“去库”正在边际走弱：周度去库由前周 −5,145 吨放缓至 −4,093 吨，同时周度产量回升 +845 吨、港口矿累库 +4.5 万吨，<b>现实端已由“去库”转向“产量回升+矿累库”</b>。基差由前日 +5,120（期货深度贴水）在反弹后转为 −780（期货微升水），说明现货端在补跌、期现结构对多头不利。所谓“成本支撑在 10 万”恰说明当前 97,280 距成本线仍有下探空间；超卖可以“更超卖”——在空头趋势中 RSI 钝化常见，减量反弹无多头承接（国君/中信净多近一年巨亏，属配置/套保而非主动做多）。欧盟配额与 11 月排产 −5% 是确定性需求利空，远未出尽。反弹沽空胜率高于低位抄底。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="debate">
+    <div class="rnd">第三轮 · 最终陈词（含方向 / 入场 / 目标 / 止损）</div>
+    <div class="body">
+      <div class="spk bull">
+        <div class="who">🐂 多头最终陈词</div>
+        <p>承认弱预期中长期压制，但短期处于“强现实+极端超卖”的反弹窗口。去库与仓单去化提供近月安全垫，净空持续收窄、前 5 转净多显示主动空头撤退。<b>方向：轻仓偏多博超卖反弹。</b>入场：93,000–94,500（接近前低/成本区分批低吸）；目标：98,000–100,000（修复基差+技术反抽）；止损：90,500（跌破历史新低 90,880 离场）。仓位≤10%，因趋势仍空、超卖反弹空间受限。</p>
+      </div>
+      <div class="spk bear">
+        <div class="who">🐻 空头最终陈词</div>
+        <p>弱预期（复产+智利扩产+欧盟配额+排产−5%）+机构看空+技术空头排列，是确定性更高的主线；10-23 减仓反弹无新增多头承接，恰为逢高布空提供点位。<b>方向：反弹沽空（轻仓·偏空）。</b>入场：97,500–99,000（反弹至压力区分批沽空）；目标：94,500–95,000（≈2% 内，压缩盈利预期）；止损：100,500（有效突破 10 万关口严格离场）。<b>铁律：93,000 下方禁止追空</b>（RSI 深度超卖、赔率差），全程轻仓（≤10%），严格止损。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 最终裁决 -->
+  <h2>六、总决策官裁决</h2>
+  <div class="card">
+    <h3>6 维多空评分表（1–10，10=强烈利多该方）</h3>
+    <table class="score">
+      <tr><th>维度</th><th>多头</th><th>空头</th><th>理由</th></tr>
+      <tr><td class="l">① 库存</td><td class="bull">5</td><td class="bear">6</td><td class="l">去库利多但产量+845、港口矿累库+4.5万，现实端边际走弱</td></tr>
+      <tr><td class="l">② 仓单</td><td class="bull">7</td><td class="bear">4</td><td class="l">仓单去化40%（近月偏紧，利多多头）；反弹后或回流</td></tr>
+      <tr><td class="l">③ 期限结构</td><td class="bull">6</td><td class="bear">5</td><td class="l">back结构利多近月；但远月弱、基差转微升水偏空远月</td></tr>
+      <tr><td class="l">④ 技术面</td><td class="bull">5</td><td class="bear">6</td><td class="l">空头排列利空，但RSI深度超卖限制追空（赔率差）</td></tr>
+      <tr><td class="l">⑤ 新闻基本面</td><td class="bull">3</td><td class="bear">8</td><td class="l">复产/智利扩产/欧盟配额/排产−5% 弱预期主导</td></tr>
+      <tr><td class="l">⑥ 持仓席位</td><td class="bull">6</td><td class="bear">5</td><td class="l">净空收窄、前5转净多利多多头；但绝对仍净空</td></tr>
+      <tr><td class="l"><b>合计</b></td><td class="bull"><b>32</b></td><td class="bear"><b>34</b></td><td class="l">空头微优，但技术超卖压缩追空空间</td></tr>
+    </table>
+    <h3>双方最强 / 最弱点</h3>
+    <ul class="sq">
+      <li><span class="bull">多头最强：</span>近月去库+仓单去化+RSI极端超卖，提供反弹安全垫与赔率。</li>
+      <li><span class="bull">多头最弱：</span>依赖“超卖反弹”，无新增多头承接（减仓反弹），弱预期未被证伪。</li>
+      <li><span class="bear">空头最强：</span>弱预期确定性高（复产+智利+欧盟配额+排产−5%），机构一致看空，技术空头排列。</li>
+      <li><span class="bear">空头最弱：</span>RSI深度超卖、净空持续收窄，低位追空赔率差、易被回补轧空。</li>
+    </ul>
+    <h3>技术面独立研判</h3>
+    <p>空头趋势未改（均线空头排列、累跌&gt;55%），但处深度超卖后的技术性反弹段；10-23 减仓反弹=空头回补，非反转。关键位：支撑 90,880/93,000，压力 97,500–99,000/100,500。<b>结论：反弹沽空优于低位追空。</b></p>
+    <h3>持仓可信度</h3>
+    <p>前 20 整体净空 −2.27 万（仍偏空），但净空自 9 月 −6 万显著收窄、前 5 转净多、价跌伴随空头兑现（相关性 −0.27）。<b>可信度：中等偏空</b>——绝对净空对“反弹沽空”有利（反弹后空头可再加），但主动追空意愿弱，不支持单边重仓做空。</p>
+    <h3>最终决策</h3>
+    <div class="kvrow"><span class="k">方向</span><span class="v" style="color:var(--warn)">反弹沽空（轻仓·偏空）</span></div>
+    <div class="kvrow"><span class="k">胜率 / 置信度</span><span class="v" style="color:var(--warn)">58%</span></div>
+    <div class="kvrow"><span class="k">入场</span><span class="v">97,500–99,000（反弹至此区间分批沽空）</span></div>
+    <div class="kvrow"><span class="k">目标</span><span class="v ok">94,500–95,000（≈2% 内，压缩盈利预期）</span></div>
+    <div class="kvrow"><span class="k">止损</span><span class="v flag">100,500（突破 10 万关口严格离场）</span></div>
+    <div class="kvrow"><span class="k">铁律</span><span class="v flag">93,000 下方禁止追空 · 仓位≤10%</span></div>
+    <div class="kvrow"><span class="k">触发窗口</span><span class="v">2026-10-26 → 2026-10-30（3–5 日）</span></div>
+    <h3>风险</h3>
+    <ul class="sq">
+      <li><b class="flag">超卖轧空风险：</b>RSI 深度超卖+净空收窄，反弹可能延续至 10 万上方触发止损。</li>
+      <li><b class="flag">复产证伪/延后：</b>枧下窝仅公示未复产，若批文延后，弱预期回摆带动急涨。</li>
+      <li><b class="flag">宏观反转：</b>美联储加息预期/美元若回落，有色板块整体修复。23 日连败 1，仓位须严格管理。</li>
+    </ul>
+  </div>
+
+  <!-- 置信度 -->
+  <h2>七、置信度字段（必填）</h2>
+  <div class="card">
+    <div class="kvrow"><span class="k">结论</span><span class="v" style="color:var(--warn)">反弹沽空（轻仓偏空）盈利触发</span></div>
+    <div class="kvrow"><span class="k">触发概率</span><span class="v" style="color:var(--warn)">58%（0–100%）</span></div>
+    <div class="kvrow"><span class="k">触发窗口</span><span class="v">2026-10-26 至 2026-10-30（下一交易日起 3–5 日）</span></div>
+    <div class="kvrow"><span class="k">关联替换</span><span class="v ok">REPLACED=NO（YAML 无 LC 关联记录，保留原品种）</span></div>
+    <div class="kvrow"><span class="k">关联置信</span><span class="v ok">RELATED_CONF=无</span></div>
+    <div class="note">说明：窗口方向命中率 62.5%，但 10-22 沽空被超跌反弹打错（连败 1）；RSI 仍深度超卖，故置信度取 58%（低于基准，因超卖反弹不确定性+连败）。若 10-26 开盘直接跳空跌破 93,000，则放弃沽空、观望。</div>
+  </div>
+
+  <div class="disclaim">
+    <p>⚠ 免责声明：本报告所有数据均通过 WebSearch 获取自公开来源（长江有色网 / 东方财富 / 同花顺 / 金融界 / 北方有色网 / SMM / Mysteel / 广期所 / 华鑫期货 / 财联社 / 中国能源报等），已在各卡片标注来源；无法获取项已明确标注「未获取」，无任何编造。本报告为子 Agent 自动生成的多 Agent 辩论分析，仅供研究参考，不构成任何投资建议。期货市场高风险，请独立判断、理性参与、合规交易。广州期货交易所已就碳酸锂价格波动发布风险提示函（2026-10-22）。</p>
+  </div>
+
+</div>
+</body>
+</html>

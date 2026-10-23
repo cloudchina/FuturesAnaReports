@@ -1,0 +1,11 @@
+CODE=JM
+DIRECTION=偏空(反弹沽空·逆势轻仓)
+CONFIDENCE=56
+WINDOW=1~3交易日(2026-10-26至2026-10-28)
+ENTRY=反弹1400~1430分批沽空(不反弹不入场)
+TARGET=1377.5→1346
+STOP=收盘站上1450
+CORE_LOGIC=保供复产+铁水232.3续降+焦企提涨受阻驱动向下，但10-23减仓空平反弹、柳林基差66%压低置信至56%
+REPLACED=YES:从JM到J
+RELATED_CONF=J:62
+HTML=JM深度分析-多Agent辩论报告.html,J深度分析-多Agent辩论报告.html

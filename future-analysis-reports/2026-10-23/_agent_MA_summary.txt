@@ -1,0 +1,11 @@
+CODE=MA
+DIRECTION=震荡偏多·回踩做多（不追高）
+CONFIDENCE=62
+WINDOW=1~3个交易日（2026-10-26~10-28）
+ENTRY=3160~3195回踩多
+TARGET=3260→3330
+STOP=收盘跌破3120
+CORE_LOGIC=近月低库存+深backwardation+基差高支撑偏多，但量仓背离（价涨仓减4.6万、多翻空）与首目标3260未触限制动能，仅回踩做多
+REPLACED=NO
+RELATED_CONF=SC:64,FU:65
+HTML=MA深度分析-多Agent辩论报告.html

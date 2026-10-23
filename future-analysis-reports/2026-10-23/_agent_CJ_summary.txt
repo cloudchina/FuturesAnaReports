@@ -1,0 +1,11 @@
+CODE=CJ
+DIRECTION=观望为主(条件性试空)
+CONFIDENCE=42
+WINDOW=2026-10-26至2026-10-28(1~3交易日)
+ENTRY=反弹至6450~6500且放量才≤5%轻仓试空；否则观望
+TARGET=6295→6185
+STOP=6565(必执行)
+CORE_LOGIC=连败3日双向止损+仓单0+深度超卖，强制观望；仅反弹放量至6450-6500才≤5%轻仓试空
+REPLACED=NO
+RELATED_CONF=无
+HTML=CJ深度分析-多Agent辩论报告.html

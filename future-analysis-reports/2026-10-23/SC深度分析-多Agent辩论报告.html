@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原油 SC 深度分析 · 多Agent辩论报告（由BU替换）</title>
+<style>
+  :root{
+    --bg:#0f1420; --bg2:#161d2e; --card:#1a2236; --card2:#202a42;
+    --txt:#e6edf3; --sub:#9fb0c3; --line:#2a3550;
+    --up:#e5484d;     /* 涨 红（中国习惯） */
+    --down:#3fb950;   /* 跌 绿 */
+    --gold:#e3b341; --blue:#58a6ff; --purple:#bc8cff;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:"Segoe UI","Microsoft YaHei",-apple-system,system-ui,sans-serif;
+    line-height:1.6;font-size:15px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 18px 60px;}
+  header.hd{background:linear-gradient(135deg,#1c2740,#10182a);
+    border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:18px;}
+  header.hd .tt{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  header.hd h1{font-size:26px;margin:0;letter-spacing:1px;}
+  header.hd .code{color:var(--gold);font-weight:700;font-size:30px;}
+  header.hd .date{color:var(--sub);font-size:13px;margin-left:auto;}
+  .quote{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px;}
+  .quote .q{background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+    padding:10px 16px;min-width:120px;}
+  .quote .q .lab{color:var(--sub);font-size:12px;}
+  .quote .q .v{font-size:20px;font-weight:700;margin-top:2px;}
+  .up{color:var(--up);} .down{color:var(--down);}
+  .banner{background:linear-gradient(135deg,#23304d,#172033);
+    border:1px solid var(--gold);border-radius:14px;padding:20px 24px;margin-bottom:18px;
+    box-shadow:0 0 0 1px rgba(227,179,65,.15);}
+  .banner .brow{display:flex;gap:30px;flex-wrap:wrap;align-items:center;}
+  .banner .brow .item .k{color:var(--sub);font-size:12px;}
+  .banner .brow .item .val{font-size:22px;font-weight:700;}
+  .banner .verdict{font-size:15px;color:var(--txt);margin-top:12px;
+    border-top:1px dashed var(--line);padding-top:12px;}
+  .replace{background:rgba(88,166,255,.12);border:1px solid var(--blue);
+    border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13.5px;color:#cfe3ff;}
+  .replace b{color:var(--blue);}
+  .sec{margin:22px 0 8px;font-size:18px;font-weight:700;color:var(--gold);
+    border-left:4px solid var(--gold);padding-left:10px;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:860px){.grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  .card h3{margin:0 0 8px;font-size:15px;display:flex;justify-content:space-between;align-items:center;}
+  .card .sc{font-size:12px;color:var(--sub);}
+  .card .sc .m{color:var(--up);font-weight:700;}
+  .card .sc .b{color:var(--down);font-weight:700;}
+  .card p{margin:6px 0;font-size:13.5px;color:#d4dde8;}
+  .card .src{font-size:11.5px;color:var(--sub);border-top:1px solid var(--line);
+    margin-top:8px;padding-top:6px;}
+  .tag{display:inline-block;background:var(--card2);border:1px solid var(--line);
+    border-radius:6px;padding:1px 7px;font-size:11px;color:var(--sub);margin-right:4px;}
+  .na{color:var(--gold);font-style:italic;}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;}
+  .panel h3{margin:0 0 10px;font-size:16px;color:var(--blue);}
+  .kv{display:grid;grid-template-columns:160px 1fr;gap:6px 14px;font-size:13.5px;}
+  .kv .k{color:var(--sub);}
+  .debate{border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+  .debate .dhead{background:var(--card2);padding:10px 16px;font-weight:700;font-size:15px;
+    display:flex;justify-content:space-between;align-items:center;}
+  .debate .dbody{padding:14px 18px;font-size:14px;}
+  .bull{color:var(--up);} .bear{color:var(--down);}
+  .rd{background:linear-gradient(135deg,#1a2438,#141d2e);border:1px solid var(--gold);
+    border-radius:14px;padding:20px 24px;}
+  table.score{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;}
+  table.score th,table.score td{border:1px solid var(--line);padding:7px 9px;text-align:center;}
+  table.score th{background:var(--card2);color:var(--sub);}
+  table.score td.dim{text-align:left;color:var(--txt);font-weight:600;}
+  .mcol{color:var(--up);font-weight:700;} .bcol{color:var(--down);font-weight:700;}
+  .conf{background:linear-gradient(135deg,#2a2150,#1a1838);border:1px solid var(--purple);
+    border-radius:12px;padding:16px 20px;margin:14px 0;}
+  .conf .big{font-size:34px;font-weight:800;color:var(--purple);}
+  .disclaimer{margin-top:30px;font-size:12px;color:var(--sub);border-top:1px solid var(--line);
+    padding-top:14px;line-height:1.7;}
+  .pill{display:inline-block;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:700;}
+  .pill.b{background:rgba(229,72,77,.18);color:var(--up);border:1px solid var(--up);}
+  .pill.s{background:rgba(63,185,80,.16);color:var(--down);border:1px solid var(--down);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ======================= HEADER ======================= -->
+  <header class="hd">
+    <div class="tt">
+      <span class="code">SC</span>
+      <h1>原油（上海国际能源交易中心）· 深度分析</h1>
+      <span class="date">报告日期 2026-10-23（周五·收盘后）｜下一交易日 2026-10-26（周一）</span>
+    </div>
+    <div class="quote">
+      <div class="q"><div class="lab">主力最新价</div><div class="v">724.90 <span class="up">元/桶</span></div></div>
+      <div class="q"><div class="lab">涨跌</div><div class="v up">+22.90 (+3.26%)</div></div>
+      <div class="q"><div class="lab">持仓量</div><div class="v">34,232 <span class="up">手(+611)</span></div></div>
+      <div class="q"><div class="lab">成交量</div><div class="v">175,350 手</div></div>
+      <div class="q"><div class="lab">日内区间</div><div class="v" style="font-size:15px">703.3 ~ 734.0</div></div>
+      <div class="q"><div class="lab">昨结/昨收</div><div class="v" style="font-size:15px">702.0 / 713.4</div></div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--sub)">
+      数据来源：金投网《10月23日收盘:国内能源期货集体上行》(energy.cngold.org 2026-10-23)、18期货行情(18qh.com 2026-10-23)、
+      新浪财经/网易转载金投网《上期所原油期货仓单变动》(2026-10-23)。
+    </div>
+  </header>
+
+  <!-- ======================= REPLACEMENT BANNER ======================= -->
+  <div class="replace">
+    <b>⚠ 替换说明（由原品种 BU 低置信度触发，替换为关联品种 SC）：</b>
+    依据 <code>commodity_relations.yaml</code>，BU 属原油产业链 chain（成员 SC/FU/LU/BU/MA/EB/EG/PX，strength 0.8）。
+    BU 10日窗口方向命中率 <b>0/2（最弱）</b>，本系统判定 BU 置信度 <b>52%</b> &lt; 60% 阈值；按"上游成本源优先"对 SC、FU 做完整分析，
+    SC 置信度 <b>65%</b> ≥ BU+5pct 且同方向（偏多），故<b>最终呈现替换为 SC</b>。
+    此为非"弱替换"（SC 为上游成本源、置信度高出 BU 13pct 且趋势领先），符合 trend-2026-10-23 校准要求。
+    BU 原始数据见文末附录。
+  </div>
+
+  <!-- ======================= DECISION BANNER ======================= -->
+  <div class="banner">
+    <div class="brow">
+      <div class="item"><div class="k">总决策方向</div><div class="val"><span class="pill b">偏多（震荡偏多）</span></div></div>
+      <div class="item"><div class="k">决策胜率</div><div class="val up">65%</div></div>
+      <div class="item"><div class="k">入场区间</div><div class="val">718 ~ 725</div></div>
+      <div class="item"><div class="k">目标</div><div class="val up">740 ~ 750</div></div>
+      <div class="item"><div class="k">止损</div><div class="val down">700</div></div>
+    </div>
+    <div class="verdict">
+      <b>核心判断：</b>地缘风险溢价（胡塞48h内4袭沙特、美以拟打击伊朗、霍尔木兹油轮遇袭）进入"无法证伪"阶段，叠加 EIA 战略库存历史低位与沙特减产，
+      短线多头趋势明确（技术看多8:0、SC 创阶段新高 734）。但须警惕华泰所指"油价与基本面持续背离"——当前涨的是<b>预期</b>而非实质供应损失，
+      且 10-23 为全市场单日风险偏好反转噪声、能化链单因子共振使分散失效（链合计仓位≤50%）。故定位<b>震荡偏多、逢回踩做多、不追高</b>。
+    </div>
+  </div>
+
+  <!-- ======================= 6 DIMENSIONS ======================= -->
+  <div class="sec">① 六维分析</div>
+  <div class="grid">
+
+    <div class="card">
+      <h3>① 库存 <span class="sc">多 <span class="m">7</span> / 空 <span class="b">5</span></span></h3>
+      <p>截至10月16日当周，美国 EIA 战略石油储备（SPR）库存降至<b>1982年10月以来最低</b>，国内原油产量降幅为2026年1月30日以来最大，
+      商业原油库存为7月31日以来最低，汽油库存降幅为5月8日以来最大（华泰期货 2026-10-23）。</p>
+      <p>沙特8月原油产量环比<b>减少189.7万桶/日</b>至623.8万桶/日（JODI）；利比亚扎维耶港管道阀门被关两油田减产；欧盟柴油/航煤供应紧张。
+      低库存+减产构成价格下沿实物支撑（偏多）。</p>
+      <p>但华泰指出"纸货与实货背离持续、基本面持续转弱"，高运价与炼厂利润压缩带来需求负反馈（偏空）。</p>
+      <div class="src">来源：华泰期货《地缘局势继续推高油价，但与基本面持续背离》(新浪财经 2026-10-23)、JODI/彭博。</div>
+    </div>
+
+    <div class="card">
+      <h3>② 仓单 / 持仓 <span class="sc">多 <span class="m">6</span> / 空 <span class="b">5</span></span></h3>
+      <p>总持仓 <b>34,232 手</b>，较前日 <b>+611 手</b>（前日33,621），成交 175,350 手——价升量稳、持仓微增，显示多头未撤退但增持幅度有限。</p>
+      <p><span class="na">SC 上期所标准仓单具体桶数：未获取</span>（10-23 金投/新浪/网易仓单文章仅披露行情，未列具体仓单数值）。</p>
+      <p>仓单变动含义：仓单减少通常推动价格上行，增加则暗示现货充裕。当前数值缺失，维度置信度下调。</p>
+      <div class="src">来源：金投网/新浪财经《上期所原油期货仓单变动》(2026-10-23)、18期货行情。</div>
+    </div>
+
+    <div class="card">
+      <h3>③ 期限结构 <span class="sc">多 <span class="m">5</span> / 空 <span class="b">5</span></span></h3>
+      <p><span class="na">SC 各合约收盘价、基差、近远月月差：未获取</span>（公开收盘综述未披露 SC 具体合约排列）。</p>
+      <p>外盘参考：布伦特已<b>突破 106.60 阻力</b>（FxPro 波浪分析看多至 113.80），MA5 110.763 &gt; MA10 108.748 &gt; MA20 104.754，呈多头排列，
+      对 SC 形成正向牵引。</p>
+      <p>内盘 SC 相对 Brent 的升贴水（比价）未获取，期限结构判定信息不足，评分中性。</p>
+      <div class="src">来源：FxPro 波浪分析 / 汇通网 fx678 布伦特均线(2026-10-23)。SC 具体合约数据缺失。</div>
+    </div>
+
+    <div class="card">
+      <h3>④ 技术面 <span class="sc">多 <span class="m">8</span> / 空 <span class="b">4</span></span></h3>
+      <p>汇通网对 SC（中油期货）综合技术信号<b>"看多"</b>：移动平均指数看多 <b>8 : 0</b>，RSI(14)/MACD(12,26)/CCI 均看多，仅 Williams %R 看空（汇通网 2026-10-23）。</p>
+      <p>SC 收盘 724.90 创阶段新高，盘中最高 <b>734.0</b>，位于所有均线之上，多头排列；外盘 Brent 均线标准多头。</p>
+      <p><span class="na">SC 具体 MA/RSI/MACD/BOLL/KDJ/WR 数值：未获取</span>（仅获汇通综合信号与 Brent 均线）。WR 看空提示短线超买。</p>
+      <div class="src">来源：汇通网原油策略(2026-10-23)、FxPro、18期货分时。</div>
+    </div>
+
+    <div class="card">
+      <h3>⑤ 新闻基本面 <span class="sc">多 <span class="m">8</span> / 空 <span class="b">7</span></span></h3>
+      <p><b>[多]</b> 胡塞武装48h内对沙特发动4次袭击（利雅得国防部、两机场、石油设施），达曼机场遇袭2死8伤；美以已制定中期选举后打击伊朗计划；
+      霍尔木兹海峡油轮持续遇袭。宁证期货："中东地缘风险难以缓解，油价震荡偏多"（金投/宁证 2026-10-23）。</p>
+      <p><b>[空]</b> 华泰期货："地缘推高但与基本面持续背离"，谢拜油田遇袭被拦截、打击计划尚未执行——"涨的是预期，供应实质受损未兑现"，
+      建议"逢高布空+买看涨期权保护"（华泰 2026-10-23）。特朗普援引《国防生产法》支持美国石油扩能（中长期供给弹性）。</p>
+      <div class="src">来源：宁证期货/华泰期货(金投网/新浪 2026-10-23)、新华社/纽约时报。</div>
+    </div>
+
+    <div class="card">
+      <h3>⑥ 持仓席位 <span class="sc">多 <span class="m">6</span> / 空 <span class="b">5</span></span></h3>
+      <p>总持仓 +611 手（微增），成交 17.5 万手，价量配合偏多但增持幅度小（&lt;2%）。
+      微增更似空头回补/换手，而非新多大举建仓。</p>
+      <p><span class="na">SC 前20名期货公司净多/净空持仓及主力席位连续变化：未获取</span>（10-23 公开源未披露 SC 龙虎榜）。</p>
+      <p>席位方向无法验证，维度可信度中等、权重下调。</p>
+      <div class="src">来源：金投网行情综述(2026-10-23)。前20席位明细缺失。</div>
+    </div>
+
+  </div>
+
+  <!-- ======================= TECHNICAL PANEL ======================= -->
+  <div class="sec">② 技术面板</div>
+  <div class="panel">
+    <h3>趋势 / 震荡 / 量能 / 形态</h3>
+    <div class="kv">
+      <div class="k">趋势（EMA/MA）</div>
+      <div>SC 收盘 724.90 站上全部均线、创阶段新高 734.0；外盘 Brent MA5 110.763 &gt; MA10 108.748 &gt; MA20 104.754 多头排列（汇通/fx678）。<span class="na">SC 具体 MA 数值未获取</span></div>
+      <div class="k">MACD / BOLL</div>
+      <div>汇通网 MACD(12,26) 信号"看多"；<span class="na">SC 具体 DIF/DEA/BOLL 轨宽未获取</span>。Brent 已突破 106.60 阻力看多至 113.80。</div>
+      <div class="k">震荡（RSI/KDJ/WR）</div>
+      <div>汇通网 RSI(14) 看多、CCI 看多；<b>Williams %R 看空</b>（短线超买提示）。<span class="na">SC 具体 RSI/KDJ/WR 数值未获取</span></div>
+      <div class="k">量能</div>
+      <div>成交 175,350 手，持仓 34,232 手（+611）；价升量稳、持仓微增，多头惯性尚在但非趋势性放量建仓。</div>
+      <div class="k">形态</div>
+      <div>突破型阳线，盘中最高 734.0 创阶段新高；临近 Brent 113.80（≈SC 750 区域）目标位，属多头获利了结敏感区，追高性价比下降。</div>
+    </div>
+    <div style="font-size:11.5px;color:var(--sub);margin-top:8px">注：所有"看多/看空"信号来自汇通网综合技术指标（2026-10-23）；SC 具体数值因公开源未披露而标注"未获取"，不作编造。</div>
+  </div>
+
+  <!-- ======================= POSITION PANEL ======================= -->
+  <div class="sec">③ 持仓面板</div>
+  <div class="panel">
+    <h3>总持仓 / 成交 / 席位</h3>
+    <div class="kv">
+      <div class="k">总持仓</div><div>34,232 手（前日 33,621，<span class="up">+611 手</span>）</div>
+      <div class="k">成交量</div><div>175,350 手</div>
+      <div class="k">持仓变化性质</div><div>微增（&lt;2%），偏多但力度有限，疑似空头回补/换手</div>
+      <div class="k">前20净持仓</div><div><span class="na">未获取</span>（10-23 公开源未披露 SC 龙虎榜前20多空）</div>
+      <div class="k">主力席位连续变化</div><div><span class="na">未获取</span></div>
+    </div>
+  </div>
+
+  <!-- ======================= TERM STRUCTURE PANEL ======================= -->
+  <div class="sec">④ 期限结构面板</div>
+  <div class="panel">
+    <h3>各合约 / 基差 / 升贴水</h3>
+    <div class="kv">
+      <div class="k">SC 各合约收盘价</div><div><span class="na">未获取</span>（公开收盘综述仅给主力价）</div>
+      <div class="k">基差（现货-期货）</div><div><span class="na">未获取</span></div>
+      <div class="k">近远月月差 / Contango-Back</div><div><span class="na">未获取</span></div>
+      <div class="k">外盘参照</div><div>Brent 突破 106.60 阻力看多至 113.80（FxPro）；SC 与 Brent 比价未获取</div>
+    </div>
+  </div>
+
+  <!-- ======================= DEBATE ROUND 1 ======================= -->
+  <div class="sec">⑤ 多Agent三轮辩论</div>
+
+  <div class="debate">
+    <div class="dhead"><span>第一轮 · 🐂 多头立论（核心逻辑 + 数据）</span><span class="bull">偏多</span></div>
+    <div class="dbody">
+      <p><b>逻辑一 · 地缘风险溢价进入"无法证伪"的刚性阶段。</b> 10月22日胡塞武装在过去48小时内对沙特发动4次导弹与无人机袭击，目标涵盖利雅得国防部、两座国际机场及一处石油设施；达曼法赫德国王国际机场遇袭造成2死8伤；美国《纽约时报》披露美以已制定中期选举后再次打击伊朗的具体计划；霍尔木兹海峡油轮持续遭袭。这一系列事件并非一次性脉冲，而是持续性对抗，市场无法证伪其升级可能（宁证期货 2026-10-23）。外盘直接定价：布伦特10-22收 113.17 美元/桶（+4.0%），10-23盘中进一步至 113.79；WTI 收 99.47（+2.39%）盘中破100至100.39（金投/汇通 2026-10-23）。内盘 SC 主力收 724.90 元/桶（+3.26%），盘中最高 734.0 创阶段新高（金投/18qh）。地缘溢价是本轮上行最核心的驱动，且短期内无缓和信号。</p>
+      <p><b>逻辑二 · 供给端多维收紧，库存数据为硬支撑。</b> 截至10月16日当周，美国 EIA 战略石油储备（SPR）降至1982年10月以来最低，国内原油产量降幅为2026年1月30日以来最大，商业原油库存为7月31日以来最低，汽油库存降幅为5月8日以来最大（华泰期货 2026-10-23）。供给收缩具结构性：沙特8月产量环比减少 189.7 万桶/日至 623.8 万桶/日（JODI），利比亚扎维耶港管道阀门被关两油田减产，欧盟柴油与航煤供应持续紧张。低库存+减产的组合使任何地缘扰动都被放大为价格上行。</p>
+      <p><b>逻辑三 · 技术面与资金面共振确认多头趋势。</b> 汇通网对 SC（中油期货）综合技术信号给出"看多"：移动平均指数看多 8:0、RSI(14)/MACD(12,26)/CCI 均看多，仅 Williams 看空（汇通网 2026-10-23）。外盘 Brent 均线呈标准多头排列（MA5 110.763 &gt; MA10 108.748 &gt; MA20 104.754），且已突破 106.60 阻力，FxPro 波浪分析看多至 113.80。资金面：SC 总持仓 34,232 手较前日增持 611 手，成交 175,350 手，价升量稳、持仓微增显示多头未撤退。技术、资金、地缘三因子同向，多头立论完整。</p>
+    </div>
+  </div>
+
+  <div class="debate">
+    <div class="dhead"><span>第一轮 · 🐻 空头立论（核心逻辑 + 数据）</span><span class="bear">反弹沽空</span></div>
+    <div class="dbody">
+      <p><b>逻辑一 · 油价上涨是"预期"而非"实质供应损失"，与基本面持续背离。</b> 华泰期货明确指出"地缘局势继续推高油价，但与基本面持续背离"：胡塞袭击中谢拜油田遇袭被拦截、运营未受影响，美以打击伊朗计划尚未执行——"涨的是预期，供应实质受损还没兑现"（华泰/微信复盘 2026-10-23）。更关键的是纸货与实货背离持续：高运价、炼厂利润压缩带来的需求负反馈无法支撑当前高油价。一旦地缘利多兑现不及预期，油价将面临"大幅下跌修正"。空头并非看空地缘，而是看空"预期定价"与"现实基本面"的裂口。</p>
+      <p><b>逻辑二 · 单日齐涨属风险偏好反转噪声，且能化链单因子共振使分散失效。</b> 2026-10-23 是全市场"风险偏好反转日"：能源+黑色+化工集体大涨 2%~6.8%，仅生猪/苹果/贵金属等少数收跌（金融界/金投收盘综述）。SC 与 BU/FU/MA/EB 同受原油单因子驱动，当日齐涨齐跌，统计上分散无效——本系统规则要求能化链合计仓位≤50%（trend-2026-10-23）。此外 SC 历史窗口方向命中率仅 2/4=50%，而 BU 窗口 0/2 最弱，说明能源链在连续下跌后的"一日游"反弹极易误导方向；10-23 的涨幅很可能是超跌反弹而非趋势反转。</p>
+      <p><b>逻辑三 · 高价抑制需求，且存在多重潜在供给释放。</b> 需求端：柴油裂解高位但终端负反馈累积；特朗普援引《国防生产法》支持美国石油勘探、管道、炼厂扩能（华泰 2026-10-23），虽短期难落地，但释放"供给弹性"预期；印度9月从中东进口原油已回升至战前水平、削减俄油采购，霍尔木兹发货加大缓解了供应紧张（彭博/华泰）。供给增量预期+需求负反馈，使当前 113 美元/桶的布伦特价格缺乏需求端接盘，上行空间受限。</p>
+    </div>
+  </div>
+
+  <!-- ======================= DEBATE ROUND 2 ======================= -->
+  <div class="debate">
+    <div class="dhead"><span>第二轮 · 🐂 多头交叉驳斥</span><span class="bull">驳空头</span></div>
+    <div class="dbody">
+      <p><b>针对空头逻辑一（背离）：</b> 空头承认"地缘无法证伪"，这恰恰是多头最有利的支点——不可证伪的风险溢价不会主动消退，而沙特达曼机场遇袭已造成2死8伤的实打实损失，并非纯预期。华泰"逢高布空+买看涨期权保护"的建议本身即承认上行风险极大，空头用期权保护多头敞口，等于变相确认多头趋势的惯性。EIA 的 SPR 历史低位、产量最大降幅是硬库存数据，不依赖地缘叙事，构成价格下沿的实物支撑。</p>
+      <p><b>针对空头逻辑二（噪声/共振）：</b> 诚然能化链单因子共振要求压低仓位，但这只约束"分散有效性"，并不改变 SC 作为成本源的相对强度——正因共振，SC（上游）比 BU（下游跟随）更值得配置。至于"一日游反弹"，需区分：10-23 的上涨伴随 SC 持仓增持 611 手与突破 734 阶段新高，与单纯超跌缩量反弹不同；且 Brent 已突破 106.60 技术阻力，属趋势性突破而非日内脉冲。历史窗口 50% 是陈旧样本，近一交易日 SC（10-22, 64%）已命中，动量正在修复。</p>
+    </div>
+  </div>
+
+  <div class="debate">
+    <div class="dhead"><span>第二轮 · 🐻 空头交叉驳斥</span><span class="bear">驳多头</span></div>
+    <div class="dbody">
+      <p><b>针对多头逻辑一（地缘刚性）：</b> 多头把"无法证伪"当作"必然发生"，但市场定价的是概率而非确定性。谢拜油田被拦截、打击伊朗计划"尚不确定是否获批"，说明最极端的供给冲击并未落地。历史经验显示，地缘溢价在事件未兑现时常以"尖峰回吐"方式修正——华泰判断"若兑现不及预期将面临大幅下跌"，正说明当前价格已透支。沙特正寻求海外战略储备扩容（韩国/日本/荷兰/埃及），意在增强断供韧性，削弱长端溢价。</p>
+      <p><b>针对多头逻辑三（技术/资金）：</b> 汇通网虽给"看多"，但 Williams 指标看空、且 SC 具体 MA/RSI 数值未获取，信号强度存疑；持仓仅增持 611 手（相对 34,232 总持仓增幅&lt;2%），属"微增"而非趋势性建仓，更像是空头回补而非新多主动进攻——与 BU 减仓上涨（持仓 -7,460）同属"空平驱动"，持续性存疑。Brent 突破 106.60 后的 113.80 目标，恰位于当前 113 附近，上行空间已有限，反而临近多头获利了结区。</p>
+    </div>
+  </div>
+
+  <!-- ======================= DEBATE ROUND 3 ======================= -->
+  <div class="debate">
+    <div class="dhead"><span>第三轮 · 🐂 多头最终陈词（方向/入场/目标/止损）</span><span class="bull">偏多</span></div>
+    <div class="dbody">
+      <p>综合三轮，多头坚持<b>"偏多"</b>方向，但承认需以纪律控制回吐风险。核心依据：① 地缘溢价刚性（胡塞4袭沙特、美以拟打击伊朗、霍尔木兹）不可证伪，布伦特 113+ 构成外盘锚；② EIA SPR 历史低 + 沙特减产 189.7 万桶/日提供实物支撑；③ 技术多头排列（汇通看多 8:0，Brent 突破 106.60），SC 创阶段新高 734。</p>
+      <p><b>操作：</b> 入场区间 <b>718~725</b>（回踩昨结 702 上方不破，不追 734 高位）；目标 <b>740~750</b>（Brent 看多至 113.80 对应内盘增量）；止损 <b>700</b>（跌破昨结 702 下方，地缘逻辑失效即离场）。<b>胜率 65%、置信度 65%</b>，触发窗口 1~3 个交易日。强调：能化链共振下总仓位 ≤50%，SC 单独 ≤30%。</p>
+    </div>
+  </div>
+
+  <div class="debate">
+    <div class="dhead"><span>第三轮 · 🐻 空头最终陈词（方向/入场/目标/止损）</span><span class="bear">反弹沽空</span></div>
+    <div class="dbody">
+      <p>空头维持<b>"反弹沽空 / 高空"</b>倾向，但尊重短期地缘支撑，故不逆势死空，主张"等反弹至高位再沽"。核心依据：① 油价与基本面背离，纸货/实货裂口扩大，预期透支；② 单日反转噪声 + 能化单因子共振，方向可持续性低；③ SC 持仓仅微增 611 手、具体技术指标未获取，突破有效性待验，且临近 Brent 113.80 目标位即多头了结区。</p>
+      <p><b>操作：</b> 不追多；若冲高至 <b>740~750</b> 滞涨，分批沽空，目标 <b>700</b>（昨结附近），止损 <b>755</b>（突破前高则趋势确认、认错离场）；或干脆观望直至地缘明朗。短期偏多惯性胜率约 35%~40%，中期回吐概率更高。风险点是地缘进一步升级（红海/中东恶化）迫使空头止损。</p>
+    </div>
+  </div>
+
+  <!-- ======================= CHIEF RULING ======================= -->
+  <div class="sec">⑥ 总决策官裁决</div>
+  <div class="rd">
+    <h3 style="color:var(--gold);margin-top:0">六维多空评分表（每项 1-10）</h3>
+    <table class="score">
+      <tr><th>维度</th><th>多头评分</th><th>空头评分</th><th>评分理由</th></tr>
+      <tr><td class="dim">① 库存</td><td class="mcol">7</td><td class="bcol">5</td><td>EIA SPR历史低、沙特减产189.7万桶/日、利比亚停产利多；但华泰指实货背离</td></tr>
+      <tr><td class="dim">② 仓单/持仓</td><td class="mcol">6</td><td class="bcol">5</td><td>总持仓+611微增偏多；SC具体仓单、前20净持仓未获取</td></tr>
+      <tr><td class="dim">③ 期限结构</td><td class="mcol">5</td><td class="bcol">5</td><td>SC具体合约月差/基差未获取；外盘Brent突破106.60看多，信息不充分</td></tr>
+      <tr><td class="dim">④ 技术面</td><td class="mcol">8</td><td class="bcol">4</td><td>汇通看多8:0、SC创734新高、Brent均线多头；仅WR看空</td></tr>
+      <tr><td class="dim">⑤ 新闻基本面</td><td class="mcol">8</td><td class="bcol">7</td><td>多：地缘刚性；空：华泰"背离、逢高布空"、需求负反馈</td></tr>
+      <tr><td class="dim">⑥ 持仓席位</td><td class="mcol">6</td><td class="bcol">5</td><td>总持仓增持但幅度小，前20具体未获取，可信度中等</td></tr>
+    </table>
+
+    <p><b>多头净优势维度：</b>技术(8&gt;4)、新闻(8&gt;7)、库存(7&gt;5)。综合偏多。</p>
+
+    <h3 style="color:var(--gold)">双方最强 / 最弱点</h3>
+    <p><b>多头最强：</b>地缘溢价刚性 + 技术多头排列（汇通看多 8:0、SC 创 734 新高）。<br>
+       <b>多头最弱：</b>持仓仅微增 611 手、具体技术指标/前20未获取，突破有效性待验。<br>
+       <b>空头最强：</b>基本面背离 + 单日反转噪声风险（华泰"逢高布空"）。<br>
+       <b>空头最弱：</b>地缘"无法证伪"使其下档保护成本高（需买看涨期权），硬库存数据构成实物下沿。</p>
+
+    <h3 style="color:var(--gold)">技术面独立研判</h3>
+    <p>SC 收盘 724.9 位于所有均线之上、创阶段新高，汇通综合信号看多（均线 8:0，RSI/MACD/CCI 看多），短线强势明确；但 Williams 看空提示短线超买，且 734~750 区间临近 Brent 113.80 目标，追高性价比下降，宜等回踩 718~725 确认支撑。</p>
+
+    <h3 style="color:var(--gold)">持仓可信度</h3>
+    <p><b>中等。</b>总持仓增持 611 手（&lt;2%）属微增，更像空平/换手而非新多大举建仓；前20净持仓数据未获取，无法验证机构方向，故持仓维度可信度中等、权重下调。</p>
+
+    <h3 style="color:var(--gold)">最终决策</h3>
+    <p>
+      <span class="pill b">方向：偏多（震荡偏多）</span>
+      <span class="pill b" style="margin-left:8px">胜率：65%</span><br><br>
+      <b>入场：</b> 718 ~ 725（回踩不破昨结 702 上方，不追高）<br>
+      <b>目标：</b> 740 ~ 750<br>
+      <b>止损：</b> 700（跌破昨结 702 下方，地缘逻辑失效即离场）<br>
+      <b>仓位纪律：</b> 能化链合计 ≤50%，SC 单独 ≤30%<br>
+      <b>置信度：</b> <b>65%</b> ｜ <b>触发窗口：</b> 1~3 个交易日（下一交易日 2026-10-26）
+    </p>
+
+    <h3 style="color:var(--gold)">主要风险</h3>
+    <p>① 地缘缓和 / 打击计划未执行 → 溢价尖峰回吐；② 10-23 单日反转噪声，或为一月游；
+       ③ 能化链单因子共振，分散失效（链合计≤50%）；④ 美联储12月加息预期升至 86%，实际利率上行压制风险资产；
+       ⑤ SC 仓单 / 前20 数据未获取，存在信息缺口。</p>
+  </div>
+
+  <!-- ======================= CONFIDENCE FIELD ======================= -->
+  <div class="conf">
+    <div class="big">置信度 65%</div>
+    <p style="margin:6px 0 0"><b>预期触发窗口：</b> 1~3 个交易日（覆盖下一交易日 2026-10-26 及之后两个交易日）。</p>
+    <p style="margin:6px 0 0"><b>依据：</b> 多空共振（地缘+低库存+技术多头三因子同向，+）；持仓连续性（总持仓微增 611，中性，非趋势建仓，−微调）；
+       形态成熟度（SC 突破 734 阶段新高、Brent 突破 106.60，较成熟，+）；基本面明确度（地缘"无法证伪"明确，但"预期vs实质"背离使明确度打折，±）。
+       综合给予 65%，属"偏多但需回踩确认、不追高"的中高置信。</p>
+  </div>
+
+  <!-- ======================= APPENDIX: BU RAW ======================= -->
+  <div class="sec">附录 · 被替换原品种 BU（沥青）原始数据</div>
+  <div class="panel">
+    <div class="kv">
+      <div class="k">BU 主力收盘</div><div>5,061 元/吨（<span class="up">+2.37%</span>），持仓 79,099 手（<span class="down">-7,460</span>），成交 277,959 手（金投/金融界 2026-10-23）</div>
+      <div class="k">BU 前20（10-22）</div><div>多单 30.77 万手 / 空单 26.44 万手，多空比 1.16，净持仓 4.33 万手（较上日 <span class="down">-7,559</span> 手）（同花顺/金投 2026-10-23）</div>
+      <div class="k">BU 库存</div><div>10-19当周厂装置开工率 24.86%(-2.28%)；炼厂总库存 12.98%(-0.04%)；社会库存率 11.82%(-0.35%)；77家产能利用率 22.6%(-0.5pct)（同花顺 2026-10-23）。第41周厂库41万吨(同比-45.41%)、社库46万吨(同比-68.92%)（Mysteel/广州期货）</div>
+      <div class="k">BU 仓单</div><div>仓库仓单 0 吨，厂库仓单 77,500 吨，总计 77,500 吨（金投 2026-10-21/22）；仓库仓单日报 10-20 合计 0（99qh）</div>
+      <div class="k">BU 基差/月差</div><div>山东11/12/01合约基差 1061/1394/1506 元/吨；11-12月差 333 元/吨（back结构）；BU与SC比价 0.9644（金投 2026-10-22）</div>
+      <div class="k">BU 机构观点</div><div>国信期货"中性/震荡，跟随原油"；国新国证"跟随原油运行"（同花顺 2026-10-23）</div>
+      <div class="k">BU 置信度</div><div><b>52%</b>（减仓反弹+需求收尾+窗口0/2最弱 → 低于60%阈值触发替换）</div>
+    </div>
+  </div>
+
+  <!-- ======================= DISCLAIMER ======================= -->
+  <div class="disclaimer">
+    <p><b>免责声明：</b>本报告由 AI 基于公开收盘数据与 WebSearch 检索结果（金投网、金融界、同花顺iFinD、新浪财经、网易、Mysteel/广州期货、华泰期货、宁证期货、汇通网、FxPro、JODI、18期货等，均为 2026-10-23 当日或近期公开源）自动生成。
+    标注"<span class="na">未获取</span>"的字段为公开源未披露、本系统未编造。所有数值均注明来源；不同来源口径（如厂库/仓库仓单、全合约/主力合约）已分别标注。</p>
+    <p>本报告仅为研究框架演示与信息聚合，<b>不构成任何投资建议</b>。期货市场高风险，决策须基于独立判断并自担风险。多Agent辩论为结构化推演，不代表任何真实机构观点。能化链单因子共振下，本系统规则要求相关品种合计仓位 ≤50%。</p>
+    <p>生成时间：2026-10-23 收盘后 ｜ 方法：6大维度 + 多Agent三轮辩论 + 总决策官裁决 ｜ 替换逻辑依据 commodity_relations.yaml 与 trend-2026-10-23 校准上下文。</p>
+  </div>
+
+</div>
+</body>
+</html>

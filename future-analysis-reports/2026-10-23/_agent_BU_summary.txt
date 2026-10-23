@@ -1,0 +1,11 @@
+CODE=BU
+DIRECTION=偏多
+CONFIDENCE=52
+WINDOW=1~3个交易日
+ENTRY=5000~5030（回踩不追，跟随SC节奏）
+TARGET=5150
+STOP=4900
+CORE_LOGIC=BU跟随原油反弹但减仓(-7460)+需求季节性收尾+窗口0/2最弱，自身信号最弱触发低置信度替换
+REPLACED=YES:从BU到SC
+RELATED_CONF=SC:65,FU:66
+HTML=SC深度分析-多Agent辩论报告.html

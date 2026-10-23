@@ -1,0 +1,11 @@
+CODE=EB
+DIRECTION=偏多(做多)
+CONFIDENCE=66
+WINDOW=2026-10-26至10-28(1-3交易日)
+ENTRY=10800-10900回踩做多(突破10950轻仓追多)
+TARGET=11150/11300-11500
+STOP=10500
+CORE_LOGIC=低库存(华东3.3万吨历史极低)+地缘成本支撑+近月backwardation基差偏强,防能化链同因子回吐,与SC/MA合计仓位≤50%
+REPLACED=NO
+RELATED_CONF=SC:62,FU:65
+HTML=EB深度分析-多Agent辩论报告.html
