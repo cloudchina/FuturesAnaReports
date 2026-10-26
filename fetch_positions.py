@@ -9,10 +9,12 @@
 说明:
   - --varieties 支持品种代码或中文名，脚本自动按成交量/持仓量最大挑选主力合约。
   - 每个合约输出：前20名多头/空头持仓合计及增减、净持仓、集中度、前5席位明细。
+  - --csv 追加/更新长期日志（默认建议 future-analysis-reports/positions-log.csv），供 5 日持仓趋势使用。
   - 当日数据未发布时，自动向前回退最多 5 个自然日，并在输出中标注实际数据日期。
   - 沙箱为全新环境时，脚本会自动 pip install akshare。
 """
 import argparse
+import csv
 import json
 import os
 import subprocess
@@ -40,6 +42,11 @@ def ensure_akshare():
         subprocess.run([sys.executable, "-m", "pip", "install", "-q", "akshare"], check=True)
     import akshare
     return akshare
+
+
+def variety_of(contract):
+    """从合约代码提取品种代码（兼容 J2701 这类单字母品种）。"""
+    return "".join(ch for ch in contract if ch.isalpha()).upper()
 
 
 def norm_code(token):
@@ -88,6 +95,32 @@ def leg(ak, contract, date, symbol):
     return rows
 
 
+def upsert_csv(path, date, data):
+    """把当日快照幂等写入长期日志（键：日期+品种+合约），供 5 日持仓趋势使用。"""
+    fields = ["日期", "品种", "合约", "总持仓", "前20多单", "前20空单", "净持仓",
+              "多单增减", "空单增减", "净持仓变化", "多单集中度", "空单集中度"]
+    day = f"{date[:4]}-{date[4:6]}-{date[6:]}"
+    rows = {}
+    if os.path.isfile(path):
+        with open(path, encoding="utf-8-sig", newline="") as f:
+            for r in csv.DictReader(f):
+                rows[(r.get("日期"), r.get("品种"), r.get("合约"))] = r
+    for c, d in data.items():
+        rows[(day, d["variety"], c)] = {
+            "日期": day, "品种": d["variety"], "合约": c,
+            "总持仓": d["total_oi"], "前20多单": d["long_top20"], "前20空单": d["short_top20"],
+            "净持仓": d["net_top20"], "多单增减": d["long_top20_chg"],
+            "空单增减": d["short_top20_chg"], "净持仓变化": d["net_chg"],
+            "多单集中度": d["long_concentration"], "空单集中度": d["short_concentration"],
+        }
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader()
+        for k in sorted(rows, key=lambda x: (x[0] or "", x[1] or "", x[2] or "")):
+            w.writerow({k2: rows[k].get(k2, "") for k2 in fields})
+
+
 def pick_date(ak, contract):
     """从指定日期向前找最近一个有持仓数据的交易日。"""
     today = datetime.now().date()
@@ -108,17 +141,25 @@ def main():
     ap.add_argument("--contracts", default="", help="直接指定合约，逗号分隔")
     ap.add_argument("--date", default="", help="YYYYMMDD 或 YYYY-MM-DD，缺省为最近有数据的交易日")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--csv", default="", help="长期日志 CSV 路径（按 日期+品种+合约 幂等 upsert）")
+    ap.add_argument("--ohlc", default="", help="可选：tools/fetch_ohlc.py 产出的日K JSON，用于补总持仓算集中度")
     args = ap.parse_args()
 
     ak = ensure_akshare()
     errors = {}
+
+    oi_map = {}
+    if args.ohlc and os.path.isfile(args.ohlc):
+        with open(args.ohlc, encoding="utf-8") as f:
+            for sym, days in (json.load(f).get("daily") or {}).items():
+                oi_map[sym.upper()] = {d.replace("-", ""): v.get("oi") for d, v in days.items()}
 
     targets = []
     if args.contracts:
         for c in args.contracts.split(","):
             c = c.strip().upper()
             if c:
-                targets.append((c[:2] if c[:2].isalpha() else "", c, None))
+                targets.append((variety_of(c), c, None))
     variants = [norm_code(x) for x in args.varieties.split(",") if x.strip()]
     bad = [x for x, y in zip(args.varieties.split(","), variants) if y is None and x.strip()]
     for b in bad:
@@ -145,22 +186,23 @@ def main():
             if not longs or not shorts:
                 errors[contract] = f"{date} 无持仓排名数据"
                 continue
+            total_oi = (oi_map.get(contract.upper(), {}) or {}).get(date) or oi
             long_sum = sum(x[1] for x in longs)
             short_sum = sum(x[1] for x in shorts)
             long_chg = sum(x[2] for x in longs)
             short_chg = sum(x[2] for x in shorts)
             data[contract] = {
-                "variety": v or contract[:2],
+                "variety": v or variety_of(contract),
                 "date": date,
-                "total_oi": oi,
+                "total_oi": total_oi,
                 "long_top20": long_sum,
                 "short_top20": short_sum,
                 "net_top20": long_sum - short_sum,
                 "long_top20_chg": long_chg,
                 "short_top20_chg": short_chg,
                 "net_chg": long_chg - short_chg,
-                "long_concentration": round(long_sum / oi, 4) if oi else None,
-                "short_concentration": round(short_sum / oi, 4) if oi else None,
+                "long_concentration": round(long_sum / total_oi, 4) if total_oi else None,
+                "short_concentration": round(short_sum / total_oi, 4) if total_oi else None,
                 "top_long": longs[:5],
                 "top_short": shorts[:5],
             }
@@ -178,11 +220,16 @@ def main():
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
 
+    if args.csv:
+        upsert_csv(args.csv, date, data)
+        print(f"upsert {args.csv}")
+
     for c, d in data.items():
+        lc, sc = d["long_concentration"], d["short_concentration"]
+        conc = f"多{lc:.1%}/空{sc:.1%}" if (lc is not None and sc is not None) else "集中度 未取总持仓"
         print(f"{c} {d['date']} 前20多单 {d['long_top20']:.0f}（{d['long_top20_chg']:+.0f}） "
               f"空单 {d['short_top20']:.0f}（{d['short_top20_chg']:+.0f}） "
-              f"净持仓 {d['net_top20']:+.0f}（{d['net_chg']:+.0f}） "
-              f"集中度 多{d['long_concentration']:.1%}/空{d['short_concentration']:.1%}")
+              f"净持仓 {d['net_top20']:+.0f}（{d['net_chg']:+.0f}） {conc}")
     print(f"wrote {args.out}: {len(data)} contracts")
     if errors:
         print("errors:", json.dumps(errors, ensure_ascii=False))
