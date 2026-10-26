@@ -13,7 +13,9 @@
   - 该接口为分钟快照聚合，极值与日K可能有细微差异，仅用于同日双触的先后判定。
 """
 import argparse
+import csv
 import json
+import os
 import re
 import time
 import urllib.request
@@ -37,9 +39,30 @@ def fetch(symbol, timeout=25):
     return json.loads(raw[i:j + 1])
 
 
+def symbols_from_predictions(reports_dir, asof, lookback):
+    """从最近 N 个 predictions.csv 收集合约，免去手工维护合约列表。"""
+    dates = sorted(
+        [d for d in os.listdir(reports_dir)
+         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d) and d < asof and
+         os.path.isfile(os.path.join(reports_dir, d, "predictions.csv"))],
+        reverse=True)[:lookback]
+    out = []
+    for d in sorted(dates):
+        with open(os.path.join(reports_dir, d, "predictions.csv"),
+                  encoding="utf-8-sig", newline="") as f:
+            for r in csv.DictReader(f):
+                c = (r.get("合约") or "").strip().upper()
+                if c and c not in out:
+                    out.append(c)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--symbols", required=True, help="逗号分隔")
+    ap.add_argument("--symbols", default="", help="逗号分隔；留空则从 predictions.csv 推导")
+    ap.add_argument("--reports-dir", default="")
+    ap.add_argument("--asof", default="")
+    ap.add_argument("--lookback", type=int, default=5)
     ap.add_argument("--start", required=True)
     ap.add_argument("--end", required=True)
     ap.add_argument("--out", required=True)
@@ -47,6 +70,8 @@ def main():
     args = ap.parse_args()
 
     symbols = [s.strip().upper() for s in args.symbols.split(",") if s.strip()]
+    if not symbols and args.reports_dir and args.asof:
+        symbols = symbols_from_predictions(args.reports_dir, args.asof, args.lookback)
     data, errors = {}, {}
     for s in symbols:
         try:
