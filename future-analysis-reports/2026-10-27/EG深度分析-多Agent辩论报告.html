@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>乙二醇(EG2701) 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{
+  --bg:#080b11; --bg2:#0e131c; --card:#121926; --card2:#161f2e;
+  --line:#22304a; --txt:#dfe7f3; --dim:#8b9ab2; --mute:#5d6b82;
+  --up:#26d07c; --upbg:rgba(38,208,124,.12);
+  --dn:#ff5d6c; --dnbg:rgba(255,93,108,.12);
+  --gold:#f5b942; --blue:#4aa8ff; --pur:#a97bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#132033 0%,#080b11 55%) no-repeat,var(--bg);
+  color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+  line-height:1.75;font-size:15px;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+a{color:var(--blue);text-decoration:none}
+/* header */
+header{padding:34px 0 22px;border-bottom:1px solid var(--line)}
+.htop{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+h1{font-size:30px;letter-spacing:1px;font-weight:800}
+h1 .code{color:var(--blue);font-size:20px;font-weight:600;margin-left:10px;letter-spacing:2px}
+.sub{color:var(--dim);font-size:13px;margin-top:6px}
+.price{text-align:right}
+.price .p{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+.price .c{font-size:15px;font-weight:700}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{background:#17203200;border:1px solid var(--line);color:var(--dim);font-size:12px;padding:3px 10px;border-radius:99px}
+/* banner */
+.banner{margin:24px 0;border-radius:16px;padding:22px 24px;border:1px solid var(--line);
+  background:linear-gradient(120deg,rgba(38,208,124,.10),rgba(74,168,255,.06));position:relative;overflow:hidden}
+.banner.bear{background:linear-gradient(120deg,rgba(255,93,108,.12),rgba(169,123,255,.06))}
+.banner.neu{background:linear-gradient(120deg,rgba(245,185,66,.12),rgba(139,154,178,.06))}
+.brow{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+.dirbadge{font-size:26px;font-weight:900;letter-spacing:3px;padding:8px 20px;border-radius:12px;
+  background:var(--upbg);color:var(--up);border:1px solid rgba(38,208,124,.35)}
+.bear .dirbadge{background:var(--dnbg);color:var(--dn);border-color:rgba(255,93,108,.35)}
+.neu .dirbadge{background:rgba(245,185,66,.12);color:var(--gold);border-color:rgba(245,185,66,.35)}
+.kv{display:flex;flex-direction:column;min-width:96px}
+.kv b{font-size:19px;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;color:var(--dim)}
+.banner p{margin-top:14px;color:#c8d4e6;font-size:14.5px}
+/* section */
+section{margin:34px 0}
+h2{font-size:19px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+h2::before{content:"";width:4px;height:19px;border-radius:2px;background:linear-gradient(180deg,var(--blue),var(--pur))}
+h3{font-size:15px;font-weight:700;color:#cfe0f5;margin:0 0 8px}
+.note{color:var(--mute);font-size:12px;margin-top:6px}
+/* cards */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g6{grid-template-columns:repeat(3,1fr)}
+@media(max-width:920px){.g3,.g6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g3,.g2,.g6{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+.card .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card .ch .t{font-size:14px;font-weight:800;letter-spacing:.5px}
+.card .ch .s{font-size:12px;color:var(--dim)}
+ul.dl{list-style:none}
+ul.dl li{font-size:13.4px;color:#c3cfe2;padding:3px 0 3px 14px;position:relative}
+ul.dl li::before{content:"▪";position:absolute;left:0;color:var(--blue);font-size:11px;top:4px}
+ul.dl li b{color:#eaf2ff}
+/* score bar */
+.bar{margin-top:10px}
+.bar .lb{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.track{height:7px;border-radius:99px;background:#1b2536;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.up{background:linear-gradient(90deg,#1d9e5f,var(--up))}
+.fill.dn{background:linear-gradient(90deg,#b83c4b,var(--dn))}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid #1a2436;text-align:left}
+th{color:var(--dim);font-weight:600;font-size:12px;background:#0f1622}
+td{color:#ccd8ea;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--up);font-weight:700}
+.neg{color:var(--dn);font-weight:700}
+/* columns */
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:920px){.cols{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+/* debate */
+.round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin-bottom:16px}
+.rh{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#0f1622;border-bottom:1px solid var(--line)}
+.rh .rt{font-weight:800;font-size:15px}
+.rh .rr{font-size:12px;color:var(--mute)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:760px){.vs{grid-template-columns:1fr}}
+.side{padding:16px 18px}
+.side.bull{background:linear-gradient(180deg,rgba(38,208,124,.05),transparent)}
+.side.bear{background:linear-gradient(180deg,rgba(255,93,108,.05),transparent);border-left:1px solid var(--line)}
+@media(max-width:760px){.side.bear{border-left:none;border-top:1px solid var(--line)}}
+.who{font-size:13px;font-weight:800;letter-spacing:.5px;margin-bottom:8px}
+.who.b{color:var(--up)} .who.s{color:var(--dn)}
+.side p{font-size:13.6px;color:#c6d2e4;margin-bottom:9px}
+.side p b{color:#fff}
+.side ol{margin:0 0 8px 18px}
+.side ol li{font-size:13.6px;color:#c6d2e4;margin-bottom:6px}
+/* decision */
+.scores td.sc{text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.sw{grid-template-columns:1fr}}
+.plan{margin-top:14px}
+.plan td{font-size:13.5px}
+.conf{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:14px;padding:16px;border-radius:12px;
+  background:linear-gradient(120deg,rgba(74,168,255,.10),rgba(169,123,255,.06));border:1px solid #24344f}
+.conf .big{font-size:38px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.conf .txt{font-size:13px;color:#c3cfe2;max-width:760px}
+.conf .txt b{color:#fff}
+.caliber{font-size:11.5px;color:var(--mute);margin-top:8px;border-left:2px solid #2a3a55;padding-left:10px}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--mute);font-size:12px}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.kpi div{background:#0f1622;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:12px;color:var(--dim)}
+.kpi div b{color:#e8f1ff;font-size:14px;margin-left:5px}
+</style></head><body><div class="wrap">
+<header><div class="htop">
+<div><h1>乙二醇<span class="code">EG2701</span></h1>
+<div class="sub">大连商品交易所 · 报告日期 2026-10-27 · 数据截至 2026-10-27 收盘</div></div>
+<div class="price"><div class="p">5,077</div>
+<div class="c" style="color:var(--up)">+1.95% · 5日 +5.84% · 20日 +3.57%</div></div></div>
+<div class="tags"><span class="tag">持仓量 314,584 手</span><span class="tag">6大维度</span><span class="tag">3轮多空辩论</span><span class="tag">置信度 67.0%</span><span class="tag">能化·聚酯原料</span><span class="tag">放量增仓突破</span><span class="tag">深backwardation</span><span class="tag">⚑ 替换：原EB→EG</span></div>
+</header>
+
+<div class="banner"><div class="brow">
+<div class="dirbadge">多</div>
+<div class="kv"><b>多方 56% / 空方 44%</b><span>胜率评估</span></div>
+<div class="kv"><b>67.0%</b><span>置信度（已校准）</span></div>
+<div class="kv"><b>1~3 个交易日</b><span>预期触发窗口</span></div>
+<div class="kv"><b>5,260</b><span>目标1</span></div>
+<div class="kv"><b>4,880</b><span>止损</span></div>
+</div><p>本报告为<b>关联品种替换报告</b>：原品种苯乙烯（EB2612）置信度仅 55.1%（< 60% 阈值），按 commodity_relations.yaml 的原油产业链关联（chain 强度 0.8），对其关联品种做了完整 6 维分析与 3 轮辩论，乙二醇以 <b>67.0%</b> 的校准置信度高于原品种，故最终呈现替换为 EG。<br>EG 今日 +1.95% 收 5,077，<b>突破布林上轨（%B 108.2）</b>、成交量放大 1.31 倍、持仓单日 +20,238 手（5 日 +100,320 手），为典型的「放量增仓突破」；结构上 2611（5,260）> 2701（5,077）> 2705（4,896）的深 backwardation 与现货 5,733 的 11.45% 升水，构成估值支撑；但开工 77.46% 高位、9 月产量 175 万吨（+12%）、Q4 投产高峰意味着累库压力仍在。裁决为「多」，窗口 1~3 个交易日。</p></div>
+
+<section><h2>六维数据全景</h2>
+<div class="grid g6"><div class="card"><div class="ch"><span class="t">① 库存</span><span class="s">绝对低位、但累库预期（中性偏多）</span></div>
+<ul class="dl"><li>CCF：10/26 华东主港库存 <b>14.9 万吨（-3.1）</b>，受台风影响到货偏少</li><li>库存绝对水平极低：较 7/30 的 41.6 万吨降 <b>64%</b>，较 3/2 的 92.64 万吨降 <b>84%</b></li><li>但机构一致预期「后续库存有望回升」——台风后到货集中，阶段性累库确定性高</li><li>东财交易所口径 8,119（10/27，+505），连续 3 日回升，印证累库已启动</li></ul><div class="bar"><div class="lb"><span>空头 4/10</span><span>多头 6/10</span></div>
+<div class="track"><div class="fill up" style="width:60%"></div></div></div></div><div class="card"><div class="ch"><span class="t">② 仓单</span><span class="s">低位、明细受限（中性）</span></div>
+<ul class="dl"><li>大商所仓单日报接口受瑞数反爬限制（HTTP 412），10/27 明细未取到</li><li>东财交易所口径 8,119（+505），连续 3 日回升，方向偏空</li><li>仓单量相对 31.5 万手总持仓可忽略，暂无交割压制</li><li>但仓单与库存同步回升，是累库周期的早期信号</li></ul><div class="bar"><div class="lb"><span>空头 6/10</span><span>多头 4/10</span></div>
+<div class="track"><div class="fill up" style="width:40%"></div></div></div></div><div class="card"><div class="ch"><span class="t">③ 期限结构</span><span class="s">陡峭 backwardation（强多）</span></div>
+<ul class="dl"><li>EG2611 5,260 → EG2701 5,077 → EG2703 4,914 → EG2705 4,896，<b>近强远弱</b></li><li>2701→2705 下移 <b>181 元</b>，2611→2705 下移 364 元</li><li>现货 5,733.33 对 2701 <b>升水 656.33 元（+11.45%）</b>，期货深度贴水</li><li>近月 2611 升水 2701 达 183 元，近端偏紧结构明确</li></ul><div class="bar"><div class="lb"><span>空头 3/10</span><span>多头 7/10</span></div>
+<div class="track"><div class="fill up" style="width:70%"></div></div></div></div><div class="card"><div class="ch"><span class="t">④ 技术面</span><span class="s">放量增仓突破（强多）</span></div>
+<ul class="dl"><li>EMA5/10/20/60 = 4,941 / 4,895 / 4,875 / 4,760，<b>多头排列</b>，四线向上发散</li><li>价格 5,077 <b>突破布林上轨 5,043</b>，%B <b>108.2</b>；MACD 零轴上方金叉，红柱 29.5 放大</li><li>RSI14 <b>59.2</b>（前值 55.8，未过热）、KDJ 69.5/57.3/93.9、WR -8.1</li><li>今日 +1.95%，量比 <b>1.31</b>、持仓 <b>+20,238</b>（5 日 +100,320），<b>增仓突破</b></li></ul><div class="bar"><div class="lb"><span>空头 2/10</span><span>多头 8/10</span></div>
+<div class="track"><div class="fill up" style="width:80%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑤ 新闻基本面</span><span class="s">成本强 vs 供需转宽松（对冲）</span></div>
+<ul class="dl"><li>综合开工负荷 <b>77.46%</b>（10/15，-1.71pct），合成气法 84.88%（-2.69pct），仍处同期高位</li><li>9 月国内产量 <b>175 万吨</b>（环比 <b>+12%</b>），Q4 新增产能集中投产（中沙等）</li><li>聚酯负荷偏低、终端旺季承接不足，供需逐步转向宽松、累库预期兑现</li><li>成本端：Brent 115.81 美元高位 + 中东局势紧张，油制 EG 成本支撑强</li><li>生意社：10 月价格大幅回调后「近期有止跌回暖迹象」</li></ul><div class="bar"><div class="lb"><span>空头 5/10</span><span>多头 5/10</span></div>
+<div class="track"><div class="fill up" style="width:50%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑥ 持仓席位</span><span class="s">净多大幅增仓（强多）</span></div>
+<ul class="dl"><li>前20 净多 <b>+19,185 手</b>（当日 <b>+8,473</b>），多单 219,187（+18,425）、空单 200,002（+9,952）</li><li>多头增仓量为空头的 <b>1.85 倍</b>，多空集中度 69.7% / 63.6%，多头占优</li><li>多头榜：东证 <b>+9,815</b>、中信 +3,398、国泰君安 +1,241 集体加多，仅高盛 -1,043</li><li>空头榜：东证 <b>-3,619</b>、中信 -1,975 减仓，仅中信建投 +2,926 加空</li></ul><div class="bar"><div class="lb"><span>空头 2/10</span><span>多头 8/10</span></div>
+<div class="track"><div class="fill up" style="width:80%"></div></div></div></div></div>
+<div class="note">评分条为「多头力度」0-10 分，由总决策官依据该维度数据独立打分；分值越高越利多。</div></section>
+
+<section><h2>技术面深度研判</h2>
+<div class="card"><h3>【趋势判断】短期（日K）多头突破 / 中期（周K）偏多，强度：中偏强</h3>
+<p style="font-size:13.6px;color:#c6d2e4">自 4,155（60日低点）震荡上行，当前 5,077 距 60 日高点 5,390 仅 5.8%，四线均线多头排列且向上发散。今日的关键变化是<b>收盘价站到布林上轨（5,043）之上、%B 达 108.2</b>，配合量比 1.31 与持仓 +20,238 手，构成「放量增仓突破」。RSI 59.2 说明尚未进入超买区，与 FU（81.2）、BU（70.3）相比，EG 的上涨还有余量。风险在于突破形态在高位易出现「假突破回踩」，需以 EMA5（4,941）为防守线。</p>
+<div class="kpi"><div>收盘<b>5,077</b></div><div>ATR14<b>202.4</b></div><div>量比<b>1.31</b></div><div>持仓量<b>314,584</b></div><div>20日区间<b>4,555-5,123</b></div><div>基差<b>+656.33</b></div></div></div>
+<div class="cols" style="margin-top:14px">
+<div class="card"><h3>趋势指标</h3><ul class="dl"><li>EMA5 4,941 / EMA10 4,895 / EMA20 4,875 / EMA60 4,760，<b>多头排列</b>，发散上行</li><li>价格 5,077 高于 EMA5 达 2.7%，乖离率可控</li><li>MACD：DIF 23.8 / DEA 9.1，<b>零轴上方金叉</b>，红柱 29.5 持续放大</li><li>布林带开口扩张（宽度 8.54%），价格站上上轨 5,043、%B 108.2</li></ul></div>
+<div class="card"><h3>震荡指标</h3><ul class="dl"><li>RSI14 <b>59.2</b>（前值 55.8），上行但未进入 70 超买区，属健康强势</li><li>KDJ：K 69.5 / D 57.3 / J 93.9，高位金叉、J 值偏高（短线有过热苗头）</li><li>WR14 <b>-8.1</b>，处于超买区，短线回踩概率上升</li><li>布林 %B 108.2，价格已越出上轨，需回踩上轨确认有效性</li></ul></div>
+<div class="card"><h3>量能分析</h3><ul class="dl"><li>成交量 925,113 手，5 日均量 708,885，量比 <b>1.31</b>，<b>放量</b></li><li>持仓量单日 <b>+20,238</b>、5 日 <b>+100,320</b>（+46.8%），增仓幅度极大</li><li>放量 + 增仓 + 价格上破上轨 = <b>增仓突破</b>，是四项量价组合中最强的一种</li><li>移仓因素：EG2611 持仓 5 日 -179,198、EG2701 +100,320，但 2701 的净多同日 +8,473 说明多头主导移仓</li></ul></div>
+<div class="card"><h3>形态研判</h3><ul class="dl"><li>形态：4,155 起的上升通道，今日突破 5,043（布林上轨 / 前高 5,123 下方）</li><li>5,123 为 20 日高点，5,390 为 60 日高点，构成两道明确压力</li><li>突破后若回踩 4,941-4,975 不破，属标准的「突破—回踩—再上」结构</li><li>跌破 4,875（EMA20）则突破失败，转为箱体震荡</li></ul></div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>关键价位</h3><ul class="dl"><li>第一支撑 <b>4,941</b>（EMA5 / 突破回踩位）</li><li>第二支撑 <b>4,875</b>（EMA20）/ 强支撑 <b>4,760</b>（EMA60）</li><li>第一压力 <b>5,123</b>（20日高点）</li><li>第二压力 <b>5,260</b>（EG2611 近月价 / 前高密集区）</li><li>强压力 <b>5,390</b>（60日高点）</li></ul></div>
+<div class="card"><h3>多空指标共振</h3><ul class="dl">
+<li>多头信号：多头排列、MACD零轴上金叉红柱放大、突破布林上轨、放量增仓、净多+8,473、深backwardation（6个）</li><li>空头信号：WR -8.1 超买、J 值 93.9、仓单与库存同步回升、累库预期（4个）</li>
+<li>中性信号：RSI 59.2（未过热）、%B 108.2（需回踩确认）</li><li><b>综合结论：</b>技术面&lt;b&gt;偏多且为突破形态&lt;/b&gt;，强度评级「中偏强」。这是本日七个品种中唯一「价格突破上轨 + 放量 + 增仓 + 净多大幅增加」四项同时成立的品种，但超买与累库预期要求严格控制仓位与止损。</li></ul></div>
+</div></section>
+
+<section><h2>持仓席位深度分析</h2>
+<div class="card"><div class="ch"><span class="t">前20名会员净持仓 · EG2701</span><span class="s">数据日期 2026-10-27（akshare 新浪源）</span></div>
+<div class="kpi">
+<div>净持仓<b class="pos">+19,185</b></div>
+<div>当日变化<b class="pos">+8,473</b></div>
+<div>总持仓<b>314,584</b></div>
+<div>多头集中度<b>69.7%</b></div>
+<div>空头集中度<b>63.6%</b></div></div>
+<p style="font-size:13.6px;color:#c6d2e4;margin-top:12px">前20 净多 <b>+19,185 手</b>，当日 <b>+8,473</b>，多单增 18,425、空单增 9,952，<b>多头增仓量是空头的 1.85 倍</b>。多头榜东证 +9,815 是本日全品种单席最大加多，中信 +3,398、国泰君安 +1,241 同步跟进；空头榜东证 -3,619、中信 -1,975 减仓，仅中信建投 +2,926 逆势加空。多空集中度 69.7% / 63.6%，多头占优。这是「头部资金同向加多」的典型结构，与 EB 的「东证多翻空」形成鲜明反差——也是本次替换的核心依据之一。</p></div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>多头前5席位</h3><table><thead><tr><th>席位</th><th>多单持仓</th><th>增减</th></tr></thead><tbody><tr><td>东证期货</td><td>43,880</td><td class='pos'>+9,815</td></tr><tr><td>中信期货</td><td>33,322</td><td class='pos'>+3,398</td></tr><tr><td>国泰君安</td><td>30,235</td><td class='pos'>+1,241</td></tr><tr><td>高盛期货</td><td>14,305</td><td class='neg'>-1,043</td></tr><tr><td>华泰期货</td><td>10,444</td><td class='pos'>+749</td></tr></tbody></table></div>
+<div class="card"><h3>空头前5席位</h3><table><thead><tr><th>席位</th><th>空单持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td>53,104</td><td class='pos'>+164</td></tr><tr><td>中信期货</td><td>18,625</td><td class='neg'>-1,975</td></tr><tr><td>永安期货</td><td>16,492</td><td class='pos'>+444</td></tr><tr><td>东证期货</td><td>10,482</td><td class='neg'>-3,619</td></tr><tr><td>中信建投</td><td>10,253</td><td class='pos'>+2,926</td></tr></tbody></table></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>5日持仓趋势（2026-10-27 单日快照（换月期间历史可比性有限））</h3>
+<p style="font-size:13.6px;color:#c6d2e4">本次为 EG2701 首次纳入持仓日志，暂无 5 日趋势序列（EG2611 为主力时未采集）。当日结构：净多 +19,185、增仓 +8,473、多头增仓 1.85 倍于空头。按席位行为学判断：多头榜出现「东证 +9,815」这种量级的单席加仓，通常对应趋势资金的方向性建仓，而非短线对冲；空头端东证 -3,619 的减仓，进一步削弱了上方抛压。</p></div></section>
+
+<section><h2>期限结构与基差</h2>
+<div class="card"><svg viewBox="0 0 1060 235" width="100%" height="235" role="img"><rect x="138" y="35" width="92" height="170" rx="6" fill="#4aa8ff" opacity=".85"/><text x="184" y="27" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">5,260</text><text x="184" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">EG2611</text><rect x="369" y="100" width="92" height="105" rx="6" fill="#26d07c" opacity=".85"/><text x="415" y="92" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">5,077</text><text x="415" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">EG2701</text><rect x="599" y="159" width="92" height="46" rx="6" fill="#26d07c" opacity=".85"/><text x="645" y="151" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">4,914</text><text x="645" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">EG2703</text><rect x="830" y="165" width="92" height="40" rx="6" fill="#26d07c" opacity=".85"/><text x="876" y="157" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">4,896</text><text x="876" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">EG2705</text></svg>
+<table style="margin-top:10px"><thead><tr><th>合约</th><th>收盘价</th><th>持仓量</th><th>结构含义</th></tr></thead><tbody><tr><td>EG2611</td><td>5,260</td><td>42,235</td><td>近月，现货紧张定价</td></tr><tr><td>EG2701</td><td>5,077</td><td>314,584</td><td>主力，突破上行</td></tr><tr><td>EG2703</td><td>4,914</td><td>25,554</td><td>远月，累库预期</td></tr><tr><td>EG2705</td><td>4,896</td><td>30,671</td><td>远月，贴水最深</td></tr></tbody></table>
+<p class="note">Backwardation：2611（5,260）→ 2705（4,896）累计下移 364 元（-6.9%），2701→2705 下移 181 元。现货 5,733.33 对 2701 升水 <b>656.33 元（+11.45%）</b>。需要注意：EG 的现货-期货升水中含交割标准与品级差异，长期存在，不能按「11.45% 必须收敛」做多；但近月 2611 升水 2701 达 183 元，说明近端确实偏紧，这与 14.9 万吨的低库存相互印证。</p></div></section>
+
+<section><h2>三轮多空辩论</h2><div class="round"><div class="rh"><span class="rt">第1轮 · 立论陈词</span><span class="rr">6维度论证 · 各约450字</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>核心逻辑一：这是本日最干净的一次「放量增仓突破」。</b>成交 925,113 手、量比 1.31；持仓单日 +20,238 手、5 日 +100,320 手（+46.8%）；价格 +1.95% 直接站上布林上轨（5,043），%B 达 108.2。量、仓、价三项同时向上，是四种量价组合里最强的一种。更关键的是净多同日 +8,473，多头增仓量是空头的 1.85 倍，东证单席 +9,815 加多——这是趋势资金在进场，不是短线博弈。</p>
+<p><b>核心逻辑二：库存绝对水平极低，估值有底。</b>华东主港 14.9 万吨，较 3 月的 92.64 万吨降 84%、较 7 月底的 41.6 万吨降 64%。虽然机构预期后续累库，但那是「台风后到货恢复」的技术性回升，不是供给过剩。在低库存状态下，任何装置意外都会放大价格弹性。</p>
+<p><b>核心逻辑三：深 backwardation + 11.45% 现货升水。</b>2611（5,260）> 2701（5,077）> 2705（4,896），近强远弱；现货 5,733 对 2701 升水 656 元。成本端 Brent 115.81 美元高位、中东局势紧张，油制 EG 的成本支撑仍在。</p>
+<p><b>目标：</b>回踩 4,990-5,060 做多，目标 5,260，极限 5,390，窗口 1-3 日。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>核心逻辑一：累库的方向是确定的，突破发生在累库周期里。</b>综合开工 77.46%、合成气法 84.88%，仍处同期高位；9 月产量 <b>175 万吨（+12%）</b>；Q4 还有中沙等新增产能集中投产。聚酯负荷偏低、终端旺季承接不足，机构判断「供需逐步转向宽松、累库预期兑现」。东财仓单/库存连续 3 日回升（8,119，+505）已经在验证这件事。</p>
+<p><b>核心逻辑二：技术上是「越出上轨」，不是「突破压力」。</b>%B <b>108.2</b> 意味着价格已经跑到布林上轨外面，WR <b>-8.1</b> 进入超买区，J 值 93.9——这三项同时出现，短线回踩概率显著上升。而且 5,123（20日高点）与 5,390（60日高点）两道压力就在头上，今天连 5,123 都没碰到。</p>
+<p><b>核心逻辑三：持仓暴增主要是移仓，不是新多。</b>EG2611 持仓 5 日 <b>-179,198</b> 手、EG2701 +100,320 手，总持仓是净减少的。所谓「增仓突破」很大一部分是 11 月合约移仓换月的账面变化。净多 +19,185 手对应 31.5 万手总持仓仅 6.1%，谈不上控盘。</p>
+<p><b>结论：</b>5,200-5,260 沽空，止损 5,420，目标 4,875，窗口 2-4 日。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第2轮 · 交叉驳斥</span><span class="rr">逐条针对性反驳</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>驳「累库周期」：</b>累库预期是 9 月就有的叙事，但价格在 10 月从 4,555 涨到 5,077（+11.5%）——<b>累库预期并没有阻止上涨</b>。原因是累库的起点太低（14.9 万吨），从「极低」回到「偏低」不构成压力。你把「库存回升」当作利空，忽略了回升的绝对水平。</p>
+<p><b>驳「越出上轨」：</b>越出上轨在强趋势里是<b>常态</b>，不是卖点。真正的卖点是「越出上轨后重新跌回轨内」。今日收盘 5,077 稳稳站在上轨 5,043 之上，且量比 1.31、净多 +8,473，没有任何「假突破」的特征。你用超买指标否定突破，是把强势当成风险。</p>
+<p><b>驳「增仓是移仓」：</b>移仓是双向的——2611 减 179,198、2701 增 100,320，其余部分（约 8 万手）是净流出，说明空头在移仓过程中<b>净离场</b>，而多头留在 2701。更直接的反证是：净多单日 +8,473，其中多头 +18,425、空头 +9,952——如果只是换月，多空增减应该对称，事实是 1.85 倍。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>驳「放量增仓突破」：</b>放量是真的，但请看清楚方向——<b>空单也在增 9,952 手</b>，空头并没有溃退。所谓突破只涨了 1.95%、连 5,123（20 日高点）都没摸到，这是「箱体内的强势」，不是「箱体外的突破」。真正的突破应该直接越过前高。</p>
+<p><b>驳「库存极低」：</b>14.9 万吨低是因为<b>台风影响到货</b>，属于一次性扰动。机构已经明确说「后续库存有望回升」，东财口径连续 3 日 +505 就是回升的开始。用一次天气扰动造成的低库存去做多，逻辑上是把噪音当信号。</p>
+<p><b>驳「深 backwardation」：</b>EG 的现货升水是结构性的（交割品级与库区差异），长期维持 8%-12%，你把它当作 11.45% 的「收敛空间」是误读。而且如果真是近端紧张，2611 应该更贵——它只升水 183 元，连持仓成本都不够。</p>
+<p><b>补充：</b>本品种不是原分析标的，是因 EB 置信度不足（55.1%）而被纳入比较的关联品种。若 EG 的结论同样只有 60% 出头，那么「用 EG 替换 EB」并不产生实质性的信息增益——这也是我方要提醒决策官的一点。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第3轮 · 最终陈词</span><span class="rr">回应驳斥 + 最终方案</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>回应：</b>对方最后那段提醒很关键，我正面回答：EG 与 EB 的差别不在「置信度数字」，而在<b>资金方向</b>——EB 是净多单日 -7,052、东证多翻空；EG 是净多单日 +8,473、东证单席 +9,815 加多。同样是「多」，一个是资金在撤，一个是资金在进，这就是替换的意义。</p>
+<p><b>胜负手：</b>①放量 + 增仓 + 站上上轨 +%B 108.2，四项同向；②净多 +8,473、多头增仓 1.85 倍于空头，头部资金同向加多。这两条是即时的、可验证的。</p>
+<p><b>最终方案：</b>方向<b>多</b>。回踩 <b>4,990-5,060</b>（上轨 5,043 附近）分批入场，目标1 <b>5,260</b>、目标2 5,390，止损 <b>4,880</b>（EMA20 下方），窗口 1-3 日，仓位 25%。若明日直接高开越过 5,123，改用突破追入（仓位减半）。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>回应：</b>对方说「资金在进」，但请看他自己的数据：多空集中度 69.7% / 63.6%，差距只有 6.1 个百分点；净多 1.9 万手占 31.5 万手总持仓 6.1%。这叫「略占优」，不叫「资金在进」。真正资金在进的品种，多头集中度会拉到 75% 以上（参考 BU 的 73.9%）。</p>
+<p><b>胜负手：</b>①累库正在被数据验证（东财口径连续 3 日回升，+505）；②9 月产量 +12%、Q4 投产高峰、聚酯需求偏弱，供需转宽松是中期方向；③技术上越出上轨 + WR -8.1 + J 93.9，短线回调概率高。</p>
+<p><b>最终方案：</b>不追空（尊重突破）。<b>等待 5,200-5,260 沽空</b>，止损 5,420，目标1 4,875、目标2 4,760，窗口 2-4 日。若放量站稳 5,390（60日高点），本方认输离场。</p></div></div></div></section>
+
+<section><h2>总决策官裁决</h2>
+<div class="card"><h3>六维度多空评分表</h3>
+<table class="scores"><thead><tr><th>维度</th><th>关键事实</th><th>多头分</th><th>空头分</th><th>净分</th><th>裁决理由</th></tr></thead><tbody><tr><td>① 库存</td><td>华东主港 14.9 万吨（-3.1），但预期回升</td><td class='sc pos'>6</td><td class='sc neg'>4</td><td class='sc'>+2</td><td>绝对低位，累库在路上</td></tr><tr><td>② 仓单</td><td>东财口径 8,119（+505），连续3日回升</td><td class='sc pos'>4</td><td class='sc neg'>6</td><td class='sc'>-2</td><td>累库早期信号，明细受限</td></tr><tr><td>③ 期限结构</td><td>backwardation，现货升水 656（+11.45%）</td><td class='sc pos'>7</td><td class='sc neg'>3</td><td class='sc'>+4</td><td>近强远弱，估值偏低</td></tr><tr><td>④ 技术面</td><td>放量增仓+突破上轨 vs 超买/未破前高</td><td class='sc pos'>8</td><td class='sc neg'>2</td><td class='sc'>+6</td><td>本日最强量价结构</td></tr><tr><td>⑤ 新闻基本面</td><td>开工77.5%+产量+12%+投产 vs 油价成本支撑</td><td class='sc pos'>5</td><td class='sc neg'>5</td><td class='sc'>0</td><td>供需转宽松、成本强</td></tr><tr><td>⑥ 持仓席位</td><td>净多+19,185（当日+8,473），多头1.85倍于空头</td><td class='sc pos'>8</td><td class='sc neg'>2</td><td class='sc'>+6</td><td>头部资金同向加多</td></tr></tbody></table>
+<div class="sw">
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--up)">多头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>放量 1.31 + 增仓 20,238 + 站上布林上轨 + 净多单日 +8,473，四项同时成立</li><li><b>最弱：</b>连 5,123（20日高点）都未触及，属箱体内强势而非箱体外突破</li></ul></div>
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--dn)">空头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>累库正在被验证（仓单/库存连续 3 日回升）+ 9月产量+12% + Q4 投产高峰</li><li><b>最弱：</b>无法解释 东证 单席 +9,815 加多 与 净多单日 +8,473，也无法解释在多空双向增仓中多头占 1.85 倍</li></ul></div>
+</div>
+<p style="font-size:13.8px;color:#c6d2e4;margin-top:14px">六维净分 +16，方向偏多，且是本日七个品种中唯一「放量 + 增仓 + 突破上轨 + 净多大增」四项同时成立的品种。总决策官认定：<b>EG 的上涨由资金推动而非基本面驱动</b>——基本面上累库压力明确（开工高位、产量 +12%、Q4 投产），但资金面上头部席位同向加多。这类「基本面压制 + 资金推动」的行情，特征是<b>短促、幅度有限、依赖跟随</b>，因此给出 1-3 日窗口、25% 仓位、并以 EMA20 为硬止损。<br><b>替换说明：</b>原品种 EB 置信度 55.1%（< 60%），其关联品种中 SC（INE，新浪无持仓排名、仓单/库存不可得，数据完整度不足）与 FU（61.5%）、EG（67.0%）相比，EG 校准置信度最高，且资金结构（净多 +8,473 / 东证 +9,815）显著优于 EB（净多 -7,052 / 东证多翻空），故最终呈现替换为 EG。</p>
+</div>
+<div class="card plan" style="margin-top:14px"><h3>决策方案</h3>
+<table><thead><tr><th>项目</th><th>数值</th><th>说明</th></tr></thead><tbody>
+<tr><td>方向</td><td class="pos">多</td><td>多（突破跟随，回踩参与）</td></tr>
+<tr><td>入场区间</td><td>4,990 - 5,060</td><td>回踩布林上轨(5,043)/EMA5(4,941)上方分批，最多2笔；若直接越过5,123则改突破追入、仓位减半</td></tr>
+<tr><td>目标1 / 目标2</td><td>5,260 / 5,390</td><td>T1为近月EG2611价与空头沽空区下沿；T2为60日高点</td></tr>
+<tr><td>止损</td><td>4,880</td><td>跌破EMA20(4,875)，突破形态失效，止损幅度约 -3.9%</td></tr>
+<tr><td>预期窗口</td><td>1~3 个交易日</td><td>资金推动型突破，逾期未达目标无条件离场</td></tr>
+<tr><td>建议仓位</td><td>25%</td><td>基于置信度与波动率(ATR)折算</td></tr>
+</tbody></table></div>
+<div class="conf"><div class="big">67.0%</div><div class="txt">
+<b>置信度说明：</b>基础置信度 62%：多空信号共振度高（技术面 4 项同向、持仓多头 1.85 倍于空头、期限深 backwardation、库存绝对低位），但基本面明确度低（累库预期明确、产量与投产压力）、技术形态成熟度中等（越出上轨但未破 5,123 前高），故未给到 65% 以上。该品种为 EB 的关联品种，本次为首次纳入分析，无自身复盘命中率记录（不适用「同向结论反向复核」）。基础置信度落在「60-69」档，该档近5日样本 n=18、实际触发率 66.7%，系数 1.08，校准后 62%×1.08=66.96%≈67.0%。<br>
+<b>预期触发窗口：</b>1~3 个交易日　<b>基础置信度：</b>62%　<b>校准系数：</b>×1.08
+<div class="caliber">系数来源：future-analysis-reports/2026-10-27/confidence-factors.json —— 基础置信度落在「60-69」档，该档近5日样本 n=18，实际触发率 66.7%，系统系数 1.08（n≥5 才生效，否则取 1.0）；结果已裁剪至 10%~95%。</div>
+</div></div>
+<div class="card" style="margin-top:14px;border-color:#4a2b33;background:linear-gradient(120deg,rgba(255,93,108,.07),transparent)">
+<h3 style="color:var(--dn)">风险提示</h3><p style="font-size:13.4px;color:#c9d4e6">①假突破回踩：价格已越出布林上轨、WR -8.1 超买，回踩 4,941 甚至 4,875 的概率不低，止损可能被扫；②累库兑现：台风后到货恢复 + Q4 投产，若库存快速回到 18-20 万吨，基本面将压制 5,260 以上的空间；③成本端回落：Brent 若从 115.81 回落，油制 EG 成本支撑下移；④移仓扰动：EG2611 持仓 5 日 -179,198，11 月移仓尚未结束，2701 的持仓与价格可能继续受移仓影响；⑤本报告为<b>关联替换报告</b>，EG 与 EB 同属原油下游但工艺链条不同（EG 为聚酯原料、EB 为纯苯下游），替换的合理性基于「资金结构更优」而非「基本面更优」。</p></div>
+</section>
+
+<footer>本报告由 AI 多 Agent 辩论系统自动生成，数据来源：新浪财经期货日K、akshare（上期所/郑商所仓单日报、前20名会员持仓）、隆众资讯/Mysteel/SMM/生意社（经公开新闻转引）、Web 新闻与机构研报。所有数据均标注日期，历史数据不代表未来表现。<br>
+本报告不构成任何投资建议或投资承诺，据此操作风险自担。期货有杠杆，入市需谨慎。<br>
+生成时间：2026-10-27 · futures-deep-analysis v2</footer>
+</div></body></html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>甲醇(MA2701) 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{
+  --bg:#080b11; --bg2:#0e131c; --card:#121926; --card2:#161f2e;
+  --line:#22304a; --txt:#dfe7f3; --dim:#8b9ab2; --mute:#5d6b82;
+  --up:#26d07c; --upbg:rgba(38,208,124,.12);
+  --dn:#ff5d6c; --dnbg:rgba(255,93,108,.12);
+  --gold:#f5b942; --blue:#4aa8ff; --pur:#a97bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#132033 0%,#080b11 55%) no-repeat,var(--bg);
+  color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+  line-height:1.75;font-size:15px;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+a{color:var(--blue);text-decoration:none}
+/* header */
+header{padding:34px 0 22px;border-bottom:1px solid var(--line)}
+.htop{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+h1{font-size:30px;letter-spacing:1px;font-weight:800}
+h1 .code{color:var(--blue);font-size:20px;font-weight:600;margin-left:10px;letter-spacing:2px}
+.sub{color:var(--dim);font-size:13px;margin-top:6px}
+.price{text-align:right}
+.price .p{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+.price .c{font-size:15px;font-weight:700}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{background:#17203200;border:1px solid var(--line);color:var(--dim);font-size:12px;padding:3px 10px;border-radius:99px}
+/* banner */
+.banner{margin:24px 0;border-radius:16px;padding:22px 24px;border:1px solid var(--line);
+  background:linear-gradient(120deg,rgba(38,208,124,.10),rgba(74,168,255,.06));position:relative;overflow:hidden}
+.banner.bear{background:linear-gradient(120deg,rgba(255,93,108,.12),rgba(169,123,255,.06))}
+.banner.neu{background:linear-gradient(120deg,rgba(245,185,66,.12),rgba(139,154,178,.06))}
+.brow{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+.dirbadge{font-size:26px;font-weight:900;letter-spacing:3px;padding:8px 20px;border-radius:12px;
+  background:var(--upbg);color:var(--up);border:1px solid rgba(38,208,124,.35)}
+.bear .dirbadge{background:var(--dnbg);color:var(--dn);border-color:rgba(255,93,108,.35)}
+.neu .dirbadge{background:rgba(245,185,66,.12);color:var(--gold);border-color:rgba(245,185,66,.35)}
+.kv{display:flex;flex-direction:column;min-width:96px}
+.kv b{font-size:19px;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;color:var(--dim)}
+.banner p{margin-top:14px;color:#c8d4e6;font-size:14.5px}
+/* section */
+section{margin:34px 0}
+h2{font-size:19px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+h2::before{content:"";width:4px;height:19px;border-radius:2px;background:linear-gradient(180deg,var(--blue),var(--pur))}
+h3{font-size:15px;font-weight:700;color:#cfe0f5;margin:0 0 8px}
+.note{color:var(--mute);font-size:12px;margin-top:6px}
+/* cards */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g6{grid-template-columns:repeat(3,1fr)}
+@media(max-width:920px){.g3,.g6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g3,.g2,.g6{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+.card .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card .ch .t{font-size:14px;font-weight:800;letter-spacing:.5px}
+.card .ch .s{font-size:12px;color:var(--dim)}
+ul.dl{list-style:none}
+ul.dl li{font-size:13.4px;color:#c3cfe2;padding:3px 0 3px 14px;position:relative}
+ul.dl li::before{content:"▪";position:absolute;left:0;color:var(--blue);font-size:11px;top:4px}
+ul.dl li b{color:#eaf2ff}
+/* score bar */
+.bar{margin-top:10px}
+.bar .lb{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.track{height:7px;border-radius:99px;background:#1b2536;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.up{background:linear-gradient(90deg,#1d9e5f,var(--up))}
+.fill.dn{background:linear-gradient(90deg,#b83c4b,var(--dn))}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid #1a2436;text-align:left}
+th{color:var(--dim);font-weight:600;font-size:12px;background:#0f1622}
+td{color:#ccd8ea;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--up);font-weight:700}
+.neg{color:var(--dn);font-weight:700}
+/* columns */
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:920px){.cols{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+/* debate */
+.round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin-bottom:16px}
+.rh{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#0f1622;border-bottom:1px solid var(--line)}
+.rh .rt{font-weight:800;font-size:15px}
+.rh .rr{font-size:12px;color:var(--mute)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:760px){.vs{grid-template-columns:1fr}}
+.side{padding:16px 18px}
+.side.bull{background:linear-gradient(180deg,rgba(38,208,124,.05),transparent)}
+.side.bear{background:linear-gradient(180deg,rgba(255,93,108,.05),transparent);border-left:1px solid var(--line)}
+@media(max-width:760px){.side.bear{border-left:none;border-top:1px solid var(--line)}}
+.who{font-size:13px;font-weight:800;letter-spacing:.5px;margin-bottom:8px}
+.who.b{color:var(--up)} .who.s{color:var(--dn)}
+.side p{font-size:13.6px;color:#c6d2e4;margin-bottom:9px}
+.side p b{color:#fff}
+.side ol{margin:0 0 8px 18px}
+.side ol li{font-size:13.6px;color:#c6d2e4;margin-bottom:6px}
+/* decision */
+.scores td.sc{text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.sw{grid-template-columns:1fr}}
+.plan{margin-top:14px}
+.plan td{font-size:13.5px}
+.conf{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:14px;padding:16px;border-radius:12px;
+  background:linear-gradient(120deg,rgba(74,168,255,.10),rgba(169,123,255,.06));border:1px solid #24344f}
+.conf .big{font-size:38px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.conf .txt{font-size:13px;color:#c3cfe2;max-width:760px}
+.conf .txt b{color:#fff}
+.caliber{font-size:11.5px;color:var(--mute);margin-top:8px;border-left:2px solid #2a3a55;padding-left:10px}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--mute);font-size:12px}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.kpi div{background:#0f1622;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:12px;color:var(--dim)}
+.kpi div b{color:#e8f1ff;font-size:14px;margin-left:5px}
+</style></head><body><div class="wrap">
+<header><div class="htop">
+<div><h1>甲醇<span class="code">MA2701</span></h1>
+<div class="sub">郑州商品交易所 · 报告日期 2026-10-27 · 数据截至 2026-10-27 收盘</div></div>
+<div class="price"><div class="p">3,448</div>
+<div class="c" style="color:var(--up)">+1.74% · 5日 +9.22% · 20日 +17.20%</div></div></div>
+<div class="tags"><span class="tag">持仓量 904,098 手</span><span class="tag">6大维度</span><span class="tag">3轮多空辩论</span><span class="tag">置信度 71.3%</span><span class="tag">能化·进口依赖</span><span class="tag">港口库存历史新低</span><span class="tag">深度 backwardation</span></div>
+</header>
+
+<div class="banner"><div class="brow">
+<div class="dirbadge">多</div>
+<div class="kv"><b>多方 63% / 空方 37%</b><span>胜率评估</span></div>
+<div class="kv"><b>71.3%</b><span>置信度（已校准）</span></div>
+<div class="kv"><b>1~3 个交易日</b><span>预期触发窗口</span></div>
+<div class="kv"><b>3,560</b><span>目标1</span></div>
+<div class="kv"><b>3,330</b><span>止损</span></div>
+</div><p>进口腰斩（10 月预估 40-47 万吨，正常月 80-99 万吨）叠加港口库存 30.51 万吨的历史新低，把太仓现货推到 4,150 元，对 2701 升水 702 元（+20.4%）。这是全市场最陡的基差结构之一。但今日盘面出现「减仓上涨」：持仓量单日 -48,484 手、前20净多 -4,563 手，同时 MTO 外采装置大面积停车的需求负反馈正在兑现。裁决为「多，但降级为轻仓短多」，以回踩 EMA5 为入场。</p></div>
+
+<section><h2>六维数据全景</h2>
+<div class="grid g6"><div class="card"><div class="ch"><span class="t">① 库存</span><span class="s">历史新低（强多）</span></div>
+<ul class="dl"><li>中国甲醇港口库存 <b>30.51 万吨</b>（10/8，隆众），环比 -22.47%，<b>续创历史新低</b></li><li>周期内显性外轮卸货仅 2.35 万吨，到港极度稀少</li><li>内地企业库存同样偏低，西北厂库无明显压力</li><li>低库存 + 低到港 = 现货可流通货源枯竭，卖方定价权极强</li></ul><div class="bar"><div class="lb"><span>空头 0/10</span><span>多头 10/10</span></div>
+<div class="track"><div class="fill up" style="width:100%"></div></div></div></div><div class="card"><div class="ch"><span class="t">② 仓单</span><span class="s">低位（偏多）</span></div>
+<ul class="dl"><li>郑商所甲醇仓单 <b>5,740 张</b>（10/27），当日 -172 张</li><li>厂库仓单集中于国贸石化 1,000 吨、中化化销 600 吨、安徽中能 525 吨等</li><li>仓单/总持仓 = 0.6%，远不足以压制 90 万手持仓</li><li>仓单持续小幅流出，说明卖方不愿在低位注册交割</li></ul><div class="bar"><div class="lb"><span>空头 3/10</span><span>多头 7/10</span></div>
+<div class="track"><div class="fill up" style="width:70%"></div></div></div></div><div class="card"><div class="ch"><span class="t">③ 期限结构</span><span class="s">深度 backwardation</span></div>
+<ul class="dl"><li>MA2701 3,448 → MA2705 3,120 → MA2709 2,977，逐月下移 471 元</li><li>太仓现货 4,150（10/27 生意社）对 2701 升水 <b>+702 元（+20.4%）</b></li><li>生意社基准价 4,093.33，基差率 +15.8%</li><li>近强远弱反映「进口中断是阶段性的、但当下极紧」，属强现实结构</li></ul><div class="bar"><div class="lb"><span>空头 1/10</span><span>多头 9/10</span></div>
+<div class="track"><div class="fill up" style="width:90%"></div></div></div></div><div class="card"><div class="ch"><span class="t">④ 技术面</span><span class="s">多头趋势但严重超买</span></div>
+<ul class="dl"><li>EMA5/10/20/60 = 3,318/3,252/3,169/2,958，<b>多头排列</b></li><li>MACD 零轴上方金叉，红柱 27.7 放大</li><li>RSI14 <b>71.4</b>、KDJ J=102、WR14 -7.2、布林 %B 97.3，价格贴上轨</li><li>5 日 +9.22%、20 日 +17.20%，创 60 日新高 3,482</li></ul><div class="bar"><div class="lb"><span>空头 3/10</span><span>多头 7/10</span></div>
+<div class="track"><div class="fill up" style="width:70%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑤ 新闻基本面</span><span class="s">供应强多 / 需求负反馈</span></div>
+<ul class="dl"><li>10 月进口预估 <b>40-47 万吨</b>，较正常月份近乎腰斩；8 月进口 80.53 万吨（前8月同比 -32.30%）</li><li>霍尔木兹海峡通过率极低，3 月以来进口量大幅下滑</li><li>MTO 负反馈：华东 MTO 单体理论亏损一度超 4,000 元/吨，沿海外采型 MTO <b>大面积停车，历史罕见</b></li><li>MTO 占甲醇下游需求约一半，需求端塌陷是最大掣肘</li></ul><div class="bar"><div class="lb"><span>空头 4/10</span><span>多头 6/10</span></div>
+<div class="track"><div class="fill up" style="width:60%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑥ 持仓席位</span><span class="s">净多巨大但当日减仓</span></div>
+<ul class="dl"><li>前20净多 <b>+103,564 手</b>（当日 -4,563），净多/总持仓 11.5%</li><li>连续 1 日净多减少，5 日窗口累计 -11,735</li><li>多头集中度 70.9%、空头 59.5%，多头高度集中</li><li>国泰君安多单 116,753（+12,904）逆势大增，中信 -5,502、东证 -7,214 兑现</li><li>总持仓单日 <b>-48,484</b>，减仓上涨，多头主动撤退</li></ul><div class="bar"><div class="lb"><span>空头 4/10</span><span>多头 6/10</span></div>
+<div class="track"><div class="fill up" style="width:60%"></div></div></div></div></div>
+<div class="note">评分条为「多头力度」0-10 分，由总决策官依据该维度数据独立打分；分值越高越利多。</div></section>
+
+<section><h2>技术面深度研判</h2>
+<div class="card"><h3>【趋势判断】短期（日K）强多 / 中期（周K）强多，强度：强（位置偏差）</h3>
+<p style="font-size:13.6px;color:#c6d2e4">价格自 2,821 连续上攻至 3,482，20 日涨幅 17.2%，沿布林上轨运行，均线完美多头排列。EMA5（3,318）为本周多空分水岭。指标层面已进入超买钝化区（%B 97.3、WR -7.2、J 102），且今日出现<b>缩量减仓</b>（持仓 -4.85 万手、量比仅 1.05），量价仓开始背离，是本轮上涨以来第一个警示信号。</p>
+<div class="kpi"><div>收盘<b>3,448</b></div><div>ATR14<b>140.9</b></div><div>量比<b>1.05</b></div><div>持仓量<b>904,098</b></div><div>20日区间<b>2,821-3,482</b></div><div>基差<b>+702</b></div></div></div>
+<div class="cols" style="margin-top:14px">
+<div class="card"><h3>趋势指标</h3><ul class="dl"><li>EMA5 3,318 / EMA10 3,252 / EMA20 3,169 / EMA60 2,958，<b>多头排列</b>，EMA20 上穿 EMA60 形成中期金叉</li><li>价格位于 EMA5 上方 3.9%，EMA5 斜率仍陡</li><li>MACD：DIF 107.0 / DEA 93.2，零轴上方金叉，红柱 27.7 但增幅放缓</li><li>布林带开口向上，宽度 20.34%，价格沿上轨（3,465）运行</li></ul></div>
+<div class="card"><h3>震荡指标</h3><ul class="dl"><li>RSI14 <b>71.4</b>（前值 69.2），连续 4 日超买</li><li>KDJ：K 76.4 / D 63.6 / J <b>102.0</b>，高位金叉但 J 值已破百</li><li>WR14 <b>-7.2</b>，接近极值区</li><li>布林 %B 97.3，紧贴上轨，未突破（与 BU 的 113.7 不同，说明动量弱于沥青）</li></ul></div>
+<div class="card"><h3>量能分析</h3><ul class="dl"><li>成交量 3,095,010 手，5 日均量 2,944,095，量比 1.05 —— <b>涨而量不增</b></li><li>持仓量单日 <b>-48,484</b>（5 日仍 +43,324），<b>减仓上涨</b> = 空头回补主导</li><li>前20净多 -4,563，多头同步减仓，与「空头回补」相互印证</li><li>价升、量平、仓减：上涨质量下降，需警惕冲高回落</li></ul></div>
+<div class="card"><h3>形态研判</h3><ul class="dl"><li>形态：自 2,821 起的上升通道，通道上轨约 3,490，当前已触及</li><li>今日 K 线上影线 34 点（高 3,482 / 收 3,448），<b>上影线试探失败</b></li><li>缺口：10/26 跳空（3,389 前收 → 3,420 开）未回补，3,389-3,420 为支撑带</li><li>若能站上 3,482 则打开 3,600 空间；若失守 3,389 则确认短线见顶</li></ul></div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>关键价位</h3><ul class="dl"><li>第一支撑 <b>3,389</b>（10/26 收盘 / 跳空缺口下沿）</li><li>第二支撑 <b>3,318</b>（EMA5）</li><li>强支撑 <b>3,252</b>（EMA10 + 前期平台）</li><li>第一压力 <b>3,490</b>（上升通道上轨）</li><li>强压力 <b>3,600</b>（2025 年高点密集区）</li></ul></div>
+<div class="card"><h3>多空指标共振</h3><ul class="dl">
+<li>多头信号：均线多头排列、MACD零轴上金叉、20日新高、EMA20上穿EMA60（4个）</li><li>空头信号：RSI 71.4、J值102、WR -7.2、%B 97.3、减仓上涨、上影线（6个）</li>
+<li>中性信号：量比1.05，量能中性</li><li><b>综合结论：</b>技术面整体&lt;b&gt;偏多但动量衰减&lt;/b&gt;，强度评级由「强」下调为「中强」。趋势未破，但减仓上涨+上影线提示多头在兑现，宜轻仓、快进快出。</li></ul></div>
+</div></section>
+
+<section><h2>持仓席位深度分析</h2>
+<div class="card"><div class="ch"><span class="t">前20名会员净持仓 · MA2701</span><span class="s">数据日期 2026-10-27（akshare 新浪源）</span></div>
+<div class="kpi">
+<div>净持仓<b class="pos">+103,564</b></div>
+<div>当日变化<b class="neg">-4,563</b></div>
+<div>总持仓<b>904,098</b></div>
+<div>多头集中度<b>70.9%</b></div>
+<div>空头集中度<b>59.5%</b></div></div>
+<p style="font-size:13.6px;color:#c6d2e4;margin-top:12px">前20净多 +103,564 手，是全品种中净多最集中的合约，但<b>结构出现裂痕</b>：中信（-5,502）、东证（-7,214）、银河（-3,733）、永安（-1,359）四家多头集体减仓，仅国泰君安逆势加多 12,904 手独自扛旗。多头集中度 70.9% 高于空头 59.5%，一旦国泰君安转向，踩踏风险显著。</p></div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>多头前5席位</h3><table><thead><tr><th>席位</th><th>多单持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td>116,753</td><td class='pos'>+12,904</td></tr><tr><td>中信期货</td><td>104,131</td><td class='neg'>-5,502</td></tr><tr><td>东证期货</td><td>46,706</td><td class='neg'>-7,214</td></tr><tr><td>银河期货</td><td>39,911</td><td class='neg'>-3,733</td></tr><tr><td>永安期货</td><td>37,627</td><td class='neg'>-1,359</td></tr></tbody></table></div>
+<div class="card"><h3>空头前5席位</h3><table><thead><tr><th>席位</th><th>空单持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td>66,125</td><td class='pos'>+2,772</td></tr><tr><td>中信期货</td><td>58,831</td><td class='neg'>-6,504</td></tr><tr><td>东证期货</td><td>48,761</td><td class='pos'>+3,026</td></tr><tr><td>华泰期货</td><td>38,573</td><td class='neg'>-3,389</td></tr><tr><td>浙商期货</td><td>33,248</td><td class='neg'>-528</td></tr></tbody></table></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>5日持仓趋势（2026-10-21 ~ 2026-10-27，5 个交易日）</h3>
+<p style="font-size:13.6px;color:#c6d2e4">最新净多 +103,564 手，当日 -4,563（<b>1 日净多减少</b>），5 日窗口累计 <b>-11,735 手</b>，状态标注「净多减仓」。这是本轮行情中第一次出现 5 日净多净流出，与价格创新高形成<b>顶背离雏形</b>，是本报告下调置信度的核心依据之一。</p></div></section>
+
+<section><h2>期限结构与基差</h2>
+<div class="card"><svg viewBox="0 0 1060 235" width="100%" height="235" role="img"><rect x="196" y="35" width="92" height="170" rx="6" fill="#4aa8ff" opacity=".85"/><text x="242" y="27" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">3,448</text><text x="242" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">MA2701</text><rect x="484" y="126" width="92" height="79" rx="6" fill="#26d07c" opacity=".85"/><text x="530" y="118" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">3,120</text><text x="530" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">MA2705</text><rect x="772" y="165" width="92" height="40" rx="6" fill="#26d07c" opacity=".85"/><text x="818" y="157" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">2,977</text><text x="818" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">MA2709</text></svg>
+<table style="margin-top:10px"><thead><tr><th>合约</th><th>收盘价</th><th>持仓量</th><th>结构含义</th></tr></thead><tbody><tr><td>MA2701</td><td>3,448</td><td>904,098</td><td>主力，进口断供下的强现实</td></tr><tr><td>MA2705</td><td>3,120</td><td>152,327</td><td>远月，进口恢复预期</td></tr><tr><td>MA2709</td><td>2,977</td><td>5,691</td><td>最远月，回归常态定价</td></tr></tbody></table>
+<p class="note">Backwardation：2701→2709 逐月下移 471 元（-13.7%）。太仓现货 4,150 对 2701 升水 702 元（+20.4%），为能源化工板块最高基差率之一。该结构的核心假设是「霍尔木兹中断是暂时的」——若进口恢复，远月将快速塌陷，近月则依赖低库存维持。做多 2701 本质是做多「断供持续到 12 月」。</p></div></section>
+
+<section><h2>三轮多空辩论</h2><div class="round"><div class="rh"><span class="rt">第1轮 · 立论陈词</span><span class="rr">6维度论证 · 各约450字</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>核心逻辑一：进口断供是物理事实，不是预期。</b>10 月进口预估 40-47 万吨，正常月份 80-99 万吨，8 月实际 80.53 万吨，前 8 月累计同比 -32.30%。霍尔木兹海峡通过率极低已持续 7 个月，这不是一次性扰动。港口库存 30.51 万吨、环比 -22.47%、<b>历史新低</b>，周期内显性卸货仅 2.35 万吨——库存已经低到无法再缓冲任何到港延迟。</p>
+<p><b>核心逻辑二：基差 20.4% 是不可忽视的向上引力。</b>太仓现货 4,150，2701 仅 3,448，贴水 702 元。郑商所仓单只有 5,740 张（占总持仓 0.6%），没有仓单可以压制近月。基差修复只有两条路：现货跌 700 元，或期货涨 700 元。在库存历史新低、到港仅 2.35 万吨的环境下，现货下跌的概率远低于期货上涨。</p>
+<p><b>核心逻辑三：成本与情绪同向。</b>Brent 115.81 美元、EIA 预计 Q4 减产 450 万桶/日，甲醇作为能源化工品直接受益。技术上均线多头排列、MACD 零轴上金叉、创 60 日新高，20 日涨 17.2%，趋势结构完好。</p>
+<p><b>目标：</b>回踩 3,389-3,420 后目标 3,560，极限 3,640，窗口 1-3 日。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>核心逻辑一：需求负反馈已经发生，且是历史级别的。</b>MTO 占甲醇下游需求约一半，10 月华东 MTO 单体理论亏损一度超 4,000 元/吨，<b>沿海外采型 MTO 已大面积停车，这样的局面为历史罕见</b>。甲醇越涨，MTO 停得越多，需求塌得越快——这是自我毁灭式的上涨。高价已经在消灭自己的需求基础。</p>
+<p><b>核心逻辑二：今天的盘面已经叛变。</b>持仓量单日 -48,484 手，前20净多 -4,563 手，5 日净多累计 -11,735 手，量比仅 1.05。<b>减仓上涨 + 上影线</b>（高 3,482、收 3,448）是标准的空头回补型冲高，不是新多入场。中信 -5,502、东证 -7,214、银河 -3,733 集体撤退，只剩国泰君安独扛——这是分歧而非共识。</p>
+<p><b>核心逻辑三：超买已到极值，且远月结构在否定多头。</b>RSI 71.4 连续 4 日、J 值 102、WR -7.2、%B 97.3。更关键的是 2705（3,120）、2709（2,977）远月大幅贴水，说明市场自己都不认为 3,448 是可持续的价格。近月强势靠的是断供，断供一旦缓解，2701 会以最快速度向 3,120 收敛。</p>
+<p><b>结论：</b>不追多，3,480-3,520 沽空，止损 3,620，目标 3,240。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第2轮 · 交叉驳斥</span><span class="rr">逐条针对性反驳</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>驳「需求负反馈」：</b>MTO 停车是事实，但你把「需求下降」当成「价格下跌」的充分条件，忽略了供给下降得更快。10 月进口 40-47 万吨意味着月度供给缺口约 40 万吨，而 MTO 停车减少的需求量级与之相当——这是供需双缩下的紧平衡，不是过剩。且 MTO 停车后一旦利润修复会快速重启，需求是弹性的、可逆的；而进口断供取决于地缘，是不可控的。</p>
+<p><b>驳「盘面叛变」：</b>减仓上涨我承认是警示，但你把它解读为「空头回补结束即见顶」过于武断。今日净多仍高达 10.36 万手，一个 -4,563 的变化只占 4.4%；国泰君安逆势加多 12,904 手，说明头部资金在承接而非撤退。真正的顶部特征是「增仓下跌 + 净多大幅流出」，现在恰恰相反。</p>
+<p><b>驳「远月否定近月」：</b>这是对 backwardation 的误读。远月贴水本身就是「当下极紧、未来缓解」的正常定价，它不能用来否定近月——否则所有 backwardation 品种都不能做多。真正的风险信号是 backwardation 收敛（近月下跌），目前 2701 仍在创新高，结构在强化而非弱化。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>驳「进口断供是物理事实」：</b>物理事实我完全同意，但价格交易的是<b>边际变化</b>而不是存量事实。断供已经持续 7 个月、价格已经涨了 17.2%，这个事实被充分定价了。真正需要回答的是：下个月进口会不会恢复？11 月若霍尔木兹通过率回升，40 万吨进口会瞬间变成 80 万吨，价格将从「极紧」直接跳到「宽松」。</p>
+<p><b>驳「基差向上引力」：</b>基差修复的方向不由你决定。现货 4,150 是「断供 + 低库存」的产物，一旦到港恢复，现货的下跌速度会远快于期货——基差修复完全可以通过现货崩塌完成。你把「基差大」等同于「期货必须涨」，这是单向思维。而且 20.4% 的基差率在能化品种里已属极端，极端基差往往意味着现货定价失真（样本少、成交薄）。</p>
+<p><b>驳「成本与情绪同向」：</b>甲醇的成本是煤，不是原油。中国甲醇 70% 以上是煤制，油制占比很小，用 Brent 115 美元论证甲醇成本抬升，是把油化工逻辑套在煤化工品种上，属于基础性的产业链误读。你以为的「成本支撑」在甲醇上几乎不存在。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第3轮 · 最终陈词</span><span class="rr">回应驳斥 + 最终方案</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>回应：</b>对方最有价值的一击是「煤制主导、油价不是甲醇成本」。这一点我修正——甲醇的成本锚是动力煤，原油只通过 MTO 利润与情绪间接传导。但修正后结论反而更有利于多头：煤价在保供背景下弱势，意味着甲醇的<b>成本下移空间已打开</b>，而售价由进口断供决定，<b>利润扩张</b>而非收缩，这是最健康的上涨结构。</p>
+<p><b>胜负手：</b>①港口库存 30.51 万吨历史新低 + 卸货 2.35 万吨，实物缓冲已耗尽；②仓单仅 5,740 张，近月无压制，基差 702 元必须修复。这两条都不依赖需求，因此不受「MTO 停车」证伪——MTO 停车减少的是需求，但减少不了库存的稀缺性。</p>
+<p><b>最终方案：</b>方向<b>多</b>，但降级为轻仓短多。入场 3,389-3,430（回踩缺口下沿/EMA5），目标1 3,560、目标2 3,640，止损 3,330（跌破 EMA5 与平台）。窗口 1-3 日，仓位 25%。承认：减仓上涨是真实警讯，若明日不能收复 3,482，本方案主动离场而非等止损。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>回应：</b>对方修正后的「利润扩张」逻辑确实更自洽，我接受煤制成本这一点。但它恰恰暴露了多头的死穴——<b>利润越好，供应弹性越大</b>。甲醇开工率本就高位，利润扩张会刺激内地装置提负、也会刺激 MTO 重启后的补库，供应终将追上。商品市场里，高利润从不是长期护城河，而是增产的邀请函。</p>
+<p><b>胜负手：</b>①今日「减仓上涨 + 长上影 + 5 日净多净流出 11,735 手」是资金层面的明确离场信号，比任何基本面叙事都更即时；②远月 2705/2709 大幅贴水，说明产业客户已经在远月锁定 3,100 以下的成本，多头在近月的孤军深入缺乏纵深。</p>
+<p><b>最终方案：</b>若价格冲至 3,490-3,520 且不能站稳，<b>沽空</b>，止损 3,620，目标 3,240，窗口 2-4 日。若价格先回踩 3,330 并站稳，则本方案作废——我承认在 3,400 以下做空没有胜算。</p></div></div></div></section>
+
+<section><h2>总决策官裁决</h2>
+<div class="card"><h3>六维度多空评分表</h3>
+<table class="scores"><thead><tr><th>维度</th><th>关键事实</th><th>多头分</th><th>空头分</th><th>净分</th><th>裁决理由</th></tr></thead><tbody><tr><td>① 库存</td><td>港口 30.51 万吨历史新低，卸货仅 2.35 万吨</td><td class='sc pos'>10</td><td class='sc neg'>0</td><td class='sc'>+10</td><td>实物缓冲耗尽，最强多头证据</td></tr><tr><td>② 仓单</td><td>仓单 5,740 张，占总持仓 0.6%</td><td class='sc pos'>7</td><td class='sc neg'>3</td><td class='sc'>+4</td><td>低位但厂库可注册，不给满分</td></tr><tr><td>③ 期限结构</td><td>backwardation，基差 +702（+20.4%）</td><td class='sc pos'>9</td><td class='sc neg'>1</td><td class='sc'>+8</td><td>基差修复引力强，远月结构是软肋</td></tr><tr><td>④ 技术面</td><td>多头排列+新高，但减仓上涨、长上影</td><td class='sc pos'>7</td><td class='sc neg'>3</td><td class='sc'>+4</td><td>趋势完好，动量衰减</td></tr><tr><td>⑤ 新闻基本面</td><td>进口腰斩 vs MTO 大面积停车</td><td class='sc pos'>6</td><td class='sc neg'>4</td><td class='sc'>+2</td><td>供需双缩，供应更刚性</td></tr><tr><td>⑥ 持仓席位</td><td>净多 10.36 万手，但 5 日净流出 1.17 万手</td><td class='sc pos'>6</td><td class='sc neg'>4</td><td class='sc'>+2</td><td>绝对量偏多，边际转弱</td></tr></tbody></table>
+<div class="sw">
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--up)">多头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>港口库存历史新低 + 到港 2.35 万吨 + 仓单 0.6%，构成无法用叙事否证的实物短缺</li><li><b>最弱：</b>今天的减仓上涨与 5 日净多净流出，使「立即上涨」的确定性大打折扣</li></ul></div>
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--dn)">空头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>MTO 大面积停车是历史级需求负反馈，且减仓上涨+长上影是即时离场信号</li><li><b>最弱：</b>无法解释 20.4% 基差与 5,740 张仓单如何在不涨不跌中被消化</li></ul></div>
+</div>
+<p style="font-size:13.8px;color:#c6d2e4;margin-top:14px">六维净分 +30，与沥青同分但性质不同：沥青是「库存+供应+资金」三重共振，甲醇是「库存+基差」双轮驱动而资金边际转弱。总决策官采纳多头方向，但明确三点降级：<b>仓位从 40% 降至 25%、入场必须回踩、持有不超过 3 日</b>。空头提出的「减仓上涨」被认定为有效警讯，故在方案中加入「明日不能收复 3,482 即主动离场」的纪律条款，这是本品种区别于其他多头品种的风控安排。</p>
+</div>
+<div class="card plan" style="margin-top:14px"><h3>决策方案</h3>
+<table><thead><tr><th>项目</th><th>数值</th><th>说明</th></tr></thead><tbody>
+<tr><td>方向</td><td class="pos">多</td><td>多（轻仓短多，不追 3,480 以上）</td></tr>
+<tr><td>入场区间</td><td>3,389 - 3,430</td><td>回踩10/26缺口下沿与EMA5之间分批，仅1-2笔</td></tr>
+<tr><td>目标1 / 目标2</td><td>3,560 / 3,640</td><td>T1为前高上方第一密集区；T2为通道上轨外溢目标</td></tr>
+<tr><td>止损</td><td>3,330</td><td>跌破EMA5(3,318)与3,389缺口下沿，短线结构破坏</td></tr>
+<tr><td>预期窗口</td><td>1~3 个交易日</td><td>动量衰减，窗口不宜拉长，逾期未达目标即离场</td></tr>
+<tr><td>建议仓位</td><td>25%</td><td>基于置信度与波动率(ATR)折算</td></tr>
+</tbody></table></div>
+<div class="conf"><div class="big">71.3%</div><div class="txt">
+<b>置信度说明：</b>多空共振度较高（库存10分、期限结构9分），且该品种近5日复盘 3/3 全对（多单全胜），基本面供应约束明确，基础置信度给 66%。扣分项：①今日减仓上涨、5日净多净流出 11,735 手，资金边际转弱；②MTO 大面积停车构成需求端硬约束；③RSI/J/WR 三项同时超买。因此未进入 70 以上档。<br>
+<b>预期触发窗口：</b>1~3 个交易日（需回踩确认）　<b>基础置信度：</b>66%　<b>校准系数：</b>×1.08
+<div class="caliber">系数来源：future-analysis-reports/2026-10-27/confidence-factors.json —— 基础置信度落在「60-69」档，该档近5日样本 n=18，实际触发率 66.7%，系统系数 1.08（n≥5 才生效，否则取 1.0）；结果已裁剪至 10%~95%。</div>
+</div></div>
+<div class="card" style="margin-top:14px;border-color:#4a2b33;background:linear-gradient(120deg,rgba(255,93,108,.07),transparent)">
+<h3 style="color:var(--dn)">风险提示</h3><p style="font-size:13.4px;color:#c9d4e6">①进口快速恢复：11 月到港若回升至 80 万吨，现货将从 4,150 快速回落，基差以「现货崩」的方式修复，期货跌幅可能超 300 点；②MTO 负反馈扩大：若沿海 MTO 全部停车，需求端塌陷将击穿 3,318 支撑；③减仓上涨终结：持仓已 5 日净流出，一旦国泰君安转向，踩踏风险高；④政策干预：甲醇高价已引发下游抗议，若出台保供或反囤积措施，将直接打击多头；⑤流动性风险：90 万手持仓下，单日 4.8 万手减仓说明筹码不稳。</p></div>
+</section>
+
+<footer>本报告由 AI 多 Agent 辩论系统自动生成，数据来源：新浪财经期货日K、akshare（上期所/郑商所仓单日报、前20名会员持仓）、隆众资讯/Mysteel/SMM/生意社（经公开新闻转引）、Web 新闻与机构研报。所有数据均标注日期，历史数据不代表未来表现。<br>
+本报告不构成任何投资建议或投资承诺，据此操作风险自担。期货有杠杆，入市需谨慎。<br>
+生成时间：2026-10-27 · futures-deep-analysis v2</footer>
+</div></body></html>

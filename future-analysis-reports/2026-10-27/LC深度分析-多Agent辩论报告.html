@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>碳酸锂(LC2701) 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{
+  --bg:#080b11; --bg2:#0e131c; --card:#121926; --card2:#161f2e;
+  --line:#22304a; --txt:#dfe7f3; --dim:#8b9ab2; --mute:#5d6b82;
+  --up:#26d07c; --upbg:rgba(38,208,124,.12);
+  --dn:#ff5d6c; --dnbg:rgba(255,93,108,.12);
+  --gold:#f5b942; --blue:#4aa8ff; --pur:#a97bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#132033 0%,#080b11 55%) no-repeat,var(--bg);
+  color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+  line-height:1.75;font-size:15px;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+a{color:var(--blue);text-decoration:none}
+/* header */
+header{padding:34px 0 22px;border-bottom:1px solid var(--line)}
+.htop{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+h1{font-size:30px;letter-spacing:1px;font-weight:800}
+h1 .code{color:var(--blue);font-size:20px;font-weight:600;margin-left:10px;letter-spacing:2px}
+.sub{color:var(--dim);font-size:13px;margin-top:6px}
+.price{text-align:right}
+.price .p{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+.price .c{font-size:15px;font-weight:700}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{background:#17203200;border:1px solid var(--line);color:var(--dim);font-size:12px;padding:3px 10px;border-radius:99px}
+/* banner */
+.banner{margin:24px 0;border-radius:16px;padding:22px 24px;border:1px solid var(--line);
+  background:linear-gradient(120deg,rgba(38,208,124,.10),rgba(74,168,255,.06));position:relative;overflow:hidden}
+.banner.bear{background:linear-gradient(120deg,rgba(255,93,108,.12),rgba(169,123,255,.06))}
+.banner.neu{background:linear-gradient(120deg,rgba(245,185,66,.12),rgba(139,154,178,.06))}
+.brow{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+.dirbadge{font-size:26px;font-weight:900;letter-spacing:3px;padding:8px 20px;border-radius:12px;
+  background:var(--upbg);color:var(--up);border:1px solid rgba(38,208,124,.35)}
+.bear .dirbadge{background:var(--dnbg);color:var(--dn);border-color:rgba(255,93,108,.35)}
+.neu .dirbadge{background:rgba(245,185,66,.12);color:var(--gold);border-color:rgba(245,185,66,.35)}
+.kv{display:flex;flex-direction:column;min-width:96px}
+.kv b{font-size:19px;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;color:var(--dim)}
+.banner p{margin-top:14px;color:#c8d4e6;font-size:14.5px}
+/* section */
+section{margin:34px 0}
+h2{font-size:19px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+h2::before{content:"";width:4px;height:19px;border-radius:2px;background:linear-gradient(180deg,var(--blue),var(--pur))}
+h3{font-size:15px;font-weight:700;color:#cfe0f5;margin:0 0 8px}
+.note{color:var(--mute);font-size:12px;margin-top:6px}
+/* cards */
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g6{grid-template-columns:repeat(3,1fr)}
+@media(max-width:920px){.g3,.g6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.g3,.g2,.g6{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+.card .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card .ch .t{font-size:14px;font-weight:800;letter-spacing:.5px}
+.card .ch .s{font-size:12px;color:var(--dim)}
+ul.dl{list-style:none}
+ul.dl li{font-size:13.4px;color:#c3cfe2;padding:3px 0 3px 14px;position:relative}
+ul.dl li::before{content:"▪";position:absolute;left:0;color:var(--blue);font-size:11px;top:4px}
+ul.dl li b{color:#eaf2ff}
+/* score bar */
+.bar{margin-top:10px}
+.bar .lb{display:flex;justify-content:space-between;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.track{height:7px;border-radius:99px;background:#1b2536;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.up{background:linear-gradient(90deg,#1d9e5f,var(--up))}
+.fill.dn{background:linear-gradient(90deg,#b83c4b,var(--dn))}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;border-bottom:1px solid #1a2436;text-align:left}
+th{color:var(--dim);font-weight:600;font-size:12px;background:#0f1622}
+td{color:#ccd8ea;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--up);font-weight:700}
+.neg{color:var(--dn);font-weight:700}
+/* columns */
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:920px){.cols{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+/* debate */
+.round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin-bottom:16px}
+.rh{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#0f1622;border-bottom:1px solid var(--line)}
+.rh .rt{font-weight:800;font-size:15px}
+.rh .rr{font-size:12px;color:var(--mute)}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:0}
+@media(max-width:760px){.vs{grid-template-columns:1fr}}
+.side{padding:16px 18px}
+.side.bull{background:linear-gradient(180deg,rgba(38,208,124,.05),transparent)}
+.side.bear{background:linear-gradient(180deg,rgba(255,93,108,.05),transparent);border-left:1px solid var(--line)}
+@media(max-width:760px){.side.bear{border-left:none;border-top:1px solid var(--line)}}
+.who{font-size:13px;font-weight:800;letter-spacing:.5px;margin-bottom:8px}
+.who.b{color:var(--up)} .who.s{color:var(--dn)}
+.side p{font-size:13.6px;color:#c6d2e4;margin-bottom:9px}
+.side p b{color:#fff}
+.side ol{margin:0 0 8px 18px}
+.side ol li{font-size:13.6px;color:#c6d2e4;margin-bottom:6px}
+/* decision */
+.scores td.sc{text-align:center;font-weight:800;font-variant-numeric:tabular-nums}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:640px){.sw{grid-template-columns:1fr}}
+.plan{margin-top:14px}
+.plan td{font-size:13.5px}
+.conf{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:14px;padding:16px;border-radius:12px;
+  background:linear-gradient(120deg,rgba(74,168,255,.10),rgba(169,123,255,.06));border:1px solid #24344f}
+.conf .big{font-size:38px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.conf .txt{font-size:13px;color:#c3cfe2;max-width:760px}
+.conf .txt b{color:#fff}
+.caliber{font-size:11.5px;color:var(--mute);margin-top:8px;border-left:2px solid #2a3a55;padding-left:10px}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--mute);font-size:12px}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.kpi div{background:#0f1622;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:12px;color:var(--dim)}
+.kpi div b{color:#e8f1ff;font-size:14px;margin-left:5px}
+</style></head><body><div class="wrap">
+<header><div class="htop">
+<div><h1>碳酸锂<span class="code">LC2701</span></h1>
+<div class="sub">广州期货交易所 · 报告日期 2026-10-27 · 数据截至 2026-10-27 收盘</div></div>
+<div class="price"><div class="p">98,500</div>
+<div class="c" style="color:var(--up)">+3.38% · 5日 -2.01% · 20日 -25.66%</div></div></div>
+<div class="tags"><span class="tag">持仓量 439,132 手</span><span class="tag">6大维度</span><span class="tag">3轮多空辩论</span><span class="tag">置信度 64.8%</span><span class="tag">新能源·锂盐</span><span class="tag">60日-39.5%</span><span class="tag">库存大幅去化</span><span class="tag">津巴布韦出口禁令</span></div>
+</header>
+
+<div class="banner"><div class="brow">
+<div class="dirbadge">多</div>
+<div class="kv"><b>多方 56% / 空方 44%</b><span>胜率评估</span></div>
+<div class="kv"><b>64.8%</b><span>置信度（已校准）</span></div>
+<div class="kv"><b>1~3 个交易日</b><span>预期触发窗口</span></div>
+<div class="kv"><b>103,000</b><span>目标1</span></div>
+<div class="kv"><b>94,000</b><span>止损</span></div>
+</div><p>今日 +3.38% 收 98,500，MACD 在零轴下方完成金叉（柱值由绿转红 +341.7）、价格站上 EMA5，配合 SMM 样本库存单周 <b>-6,522 吨</b>、交易所口径 -120 吨的实质去库，以及 90,880 的 20 日/60 日双低点两次未破，短线反弹结构成立。但中期空头排列未破（价格低于 EMA20 8.4%）、周产 25,530 吨仍在增加、空头榜逆势加仓——因此这是一次「超跌反弹」，窗口 1~3 个交易日，目标只到 103,000，不做趋势反转。</p></div>
+
+<section><h2>六维数据全景</h2>
+<div class="grid g6"><div class="card"><div class="ch"><span class="t">① 库存</span><span class="s">加速去化（偏多）</span></div>
+<ul class="dl"><li>SMM 样本库存 <b>57,973 吨</b>，单周 <b>-6,522 吨</b>，为近月最大单周降幅</li><li>东财交易所口径 <b>19,202 吨（10/27，-120）</b>，连续小幅下降</li><li>周产量 25,530 吨（+112），产量仍在增，去库由「低价补库 + 下游备货」驱动</li><li>库存绝对水平已从高位显著回落，累库压力阶段性缓解</li></ul><div class="bar"><div class="lb"><span>空头 3/10</span><span>多头 7/10</span></div>
+<div class="track"><div class="fill up" style="width:70%"></div></div></div></div><div class="card"><div class="ch"><span class="t">② 仓单</span><span class="s">低位、数据源受限（中性）</span></div>
+<ul class="dl"><li>广期所仓单接口受限，本项采用东财交易所口径 19,202 吨（10/27，-120）</li><li>仓单量相对 43.9 万手总持仓可忽略，对盘面几乎无压制</li><li>LC 交割标准为电池级碳酸锂，注册门槛高，仓单弹性小于工业品</li><li>仓单持续小幅流出，与现货升水结构一致</li></ul><div class="bar"><div class="lb"><span>空头 5/10</span><span>多头 5/10</span></div>
+<div class="track"><div class="fill up" style="width:50%"></div></div></div></div><div class="card"><div class="ch"><span class="t">③ 期限结构</span><span class="s">backwardation（偏多）</span></div>
+<ul class="dl"><li>LC2611 101,520 → LC2701 98,500 → LC2703 95,360 → LC2705 95,040，<b>近强远弱</b></li><li>2701→2705 下移 <b>3,460 元（-3.5%）</b>，陡峭 backwardation</li><li>现货 101,000 对 2701 <b>升水 2,500 元（+2.48%）</b>，期货小幅贴水</li><li>近月 2611（101,520）已高于现货，显示近端偏紧</li></ul><div class="bar"><div class="lb"><span>空头 4/10</span><span>多头 6/10</span></div>
+<div class="track"><div class="fill up" style="width:60%"></div></div></div></div><div class="card"><div class="ch"><span class="t">④ 技术面</span><span class="s">空头趋势中的超跌反弹</span></div>
+<ul class="dl"><li>EMA5/10/20/60 = 97,313 / 99,926 / 107,598 / 127,828，<b>空头排列</b>（中期仍空）</li><li>MACD 零轴下方<b>金叉</b>，柱值由绿转红 <b>+341.7</b>，为 9 月以来首次</li><li>RSI14 <b>33.1</b>（前值 27.8）、KDJ K 35.6 / D 21.3 / J 64.3、WR -78.2、%B 30.0</li><li>今日 <b>+3.38%</b> 长阳站上 EMA5，但量比仅 0.94（缩量反弹）</li></ul><div class="bar"><div class="lb"><span>空头 4/10</span><span>多头 6/10</span></div>
+<div class="track"><div class="fill up" style="width:60%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑤ 新闻基本面</span><span class="s">供给高位 vs 库存去化（对冲）</span></div>
+<ul class="dl"><li>9 月国内产量 <b>128,517 吨</b>（环比 +10%），周产 25,530 吨（+112），供给维持高位</li><li>电池级碳酸锂现货 101,000 元/吨，较月初 <b>-18.8%</b>，价格已完成大幅下修</li><li><b>津巴布韦锂精矿出口禁令</b> + 国内部分锂盐厂整改停产，供给端存在扰动</li><li>10/27 期现同步反弹（SMM），下游低价补库意愿回升</li><li>需求端：正极排产环比改善，但储能与动力电池增速较上半年放缓</li></ul><div class="bar"><div class="lb"><span>空头 5/10</span><span>多头 5/10</span></div>
+<div class="track"><div class="fill up" style="width:50%"></div></div></div></div><div class="card"><div class="ch"><span class="t">⑥ 持仓席位</span><span class="s">空头逆势加仓（偏空）</span></div>
+<ul class="dl"><li>前20 净空 <b>-23,815 手</b>（当日 <b>-3,161</b>，净空继续扩大），5 日累计 +4,618</li><li>空头榜逆势加空：东证 +878、中信 +394、华泰 +201、国泰君安 +193</li><li>多头榜中信建投 -1,552、东证 -1,250 减仓，仅永安 +1,829、中信 +957 增仓</li><li>空头集中度 <b>82.4%</b>（多头 77.0%），头部资金在空头方向高度集中</li></ul><div class="bar"><div class="lb"><span>空头 6/10</span><span>多头 4/10</span></div>
+<div class="track"><div class="fill up" style="width:40%"></div></div></div></div></div>
+<div class="note">评分条为「多头力度」0-10 分，由总决策官依据该维度数据独立打分；分值越高越利多。</div></section>
+
+<section><h2>技术面深度研判</h2>
+<div class="card"><h3>【趋势判断】短期（日K）超跌反弹 / 中期（周K）空头，强度：中</h3>
+<p style="font-size:13.6px;color:#c6d2e4">60 日从 162,860 跌至 90,880（-44.2%），当前 98,500 距底部反弹 8.4%，但仍低于 EMA10（99,926）1.4%、低于 EMA20（107,598）8.4%、低于 EMA60（127,828）22.9%。今日的看点是三个「第一次」：MACD 首次在零轴下方金叉（柱值 +341.7）、价格首次站上 EMA5、KDJ 的 J 值首次升至 64.3。配合 90,880 的 20 日与 60 日双低点两次未破，短线构成「超跌 + 底背离 + 缩量反包」的修复组合。但缩量（量比 0.94）是关键瑕疵——反弹缺乏增量资金确认。</p>
+<div class="kpi"><div>收盘<b>98,500</b></div><div>ATR14<b>6,177.1</b></div><div>量比<b>0.94</b></div><div>持仓量<b>439,132</b></div><div>20日区间<b>90,880-135,300</b></div><div>基差<b>+2,500</b></div></div></div>
+<div class="cols" style="margin-top:14px">
+<div class="card"><h3>趋势指标</h3><ul class="dl"><li>EMA5 97,313 / EMA10 99,926 / EMA20 107,598 / EMA60 127,828，<b>空头排列</b></li><li>价格 98,500 已站上 EMA5（97,313），距 EMA10 仅 1.4%，是反弹的第一道关卡</li><li>MACD：DIF -10,415 / DEA -10,586，<b>零轴下方金叉</b>，柱值 +341.7</li><li>布林带极度扩张（宽度 45.46%），价格在中轨 108,373 下方、%B 30.0</li></ul></div>
+<div class="card"><h3>震荡指标</h3><ul class="dl"><li>RSI14 <b>33.1</b>（前值 27.8），从超卖区回升，仍低于 50 中轴</li><li>KDJ：K 35.6 / D 21.3 / J 64.3，<b>K 上穿 D 且 J 快速抬头</b></li><li>WR14 <b>-78.2</b>，接近超卖区上沿（-80）</li><li>布林 %B 30.0，自下轨 83,737 回升，距中轨仍有 10% 空间</li></ul></div>
+<div class="card"><h3>量能分析</h3><ul class="dl"><li>成交量 338,569 手，5 日均量 359,146，量比 <b>0.94</b>，<b>缩量反弹</b></li><li>持仓量单日 <b>-4,815</b>，5 日 +9,062，减仓上涨 → 空头部分平仓为主</li><li>缩量 + 减仓反弹说明：抛压确实衰竭，但多头没有大规模进场</li><li>量能未确认，是本方案只能做 1-3 日短线、不能喊反转的核心原因</li></ul></div>
+<div class="card"><h3>形态研判</h3><ul class="dl"><li>形态：90,880 为 20 日与 60 日<b>同一低点</b>，10 月以来两次下探未破，构成双底雏形</li><li>今日长阳（+3,220 元）吞没前两根阴线，为<b>看涨吞没</b></li><li>颈线位 107,598（EMA20 与 10 月中旬平台重合），距现价 9.2%</li><li>若明日回踩不破 95,300（今日实体中枢），反弹结构有效</li></ul></div>
+</div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>关键价位</h3><ul class="dl"><li>第一支撑 <b>95,300</b>（今日长阳实体中枢 / 前收盘上方）</li><li>第二支撑 <b>90,880</b>（20日与60日双低点，双底左底）</li><li>强支撑 <b>83,737</b>（布林下轨）</li><li>第一压力 <b>99,926</b>（EMA10）/ 第二压力 <b>107,598</b>（EMA20 / 双底颈线）</li><li>强压力 <b>135,300</b>（20日高点）</li></ul></div>
+<div class="card"><h3>多空指标共振</h3><ul class="dl">
+<li>多头信号：MACD零轴下金叉、KDJ K上穿D、RSI 27.8→33.1、站上EMA5、双底未破、看涨吞没（6个）</li><li>空头信号：EMA空头排列、价格低于EMA20 8.4%/EMA60 22.9%、缩量反弹、空头逆势加仓（4个）</li>
+<li>中性信号：%B 30.0、WR -78.2（接近超卖上沿）</li><li><b>综合结论：</b>技术面短期&lt;b&gt;偏多（反弹）&lt;/b&gt;、中期&lt;b&gt;偏空（趋势）&lt;/b&gt;，强度评级「中」。典型的逆势短线：只能小仓位、短窗口、严格止损，且必须在 EMA10（99,926）附近观察是否放量突破。</li></ul></div>
+</div></section>
+
+<section><h2>持仓席位深度分析</h2>
+<div class="card"><div class="ch"><span class="t">前20名会员净持仓 · LC2701</span><span class="s">数据日期 2026-10-27（akshare 新浪源）</span></div>
+<div class="kpi">
+<div>净持仓<b class="neg">-23,815</b></div>
+<div>当日变化<b class="neg">-3,161</b></div>
+<div>总持仓<b>439,132</b></div>
+<div>多头集中度<b>77.0%</b></div>
+<div>空头集中度<b>82.4%</b></div></div>
+<p style="font-size:13.6px;color:#c6d2e4;margin-top:12px">净空 -23,815 手，当日<b>净空继续扩大 3,161 手</b>，5 日窗口累计 +4,618 手（净空收窄后再度回归），状态标注「净空减仓」但方向反复。结构上：空头榜四家逆势加空（东证 +878、中信 +394、华泰 +201、国泰君安 +193），银河 -1,071 是唯一明显减仓的；多头榜中信建投 -1,552、东证 -1,250 撤退，仅永安 +1,829 增仓。空头集中度 <b>82.4%</b> 显著高于多头 77.0%，说明<b>头部资金在空头方向高度集中</b>，这与今日价格 +3.38% 形成直接对抗——空头在涨势中加仓，是被动防守还是主动压制，需要明日验证。</p></div>
+<div class="grid g2" style="margin-top:14px">
+<div class="card"><h3>多头前5席位</h3><table><thead><tr><th>席位</th><th>多单持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td>92,670</td><td class='pos'>+855</td></tr><tr><td>中信期货</td><td>66,375</td><td class='pos'>+957</td></tr><tr><td>永安期货</td><td>20,911</td><td class='pos'>+1,829</td></tr><tr><td>中信建投</td><td>19,431</td><td class='neg'>-1,552</td></tr><tr><td>东证期货</td><td>18,733</td><td class='neg'>-1,250</td></tr></tbody></table></div>
+<div class="card"><h3>空头前5席位</h3><table><thead><tr><th>席位</th><th>空单持仓</th><th>增减</th></tr></thead><tbody><tr><td>东证期货</td><td>45,028</td><td class='pos'>+878</td></tr><tr><td>国泰君安</td><td>42,381</td><td class='pos'>+193</td></tr><tr><td>中信期货</td><td>33,481</td><td class='pos'>+394</td></tr><tr><td>银河期货</td><td>27,294</td><td class='neg'>-1,071</td></tr><tr><td>华泰期货</td><td>26,388</td><td class='pos'>+201</td></tr></tbody></table></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>5日持仓趋势（2026-10-21 ~ 2026-10-27，5 个交易日）</h3>
+<p style="font-size:13.6px;color:#c6d2e4">最新净空 -23,815 手，当日 -3,161（净空扩大），5 日窗口累计 +4,618 手，状态标注「净空减仓」但当日反向。趋势含义：10/20-10/23 空头连续止盈（4 次命中），10/26 空单止损失败后空头并未撤退，反而在 98,500 重新加仓。这意味着空头认为 98,500-100,000 是「二次做空位」，多头若不能在 100,000 上方放量突破，将遭遇空头反扑。</p></div></section>
+
+<section><h2>期限结构与基差</h2>
+<div class="card"><svg viewBox="0 0 1060 235" width="100%" height="235" role="img"><rect x="138" y="35" width="92" height="170" rx="6" fill="#4aa8ff" opacity=".85"/><text x="184" y="27" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">101,520</text><text x="184" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">LC2611</text><rect x="369" y="96" width="92" height="109" rx="6" fill="#26d07c" opacity=".85"/><text x="415" y="88" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">98,500</text><text x="415" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">LC2701</text><rect x="599" y="159" width="92" height="46" rx="6" fill="#26d07c" opacity=".85"/><text x="645" y="151" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">95,360</text><text x="645" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">LC2703</text><rect x="830" y="165" width="92" height="40" rx="6" fill="#26d07c" opacity=".85"/><text x="876" y="157" text-anchor="middle" fill="#dfe7f3" font-size="13" font-weight="700">95,040</text><text x="876" y="222" text-anchor="middle" fill="#8b9ab2" font-size="12">LC2705</text></svg>
+<table style="margin-top:10px"><thead><tr><th>合约</th><th>收盘价</th><th>持仓量</th><th>结构含义</th></tr></thead><tbody><tr><td>LC2611</td><td>101,520</td><td>21,834</td><td>近月，现货紧张定价</td></tr><tr><td>LC2701</td><td>98,500</td><td>439,132</td><td>主力，反弹修复中</td></tr><tr><td>LC2703</td><td>95,360</td><td>46,291</td><td>远月，供给过剩预期</td></tr><tr><td>LC2705</td><td>95,040</td><td>26,914</td><td>远月，贴水最深</td></tr></tbody></table>
+<p class="note">陡峭 backwardation：2611（101,520）→ 2705（95,040）累计下移 6,480 元（-6.4%），2701→2705 单段下移 3,460 元。现货 101,000 对 2701 升水 2,500（+2.48%），近月 2611 已高于现货。该结构说明：<b>近端偏紧、远端过剩</b>——碳酸锂的过剩是「未来」的过剩，不是「现在」的过剩。这正是短线反弹的结构基础，也是反弹不能走远的原因（远月深度贴水持续压制 2701 的向上空间）。</p></div></section>
+
+<section><h2>三轮多空辩论</h2><div class="round"><div class="rh"><span class="rt">第1轮 · 立论陈词</span><span class="rr">6维度论证 · 各约450字</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>核心逻辑一：库存正在以近月最快速度去化。</b>SMM 样本库存 57,973 吨，单周 <b>-6,522 吨</b>；交易所口径 19,202 吨（-120）。在周产 25,530 吨仍在增加的情况下库存还能大幅下降，说明<b>需求端的边际改善是真实的</b>——下游在 100,000 元以下主动补库，这是价格止跌的基本面基础。</p>
+<p><b>核心逻辑二：90,880 是双底，且技术三项指标同步转向。</b>90,880 既是 20 日低点也是 60 日低点，10 月以来两次下探未破；今日 MACD 首次在零轴下方金叉（柱值 +341.7）、KDJ 的 K 上穿 D（35.6 vs 21.3）、价格站上 EMA5（97,313），三者在同一天发生，配合 +3.38% 的看涨吞没长阳，是「超跌 + 底背离」的标准组合。</p>
+<p><b>核心逻辑三：backwardation 与现货升水说明近端不宽松。</b>2611（101,520）> 2701（98,500）> 2703（95,360），近强远弱；现货 101,000 对 2701 升水 2,500。津巴布韦锂精矿出口禁令 + 国内锂盐厂整改停产，供给端扰动并未消失。市场把「未来的过剩」全部压在远月，近月并不缺支撑。</p>
+<p><b>目标：</b>96,800-98,000 回踩做多，目标 103,000，极限 107,600，窗口 1-3 日。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>核心逻辑一：趋势是 60 日 -44.2%，反弹只是趋势中的噪音。</b>EMA5 97,313 / EMA10 99,926 / EMA20 107,598 / EMA60 127,828，标准空头排列；价格低于 EMA20 达 8.4%、低于 EMA60 达 22.9%。今日连 EMA10 都没有收复。在 -44% 的单边下跌里，「MACD 零轴下金叉」已经出现过多次，每次都是卖点。</p>
+<p><b>核心逻辑二：供给过剩的格局没有任何改变。</b>9 月产量 128,517 吨（环比 +10%）、周产 25,530 吨（+112），供给仍在爬坡；现货月内 <b>-18.8%</b> 是需求定价的结果，不是情绪。库存去化 6,522 吨看似利多，但 57,973 吨的绝对量对应不到 3 周消费，去库是「跌到 100,000 以下下游补库」的被动结果，一旦价格反弹到 103,000，补库立即停止——这就是反弹的天花板。</p>
+<p><b>核心逻辑三：空头在涨势中逆势加仓，且高度集中。</b>净空 -23,815 手、当日再增 3,161 手；东证 +878、中信 +394、华泰 +201、国泰君安 +193 集体加空，空头集中度 <b>82.4%</b>。今日 +3.38% 却是<b>缩量</b>（量比 0.94）、减仓 4,815 手——缩量减仓的多头反弹，遇上集中加仓的空头，方向不言自明。</p>
+<p><b>结论：</b>103,000-107,600 沽空，止损 110,000，目标 94,000，极限 90,880，窗口 2-5 日。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第2轮 · 交叉驳斥</span><span class="rr">逐条针对性反驳</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>驳「趋势未改」：</b>我方从未否认中期趋势，本方案窗口只有 1-3 日、目标只有 103,000（不到 EMA20 的一半位置），这是<b>逆势短线</b>而不是趋势多。你用「-44% 的空头排列」来否定一个 3 天的反弹方案，是拿宏观否定微观。</p>
+<p><b>驳「库存去化是被动的」：</b>被动去库也是去库。更关键的是：<b>周产还在增加、库存却大幅下降</b>，这两件事同时成立，只能说明需求端的消化能力被低估了。如果去库纯粹是「跌价被迫」，那产量增加的部分应该直接体现在库存上——事实没有。</p>
+<p><b>驳「空头逆势加仓」：</b>空头在 98,500 加仓，但价格今天仍然涨了 3.38%。<b>加仓的一方没有推动价格，说明其被动</b>。10/20-10/23 空头连赢 4 次，10/26 空单已经止损失败——空头的胜率在高位开始衰减，这正是趋势转换早期的特征。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>驳「双底」：</b>90,880 两次未破不等于双底。双底需要<b>颈线突破</b>才算成立，颈线在 107,598（EMA20），现价距此还有 9.2%。在颈线未破之前，90,880 只是「下跌中继的支撑」，不是「反转的底部」。而且今日缩量 0.94，连一根放量反包的实体都没有——双底形态最需要的就是量能，恰恰没有。</p>
+<p><b>驳「backwardation 支撑近月」：</b>backwardation 已经贴了一个多月，价格从 162,860 跌到 90,880，跌幅 44%。这说明<b>近月升水从来不是上涨的理由</b>，它反映的是「现货跌得比期货慢」而已。你把结构当成驱动，是因果倒置。</p>
+<p><b>驳「空头被动」：</b>空头加仓且价格仍涨，另一种解释是<b>空头在更高位置布防</b>——98,500-100,000 正是 10 月中旬的密集成交区，空头选择在这里加仓，成本极佳。而多头是缩量、减仓、靠平仓推动的反弹，一旦空头反扑，多头没有承接力。</p>
+<p><b>复盘提醒：</b>本品种近 5 次复盘 <b>4/5（80%）</b>，其中 10/20-10/23 连续 4 次空单止盈成功，10/26 空单止损失败。也就是说：<b>「做空」这个方向在过去一周是有效的，只是最近一次时点过早</b>。你现在要开的正是「多」——这是与过去一周最赚钱方向相反的逆势单。</p></div></div></div><div class="round"><div class="rh"><span class="rt">第3轮 · 最终陈词</span><span class="rr">回应驳斥 + 最终方案</span></div>
+<div class="vs"><div class="side bull"><div class="who b">🐂 多头首席</div><p><b>回应：</b>对方用「近 5 次 4/5 命中都是空单」来反将我一军，这一点必须正面回答：<b>空头四次止盈的位置都在 100,000 以下，而现在价格已经回到 98,500 并站上 EMA5</b>——空头的利润空间被压缩了。10/26 空单止损失败（区间 +3.4%）正是空头边际失效的第一个证据。此时继续做空，是在赚「最后一段」的钱。</p>
+<p><b>胜负手：</b>①库存单周 -6,522 吨、产量增加仍在去库，需求端改善是实的；②90,880 双低点两次未破 + MACD 零轴下金叉 + 站上 EMA5，三项同时转向。这构成一个「1-3 日级别」的反弹基础。</p>
+<p><b>最终方案：</b>方向<b>多（短线反弹）</b>。回踩 96,800-98,000 分批入场，目标1 <b>103,000</b>、目标2 107,600，止损 <b>94,000</b>（跌破今日实体中枢与双底结构），窗口 1-3 日，仓位 25%。明日若不能在 97,500 上方站稳，主动离场。</p></div>
+<div class="side bear"><div class="who s">🐻 空头首席</div><p><b>回应：</b>对方承认这是「1-3 日逆势短线」，那就等于承认胜率不占优。更关键的一点他回避了：<b>缩量 0.94 + 减仓 4,815 手 + 空头逆势加仓</b>，这三项同时出现时，历史上反弹的持续性极差。</p>
+<p><b>胜负手：</b>①空头集中度 82.4%，头部资金在 98,500-100,000 布防，上涨遇到的是「有组织的供给」；②供给端周产仍在增、9 月产量 +10%，过剩是结构性的；③缩量反弹 -> 一旦回踩 95,300 破位，多头将失去最后的防守点。</p>
+<p><b>最终方案：</b>不追空（尊重今日长阳与 MACD 金叉），<b>等待 103,000-107,600 沽空</b>，止损 110,000，目标1 94,000、目标2 90,880，窗口 2-5 日。若放量站上 107,598（双底颈线），本方认输。</p></div></div></div></section>
+
+<section><h2>总决策官裁决</h2>
+<div class="card"><h3>六维度多空评分表</h3>
+<table class="scores"><thead><tr><th>维度</th><th>关键事实</th><th>多头分</th><th>空头分</th><th>净分</th><th>裁决理由</th></tr></thead><tbody><tr><td>① 库存</td><td>SMM -6,522 吨、交易所 -120，产量增仍去库</td><td class='sc pos'>7</td><td class='sc neg'>3</td><td class='sc'>+4</td><td>去库真实，需求边际改善</td></tr><tr><td>② 仓单</td><td>东财口径 19,202 吨（-120），广期所明细受限</td><td class='sc pos'>5</td><td class='sc neg'>5</td><td class='sc'>0</td><td>低位无压制，数据有缺口</td></tr><tr><td>③ 期限结构</td><td>backwardation 2701→2705 -3,460，现货升水2,500</td><td class='sc pos'>6</td><td class='sc neg'>4</td><td class='sc'>+2</td><td>近强远弱，结构性支撑近月</td></tr><tr><td>④ 技术面</td><td>MACD零轴下金叉+站上EMA5 vs 空头排列+缩量</td><td class='sc pos'>6</td><td class='sc neg'>4</td><td class='sc'>+2</td><td>短期反转、中期未变</td></tr><tr><td>⑤ 新闻基本面</td><td>津巴布韦禁令+整改停产 vs 周产增/9月+10%</td><td class='sc pos'>5</td><td class='sc neg'>5</td><td class='sc'>0</td><td>供给扰动与过剩对冲</td></tr><tr><td>⑥ 持仓席位</td><td>净空-23,815（当日-3,161），空头逆势加空</td><td class='sc pos'>4</td><td class='sc neg'>6</td><td class='sc'>-2</td><td>头部空头集中度高</td></tr></tbody></table>
+<div class="sw">
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--up)">多头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>库存单周 -6,522 吨且在产量增加下仍去库 + 90,880 双低点两次未破 + MACD 零轴下金叉</li><li><b>最弱：</b>缩量（0.94）减仓反弹，缺乏增量资金确认，反弹高度受限</li></ul></div>
+<div class="card" style="background:var(--card2)"><h3 style="color:var(--dn)">空头最强点 / 最弱点</h3>
+<ul class="dl"><li><b>最强：</b>空头集中度 82.4% 且逆势加仓 + 周产 25,530 吨仍增 + 60日 -44.2% 空头排列</li><li><b>最弱：</b>10/26 空单已止损失败，空头在 100,000 以下的利润空间被压缩，继续做空是赚最后一段</li></ul></div>
+</div>
+<p style="font-size:13.8px;color:#c6d2e4;margin-top:14px">六维净分 +6，方向明确偏多但强度中等。总决策官认定：<b>这是「库存去化 + 技术超卖修复」驱动的短线反弹，不是「供给出清」的周期反转</b>。因此采纳多头方向，但设三道约束：①目标只到 103,000（不追 107,600 以上，那里是空头的核心布防区）；②窗口仅 1-3 日，逾期无条件离场；③止损 94,000 严格执行，因为缩量反弹一旦破位下跌速度极快（ATR 6,177）。空头的「高空 103,000-107,600」方案被采纳为本方案的止盈区，形成「低买高平」的对称安排。复盘显示该品种近 5 次 4/5 命中，但最近一次（10/26 空）止损失败，恰好支持「空头边际失效、短线转多」的判断。</p>
+</div>
+<div class="card plan" style="margin-top:14px"><h3>决策方案</h3>
+<table><thead><tr><th>项目</th><th>数值</th><th>说明</th></tr></thead><tbody>
+<tr><td>方向</td><td class="pos">多</td><td>多（超跌反弹，非趋势反转，窗口仅 1~3 日）</td></tr>
+<tr><td>入场区间</td><td>96,800 - 98,000</td><td>回踩EMA5(97,313)与今日实体中枢分批，分2笔，不追高</td></tr>
+<tr><td>目标1 / 目标2</td><td>103,000 / 107,600</td><td>T1为空头沽空区下沿（对称平仓位）；T2为双底颈线/EMA20</td></tr>
+<tr><td>止损</td><td>94,000</td><td>跌破今日实体中枢与双底结构，ATR 6,177 下止损幅度约 -4.6%</td></tr>
+<tr><td>预期窗口</td><td>1~3 个交易日</td><td>缩量反弹持续短，逾期未达目标无条件离场</td></tr>
+<tr><td>建议仓位</td><td>25%</td><td>基于置信度与波动率(ATR)折算</td></tr>
+</tbody></table></div>
+<div class="conf"><div class="big">64.8%</div><div class="txt">
+<b>置信度说明：</b>基础置信度 60%：多空信号共振度中等（库存/期限/技术偏多，持仓/供给偏空），技术形态为「双底雏形 + MACD 零轴下金叉 + 站上 EMA5」但缩量未确认，基本面明确度中等（去库真实、过剩结构性存在）。复盘记录：近5日 4/5（80%）命中，10/26 空单止损失败（区间 +3.4%），说明空头方向近期边际失效；本次方向为「多」，与失效方向相反，不触发强制反向复核，反而获得方向切换的正向支持。基础置信度落在「60-69」档，该档近5日样本 n=18、实际触发率 66.7%，系数 1.08，校准后 60%×1.08=64.8%。<br>
+<b>预期触发窗口：</b>1~3 个交易日　<b>基础置信度：</b>60%　<b>校准系数：</b>×1.08
+<div class="caliber">系数来源：future-analysis-reports/2026-10-27/confidence-factors.json —— 基础置信度落在「60-69」档，该档近5日样本 n=18，实际触发率 66.7%，系统系数 1.08（n≥5 才生效，否则取 1.0）；结果已裁剪至 10%~95%。</div>
+</div></div>
+<div class="card" style="margin-top:14px;border-color:#4a2b33;background:linear-gradient(120deg,rgba(255,93,108,.07),transparent)">
+<h3 style="color:var(--dn)">风险提示</h3><p style="font-size:13.4px;color:#c9d4e6">①缩量反弹一日游：量比 0.94、持仓 -4,815，多头承接不足，若明日跌破 95,300 将快速回补至 90,880；②空头反扑：空头集中度 82.4% 且逆势加仓，103,000 附近可能遭遇集中抛压，T1 或许难以触及；③供给继续放量：周产 25,530 吨若继续增加、9 月产量 +10% 的惯性延续，去库将转为累库；④现货再下台阶：现货 101,000 已较月初 -18.8%，若跌破 98,000，期货贴水结构将转为「期货向现货收敛」的下跌；⑤政策与地缘：津巴布韦出口禁令若松动或国内整改复产，供给端扰动消失；⑥本品种在 commodity_relations.yaml 中<b>无关联品种配置</b>，若置信度低于 60% 无法通过关联品种替换。</p></div>
+</section>
+
+<footer>本报告由 AI 多 Agent 辩论系统自动生成，数据来源：新浪财经期货日K、akshare（上期所/郑商所仓单日报、前20名会员持仓）、隆众资讯/Mysteel/SMM/生意社（经公开新闻转引）、Web 新闻与机构研报。所有数据均标注日期，历史数据不代表未来表现。<br>
+本报告不构成任何投资建议或投资承诺，据此操作风险自担。期货有杠杆，入市需谨慎。<br>
+生成时间：2026-10-27 · futures-deep-analysis v2</footer>
+</div></body></html>
