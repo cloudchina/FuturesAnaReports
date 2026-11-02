@@ -1,0 +1,48 @@
+{
+  "asof": "2026-11-02",
+  "lookback_days": 5,
+  "dir_threshold": 0.003,
+  "min_samples": 5,
+  "overall": {
+    "n": 23,
+    "claimed_avg": 0.6740434782608695,
+    "actual_conclusion_hit_rate": 0.6086956521739131,
+    "factor": 0.9,
+    "direction_hit_rate": 0.6956521739130435
+  },
+  "buckets": {
+    ">=70": {
+      "n": 10,
+      "hits": 8,
+      "claimed_avg": 0.7306,
+      "actual_hit_rate": 0.8,
+      "factor": 1.09,
+      "applied": true
+    },
+    "60-69": {
+      "n": 11,
+      "hits": 5,
+      "claimed_avg": 0.6399090909090909,
+      "actual_hit_rate": 0.45454545454545453,
+      "factor": 0.71,
+      "applied": true
+    },
+    "50-59": {
+      "n": 2,
+      "hits": 1,
+      "claimed_avg": 0.579,
+      "actual_hit_rate": 0.5,
+      "factor": 1.0,
+      "applied": false
+    },
+    "<50": {
+      "n": 0,
+      "hits": 0,
+      "claimed_avg": null,
+      "actual_hit_rate": null,
+      "factor": 1.0,
+      "applied": false
+    }
+  },
+  "apply": "今日基础置信度 × 对应档位系数（未达 min_samples 的档位系数为 1.0），结果裁剪到 10%~95%，再用于 60% 替换阈值判断"
+}
