@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>沥青BU2701 深度分析 · 多Agent辩论报告</title><style>
+:root{--bg:#0b0f14;--card:#131a23;--card2:#0f151d;--line:#22303f;--txt:#dbe6f0;--dim:#8ea3b8;
+--up:#ff4d4f;--up2:#ff7a6b;--dn:#00c48c;--dn2:#4fd1a5;--gold:#e8b339;--blue:#4b9cf5;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#16222f 0%,#0b0f14 55%) fixed;color:var(--txt);
+font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;line-height:1.7;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.header{background:linear-gradient(135deg,#101a26 0%,#16232f 60%,#1b2a1f 100%);border-bottom:1px solid var(--line);padding:28px 0 22px}
+.hd-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px}
+.hd-title{font-size:34px;font-weight:800;letter-spacing:1px}
+.hd-title span{font-size:15px;color:var(--dim);font-weight:500;margin-left:10px}
+.hd-sub{font-size:13px;color:var(--dim);margin-top:6px}
+.px{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px}
+.px div{font-size:13px;color:var(--dim)}
+.px b{display:block;font-size:22px;color:var(--txt);font-family:ui-monospace,Menlo,monospace}
+.up{color:var(--up)!important}.dn{color:var(--dn)!important}.neu{color:var(--gold)!important}
+.banner{margin:22px 0 8px;background:linear-gradient(120deg,#1a2531,#14202a);border:1px solid var(--line);
+border-left:5px solid var(--gold);border-radius:12px;padding:20px 22px;display:grid;
+grid-template-columns:1.1fr 1fr 1fr 1.4fr;gap:18px}
+.banner .k{font-size:12px;color:var(--dim);margin-bottom:4px}
+.banner .v{font-size:19px;font-weight:700}
+.banner .v.big{font-size:26px}
+.notice{margin:10px 0 0;background:rgba(232,179,57,.08);border:1px solid rgba(232,179,57,.35);border-radius:10px;
+padding:12px 16px;font-size:13px;color:#e6d5a8}
+section{margin-top:30px}
+h2{font-size:19px;margin-bottom:14px;padding-left:12px;border-left:4px solid var(--blue);letter-spacing:.5px}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:10px;font-weight:700;letter-spacing:.5px}
+.card p{font-size:13px;color:#c3d2e0;margin-bottom:8px}
+.card .src{font-size:11px;color:#63788c}
+.score{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);margin-top:6px}
+.bar{flex:1;height:7px;background:#1d2936;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+.bar i.l{background:linear-gradient(90deg,#7a2626,#ff4d4f)}
+.bar i.s{background:linear-gradient(90deg,#0a5c47,#00c48c)}
+.tech{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+td.up,th.up{color:var(--up)}td.dn{color:var(--dn)}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:20px;margin:2px 4px 2px 0}
+.tag.l{background:rgba(255,77,79,.15);color:var(--up2);border:1px solid rgba(255,77,79,.35)}
+.tag.s{background:rgba(0,196,140,.13);color:var(--dn2);border:1px solid rgba(0,196,140,.32)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}
+th{color:var(--dim);font-weight:600;font-size:12px;background:var(--card2)}
+td:first-child,th:first-child{text-align:left}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:12px 6px 0;border-bottom:1px solid var(--line)}
+.tb{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.tb i{width:64%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,#3f7bd4,#1d3f6e)}
+.tb b{font-size:12px;margin-top:6px;color:var(--txt)}
+.tb span{font-size:11px;color:var(--dim);margin-bottom:6px}
+.round{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.bull{background:linear-gradient(160deg,#241416,#161010);border:1px solid rgba(255,77,79,.3);border-radius:12px;padding:16px}
+.bear{background:linear-gradient(160deg,#0f2320,#0d1618);border:1px solid rgba(0,196,140,.28);border-radius:12px;padding:16px}
+.bull h4{color:var(--up2);font-size:14px;margin-bottom:8px}
+.bear h4{color:var(--dn2);font-size:14px;margin-bottom:8px}
+.bull p,.bear p{font-size:13px;color:#c7d5e2;margin-bottom:6px}
+.rlabel{font-size:13px;color:var(--gold);margin:18px 0 10px;font-weight:700;letter-spacing:1px}
+.verdict{background:linear-gradient(135deg,#141f1b,#101820);border:1px solid #2a4038;border-radius:12px;padding:20px}
+.verdict .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px;gap:20px}
+.verdict .row:last-child{border:0}
+.risk{margin-top:18px;background:rgba(232,179,57,.07);border:1px solid rgba(232,179,57,.3);border-radius:10px;padding:14px;font-size:13px;color:#e6d5a8}
+.foot{margin-top:34px;font-size:12px;color:#5c7186;border-top:1px solid var(--line);padding-top:16px}
+.badge{font-size:12px;padding:2px 10px;border-radius:20px;background:rgba(232,179,57,.12);color:var(--gold);border:1px solid rgba(232,179,57,.35)}
+</style></head><body>
+<div class="header"><div class="wrap"><div class="hd-top">
+<div><div class="hd-title">沥青<span>BU2701 · 上期所</span></div>
+<div class="hd-sub">期货深度分析 · 6维数据 + 三轮多空Agent辩论 + 总决策官裁决　|　报告日期 2026-11-03</div></div>
+<div><span class="badge">多Agent辩论报告 v2</span></div></div>
+<div class="px">
+<div>最新收盘<b class="dn">5,044.0</b></div>
+<div>涨跌幅<b class="dn">-2.98%</b></div>
+<div>持仓量<b>210,236</b></div>
+<div>成交量<b>447,335</b></div>
+<div>数据源<b style="font-size:14px">新浪日K + akshare + 公开资讯</b></div>
+</div></div></div>
+<div class="wrap">
+<div class="banner">
+<div><div class="k">最终方向</div><div class="v big dn">空</div></div>
+<div><div class="k">胜率评估</div><div class="v">空方 60% / 多方 40%</div></div>
+<div><div class="k">置信度（校准后）</div><div class="v">48.4%</div></div>
+<div><div class="k">预期触发窗口</div><div class="v" style="font-size:16px">1~3 个交易日</div></div>
+</div>
+<div class="card" style="margin-top:12px"><p style="font-size:13px;color:#c3d2e0"><b style="color:var(--gold)">核心判断：</b>美伊和谈预期令原油单日暴跌逾7%，沥青成本端塌陷；盘面减仓下跌、跌破5日线，短线补跌未完；但厂库+社库同比降62%的极低库存与18.2%的深度贴水限制下方空间，反弹沽空不追空。</p>
+<p class="src">置信度 = 基础 62% × 档位系数 0.78（来源 confidence-factors.json 的 60-69 档）→ 48.4%，裁剪区间 10%~95%。</p></div>
+<div class="notice">校准后置信度 48.4% < 60%，触发关联品种替换检验：原油 SC（49.1%）高于 BU，按规则替换为 SC；BU 完整分析仍入库备查。</div>
+
+<section><h2>一、六维数据全景</h2><div class="grid6"><div class="card"><h3>① 库存</h3><p>厂库 37.1 万吨（10/30），周降 2.3 万吨（-5.8%），同比 -49%</p><p>社会库 40.6 万吨，周降 0.8 万吨，同比 -69%；合计 77.7 万吨，同比约 -62%</p><p>库存处近五年低位，但 11 月炼厂复产、需求进淡季，去库动能趋缓</p><div class="src">来源：上海钢联 10-30；新浪财经 11-03</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:80%"></i></div><span>8/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:30%"></i></div><span>3/10</span></div></div><div class="card"><h3>② 仓单</h3><p>上期所沥青仓单数据接口返回 0（数据缺失），不作方向依据</p><p>总持仓 21.02 万手，当日 -15,391 手，减仓下跌</p><p>成交量 44.7 万手，低于5日均值 48.3 万手，缩量回调</p><div class="src">来源：akshare 仓单日报（数据缺失）、新浪日K</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:40%"></i></div><span>4/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:50%"></i></div><span>5/10</span></div></div><div class="card"><h3>③ 期限结构</h3><p>BU2701 5044 / 2702 4972 / 2703 4903 / 2704 4849 / 2705 4780，近高远低 Back</p><p>现货 6165 元/吨，主力贴水 1121 元（-18.18%）</p><p>Back 结构反映近端现货紧张，但期货深贴水已部分定价低库存</p><div class="src">来源：akshare futures_spot_price（11-03）</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:70%"></i></div><span>7/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:40%"></i></div><span>4/10</span></div></div><div class="card"><h3>④ 技术面</h3><p>收盘 5044 跌破 MA5 5138，MA5>MA10>MA20>MA60 仍多头排列</p><p>MACD 227.8/180.4 红柱 94.7 收敛；RSI 64.2 自超买回落</p><p>10/30 高点 5416 后连续两日回落，今日低点 4930，短线转弱</p><div class="src">来源：新浪日K，指标自算</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:40%"></i></div><span>4/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:60%"></i></div><span>6/10</span></div></div><div class="card"><h3>⑤ 新闻基本面</h3><p>美伊和谈推进、霍尔木兹重开预期升温，WTI 单日 -7.36% 至 96.46 美元</p><p>11 月炼厂复产、供应增加，北方施工进淡季、需求回落</p><p>原料紧缺与低库存仍在，机构判断 11 月高位震荡而非趋势下跌</p><div class="src">来源：新华社 11-02、新浪财经 11-03、浙商期货 11-01</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:50%"></i></div><span>5/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:60%"></i></div><span>6/10</span></div></div><div class="card"><h3>⑥ 持仓席位</h3><p>前20净多 +19,777 手，当日 -1,654，5日累计 -4,331，连续2日下降</p><p>多单 -8,428、空单 -6,774，多空双减、多头撤退更快</p><p>多集中度 73.8% 高于空 64.4%，但净多连续缩减，资金边际转空</p><div class="src">来源：akshare 会员持仓（11-03）</div><div class="score"><span style="width:52px">多头支持</span><div class="bar"><i class="l" style="width:40%"></i></div><span>4/10</span></div><div class="score"><span style="width:52px">空头支持</span><div class="bar"><i class="s" style="width:60%"></i></div><span>6/10</span></div></div></div></section>
+
+<section><h2>二、技术面深度面板</h2><div class="tech"><div class="card"><h3>趋势判断</h3><p>日线均线仍多头排列但价格跌破 MA5，短期（日K）转弱、中期（周K）强势未破，强度评级：中。</p></div><div class="card"><h3>关键价位</h3><p>支撑 4930（今日低）/ 4921（MA10）/ 4696（MA20）；压力 5138（MA5）/ 5284（10-30 收盘）/ 5416（前高）。</p></div><div class="card"><h3>多指标共振</h3><p>多头信号 3：均线多头排列、Back 结构、深贴水；空头信号 4：跌破 MA5、MACD 红柱收敛、减仓下跌、成本塌陷。</p></div><div class="card"><h3>形态与量能</h3><p>10/30 冲高 5416 后形成两连阴，今日放量下跌收 5044，跌破短期上升趋势线；量价配合偏空，但尾盘自 4930 回升，下方有承接。</p></div></div></section>
+
+<section><h2>三、持仓席位面板</h2>
+<div class="banner" style="grid-template-columns:repeat(4,1fr);border-left-color:var(--blue)">
+<div><div class="k">前20净持仓（2026-11-03）</div><div class="v up">+19,777 手</div></div>
+<div><div class="k">当日变化 / 5日累计</div><div class="v" style="font-size:16px">-1,654 / -4,331</div></div>
+<div><div class="k">连续同向</div><div class="v" style="font-size:16px">2日↓</div></div>
+<div><div class="k">多/空集中度</div><div class="v" style="font-size:16px">多73.8% / 空64.4%</div></div>
+</div>
+<div class="grid6" style="grid-template-columns:1fr 1fr;margin-top:14px">
+<div class="card"><h3>多头前5席位</h3><table><tr><th>席位</th><th>多单</th><th>增减</th></tr><tr><td>中信期货</td><td>32,190</td><td class="dn">-246</td></tr><tr><td>国泰君安</td><td>19,007</td><td class="dn">-1,604</td></tr><tr><td>高盛期货</td><td>16,450</td><td class="up">+426</td></tr><tr><td>永安期货</td><td>15,339</td><td class="dn">-1,400</td></tr><tr><td>浙商期货</td><td>12,224</td><td class="dn">-289</td></tr></table></div>
+<div class="card"><h3>空头前5席位</h3><table><tr><th>席位</th><th>空单</th><th>增减</th></tr><tr><td>国泰君安</td><td>18,559</td><td class="dn">-955</td></tr><tr><td>永安期货</td><td>11,686</td><td class="up">+396</td></tr><tr><td>银河期货</td><td>10,600</td><td class="dn">-722</td></tr><tr><td>中信期货</td><td>10,534</td><td class="dn">-1,168</td></tr><tr><td>广发期货</td><td>8,828</td><td class="dn">-954</td></tr></table></div>
+</div>
+<div class="card" style="margin-top:14px"><h3>席位解读</h3><p>净多 +19,777 手但当日 -1,654、5日 -4,331，连续2日净多下降；多头端中信、国泰、永安同步减仓，空头端亦以减仓为主，属多头主动撤退而非空头大举进攻。多空集中度均偏高，头部席位分歧加大，资金面对短线反弹的支持减弱。</p><div class="src">来源：akshare.futures_hold_pos_sina（2026-11-03），5日趋势来自 BU2701 持仓日志</div></div></section>
+
+<section><h2>四、期限结构</h2><div class="card">
+<div class="term"><div class="tb"><span>5,044</span><i style="height:100.0%"></i><b>BU2701</b></div><div class="tb"><span>4,972</span><i style="height:83.6%"></i><b>BU2702</b></div><div class="tb"><span>4,903</span><i style="height:68.0%"></i><b>BU2703</b></div><div class="tb"><span>4,849</span><i style="height:55.7%"></i><b>BU2704</b></div><div class="tb"><span>4,780</span><i style="height:40.0%"></i><b>BU2705</b></div></div>
+<p style="margin-top:12px;font-size:13px">结构判断：<b style="color:var(--gold)">Back（近高远低）</b>。近月对 2705 升水 264 元，现货对主力升水 1121 元（-18.18%）；低库存与近端紧张支撑近月，但深贴水也意味着追空的安全边际在收窄。</p></div></section>
+
+<section><h2>五、三轮多空Agent辩论</h2>
+<div class="rlabel">第一轮 · 立论陈词</div>
+<div class="round"><div class="bull"><h4>🐂 多头首席 · 金牛</h4><p>库存是硬约束：厂库+社库合计 77.7 万吨、同比 -62%，近五年低位，现货 6165 元对盘面升水 18.2%，期货不存在高估。</p><p>Back 结构下近月 2701 对 2705 升水 264 元，多头展期不亏；一旦原油企稳，基差修复会率先体现在近月。</p><p>今日尾盘自 4930 拉回 5044、留下 114 点下影，说明 4900-4950 有产业买盘承接；冬储与原料紧缺仍是潜在利多。</p></div>
+<div class="bear"><h4>🐻 空头首席 · 黑熊</h4><p>成本端刚被击穿：WTI 单日 -7.36%、布伦特 -7%，沥青裂解价差被动走扩，炼厂利润修复后复产意愿增强，11 月供应增加是确定的。</p><p>需求进入淡季：北方施工停滞，11 月总库存由去转平甚至小幅累库，低库存利多正在被时间消耗。</p><p>盘面已用脚投票：减仓 1.54 万手下跌 2.98%、跌破 MA5，10/30 的 5416 大概率是阶段性高点。</p></div></div>
+<div class="rlabel">第二轮 · 交叉驳斥</div>
+<div class="round"><div class="bull"><h4>🐂 多头首席 · 金牛</h4><p>你说供应增加，但 11 月炼厂复产幅度有限，原料马瑞油仍紧，产量弹性受制于原料而非利润。</p><p>累库 0.8 万吨是月度级别的小幅累库，77.7 万吨的绝对低位不会被一个月扭转，空头缺乏交割筹码。</p><p>减仓下跌更多是多头获利了结，不是空头建仓；空头没有增量资金，趋势下跌难成立。</p></div>
+<div class="bear"><h4>🐻 空头首席 · 黑熊</h4><p>深贴水不是看多理由，而是市场对 11-12 月淡季的合理定价；Back 结构在需求转弱时会快速走平。</p><p>下影线是短线抄底资金的博弈，成交量已低于5日均值，承接力度有限，反弹高度大概率止步 5138-5199。</p><p>你把原料紧张当常量，但美伊和谈若推动油价继续回落，沥青的成本支撑会逐级下移，4900 并非铁底。</p></div></div>
+<div class="rlabel">第三轮 · 最终陈词</div>
+<div class="round"><div class="bull"><h4>🐂 多头首席 · 金牛</h4><p>我的最终底牌是估值：18.2% 的贴水 + 62% 的同比去库，做空的赔率已经很差，任何油价企稳都会触发空头回补。</p><p>策略上不在 5044 追空，等反弹到 5150-5250 再评估；若跌破 4900 则说明产业逻辑失效，多头也应离场。</p></div>
+<div class="bear"><h4>🐻 空头首席 · 黑熊</h4><p>我的最终底牌是驱动：成本塌陷 + 淡季累库 + 资金减仓，三重边际转空，短线目标看 4900、再看 4780（2705 附近）。</p><p>但我不建议在 5044 裸空，等反弹 5130-5190 入场，止损 5290，盈亏比更合理。</p></div></div></section>
+
+<section><h2>六、总决策官裁决</h2>
+<div class="card"><table><tr><th>维度</th><th>多头评分</th><th>空头评分</th><th>理由</th></tr><tr><td>库存</td><td class="up">9</td><td class="dn">3</td><td>极低库存，强支撑</td></tr><tr><td>仓单</td><td class="up">4</td><td class="dn">5</td><td>数据缺失，参考有限</td></tr><tr><td>期限结构</td><td class="up">7</td><td class="dn">4</td><td>Back+深贴水</td></tr><tr><td>技术面</td><td class="up">4</td><td class="dn">6</td><td>跌破MA5，短线转弱</td></tr><tr><td>新闻基本面</td><td class="up">5</td><td class="dn">6</td><td>成本塌陷 vs 低库存</td></tr><tr><td>持仓席位</td><td class="up">4</td><td class="dn">6</td><td>净多连续缩减</td></tr></table></div>
+<div class="grid6" style="grid-template-columns:1fr 1fr;margin-top:14px">
+<div class="card"><h3>多头最强点</h3><p>库存与基差：合计库存同比 -62%、现货升水 18.2%，估值端对空头极不友好。</p></div>
+<div class="card"><h3>空头最强点</h3><p>成本与驱动：原油单日暴跌 7%、11 月供应增需求减，驱动端明确向下。</p></div></div>
+<div class="verdict" style="margin-top:14px">
+<div class="row"><span>最终方向</span><b class="dn">空</b></div>
+<div class="row"><span>胜率评估</span><b>空方 60% / 多方 40%</b></div>
+<div class="row"><span>入场策略</span><b>反弹沽空：5130-5190 分批（不追空）</b></div>
+<div class="row"><span>目标位</span><b>目标1 4900；目标2 4780</b></div>
+<div class="row"><span>止损位</span><b>5290</b></div>
+<div class="row"><span>置信度 / 触发窗口</span><b>48.4% / 1~3 个交易日</b></div>
+</div>
+<div class="risk"><b>风险提示：</b>若美伊谈判反复、原油大幅反弹，或冬储提前启动，沥青可能快速回补贴水，空单需严格止损。<br>本报告由AI基于公开数据生成，数据截至 2026-11-03 收盘，不构成投资建议。期货杠杆交易风险较大，请独立决策并严格止损。</div></section>
+<div class="foot">数据来源：新浪财经期货日K（2026-11-03 收盘）、akshare（交易所仓单/会员持仓/现货基差）、公开财经资讯（新浪财经、东方财富、金投网、上海钢联、隆众资讯、SMM 等）。iFinD 本次调用不可用（MCP 会话握手异常），已按任务要求启用备选数据源。<br>
+复盘校准：BU 近5日方向命中 3/4（75%），但 10-30 多单已止损失败，当前连续错误 1 次；本次转空已做反向证据复核（低库存/深贴水），故置信度未给高。</div>
+</div></body></html>
