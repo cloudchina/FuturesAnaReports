@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原油SC2612 深度分析-多Agent辩论报告</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0e16;color:#c9d4e5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(160deg,#121a27,#0e1520);border:1px solid #1e2c40;border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+h1{font-size:30px;color:#f2f6ff;letter-spacing:1px}
+h2{font-size:19px;color:#e8b45a;margin-bottom:14px;border-left:4px solid #e8b45a;padding-left:10px}
+h3{font-size:15px;color:#8fa7c7;margin-bottom:8px;font-weight:600}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.up{color:#ff6b6b}.down{color:#39d98a}.flat{color:#c9a227}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end}
+.price{font-size:40px;font-weight:700;color:#fff}
+.meta{font-size:13px;color:#7f92ad}
+.banner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:linear-gradient(135deg,#16233a,#101a28);border:1px solid #2a3d59;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.banner .k{font-size:12px;color:#8fa7c7}
+.banner .v{font-size:22px;font-weight:700;color:#fff;margin-top:4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.dim{background:#101927;border:1px solid #1d2b3f;border-radius:12px;padding:16px}
+.dim h4{font-size:15px;color:#e8b45a;margin-bottom:8px}
+.dim ul{list-style:none;font-size:13px;color:#a9bcd5}
+.dim li{padding:3px 0 3px 12px;position:relative}
+.dim li:before{content:'·';position:absolute;left:0;color:#4d7bb5}
+.bar{height:7px;background:#1a2637;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f6fb5,#e8b45a)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1e2c40;text-align:left}
+th{color:#8fa7c7;font-weight:600;background:#101927}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bull{color:#ff7b72}.bear{color:#3ddc97}
+.round{border:1px solid #1e2c40;border-radius:12px;padding:16px;margin-bottom:14px;background:#0f1723}
+.round .rh{font-size:14px;color:#e8b45a;margin-bottom:10px;font-weight:700}
+.chat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.chat{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:14px;font-size:13.5px;color:#b9c8dc}
+.bubble.b{background:rgba(255,90,80,.07);border:1px solid rgba(255,90,80,.25)}
+.bubble.s{background:rgba(50,220,150,.06);border:1px solid rgba(50,220,150,.22)}
+.bubble b{display:block;margin-bottom:6px;font-size:14px}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:10px 6px 0}
+.term .bar2{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.term .fill{width:70%;background:linear-gradient(180deg,#e8b45a,#3d6ea8);border-radius:5px 5px 0 0;min-height:4px}
+.term .lbl{font-size:11px;color:#8fa7c7;margin-top:6px;text-align:center}
+.term .px{font-size:11px;color:#dbe6f5;margin-bottom:4px}
+.note{font-size:12px;color:#7f92ad;margin-top:10px}
+.score td:first-child{color:#dbe6f5}
+.pill{display:inline-block;background:#1a2740;color:#9fc0e8;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0}
+.footer{text-align:center;font-size:12px;color:#5f7290;margin-top:26px}
+.warn{border-left:3px solid #e05a4f;background:rgba(224,90,79,.07);padding:10px 14px;border-radius:6px;font-size:13px;color:#e8a9a3}
+</style></head>
+<body><div class="wrap">
+
+<div class="card"><div class="header">
+  <div><h1>原油 SC2612</h1>
+  <div class="meta">上海国际能源交易中心 · 报告日期 2026-11-04 · 数据截至 2026-11-04 收盘</div></div>
+  <div style="text-align:right"><div class="price down">681.6</div>
+  <div class="meta">结算/收盘涨跌 <span class="down">-2.38%</span> · 持仓 22,035 手</div></div>
+</div></div>
+
+<div class="banner">
+  <div><div class="k">最终方向</div><div class="v down">空</div></div>
+  <div><div class="k">胜率评估</div><div class="v" style="font-size:17px">空方58% / 多方42%</div></div>
+  <div><div class="k">校准后置信度</div><div class="v">74.1%</div></div>
+  <div><div class="k">触发窗口</div><div class="v" style="font-size:17px">1~3 个交易日</div></div>
+  <div><div class="k">入场 / 止损</div><div class="v" style="font-size:16px">695-708 反弹分批沽空 / 720</div></div>
+  <div><div class="k">目标位</div><div class="v" style="font-size:16px">660 / 640</div></div>
+</div>
+
+<div class="card"><h2>一、六维数据全景</h2><div class="grid6">
+    <div class="dim"><h4>① 库存 · 多头强度 5/10</h4>
+      <ul><li>全球海上浮仓与OECD商业库存处中性水平</li><li>美国EIA原油库存周度波动，需跟踪11/5数据</li><li>中国SC交割库库存低位</li><li>OPEC+闲置产能约400万桶/日，缓冲充足</li></ul><div class="bar"><i style="width:50%"></i></div>
+      <div class="note">库存中性，供给缓冲充足，偏空。</div></div>
+    <div class="dim"><h4>② 仓单 · 多头强度 5/10</h4>
+      <ul><li>INE原油仓单低位，交割压力小</li><li>SC2612临近交割，仓单/持仓比低</li><li>内外盘价差处于合理区间</li></ul><div class="bar"><i style="width:50%"></i></div>
+      <div class="note">仓单中性，不构成方向驱动。</div></div>
+    <div class="dim"><h4>③ 期限结构 · 多头强度 4/10</h4>
+      <ul><li>SC2612 681.6 / SC2701 678.0 / SC2702 670.8</li><li>近远月Back，远月贴水10.8元</li><li>Brent 104.77美元、WTI 96.46美元</li><li>SC对Brent贴水，内外价差中性</li></ul><div class="bar"><i style="width:40%"></i></div>
+      <div class="note">Back结构未破，但远月更弱，地缘溢价退潮。</div></div>
+    <div class="dim"><h4>④ 技术面 · 多头强度 3/10</h4>
+      <ul><li>收盘681.6，-2.38%，跌破MA5(716.5)/MA10(721.6)/MA20(721.7)</li><li>MA60 651.4仍上行</li><li>MACD DIF -3.4/DEA 4.7，柱-16.1（前-9.3）</li><li>RSI 37.6、KDJ 43.5/57.2/16.1、WR -79.2</li></ul><div class="bar"><i style="width:30%"></i></div>
+      <div class="note">短期空头明确，但接近MA60支撑，超卖。</div></div>
+    <div class="dim"><h4>⑤ 新闻基本面 · 多头强度 2/10</h4>
+      <ul><li>美伊多哈间接磋商第三天，伊朗提出“两天计划”</li><li>特朗普称“有可能”达成协议、不急于重启战事</li><li>Brent -7.63%至104.77美元，WTI -7.36%至96.46美元</li><li>机构：地缘缓和、高估值修正、中期选举资金撤离共振</li></ul><div class="bar"><i style="width:20%"></i></div>
+      <div class="note">地缘溢价回吐是主导逻辑，短期偏空。</div></div>
+    <div class="dim"><h4>⑥ 持仓席位 · 多头强度 5/10</h4>
+      <ul><li>INE会员持仓排名不可得（数据缺口）</li><li>SC2612持仓22,035手（-2,074），减仓下跌</li><li>成交15.99万手（前17.70万），缩量</li><li>内外盘联动，资金以短线为主</li></ul><div class="bar"><i style="width:50%"></i></div>
+      <div class="note">持仓数据缺失，权重下调；减仓下跌显示多头离场。</div></div></div>
+<div class="note">评分口径：1=极空，5=中性，10=极多。数据来源：新浪财经期货日K、INE行情、新浪财经、新华财经、路透/Gulf News、南华期货</div></div>
+
+<div class="card"><h2>二、技术面深度研判</h2>
+<div class="two">
+ <div><h3>趋势指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>EMA12 716.0 / EMA26 719.4，价格跌破两者</li><li>MA5 716.5、MA10 721.6、MA20 721.7全部失守</li><li>MA60 651.4上行，中期支撑</li></ul>
+ <h3 style="margin-top:12px">震荡指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>RSI14 37.6，偏弱未超卖</li><li>KDJ 43.5/57.2/16.1，J值低位</li><li>WR -79.2，接近超卖</li></ul></div>
+ <div><h3>量能与持仓</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>成交15.99万手（前17.70万），缩量下跌</li><li>持仓2.20万手（-2,074），减仓</li><li>减仓下跌：多头止损离场</li></ul>
+ <h3 style="margin-top:12px">形态与关键价位</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>支撑660（20日低）、651（MA60）</li><li>压力695-708（缺口/MA5）、720（MA20）</li><li>形态：跌破20日震荡平台，回补10月缺口</li></ul></div>
+</div>
+<div class="note" style="margin-top:14px">技术面偏空、强度中等：跌破均线密集区且MACD绿柱扩张，但缩量减仓、接近MA60支撑，追空赔率一般。策略反弹至695-708沽空。</div></div>
+
+<div class="card"><h2>三、期限结构与基差</h2>
+<div class="term"><div class="bar2"><div class="px">681.6</div>
+      <div class="fill" style="height:92%"></div>
+      <div class="lbl">SC2612</div></div><div class="bar2"><div class="px">678.0</div>
+      <div class="fill" style="height:68%"></div>
+      <div class="lbl">SC2701</div></div><div class="bar2"><div class="px">670.8</div>
+      <div class="fill" style="height:20%"></div>
+      <div class="lbl">SC2702</div></div></div>
+<div class="note">近远月维持Back结构，远月贴水10.8元，地缘溢价退潮但现货紧张未逆转；SC相对Brent贴水，内外价差中性。</div></div>
+
+<div class="card"><h2>四、持仓席位分析（2026-11-04（INE会员排名不可得，标注数据缺口））</h2>
+<div class="two">
+<div><h3>多头前5席位</h3><table><tr><th>#</th><th>席位</th><th>多单</th><th>增减</th></tr><tr><td>1</td><td>数据缺失</td><td class='num'>0</td><td class='num '>+0</td></tr></table></div>
+<div><h3>空头前5席位</h3><table><tr><th>#</th><th>席位</th><th>空单</th><th>增减</th></tr><tr><td>1</td><td>数据缺失</td><td class='num'>0</td><td class='num '>+0</td></tr></table></div>
+</div>
+<div class="note" style="margin-top:12px">INE原油前20名会员持仓排名接口不可得，本维度仅使用总持仓与成交量：SC2612持仓22,035手（-2,074），减仓下跌，多头离场为主。</div>
+<div class="note">5日趋势：持仓连续下降，减仓下跌；因席位数据缺失，持仓维度权重下调，不作为核心依据。</div></div>
+
+<div class="card"><h2>五、三轮多空辩论</h2><div class="round"><div class="rh">第1轮 · 立论陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>一、供给缺口仍在：霍尔木兹复航只是预期，实际通行尚未恢复，中东出口仍未正常化，全球闲置产能虽高但短期物流瓶颈难解。二、技术支撑：SC自高位回落，MA60 651.4仍上行，20日低点660未破，Back结构未逆转，现货紧张仍在。三、超卖反弹：RSI 37.6、J值16.1，两日跌幅已大，地缘消息一旦反复，油价将快速反弹。目标720-735，窗口2-3日。</div><div class="bubble s"><b>黑熊 · 空头首席</b>一、地缘溢价回吐：美伊多哈磋商进入第三天，伊朗提出“两天计划”，特朗普称协议“有可能”，Brent单日-7.63%、WTI -7.36%，战争溢价正在系统性退出。二、需求与估值：中期选举后资金撤离，裂解价差回落，高估值修正尚未结束。三、技术破位：SC跌破MA5/10/20，MACD绿柱由-9.3扩大至-16.1，减仓下跌。目标660/640，止损720。</div></div></div><div class="round"><div class="rh">第2轮 · 交叉驳斥</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>驳“溢价回吐”：-7%的单日跌幅已经一次性释放，谈判仍有破裂可能，霍尔木兹未真正复航前，溢价不会归零。驳“需求走弱”：全球需求仍处旺季尾声，中国炼厂开工不低，现货Back结构未破。驳“技术破位”：缩量减仓下跌，空头并未增仓，MA60支撑近在咫尺。</div><div class="bubble s"><b>黑熊 · 空头首席</b>驳“供给缺口”：OPEC+闲置产能400万桶/日，一旦复航，缺口可迅速填补；市场交易的是预期，不是现状。驳“超卖反弹”：趋势行情中超卖可以持续，SC已连续两日大跌，反弹是给空头更好的位置。驳“Back结构”：Back反映的是近月现货，远月已经走弱，结构正在平坦化。</div></div></div><div class="round"><div class="rh">第3轮 · 最终陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>终局看风险：地缘溢价虽在退潮，但谈判未落地、霍尔木兹未复航，油价已跌至MA60上方，向下空间有限。660-665可轻仓试多，目标700，止损645。</div><div class="bubble s"><b>黑熊 · 空头首席</b>终局看主线：地缘缓和是未来两周最确定的边际变化，溢价回吐尚未结束，SC跌破均线密集区后趋势向下。但跌幅已大，不追空，反弹695-708沽空，目标660/640，止损720。</div></div></div></div>
+
+<div class="card"><h2>六、总决策官裁决</h2>
+<table class="score"><tr><th>维度</th><th>多头分</th><th>空头分</th><th>裁决理由</th></tr><tr><td>库存</td><td class='num bull'>5</td><td class='num bear'>5</td><td>全球库存中性，闲置产能充足</td></tr><tr><td>仓单</td><td class='num bull'>5</td><td class='num bear'>5</td><td>仓单低位，中性</td></tr><tr><td>期限结构</td><td class='num bull'>4</td><td class='num bear'>6</td><td>Back未破但远月转弱</td></tr><tr><td>技术面</td><td class='num bull'>3</td><td class='num bear'>8</td><td>跌破均线密集区，MACD绿柱扩张</td></tr><tr><td>新闻基本面</td><td class='num bull'>2</td><td class='num bear'>8</td><td>美伊和谈、地缘溢价回吐</td></tr><tr><td>持仓席位</td><td class='num bull'>5</td><td class='num bear'>5</td><td>席位数据缺失，减仓下跌</td></tr></table>
+<div class="two" style="margin-top:16px">
+<div><h3>双方最强点</h3><div class="note">空头最强点：地缘溢价回吐是确定性边际变化，技术破位配合；多头最强点：霍尔木兹未实际复航、Back结构未破、MA60支撑。</div></div>
+<div><h3>双方最弱点</h3><div class="note">空头最弱点：两日跌幅已大、缩量减仓，追空易反弹；多头最弱点：低估和平预期发酵的速度，且缺乏席位数据验证。</div></div>
+</div>
+<div style="margin-top:16px"><h3>决策方案</h3>
+<table><tr><th>方向</th><th>入场区间</th><th>目标1</th><th>目标2</th><th>止损</th><th>窗口</th></tr>
+<tr><td class="down"><b>空</b></td><td>695-708 反弹分批沽空</td><td>660</td><td>640</td><td>720</td><td>1~3 个交易日</td></tr></table></div>
+<div style="margin-top:16px"><h3>核心逻辑</h3><div class="note" style="font-size:13.5px;color:#c2d0e2">美伊多哈磋商推进、伊朗“两天计划”指向霍尔木兹复航，地缘风险溢价快速回吐，Brent单日-7.63%、WTI -7.36%，SC连续两日下跌并跌破MA5/10/20，MACD绿柱扩大。但SC已自高位回落，MA60 651.4仍上行、20日低点660支撑，策略为反弹沽空、不追空。</div></div>
+<div style="margin-top:16px"><h3>置信度</h3>
+<div class="note" style="font-size:13.5px;color:#c2d0e2">基础置信度 57% × 档位系数 1.30（50-59，n=8，来源 confidence-factors.json）= <b>74.1%</b>，裁剪至 10%~95%。基础置信度57%（地缘驱动明确但跌幅已大），50-59档×1.3=74.1%；该品种由原品种BU、EB低置信度触发替换后进入最终呈现池。</div></div>
+<div class="warn" style="margin-top:16px"><b>风险提示：</b>美伊谈判破裂或霍尔木兹再度受阻将令油价跳涨；EIA库存超预期去化也可能引发反弹，空单止损720。</div></div>
+
+<div class="footer">本报告由 AI 多 Agent 辩论系统自动生成，数据来自公开可复核渠道（新浪财经期货日K、INE行情、新浪财经、新华财经、路透/Gulf News、南华期货）。<br>
+内容仅供研究参考，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。</div>
+</div></body></html>
