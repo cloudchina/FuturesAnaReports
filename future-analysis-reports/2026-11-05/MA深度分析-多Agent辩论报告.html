@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>甲醇MA2701 深度分析-多Agent辩论报告</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0e16;color:#c9d4e5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(160deg,#121a27,#0e1520);border:1px solid #1e2c40;border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+h1{font-size:30px;color:#f2f6ff;letter-spacing:1px}
+h2{font-size:19px;color:#e8b45a;margin-bottom:14px;border-left:4px solid #e8b45a;padding-left:10px}
+h3{font-size:15px;color:#8fa7c7;margin-bottom:8px;font-weight:600}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.up{color:#ff6b6b}.down{color:#39d98a}.flat{color:#c9a227}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end}
+.price{font-size:40px;font-weight:700;color:#fff}
+.meta{font-size:13px;color:#7f92ad}
+.banner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:linear-gradient(135deg,#16233a,#101a28);border:1px solid #2a3d59;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.banner .k{font-size:12px;color:#8fa7c7}
+.banner .v{font-size:22px;font-weight:700;color:#fff;margin-top:4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.dim{background:#101927;border:1px solid #1d2b3f;border-radius:12px;padding:16px}
+.dim h4{font-size:15px;color:#e8b45a;margin-bottom:8px}
+.dim ul{list-style:none;font-size:13px;color:#a9bcd5}
+.dim li{padding:3px 0 3px 12px;position:relative}
+.dim li:before{content:'·';position:absolute;left:0;color:#4d7bb5}
+.bar{height:7px;background:#1a2637;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f6fb5,#e8b45a)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1e2c40;text-align:left}
+th{color:#8fa7c7;font-weight:600;background:#101927}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bull{color:#ff7b72}.bear{color:#3ddc97}
+.round{border:1px solid #1e2c40;border-radius:12px;padding:16px;margin-bottom:14px;background:#0f1723}
+.round .rh{font-size:14px;color:#e8b45a;margin-bottom:10px;font-weight:700}
+.chat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.chat{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:14px;font-size:13.5px;color:#b9c8dc}
+.bubble.b{background:rgba(255,90,80,.07);border:1px solid rgba(255,90,80,.25)}
+.bubble.s{background:rgba(50,220,150,.06);border:1px solid rgba(50,220,150,.22)}
+.bubble b{display:block;margin-bottom:6px;font-size:14px}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:10px 6px 0}
+.term .bar2{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.term .fill{width:70%;background:linear-gradient(180deg,#e8b45a,#3d6ea8);border-radius:5px 5px 0 0;min-height:4px}
+.term .lbl{font-size:11px;color:#8fa7c7;margin-top:6px;text-align:center}
+.term .px{font-size:11px;color:#dbe6f5;margin-bottom:4px}
+.note{font-size:12px;color:#7f92ad;margin-top:10px}
+.score td:first-child{color:#dbe6f5}
+.pill{display:inline-block;background:#1a2740;color:#9fc0e8;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0}
+.footer{text-align:center;font-size:12px;color:#5f7290;margin-top:26px}
+.warn{border-left:3px solid #e05a4f;background:rgba(224,90,79,.07);padding:10px 14px;border-radius:6px;font-size:13px;color:#e8a9a3}
+</style></head>
+<body><div class="wrap">
+
+<div class="card"><div class="header">
+  <div><h1>甲醇 MA2701</h1>
+  <div class="meta">郑州商品交易所 · 报告日期 2026-11-05 · 数据截至 2026-11-05 收盘</div></div>
+  <div style="text-align:right"><div class="price down">3,153.0</div>
+  <div class="meta">收盘涨跌 <span class="down">-7.32%</span> · 持仓 831,019 手</div></div>
+</div>
+</div>
+
+<div class="banner">
+  <div><div class="k">最终方向</div><div class="v down">空</div></div>
+  <div><div class="k">胜率评估</div><div class="v" style="font-size:17px">空方59% / 多方41%</div></div>
+  <div><div class="k">校准后置信度</div><div class="v">64.0%</div></div>
+  <div><div class="k">触发窗口</div><div class="v" style="font-size:17px">1~3 个交易日</div></div>
+  <div><div class="k">入场 / 止损</div><div class="v" style="font-size:15px">3210-3260 反弹沽空 / 3,310</div></div>
+  <div><div class="k">目标位</div><div class="v" style="font-size:16px">3,050 / 2,960</div></div>
+</div>
+
+<div class="card"><h2>一、六维数据全景</h2><div class="grid6">
+<div class="dim"><h4>1. 库存 · 多头强度 3/10</h4><ul><li>中国甲醇港口库存41.27万吨（11/4），环比+5.89万吨，累库开始</li><li>样本生产企业库存31.08万吨（-1.42，-4.37%），待发订单下降</li><li>机构预计本轮累库持续3-4周、累库幅度约20万吨</li><li>11月伊朗/非伊到港增加，供应恢复</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">港口累库周期确认，库存从利多转为利空。</div></div><div class="dim"><h4>2. 仓单 · 多头强度 5/10</h4><ul><li>郑商所甲醇仓单5,011手（-89）</li><li>仓单/持仓比约0.6%，交割压力有限</li><li>仓单连续小幅注销</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">仓单中性偏低。</div></div><div class="dim"><h4>3. 期限结构 · 多头强度 7/10</h4><ul><li>MA2611 3,572 / MA2612 3,266 / MA2701 3,153</li><li>MA2702 3,087 / MA2703 3,008 / MA2705 2,882 / MA2709 2,764</li><li>现货3,691.67元/吨，主力基差-538.67元（-14.59%）</li><li>深度Back，2611-2709价差808元</li></ul><div class="bar"><i style="width:70%"></i></div><div class="note">深度Back反映近月紧，但远月定价持续下移。</div></div><div class="dim"><h4>4. 技术面 · 多头强度 3/10</h4><ul><li>收盘3,153，-7.32%，高开3,357即全天最高，低见3,132</li><li>跌破MA5(3,420)、MA10(3,403)、MA20(3,304)，MA60 2,977仍上行</li><li>MACD由+18.1转为-30.3，日线死叉；RSI 48.1</li><li>20日低点3,130，5日-7.62%</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">高位长阴破位，短线弱势明确。</div></div><div class="dim"><h4>5. 新闻基本面 · 多头强度 2/10</h4><ul><li>美中期选举后地缘溢价恐慌性出清，原油-8.41%，能化板块跌停潮</li><li>11月到港回升、伊朗装船恢复，港口进入3-4周累库期</li><li>MTO开工持续亏损，烯烃需求承接不足</li><li>现货价格由3,875元回落至3,691.67元</li></ul><div class="bar"><i style="width:20%"></i></div><div class="note">成本塌陷+累库+需求负反馈，三重利空。</div></div><div class="dim"><h4>6. 持仓席位 · 多头强度 4/10</h4><ul><li>前20净多+89,527手（当日+5,826）</li><li>多单583,755（-31,372）/空单494,228（-37,198），空头减仓更多</li><li>多头集中度70.2%、空头59.5%</li><li>5日净多累计-5,684手，1日↑</li></ul><div class="bar"><i style="width:40%"></i></div><div class="note">净多规模庞大且回升，多头未撤，是后续下跌燃料。</div></div></div>
+<div class="note">评分口径：1=极空，5=中性，10=极多。数据来源：新浪财经期货日K（2026-11-05 收盘）、akshare（交易所仓单/会员持仓/现货基差）、公开财经资讯（新华财经、东方财富、新浪财经、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、中枣网等）</div></div>
+
+<div class="card"><h2>二、技术面深度研判</h2>
+<div class="two">
+ <div><h3>趋势指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>收盘3,153，跌破MA5(3,420)、MA10(3,403)、MA20(3,304)</li><li>MA60 2,977仍上行，为下方中期支撑</li><li>5日-7.62%、10日-1.19%、20日-1.47%</li></ul>
+ <h3 style="margin-top:12px">震荡指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>MACD DIF 101.9 / DEA 117.0，柱-30.3（前值+18.1），零轴上方死叉</li><li>RSI14 48.1，快速回落至中性；KDJ死叉向下</li><li>高位死叉，调整级别较大</li></ul></div>
+ <div><h3>量能与持仓</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>成交3,289,952手（5日均3,572,976），缩量下跌</li><li>持仓831,019手（-76,824），大幅减仓</li><li>减仓下跌：多头止损与空头止盈并存，抛压释放较快</li></ul>
+ <h3 style="margin-top:12px">形态与关键价位</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>支撑：3,130（今日/20日低点）、2,977（MA60）</li><li>压力：3,304（MA20）、3,357（今日高点）</li><li>形态：高开低走长阴，回补10月上涨缺口</li></ul></div>
+</div>
+<div class="note" style="margin-top:14px">技术面空：高开低走-7.32%、跌破MA20并MACD死叉，5日-7.6%；但MA60 2,977仍上行、今日减仓76,824手，抛压一次性释放较多。策略反弹3,210-3,260沽空，不追空。</div></div>
+
+<div class="card"><h2>三、期限结构与基差</h2>
+<div class="term"><div class="bar2"><div class="px">3,572</div><div class="fill" style="height:95%"></div><div class="lbl">MA2611</div></div><div class="bar2"><div class="px">3,266</div><div class="fill" style="height:63%"></div><div class="lbl">MA2612</div></div><div class="bar2"><div class="px">3,153</div><div class="fill" style="height:51%"></div><div class="lbl">MA2701</div></div><div class="bar2"><div class="px">3,087</div><div class="fill" style="height:44%"></div><div class="lbl">MA2702</div></div><div class="bar2"><div class="px">2,882</div><div class="fill" style="height:22%"></div><div class="lbl">MA2705</div></div><div class="bar2"><div class="px">2,764</div><div class="fill" style="height:10%"></div><div class="lbl">MA2709</div></div></div>
+<div class="note">现货3,691.67元/吨，主力基差-538.67元（-14.59%）；深度Back结构（2611-2709价差808元），近月受港口低库存尾声支撑，远月定价11-12月累库。Back结构下，01合约下跌需要现货补跌配合，本周现货已从3,875元回落至3,691.67元。</div></div>
+
+<div class="card"><h2>四、持仓席位分析（2026-11-05）</h2>
+<div class="two">
+<div><h3>多头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>国泰君安</td><td class='num'>111,672</td><td class='num down'>-15,984</td></tr><tr><td>2</td><td>中信期货</td><td class='num'>104,676</td><td class='num down'>-18,723</td></tr><tr><td>3</td><td>东证期货</td><td class='num'>47,399</td><td class='num up'>+2,714</td></tr><tr><td>4</td><td>高盛期货</td><td class='num'>42,840</td><td class='num down'>-5,391</td></tr><tr><td>5</td><td>华泰期货</td><td class='num'>35,312</td><td class='num up'>+4,466</td></tr></table></div>
+<div><h3>空头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>国泰君安</td><td class='num'>62,907</td><td class='num down'>-8,939</td></tr><tr><td>2</td><td>中信期货</td><td class='num'>53,153</td><td class='num down'>-2,287</td></tr><tr><td>3</td><td>浙商期货</td><td class='num'>41,263</td><td class='num down'>-3,984</td></tr><tr><td>4</td><td>华泰期货</td><td class='num'>40,262</td><td class='num up'>+8,430</td></tr><tr><td>5</td><td>东证期货</td><td class='num'>36,155</td><td class='num down'>-4,311</td></tr></table></div>
+</div>
+<div class="note" style="margin-top:12px">前20名净多+89,527手（当日+5,826），多头集中度70.2%、空头59.5%；多单-31,372、空单-37,198，空头减仓略多。国泰多单-15,984、中信多单-18,723大幅减仓；华泰空单+8,430逆势加空。</div>
+<div class="note">5日趋势：净多减仓，连续1日↑；5日净多累计-5,684手。净多规模仍近9万手，多头并未溃散，若价格继续下跌，多头止损将成为后续下跌燃料。</div></div>
+
+<div class="card"><h2>五、三轮多空辩论</h2><div class="round"><div class="rh">第1轮 · 立论陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>一、估值支撑：深度Back（2611-2709价差808元）、基差-538.67元（-14.6%），近月现实不宽松。二、企业去库：样本企业库存31.08万吨（-1.42），待发订单尚可。三、成本与情绪已一次性出清：原油-8.4%的利空在今日-7.32%中集中释放，减仓76,824手说明抛压释放充分。四、净多仍+89,527手，主力未撤离。目标3,300-3,357。</div><div class="bubble s"><b>黑熊 · 空头首席</b>一、累库确认：港口41.27万吨（+5.89），机构预计3-4周再累20万吨。二、供应恢复：11月伊朗/非伊到港增加，装船恢复。三、需求负反馈：MTO持续亏损、烯烃开工偏低。四、成本塌陷：原油-8.41%，能化跌停潮；盘面高开低走-7.32%、破MA20、MACD死叉。目标3,050/2,960，止损3,310。</div></div></div><div class="round"><div class="rh">第2轮 · 交叉驳斥</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>驳“累库”：41.27万吨仍处偏低水平，+5.89万吨是到港节奏，且企业库存同步下降，总库存并未大幅累积。驳“成本塌陷”：原油下跌已一次性定价，深度Back与-14.6%基差提供缓冲。驳“需求负反馈”：MTO亏损是阶段性的，一旦烯烃反弹，开工将回升。</div><div class="bubble s"><b>黑熊 · 空头首席</b>驳“Back支撑”：01合约锚定冬季累库后的宽松，Back恰恰是市场对远月的看空；基差-14.6%可以通过现货下跌修复，本周现货已从3,875跌至3,691.67。驳“净多未撤”：净多+5,826手是空头止盈造成的被动上升，多头仍在场内，后续止损盘才是下跌燃料。驳“抛压释放”：缩量下跌说明买盘更弱。</div></div></div><div class="round"><div class="rh">第3轮 · 最终陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>终局看现实：Back结构、-14.6%基差、企业去库、MA60 2,977上行，现实并不支持单边下跌。3,130-3,150是今日低点，跌破前不追空，反弹看3,300，止损3,050。</div><div class="bubble s"><b>黑熊 · 空头首席</b>终局看边际：累库周期确认、到港恢复、MTO亏损、成本塌陷，四重边际利空共振。反弹3,210-3,260沽空，目标3,050/2,960，止损3,310；若放量收复3,304（MA20）则离场。</div></div></div></div>
+
+<div class="card"><h2>六、总决策官裁决</h2>
+<table class="score"><tr><th>维度</th><th>多头分</th><th>空头分</th><th>裁决理由</th></tr><tr><td>库存</td><td class='num bull'>3</td><td class='num bear'>7</td><td>港口累库+5.89万吨，累库周期开启</td></tr><tr><td>仓单</td><td class='num bull'>5</td><td class='num bear'>5</td><td>5,011手，中性</td></tr><tr><td>期限结构</td><td class='num bull'>7</td><td class='num bear'>3</td><td>深度Back+14.6%基差</td></tr><tr><td>技术面</td><td class='num bull'>3</td><td class='num bear'>7</td><td>高开低走破MA20、MACD死叉</td></tr><tr><td>新闻基本面</td><td class='num bull'>2</td><td class='num bear'>8</td><td>成本塌陷+累库+需求弱</td></tr><tr><td>持仓席位</td><td class='num bull'>4</td><td class='num bear'>6</td><td>净多仍近9万手，止损盘待释放</td></tr></table>
+<div class="two" style="margin-top:16px">
+<div><h3>双方最强点</h3><div class="note">空头最强点：累库周期确认、成本塌陷、需求负反馈三重边际利空，盘面破位；多头最强点：深度Back、-14.6%基差、企业去库、MA60上行。</div></div>
+<div><h3>双方最弱点</h3><div class="note">空头最弱点：减仓下跌、抛压释放较快，MA60仍上行；多头最弱点：把Back当方向，忽视港口累库与到港恢复的确定性。</div></div>
+</div>
+<div style="margin-top:16px"><h3>决策方案</h3>
+<table><tr><th>方向</th><th>入场区间</th><th>目标1</th><th>目标2</th><th>止损</th><th>窗口</th></tr>
+<tr><td class="down"><b>空</b></td><td>3210-3260 反弹沽空</td><td>3,050</td><td>2,960</td><td>3,310</td><td>1~3 个交易日</td></tr></table></div>
+<div style="margin-top:16px"><h3>核心逻辑</h3><div class="note" style="font-size:13.5px;color:#c2d0e2">美中期选举后地缘溢价恐慌性出清，原油-8.41%带动能化跌停潮；甲醇港口库存41.27万吨（+5.89）开启3-4周累库周期，11月伊朗/非伊到港回升，MTO持续亏损、烯烃需求承接不足，盘面高开低走-7.32%、跌破MA20并MACD死叉。但深度Back、基差-14.6%、企业库存下降与MA60上行限制跌幅，故反弹沽空、不追空。</div></div>
+<div style="margin-top:16px"><h3>置信度</h3>
+<div class="note" style="font-size:13.5px;color:#c2d0e2">基础置信度64%（累库与成本塌陷驱动明确，技术破位，但深Back与基差形成约束）× 档位系数1.00（60-69档，n=4，未达min_samples=5，按1.0，来源 confidence-factors.json）= <b>64.0%</b>，裁剪至10%~95%。5日复盘：甲醇11/04空单今日止盈成功（-7.32%），方向有效性得到验证；近5日方向命中率50%、无连续错误，已在辩论中纳入低库存、深Back与净多庞大的反向证据。</div></div>
+<div class="warn" style="margin-top:16px"><b>风险提示：</b>原油企稳、伊朗装船再度受阻或MTO重启将扭转供需；深Back下近月抗跌，空单严格止损3,310，不建议在3,130附近追空。</div></div>
+
+<div class="footer">本报告由 AI 多 Agent 辩论系统自动生成，数据来自公开可复核渠道（新浪财经期货日K、akshare（交易所仓单/会员持仓/现货基差）、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、新华财经、东方财富）。<br>
+内容仅供研究参考，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。</div>
+</div></body></html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>碳酸锂LC2701 深度分析-多Agent辩论报告</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0e16;color:#c9d4e5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(160deg,#121a27,#0e1520);border:1px solid #1e2c40;border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+h1{font-size:30px;color:#f2f6ff;letter-spacing:1px}
+h2{font-size:19px;color:#e8b45a;margin-bottom:14px;border-left:4px solid #e8b45a;padding-left:10px}
+h3{font-size:15px;color:#8fa7c7;margin-bottom:8px;font-weight:600}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.up{color:#ff6b6b}.down{color:#39d98a}.flat{color:#c9a227}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end}
+.price{font-size:40px;font-weight:700;color:#fff}
+.meta{font-size:13px;color:#7f92ad}
+.banner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:linear-gradient(135deg,#16233a,#101a28);border:1px solid #2a3d59;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.banner .k{font-size:12px;color:#8fa7c7}
+.banner .v{font-size:22px;font-weight:700;color:#fff;margin-top:4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.dim{background:#101927;border:1px solid #1d2b3f;border-radius:12px;padding:16px}
+.dim h4{font-size:15px;color:#e8b45a;margin-bottom:8px}
+.dim ul{list-style:none;font-size:13px;color:#a9bcd5}
+.dim li{padding:3px 0 3px 12px;position:relative}
+.dim li:before{content:'·';position:absolute;left:0;color:#4d7bb5}
+.bar{height:7px;background:#1a2637;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f6fb5,#e8b45a)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1e2c40;text-align:left}
+th{color:#8fa7c7;font-weight:600;background:#101927}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bull{color:#ff7b72}.bear{color:#3ddc97}
+.round{border:1px solid #1e2c40;border-radius:12px;padding:16px;margin-bottom:14px;background:#0f1723}
+.round .rh{font-size:14px;color:#e8b45a;margin-bottom:10px;font-weight:700}
+.chat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.chat{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:14px;font-size:13.5px;color:#b9c8dc}
+.bubble.b{background:rgba(255,90,80,.07);border:1px solid rgba(255,90,80,.25)}
+.bubble.s{background:rgba(50,220,150,.06);border:1px solid rgba(50,220,150,.22)}
+.bubble b{display:block;margin-bottom:6px;font-size:14px}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:10px 6px 0}
+.term .bar2{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.term .fill{width:70%;background:linear-gradient(180deg,#e8b45a,#3d6ea8);border-radius:5px 5px 0 0;min-height:4px}
+.term .lbl{font-size:11px;color:#8fa7c7;margin-top:6px;text-align:center}
+.term .px{font-size:11px;color:#dbe6f5;margin-bottom:4px}
+.note{font-size:12px;color:#7f92ad;margin-top:10px}
+.score td:first-child{color:#dbe6f5}
+.pill{display:inline-block;background:#1a2740;color:#9fc0e8;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0}
+.footer{text-align:center;font-size:12px;color:#5f7290;margin-top:26px}
+.warn{border-left:3px solid #e05a4f;background:rgba(224,90,79,.07);padding:10px 14px;border-radius:6px;font-size:13px;color:#e8a9a3}
+</style></head>
+<body><div class="wrap">
+
+<div class="card"><div class="header">
+  <div><h1>碳酸锂 LC2701</h1>
+  <div class="meta">广州期货交易所 · 报告日期 2026-11-05 · 数据截至 2026-11-05 收盘</div></div>
+  <div style="text-align:right"><div class="price up">91,580.0</div>
+  <div class="meta">收盘涨跌 <span class="up">+5.92%</span> · 持仓 416,316 手</div></div>
+</div>
+</div>
+
+<div class="banner">
+  <div><div class="k">最终方向</div><div class="v up">多</div></div>
+  <div><div class="k">胜率评估</div><div class="v" style="font-size:17px">多方55% / 空方45%</div></div>
+  <div><div class="k">校准后置信度</div><div class="v">58.8%</div></div>
+  <div><div class="k">触发窗口</div><div class="v" style="font-size:17px">1~3 个交易日</div></div>
+  <div><div class="k">入场 / 止损</div><div class="v" style="font-size:15px">90000-91000 回踩做多 / 88,500</div></div>
+  <div><div class="k">目标位</div><div class="v" style="font-size:16px">95,000 / 97,500</div></div>
+</div>
+
+<div class="card"><h2>一、六维数据全景</h2><div class="grid6">
+<div class="dim"><h4>1. 库存 · 多头强度 4/10</h4><ul><li>SMM现货库存51,141吨，环比-952吨；下游28,949吨（-855）、冶炼厂7,594吨（+280）</li><li>大样本库存57,580吨，环比继续下降</li><li>周度总产量27,821吨（+1,446），辉石16,504吨（+1,537）</li><li>港口锂矿实物库存39.2万吨（10/22，+4.5），贸易商23.7万吨（+2.8）</li></ul><div class="bar"><i style="width:40%"></i></div><div class="note">锂盐去库但产量与矿端库存回升，供需边际转松。</div></div><div class="dim"><h4>2. 仓单 · 多头强度 5/10</h4><ul><li>广期所碳酸锂仓单21,041手（-514）</li><li>仓单/持仓比约5.1%，处于中性水平</li><li>仓单连续小幅注销</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">仓单小幅去化，中性。</div></div><div class="dim"><h4>3. 期限结构 · 多头强度 5/10</h4><ul><li>LC2611 93,400 / LC2612 92,820 / LC2701 91,580</li><li>LC2702 90,840 / LC2703 90,360 / LC2705 91,020 / LC2709 90,840</li><li>现货90,500元/吨，主力基差+1,080元（+1.19%）</li><li>近高远低，温和Back；2701-2709价差740元</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">期货升水现货1.19%，近月结构偏强。</div></div><div class="dim"><h4>4. 技术面 · 多头强度 6/10</h4><ul><li>收盘91,580，+5.92%，站上MA5(89,308)，逼近MA10(91,926)</li><li>MA20 96,720、MA60 126,881仍下行，中期空头未改</li><li>MACD +1,495.9（前值+723.0）红柱扩张，零轴下方金叉</li><li>今日开86,460即最低、最高93,920，收91,580，长下影大阳线</li></ul><div class="bar"><i style="width:60%"></i></div><div class="note">放量长阳止跌，短线反转信号。</div></div><div class="dim"><h4>5. 新闻基本面 · 多头强度 5/10</h4><ul><li>碳酸锂主力盘中涨超6%，资金大幅涌入、放量拉升</li><li>锂矿股连续第4日上涨，天齐锂业、宁德时代涨超6%</li><li>昨日盘中创阶段新低86,460后强势反转</li><li>锂盐价格与锂矿估值均处历史底部区间</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">资金与情绪修复主导，基本面仍偏过剩。</div></div><div class="dim"><h4>6. 持仓席位 · 多头强度 5/10</h4><ul><li>前20净空-18,652手（当日-1,580，净空增加）</li><li>多单310,087（-16,105）/空单328,739（-14,525），多空双减</li><li>多头集中度74.5%、空头79.0%</li><li>5日净空累计-409手，连续3日净空增仓</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">空头集中度79%极高，减仓反弹存在回补空间。</div></div></div>
+<div class="note">评分口径：1=极空，5=中性，10=极多。数据来源：新浪财经期货日K（2026-11-05 收盘）、akshare（交易所仓单/会员持仓/现货基差）、公开财经资讯（新华财经、东方财富、新浪财经、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、中枣网等）</div></div>
+
+<div class="card"><h2>二、技术面深度研判</h2>
+<div class="two">
+ <div><h3>趋势指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>收盘91,580，站上MA5(89,308)，仍低于MA10(91,926)、MA20(96,720)、MA60(126,881)</li><li>MA20/MA60下行，中期空头趋势未反转</li><li>5日+3.64%、10日-2.76%、20日-21.93%</li></ul>
+ <h3 style="margin-top:12px">震荡指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>MACD DIF -9,317 / DEA -10,065，柱+1,496（前值+723），红柱扩张</li><li>RSI14 44.2，自超卖回升；KDJ低位金叉</li><li>零轴下方金叉，属超跌反弹</li></ul></div>
+ <div><h3>量能与持仓</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>成交524,215手（5日均382,364），显著放量</li><li>持仓416,316手（-21,689），大幅减仓</li><li>放量减仓上涨：空头集中回补，而非新多建仓</li></ul>
+ <h3 style="margin-top:12px">形态与关键价位</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>支撑：89,308（MA5）、86,460（阶段低点）</li><li>压力：91,926（MA10）、96,720（MA20）</li><li>形态：昨日新低86,460后长下影大阳，短线V型反弹</li></ul></div>
+</div>
+<div class="note" style="margin-top:14px">技术面偏多：放量长阳、MACD红柱扩张、空头集中回补，短线反弹成立；但MA20/60仍下行、减仓上涨说明是新空回补而非趋势反转。策略回踩90,000-91,000做多，目标95,000/97,500。</div></div>
+
+<div class="card"><h2>三、期限结构与基差</h2>
+<div class="term"><div class="bar2"><div class="px">93,400</div><div class="fill" style="height:95%"></div><div class="lbl">LC2611</div></div><div class="bar2"><div class="px">92,820</div><div class="fill" style="height:76%"></div><div class="lbl">LC2612</div></div><div class="bar2"><div class="px">91,580</div><div class="fill" style="height:35%"></div><div class="lbl">LC2701</div></div><div class="bar2"><div class="px">90,840</div><div class="fill" style="height:10%"></div><div class="lbl">LC2702</div></div><div class="bar2"><div class="px">91,020</div><div class="fill" style="height:16%"></div><div class="lbl">LC2705</div></div><div class="bar2"><div class="px">90,840</div><div class="fill" style="height:10%"></div><div class="lbl">LC2709</div></div></div>
+<div class="note">现货90,500元/吨，主力基差+1,080元（+1.19%），期货升水现货；期限结构近高远低、整体平坦（2701-2709价差740元），2705小幅回升至91,020，反映市场对明年二季度需求有微弱预期。结构无明显方向指引。</div></div>
+
+<div class="card"><h2>四、持仓席位分析（2026-11-05）</h2>
+<div class="two">
+<div><h3>多头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>国泰君安期货</td><td class='num'>85,577</td><td class='num down'>-4,061</td></tr><tr><td>2</td><td>中信期货</td><td class='num'>59,006</td><td class='num down'>-1,299</td></tr><tr><td>3</td><td>中信建投</td><td class='num'>18,615</td><td class='num down'>-927</td></tr><tr><td>4</td><td>永安期货</td><td class='num'>17,850</td><td class='num down'>-5,046</td></tr><tr><td>5</td><td>东证期货</td><td class='num'>15,571</td><td class='num up'>+692</td></tr></table></div>
+<div><h3>空头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>东证期货</td><td class='num'>40,013</td><td class='num down'>-4,845</td></tr><tr><td>2</td><td>国泰君安期货</td><td class='num'>39,364</td><td class='num down'>-3,982</td></tr><tr><td>3</td><td>中信期货</td><td class='num'>32,044</td><td class='num down'>-1,185</td></tr><tr><td>4</td><td>银河期货</td><td class='num'>21,563</td><td class='num up'>+98</td></tr><tr><td>5</td><td>华泰期货</td><td class='num'>21,315</td><td class='num up'>+47</td></tr></table></div>
+</div>
+<div class="note" style="margin-top:12px">前20名净空-18,652手（净空增加1,580），多头集中度74.5%、空头79.0%；多单-16,105、空单-14,525，多空大幅双减。东证空单-4,845、国泰空单-3,982、永安多单-5,046，双方均在离场，空头集中度仍高。</div>
+<div class="note">5日趋势：净空增仓，连续3日↓；5日净空累计-409手基本持平。今日大涨伴随减仓，属空头回补与多头减仓并存的“双向撤退”，趋势资金并未进场。</div></div>
+
+<div class="card"><h2>五、三轮多空辩论</h2><div class="round"><div class="rh">第1轮 · 立论陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>一、底部反转：昨日86,460创阶段新低后今日放量长阳+5.92%，开于最低、收于高位，典型空头陷阱。二、去库延续：SMM库存51,141吨（-952），下游28,949吨（-855），仓单21,041手（-514）。三、空头拥挤：空头集中度79.0%，净空18,652手，回补空间大；今日减仓21,689手就是证据。四、情绪修复：锂矿股4连涨、天齐与宁德涨超6%，资金持续流入。目标95,000/97,500。</div><div class="bubble s"><b>黑熊 · 空头首席</b>一、供给回升：周产量27,821吨（+1,446），辉石16,504吨（+1,537），矿端港口库存39.2万吨（+4.5）、贸易商23.7万吨（+2.8）。二、库存绝对量仍高：51,141吨现货库存、57,580吨大样本库存。三、中期趋势未改：MA20 96,720、MA60 126,881下行，20日-21.9%。四、减仓上涨是空头回补而非新多，反弹高度有限；期货升水现货1,080元。目标88,000，止损97,000。</div></div></div><div class="round"><div class="rh">第2轮 · 交叉驳斥</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>驳“供给回升”：产量增加但下游去库更快（-855吨），说明需求有韧性；矿端库存是上游原材料，尚未传导至锂盐。驳“减仓=无新多”：空头回补本身就是最强的新增买盘，79%的空头集中度意味着任何反弹都会引发踩踏。驳“升水”：+1.19%的升水幅度极小，不构成做空理由。</div><div class="bubble s"><b>黑熊 · 空头首席</b>驳“空头陷阱”：昨日新低后反弹在下跌趋势中很常见，MA20 96,720未收复前都只是反弹。驳“去库”：51,141吨库存对应不到两周需求，绝对量仍高；产量+1,446吨/周意味着累库随时重启。驳“情绪修复”：股票与期货的反弹由资金驱动，缺乏基本面持续支撑。</div></div></div><div class="round"><div class="rh">第3轮 · 最终陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>终局看赔率：86,460是明确止损位，向下空间1,000-3,000元；向上至MA20 96,720有5,000元空间，盈亏比大于1:2。回踩90,000-91,000做多，目标95,000/97,500，止损88,500。</div><div class="bubble s"><b>黑熊 · 空头首席</b>终局看趋势：供给过剩、矿端转松、均线空头排列，反弹是沽空机会。反弹至95,000-96,700试空，目标88,000，止损98,000；若放量站稳MA20 96,720则止损离场。</div></div></div></div>
+
+<div class="card"><h2>六、总决策官裁决</h2>
+<table class="score"><tr><th>维度</th><th>多头分</th><th>空头分</th><th>裁决理由</th></tr><tr><td>库存</td><td class='num bull'>4</td><td class='num bear'>6</td><td>锂盐去库但产量与矿端回升</td></tr><tr><td>仓单</td><td class='num bull'>5</td><td class='num bear'>5</td><td>21,041手（-514），中性</td></tr><tr><td>期限结构</td><td class='num bull'>5</td><td class='num bear'>5</td><td>温和Back，期货升水1.19%</td></tr><tr><td>技术面</td><td class='num bull'>6</td><td class='num bear'>4</td><td>放量长阳、MACD红柱扩张</td></tr><tr><td>新闻基本面</td><td class='num bull'>5</td><td class='num bear'>5</td><td>资金情绪修复VS供给过剩</td></tr><tr><td>持仓席位</td><td class='num bull'>5</td><td class='num bear'>5</td><td>空头集中度79%，回补空间大</td></tr></table>
+<div class="two" style="margin-top:16px">
+<div><h3>双方最强点</h3><div class="note">多头最强点：放量长阳+空头集中度79%+库存去化，回补行情弹性大；空头最强点：产量与矿端库存回升、MA20/60下行、减仓上涨缺乏新多承接。</div></div>
+<div><h3>双方最弱点</h3><div class="note">多头最弱点：中期趋势仍空、减仓上涨说明无新增资金；空头最弱点：空头过度拥挤，86,460的低点已被证明是空头陷阱。</div></div>
+</div>
+<div style="margin-top:16px"><h3>决策方案</h3>
+<table><tr><th>方向</th><th>入场区间</th><th>目标1</th><th>目标2</th><th>止损</th><th>窗口</th></tr>
+<tr><td class="up"><b>多</b></td><td>90000-91000 回踩做多</td><td>95,000</td><td>97,500</td><td>88,500</td><td>1~3 个交易日</td></tr></table></div>
+<div style="margin-top:16px"><h3>核心逻辑</h3><div class="note" style="font-size:13.5px;color:#c2d0e2">昨日86,460创阶段新低后，今日放量长阳+5.92%、开于最低收于高位，MACD红柱扩张；SMM锂盐库存51,141吨（-952）、下游-855吨，仓单-514手，空头集中度79.0%、净空18,652手，回补动能强；锂矿股4连涨、资金持续流入。但周产量+1,446吨、矿端库存回升、MA20/60仍下行，故定性为超跌反弹，回踩做多、不追高。</div></div>
+<div style="margin-top:16px"><h3>置信度</h3>
+<div class="note" style="font-size:13.5px;color:#c2d0e2">基础置信度56%（短线反转信号清晰，但中期空头趋势与供给回升构成反向约束）× 档位系数1.05（50-59档，n=10，来源 confidence-factors.json）= <b>58.8%</b>，裁剪至10%~95%。<b>该方向近期失效风险</b>：5日复盘显示碳酸锂近3次方向仅命中1次（33.3%）、当前连续错误1次（11/04做空于11/05止损），本期已按复盘要求做反向证据复核——产量+1,446吨、矿端库存回升、MA20/60下行、期货升水现货。因校准后58.8%＜60%且commodity_relations.yaml中无关联品种，保留原品种。</div></div>
+<div class="warn" style="margin-top:16px"><b>风险提示：</b>供给端复产超预期、库存重新累积将压制反弹；减仓上涨缺乏新多承接，若跌破86,460则反弹失败，严格止损88,500。</div></div>
+
+<div class="footer">本报告由 AI 多 Agent 辩论系统自动生成，数据来自公开可复核渠道（新浪财经期货日K、akshare（交易所仓单/会员持仓/现货基差）、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、新华财经、东方财富）。<br>
+内容仅供研究参考，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。</div>
+</div></body></html>

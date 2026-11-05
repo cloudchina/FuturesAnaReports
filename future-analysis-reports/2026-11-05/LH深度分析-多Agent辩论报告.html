@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生猪LH2701 深度分析-多Agent辩论报告</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0e16;color:#c9d4e5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(160deg,#121a27,#0e1520);border:1px solid #1e2c40;border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+h1{font-size:30px;color:#f2f6ff;letter-spacing:1px}
+h2{font-size:19px;color:#e8b45a;margin-bottom:14px;border-left:4px solid #e8b45a;padding-left:10px}
+h3{font-size:15px;color:#8fa7c7;margin-bottom:8px;font-weight:600}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.up{color:#ff6b6b}.down{color:#39d98a}.flat{color:#c9a227}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end}
+.price{font-size:40px;font-weight:700;color:#fff}
+.meta{font-size:13px;color:#7f92ad}
+.banner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:linear-gradient(135deg,#16233a,#101a28);border:1px solid #2a3d59;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.banner .k{font-size:12px;color:#8fa7c7}
+.banner .v{font-size:22px;font-weight:700;color:#fff;margin-top:4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.dim{background:#101927;border:1px solid #1d2b3f;border-radius:12px;padding:16px}
+.dim h4{font-size:15px;color:#e8b45a;margin-bottom:8px}
+.dim ul{list-style:none;font-size:13px;color:#a9bcd5}
+.dim li{padding:3px 0 3px 12px;position:relative}
+.dim li:before{content:'·';position:absolute;left:0;color:#4d7bb5}
+.bar{height:7px;background:#1a2637;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f6fb5,#e8b45a)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1e2c40;text-align:left}
+th{color:#8fa7c7;font-weight:600;background:#101927}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bull{color:#ff7b72}.bear{color:#3ddc97}
+.round{border:1px solid #1e2c40;border-radius:12px;padding:16px;margin-bottom:14px;background:#0f1723}
+.round .rh{font-size:14px;color:#e8b45a;margin-bottom:10px;font-weight:700}
+.chat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.chat{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:14px;font-size:13.5px;color:#b9c8dc}
+.bubble.b{background:rgba(255,90,80,.07);border:1px solid rgba(255,90,80,.25)}
+.bubble.s{background:rgba(50,220,150,.06);border:1px solid rgba(50,220,150,.22)}
+.bubble b{display:block;margin-bottom:6px;font-size:14px}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:10px 6px 0}
+.term .bar2{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.term .fill{width:70%;background:linear-gradient(180deg,#e8b45a,#3d6ea8);border-radius:5px 5px 0 0;min-height:4px}
+.term .lbl{font-size:11px;color:#8fa7c7;margin-top:6px;text-align:center}
+.term .px{font-size:11px;color:#dbe6f5;margin-bottom:4px}
+.note{font-size:12px;color:#7f92ad;margin-top:10px}
+.score td:first-child{color:#dbe6f5}
+.pill{display:inline-block;background:#1a2740;color:#9fc0e8;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0}
+.footer{text-align:center;font-size:12px;color:#5f7290;margin-top:26px}
+.warn{border-left:3px solid #e05a4f;background:rgba(224,90,79,.07);padding:10px 14px;border-radius:6px;font-size:13px;color:#e8a9a3}
+</style></head>
+<body><div class="wrap">
+
+<div class="card"><div class="header">
+  <div><h1>生猪 LH2701</h1>
+  <div class="meta">大连商品交易所 · 报告日期 2026-11-05 · 数据截至 2026-11-05 收盘</div></div>
+  <div style="text-align:right"><div class="price down">9,115.0</div>
+  <div class="meta">收盘涨跌 <span class="down">-0.60%</span> · 持仓 180,162 手</div></div>
+</div>
+</div>
+
+<div class="banner">
+  <div><div class="k">最终方向</div><div class="v down">空</div></div>
+  <div><div class="k">胜率评估</div><div class="v" style="font-size:17px">空方58% / 多方42%</div></div>
+  <div><div class="k">校准后置信度</div><div class="v">62.0%</div></div>
+  <div><div class="k">触发窗口</div><div class="v" style="font-size:17px">2~4 个交易日</div></div>
+  <div><div class="k">入场 / 止损</div><div class="v" style="font-size:15px">9180-9280 反弹沽空 / 9,430</div></div>
+  <div><div class="k">目标位</div><div class="v" style="font-size:16px">8,900 / 8,750</div></div>
+</div>
+
+<div class="card"><h2>一、六维数据全景</h2><div class="grid6">
+<div class="dim"><h4>1. 库存 · 多头强度 4/10</h4><ul><li>全国生猪均价8.97元/公斤（11/5），击穿9元防线；生意社基准价9.15元/公斤</li><li>三季度末全国生猪存栏42,533万头，同比-2.6%</li><li>能繁母猪存栏3,602万头，环比-4.7%、同比-10.7%，产能去化明确</li><li>出栏均重128.3公斤（+0.45），处近年同期高位；冻品库容率偏高</li></ul><div class="bar"><i style="width:40%"></i></div><div class="note">产能去化是远月利多，但当下供给压力仍在。</div></div><div class="dim"><h4>2. 仓单 · 多头强度 5/10</h4><ul><li>大商所生猪仓单725手，连续3日持平</li><li>仓单/持仓比约0.4%，交割压力有限</li><li>11/3曾有180手注销</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">仓单中性，对近月影响有限。</div></div><div class="dim"><h4>3. 期限结构 · 多头强度 3/10</h4><ul><li>LH2611 8,000 / LH2701 9,115 / LH2703 9,075</li><li>LH2705 10,060 / LH2707 11,275 / LH2709 12,425</li><li>现货9,120元/吨，主力基差-5元（-0.05%）</li><li>近月贴水、远月大幅升水，2701-2709价差3,310元</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">远月升水定价产能去化，近月无贴水保护。</div></div><div class="dim"><h4>4. 技术面 · 多头强度 3/10</h4><ul><li>收盘9,115，位于MA5(9,289)、MA10(9,520)、MA20(9,974)、MA60(11,519)下方</li><li>均线空头排列，20日-17.92%、5日-4.55%</li><li>MACD -44.8（前值-52.3）绿柱收敛；RSI 23.0 超卖</li><li>今日收盘即60日新低9,115，5日连续下台阶</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">趋势仍空，但超卖+绿柱收敛，跌势趋缓。</div></div><div class="dim"><h4>5. 新闻基本面 · 多头强度 3/10</h4><ul><li>牧原10月销售商品猪591.3万头（-16.43%），均价9.64元（-16.54%），收入-29.79%</li><li>规模场出栏意愿强，前期压栏与二育猪源持续释放</li><li>天气转凉育肥增重提速，出栏均重处同期高位</li><li>需求处节后空档期，腌腊尚未启动，白条走货偏缓</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">供强需弱，现货仍在寻底。</div></div><div class="dim"><h4>6. 持仓席位 · 多头强度 3/10</h4><ul><li>前20净空-9,770手（当日-3,496，净空增加）</li><li>多单94,981（+1,857）/空单104,751（+5,353），空头增仓明显</li><li>多头集中度52.7%、空头58.1%，集中度均不高</li><li>5日净空累计+1,820手（净空缩减），今日重新增空</li></ul><div class="bar"><i style="width:30%"></i></div><div class="note">空头当日增仓，5日窗口内整体减空，方向一致性一般。</div></div></div>
+<div class="note">评分口径：1=极空，5=中性，10=极多。数据来源：新浪财经期货日K（2026-11-05 收盘）、akshare（交易所仓单/会员持仓/现货基差）、公开财经资讯（新华财经、东方财富、新浪财经、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、中枣网等）</div></div>
+
+<div class="card"><h2>二、技术面深度研判</h2>
+<div class="two">
+ <div><h3>趋势指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>收盘9,115，位于全部均线下方，空头排列完整</li><li>5日-4.55%、10日-7.56%、20日-17.92%，单边下行</li><li>MA20 9,974、MA60 11,519持续下行，中期趋势未改</li></ul>
+ <h3 style="margin-top:12px">震荡指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>MACD DIF -607.3 / DEA -584.9，柱-44.8（前值-52.3），绿柱收敛</li><li>RSI14 23.0，进入超卖区；KDJ低位钝化</li><li>价格贴近日内低点9,040，未出现有效止跌信号</li></ul></div>
+ <div><h3>量能与持仓</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>成交182,301手（5日均155,344），放量下跌</li><li>持仓180,162手（+7,057），增仓下跌</li><li>增仓+下跌：空头主动增仓，趋势延续信号</li></ul>
+ <h3 style="margin-top:12px">形态与关键价位</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>支撑：9,040（今日低点）、8,900（整数关口）</li><li>压力：9,289（MA5）、9,520（MA10）</li><li>形态：沿MA5阴跌，未见底部结构</li></ul></div>
+</div>
+<div class="note" style="margin-top:14px">技术面空：均线空头排列、增仓下跌、20日-17.9%，趋势延续；但RSI 23超卖、MACD绿柱收敛，短期跌势可能放缓。策略反弹9,180-9,280沽空，目标8,900/8,750。</div></div>
+
+<div class="card"><h2>三、期限结构与基差</h2>
+<div class="term"><div class="bar2"><div class="px">8,000</div><div class="fill" style="height:10%"></div><div class="lbl">LH2611</div></div><div class="bar2"><div class="px">9,115</div><div class="fill" style="height:31%"></div><div class="lbl">LH2701</div></div><div class="bar2"><div class="px">9,075</div><div class="fill" style="height:31%"></div><div class="lbl">LH2703</div></div><div class="bar2"><div class="px">10,060</div><div class="fill" style="height:50%"></div><div class="lbl">LH2705</div></div><div class="bar2"><div class="px">11,275</div><div class="fill" style="height:73%"></div><div class="lbl">LH2707</div></div><div class="bar2"><div class="px">12,425</div><div class="fill" style="height:95%"></div><div class="lbl">LH2709</div></div></div>
+<div class="note">现货9,120元/吨，主力基差仅-5元（-0.05%），期货几乎平水现货；近月LH2611贴水1,115元反映当前现货疲弱，远月LH2705/2709升水945/3,310元定价产能去化与季节性旺季。近月无贴水保护，现货继续下跌将直接拖累盘面。</div></div>
+
+<div class="card"><h2>四、持仓席位分析（2026-11-05）</h2>
+<div class="two">
+<div><h3>多头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>中信期货</td><td class='num'>9,713</td><td class='num down'>-620</td></tr><tr><td>2</td><td>国泰君安</td><td class='num'>9,524</td><td class='num up'>+848</td></tr><tr><td>3</td><td>中信建投</td><td class='num'>7,113</td><td class='num up'>+183</td></tr><tr><td>4</td><td>东证期货</td><td class='num'>6,911</td><td class='num up'>+286</td></tr><tr><td>5</td><td>永安期货</td><td class='num'>6,436</td><td class='num up'>+115</td></tr></table></div>
+<div><h3>空头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>国泰君安</td><td class='num'>15,803</td><td class='num up'>+1,181</td></tr><tr><td>2</td><td>中信期货</td><td class='num'>11,875</td><td class='num up'>+517</td></tr><tr><td>3</td><td>东证期货</td><td class='num'>8,221</td><td class='num down'>-568</td></tr><tr><td>4</td><td>永安期货</td><td class='num'>6,411</td><td class='num up'>+262</td></tr><tr><td>5</td><td>中泰期货</td><td class='num'>6,196</td><td class='num up'>+859</td></tr></table></div>
+</div>
+<div class="note" style="margin-top:12px">前20名净空-9,770手（净空增加3,496），多头集中度52.7%、空头58.1%；多单+1,857、空单+5,353，空头增仓约为多头的2.9倍。国泰空单15,803（+1,181）、中泰空单+859，头部席位一致增空。</div>
+<div class="note">5日趋势：净空减仓，连续1日↓；5日净空累计+1,820手（净空缩减），今日重新增空3,496手，方向一致性一般，需防超卖反弹。</div></div>
+
+<div class="card"><h2>五、三轮多空辩论</h2><div class="round"><div class="rh">第1轮 · 立论陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>一、极端超卖：RSI 23、价格创60日新低，利空已高度定价。二、产能去化确定：能繁母猪3,602万头、同比-10.7%、环比-4.7%，远月LH2705/2709升水945/3,310元。三、季节性将至：腌腊、元旦春节备货启动后现货有望企稳，期货通常提前1-2个月反应。四、今日基差仅-5元，期货没有提前透支下跌。目标9,400-9,520。</div><div class="bubble s"><b>黑熊 · 空头首席</b>一、现货跌势未止：全国均价8.97元/公斤击穿9元，生意社基准9.15元，牧原10月均价9.64元同比-16.5%。二、供给压力：出栏均重128.3公斤高位、规模场出栏意愿强、二育与压栏猪源释放。三、需求空档：腌腊未启动、冻品高库容挤压鲜销。四、盘面均线全空、增仓下跌、20日-17.9%。目标8,900/8,750，止损9,430。</div></div></div><div class="round"><div class="rh">第2轮 · 交叉驳斥</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>驳“供给压力”：出栏均重高恰恰意味着后续供给前置，12月后供应将环比下降。驳“无贴水保护”：2701对应春节前需求，用当前淡季现货9.15元衡量并不合理。驳“增仓下跌”：空头集中度仅58.1%，且5日净空整体缩减1,820手，空头并不坚定。</div><div class="bubble s"><b>黑熊 · 空头首席</b>驳“超卖”：超卖可以更超卖，均线全空、20日-17.9%，趋势没有反转信号。驳“产能去化”：能繁去化要到2705之后才体现，2701合约交割前仍是高供给。驳“基差无保护”：基差-0.05%意味着期货没有提前跌，现货继续走弱将直接拖累盘面。</div></div></div><div class="round"><div class="rh">第3轮 · 最终陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>终局看估值：9,000-9,100已接近养殖成本线，继续向下空间有限；一旦腌腊启动或集团场缩量，反弹弹性大。回踩9,000-9,050轻仓试多，目标9,350，止损8,900。</div><div class="bubble s"><b>黑熊 · 空头首席</b>终局看趋势：现货破9、均线全空、空头增仓，下跌未完成。反弹9,180-9,280沽空，目标8,900/8,750，止损9,430；若放量收复9,520（MA10）则离场。</div></div></div></div>
+
+<div class="card"><h2>六、总决策官裁决</h2>
+<table class="score"><tr><th>维度</th><th>多头分</th><th>空头分</th><th>裁决理由</th></tr><tr><td>库存</td><td class='num bull'>4</td><td class='num bear'>6</td><td>存栏同比降但出栏均重高、冻品高库</td></tr><tr><td>仓单</td><td class='num bull'>5</td><td class='num bear'>5</td><td>725手，中性</td></tr><tr><td>期限结构</td><td class='num bull'>3</td><td class='num bear'>7</td><td>近月无贴水保护，远月升水</td></tr><tr><td>技术面</td><td class='num bull'>3</td><td class='num bear'>7</td><td>均线全空、增仓下跌、RSI超卖</td></tr><tr><td>新闻基本面</td><td class='num bull'>3</td><td class='num bear'>7</td><td>现货破9、需求空档</td></tr><tr><td>持仓席位</td><td class='num bull'>3</td><td class='num bear'>7</td><td>空头增仓5,353手</td></tr></table>
+<div class="two" style="margin-top:16px">
+<div><h3>双方最强点</h3><div class="note">空头最强点：现货破9元、均线全空、增仓下跌，趋势与基本面共振；多头最强点：RSI 23极端超卖、能繁去化10.7%、腌腊季临近。</div></div>
+<div><h3>双方最弱点</h3><div class="note">空头最弱点：5日净空整体缩减、空头集中度不高，超卖后易反弹；多头最弱点：把远月产能去化逻辑套用到近月，忽视当前高供给与弱需求。</div></div>
+</div>
+<div style="margin-top:16px"><h3>决策方案</h3>
+<table><tr><th>方向</th><th>入场区间</th><th>目标1</th><th>目标2</th><th>止损</th><th>窗口</th></tr>
+<tr><td class="down"><b>空</b></td><td>9180-9280 反弹沽空</td><td>8,900</td><td>8,750</td><td>9,430</td><td>2~4 个交易日</td></tr></table></div>
+<div style="margin-top:16px"><h3>核心逻辑</h3><div class="note" style="font-size:13.5px;color:#c2d0e2">现货全国均价跌破9元至8.97元/公斤，出栏均重128.3公斤高位、规模场加速出栏，而腌腊需求尚未启动、冻品高库容挤压鲜销，供强需弱格局延续；盘面均线全空、增仓下跌、20日-17.9%。但RSI 23极端超卖、能繁母猪同比-10.7%，远月大幅升水，故只做反弹沽空、不追低。</div></div>
+<div style="margin-top:16px"><h3>置信度</h3>
+<div class="note" style="font-size:13.5px;color:#c2d0e2">基础置信度62%（趋势与现货共振，但超卖与产能去化形成反向约束）× 档位系数1.00（60-69档，n=4，未达min_samples=5，按1.0，来源 confidence-factors.json）= <b>62.0%</b>，裁剪至10%~95%。5日复盘：生猪近3次方向全部命中（100%），无连续错误，趋势跟随有效性高；已纳入超卖、远月升水与腌腊需求的反向证据。</div></div>
+<div class="warn" style="margin-top:16px"><b>风险提示：</b>腌腊提前启动、集团场缩量挺价或收储政策落地将引发反弹；RSI 23超卖，空单不宜重仓，严格止损9,430。</div></div>
+
+<div class="footer">本报告由 AI 多 Agent 辩论系统自动生成，数据来自公开可复核渠道（新浪财经期货日K、akshare（交易所仓单/会员持仓/现货基差）、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、新华财经、东方财富）。<br>
+内容仅供研究参考，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。</div>
+</div></body></html>

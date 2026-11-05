@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>红枣CJ2701 深度分析-多Agent辩论报告</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0e16;color:#c9d4e5;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(160deg,#121a27,#0e1520);border:1px solid #1e2c40;border-radius:14px;padding:20px 22px;margin-bottom:18px;box-shadow:0 8px 28px rgba(0,0,0,.35)}
+h1{font-size:30px;color:#f2f6ff;letter-spacing:1px}
+h2{font-size:19px;color:#e8b45a;margin-bottom:14px;border-left:4px solid #e8b45a;padding-left:10px}
+h3{font-size:15px;color:#8fa7c7;margin-bottom:8px;font-weight:600}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px}
+.up{color:#ff6b6b}.down{color:#39d98a}.flat{color:#c9a227}
+.header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:flex-end}
+.price{font-size:40px;font-weight:700;color:#fff}
+.meta{font-size:13px;color:#7f92ad}
+.banner{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:linear-gradient(135deg,#16233a,#101a28);border:1px solid #2a3d59;border-radius:14px;padding:20px 22px;margin-bottom:18px}
+.banner .k{font-size:12px;color:#8fa7c7}
+.banner .v{font-size:22px;font-weight:700;color:#fff;margin-top:4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.dim{background:#101927;border:1px solid #1d2b3f;border-radius:12px;padding:16px}
+.dim h4{font-size:15px;color:#e8b45a;margin-bottom:8px}
+.dim ul{list-style:none;font-size:13px;color:#a9bcd5}
+.dim li{padding:3px 0 3px 12px;position:relative}
+.dim li:before{content:'·';position:absolute;left:0;color:#4d7bb5}
+.bar{height:7px;background:#1a2637;border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f6fb5,#e8b45a)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1e2c40;text-align:left}
+th{color:#8fa7c7;font-weight:600;background:#101927}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.bull{color:#ff7b72}.bear{color:#3ddc97}
+.round{border:1px solid #1e2c40;border-radius:12px;padding:16px;margin-bottom:14px;background:#0f1723}
+.round .rh{font-size:14px;color:#e8b45a;margin-bottom:10px;font-weight:700}
+.chat{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.chat{grid-template-columns:1fr}}
+.bubble{border-radius:10px;padding:14px;font-size:13.5px;color:#b9c8dc}
+.bubble.b{background:rgba(255,90,80,.07);border:1px solid rgba(255,90,80,.25)}
+.bubble.s{background:rgba(50,220,150,.06);border:1px solid rgba(50,220,150,.22)}
+.bubble b{display:block;margin-bottom:6px;font-size:14px}
+.term{display:flex;align-items:flex-end;gap:18px;height:210px;padding:10px 6px 0}
+.term .bar2{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.term .fill{width:70%;background:linear-gradient(180deg,#e8b45a,#3d6ea8);border-radius:5px 5px 0 0;min-height:4px}
+.term .lbl{font-size:11px;color:#8fa7c7;margin-top:6px;text-align:center}
+.term .px{font-size:11px;color:#dbe6f5;margin-bottom:4px}
+.note{font-size:12px;color:#7f92ad;margin-top:10px}
+.score td:first-child{color:#dbe6f5}
+.pill{display:inline-block;background:#1a2740;color:#9fc0e8;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 4px 2px 0}
+.footer{text-align:center;font-size:12px;color:#5f7290;margin-top:26px}
+.warn{border-left:3px solid #e05a4f;background:rgba(224,90,79,.07);padding:10px 14px;border-radius:6px;font-size:13px;color:#e8a9a3}
+</style></head>
+<body><div class="wrap">
+
+<div class="card"><div class="header">
+  <div><h1>红枣 CJ2701</h1>
+  <div class="meta">郑州商品交易所 · 报告日期 2026-11-05 · 数据截至 2026-11-05 收盘</div></div>
+  <div style="text-align:right"><div class="price up">6,525.0</div>
+  <div class="meta">收盘涨跌 <span class="up">+3.49%</span> · 持仓 219,977 手</div></div>
+</div>
+</div>
+
+<div class="banner">
+  <div><div class="k">最终方向</div><div class="v up">多</div></div>
+  <div><div class="k">胜率评估</div><div class="v" style="font-size:17px">多方55% / 空方45%</div></div>
+  <div><div class="k">校准后置信度</div><div class="v">60.9%</div></div>
+  <div><div class="k">触发窗口</div><div class="v" style="font-size:17px">2~4 个交易日</div></div>
+  <div><div class="k">入场 / 止损</div><div class="v" style="font-size:15px">6440-6500 回踩做多 / 6,330</div></div>
+  <div><div class="k">目标位</div><div class="v" style="font-size:16px">6,700 / 6,855</div></div>
+</div>
+
+<div class="card"><h2>一、六维数据全景</h2><div class="grid6">
+<div class="dim"><h4>1. 库存 · 多头强度 6/10</h4><ul><li>郑商所红枣仓单0手，有效预报仅11手</li><li>新季灰枣产量预估50-65万吨（主流50-60万吨，部分调研>65万吨），稳产至丰产</li><li>新疆主产区下树延迟，和田、且末、若羌少量成交3.50-5.00元/公斤</li><li>河北崔尔庄到货10车（11/3），特级6.60-7.50元/公斤、一级6.10元/公斤</li></ul><div class="bar"><i style="width:60%"></i></div><div class="note">新枣丰产压制上方，但仓单为零、现货收购价低。</div></div><div class="dim"><h4>2. 仓单 · 多头强度 7/10</h4><ul><li>仓单0手（连续多日），有效预报11手</li><li>仓单/持仓比0%，无交割压力</li><li>新季仓单尚未注册，11月为注册空窗期</li></ul><div class="bar"><i style="width:70%"></i></div><div class="note">零仓单是本轮反弹最直接的产业支撑。</div></div><div class="dim"><h4>3. 期限结构 · 多头强度 4/10</h4><ul><li>CJ2612 6,420 / CJ2701 6,525 / CJ2703 6,515</li><li>CJ2705 6,610 / CJ2707 6,765 / CJ2709 6,885</li><li>近月贴水、远月升水，2701-2709价差360元</li><li>期货较新枣收购价（折仓单成本约6,300-6,500）小幅升水</li></ul><div class="bar"><i style="width:40%"></i></div><div class="note">温和contango，远月升水反映持仓成本而非看多。</div></div><div class="dim"><h4>4. 技术面 · 多头强度 7/10</h4><ul><li>收盘6,525，+3.49%，站上MA5(6,320)、MA10(6,271)、MA20(6,377)</li><li>MA60 7,333仍下行，为上方主要压力</li><li>MACD +133.6（前值+94.1）红柱扩张，DIF/DEA零轴下方金叉</li><li>今日低开6,305、最低6,270、最高6,535，收6,525近全天高点</li></ul><div class="bar"><i style="width:70%"></i></div><div class="note">低开高走大阳线，短线转强。</div></div><div class="dim"><h4>5. 新闻基本面 · 多头强度 5/10</h4><ul><li>新季产量稳中有增，丰产格局基本明朗</li><li>下树延迟、进疆客商少、收购时间推迟，农户惜售</li><li>红枣主力收涨3.9%，日内资金流入8,646万元</li><li>消费旺季开启但贸易商按需采购，终端未见放量</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">短多长空：收购延迟与资金推动反弹，丰产压制高度。</div></div><div class="dim"><h4>6. 持仓席位 · 多头强度 5/10</h4><ul><li>前20净空-20,642手（当日-852，净空增加）</li><li>多单102,671（+6,116）/空单123,313（+6,968），多空双增</li><li>多头集中度46.7%、空头56.1%</li><li>5日净空累计-4,947手，连续4日净空增仓</li></ul><div class="bar"><i style="width:50%"></i></div><div class="note">空头在上涨中持续加仓，已被套，存回补可能。</div></div></div>
+<div class="note">评分口径：1=极空，5=中性，10=极多。数据来源：新浪财经期货日K（2026-11-05 收盘）、akshare（交易所仓单/会员持仓/现货基差）、公开财经资讯（新华财经、东方财富、新浪财经、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、中枣网等）</div></div>
+
+<div class="card"><h2>二、技术面深度研判</h2>
+<div class="two">
+ <div><h3>趋势指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>收盘6,525，站上MA5(6,320)、MA10(6,271)、MA20(6,377)</li><li>MA20仍小幅下行、MA60 7,333向下，中期趋势未反转</li><li>5日+7.05%、10日+2.92%、20日-4.11%，短期强于中期</li></ul>
+ <h3 style="margin-top:12px">震荡指标</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>MACD DIF -236.5 / DEA -303.3，柱+133.6（前值+94.1），红柱扩张</li><li>RSI14 53.5，中性偏强；KDJ金叉向上</li><li>零轴下方金叉，属超跌反弹而非趋势反转</li></ul></div>
+ <div><h3>量能与持仓</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>成交404,288手（5日均346,297），放量上涨</li><li>持仓219,977手（+9,470），增仓上行</li><li>增仓+上涨：多空分歧加剧，空头被套</li></ul>
+ <h3 style="margin-top:12px">形态与关键价位</h3><ul class="dim" style="border:0;background:transparent;padding:0"><li>支撑：6,377（MA20）、6,270（今日低点）</li><li>压力：6,700（整数）、6,855（20日高点）、7,333（MA60）</li><li>形态：双底（6,095/6,270）后的反弹，颈线6,700</li></ul></div>
+</div>
+<div class="note" style="margin-top:14px">技术面偏多：低开高走放量增仓、站上MA20、MACD红柱扩张，短线反弹成立；但MA60 7,333仍下行、MACD在零轴下方，属超跌反弹。策略回踩6,440-6,500做多，目标6,700/6,855。</div></div>
+
+<div class="card"><h2>三、期限结构与基差</h2>
+<div class="term"><div class="bar2"><div class="px">6,420</div><div class="fill" style="height:10%"></div><div class="lbl">CJ2612</div></div><div class="bar2"><div class="px">6,525</div><div class="fill" style="height:29%"></div><div class="lbl">CJ2701</div></div><div class="bar2"><div class="px">6,515</div><div class="fill" style="height:27%"></div><div class="lbl">CJ2703</div></div><div class="bar2"><div class="px">6,610</div><div class="fill" style="height:45%"></div><div class="lbl">CJ2705</div></div><div class="bar2"><div class="px">6,765</div><div class="fill" style="height:73%"></div><div class="lbl">CJ2707</div></div><div class="bar2"><div class="px">6,885</div><div class="fill" style="height:95%"></div><div class="lbl">CJ2709</div></div></div>
+<div class="note">红枣无连续现货报价，以河北崔尔庄特级6.60-7.50元/公斤（折6,600-7,500元/吨）与新枣收购价3.50-5.00元/公斤（折仓单成本约6,300-6,500元/吨）为参照，主力6,525仅小幅升水仓单成本。近远月温和contango（2701-2709价差360元），远月升水主要反映持仓成本。</div></div>
+
+<div class="card"><h2>四、持仓席位分析（2026-11-05）</h2>
+<div class="two">
+<div><h3>多头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>中信期货</td><td class='num'>11,215</td><td class='num up'>+1,404</td></tr><tr><td>2</td><td>国泰君安</td><td class='num'>8,090</td><td class='num up'>+906</td></tr><tr><td>3</td><td>徽商期货</td><td class='num'>7,644</td><td class='num up'>+898</td></tr><tr><td>4</td><td>东证期货</td><td class='num'>7,088</td><td class='num up'>+1,507</td></tr><tr><td>5</td><td>方正中期</td><td class='num'>5,858</td><td class='num up'>+323</td></tr></table></div>
+<div><h3>空头前5席位</h3><table><tr><th>#</th><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>1</td><td>国泰君安</td><td class='num'>21,327</td><td class='num up'>+569</td></tr><tr><td>2</td><td>东证期货</td><td class='num'>10,069</td><td class='num up'>+44</td></tr><tr><td>3</td><td>中信期货</td><td class='num'>9,224</td><td class='num down'>-808</td></tr><tr><td>4</td><td>银河期货</td><td class='num'>8,292</td><td class='num up'>+598</td></tr><tr><td>5</td><td>华泰期货</td><td class='num'>6,488</td><td class='num up'>+42</td></tr></table></div>
+</div>
+<div class="note" style="margin-top:12px">前20名净空-20,642手（净空增加852），多头集中度46.7%、空头56.1%；多单+6,116、空单+6,968，多空双增且空头略多。国泰空单21,327（+569）为最大空头，中信多单+1,404、东证多单+1,507。</div>
+<div class="note">5日趋势：净空增仓，连续4日↓；5日净空累计-4,947手，空头在上涨中持续加仓、浮亏扩大，若突破6,700存在空头回补加速的可能。</div></div>
+
+<div class="card"><h2>五、三轮多空辩论</h2><div class="round"><div class="rh">第1轮 · 立论陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>一、仓单归零：郑商所仓单0手、有效预报11手，11月注册空窗，近月无交割压力。二、成本支撑：新枣收购价3.50-5.00元/公斤，折仓单成本约6,300-6,500元，盘面6,525仅小幅升水。三、收购延迟：下树推迟、进疆客商少、农户惜售。四、资金进场：今日增仓9,470手、资金流入8,646万元，低开高走站上MA20，MACD红柱扩张。目标6,700/6,855。</div><div class="bubble s"><b>黑熊 · 空头首席</b>一、丰产明确：新季灰枣产量50-65万吨，稳产至丰产，供应充裕。二、需求疲弱：消费旺季开启但贸易商按需采购，未见放量。三、结构偏弱：远月升水、MA60 7,333向下，中期趋势未反转。四、产业空头在6525继续加仓（空单+6,968），说明套保盘认为当前价格已高于合理区间。目标6,300，止损6,700。</div></div></div><div class="round"><div class="rh">第2轮 · 交叉驳斥</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>驳“丰产”：丰产已在6,095-6,300的低价中充分定价；仓单为0说明产业不愿在此价交割，收购价3.5-5.0元/公斤对应成本约6,300-6,500元，盘面没有高估。驳“需求弱”：收购季刚开始，客商未进场不代表需求消失，推迟反而可能造成集中采购。</div><div class="bubble s"><b>黑熊 · 空头首席</b>驳“零仓单”：零仓单是季节性现象，12月新枣集中注册后仓单将快速增加，01合约面临实盘压力。驳“资金推动”：增仓9,470手是多空对赌，净空仍在增加，产业空头在6,525继续抛售；6,855（20日高点）与MA60 7,333构成双重压力。</div></div></div><div class="round"><div class="rh">第3轮 · 最终陈词</div>
+        <div class="chat"><div class="bubble b"><b>金牛 · 多头首席</b>终局看赔率：下方6,270-6,300是成本与今日低点双重支撑，上方6,700-6,855是空头成本区，回踩6,440-6,500做多，盈亏比约1:2。目标6,700，止损6,330。</div><div class="bubble s"><b>黑熊 · 空头首席</b>终局看供给：丰产格局下反弹高度有限，6,700-6,855是产业空头加仓区。反弹至6,700-6,765试空，目标6,400，止损6,855；若放量突破6,855则止损离场。</div></div></div></div>
+
+<div class="card"><h2>六、总决策官裁决</h2>
+<table class="score"><tr><th>维度</th><th>多头分</th><th>空头分</th><th>裁决理由</th></tr><tr><td>库存</td><td class='num bull'>6</td><td class='num bear'>4</td><td>仓单0、有效预报11手</td></tr><tr><td>仓单</td><td class='num bull'>7</td><td class='num bear'>3</td><td>零仓单，无交割压力</td></tr><tr><td>期限结构</td><td class='num bull'>4</td><td class='num bear'>6</td><td>温和contango，远月升水</td></tr><tr><td>技术面</td><td class='num bull'>7</td><td class='num bear'>3</td><td>低开高走、增仓、MACD红柱扩张</td></tr><tr><td>新闻基本面</td><td class='num bull'>5</td><td class='num bear'>5</td><td>收购延迟VS丰产</td></tr><tr><td>持仓席位</td><td class='num bull'>5</td><td class='num bear'>5</td><td>空头4日增仓被套</td></tr></table>
+<div class="two" style="margin-top:16px">
+<div><h3>双方最强点</h3><div class="note">多头最强点：零仓单+收购延迟+资金增仓，短线动能与产业支撑共振；空头最强点：新季丰产50-65万吨、MA60向下、远月升水，反弹空间受限。</div></div>
+<div><h3>双方最弱点</h3><div class="note">多头最弱点：丰产格局下反弹属逆势，MA60 7,333压制；空头最弱点：4日增仓已被套，若突破6,700可能触发空头回补踩踏。</div></div>
+</div>
+<div style="margin-top:16px"><h3>决策方案</h3>
+<table><tr><th>方向</th><th>入场区间</th><th>目标1</th><th>目标2</th><th>止损</th><th>窗口</th></tr>
+<tr><td class="up"><b>多</b></td><td>6440-6500 回踩做多</td><td>6,700</td><td>6,855</td><td>6,330</td><td>2~4 个交易日</td></tr></table></div>
+<div style="margin-top:16px"><h3>核心逻辑</h3><div class="note" style="font-size:13.5px;color:#c2d0e2">新季灰枣下树延迟、进疆客商少，收购价3.50-5.00元/公斤偏低下农户惜售；郑商所仓单归零、有效预报仅11手，11月注册空窗期无交割压力；今日低开高走放量增仓9,470手、资金流入8,646万元，站上MA20、MACD红柱扩张。但新季产量50-65万吨丰产格局明朗，MA60 7,333向下，故定性为超跌反弹而非趋势反转，回踩做多、不追高。</div></div>
+<div style="margin-top:16px"><h3>置信度</h3>
+<div class="note" style="font-size:13.5px;color:#c2d0e2">基础置信度58%（短线动能与产业支撑明确，但丰产与中期下行趋势构成反向约束）× 档位系数1.05（50-59档，n=10，来源 confidence-factors.json）= <b>60.9%</b>，裁剪至10%~95%。5日复盘：红枣近5日多为中性观望，未计分，无连续错误；已在辩论中纳入丰产、MA60压制与12月仓单注册的反向证据。</div></div>
+<div class="warn" style="margin-top:16px"><b>风险提示：</b>新枣集中上市、收购价低于3.5元/公斤或12月仓单快速注册将压制反弹；6,855为20日高点，若冲高回落需及时止盈，严格止损6,330。</div></div>
+
+<div class="footer">本报告由 AI 多 Agent 辩论系统自动生成，数据来自公开可复核渠道（新浪财经期货日K、akshare（交易所仓单/会员持仓/现货基差）、隆众资讯、Mysteel、SMM、兰格钢铁、中国养猪网、生意社、新华财经、东方财富）。<br>
+内容仅供研究参考，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。</div>
+</div></body></html>
