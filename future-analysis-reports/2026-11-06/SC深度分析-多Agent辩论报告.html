@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原油SC 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e13;--panel:#111821;--panel2:#0d141c;--line:#1e2a36;--txt:#d7e0e8;--dim:#8b9aa8;
+--gold:#e6b45c;--red:#e2574c;--green:#2fb37a;--blue:#4b93c9;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#16212d 0%,#0a0e13 55%) no-repeat,#0a0e13;color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(180deg,#121a23,#0e151d);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+h2{font-size:19px;letter-spacing:.5px;margin-bottom:16px;padding-left:12px;border-left:3px solid var(--gold);font-weight:600}
+h3{font-size:15px;margin-bottom:10px;color:#eaf2f8}
+.mono{font-family:"SF Mono",Consolas,monospace}
+.dim{color:var(--dim)}
+.small{font-size:12.5px}
+/* header */
+.hd{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;
+background:linear-gradient(135deg,#141d27 0%,#0d141b 60%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:20px}
+.hd .t1{font-size:13px;color:var(--gold);letter-spacing:3px}
+.hd .t2{font-size:38px;font-weight:700;letter-spacing:1px;margin:4px 0 2px}
+.hd .t3{font-size:13px;color:var(--dim)}
+.price{text-align:right}
+.price .p{font-size:40px;font-weight:700;font-family:"SF Mono",Consolas,monospace}
+.up{color:var(--red)}.down{color:var(--green)}
+.kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--dim);justify-content:flex-end}
+.kv b{color:var(--txt);font-family:"SF Mono",Consolas,monospace;font-weight:600}
+/* banner */
+.banner{position:relative;overflow:hidden;border-radius:16px;padding:24px 26px;margin-bottom:20px;border:1px solid #2b3644;
+background:linear-gradient(120deg,#1a2430,#0f1720 70%)}
+.banner:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+background:radial-gradient(circle,rgba(230,180,92,.16),transparent 65%)}
+.banner .row{display:flex;flex-wrap:wrap;gap:34px;align-items:center;position:relative;z-index:2}
+.dir{font-size:34px;font-weight:800;letter-spacing:4px}
+.dir.long{color:var(--red)}.dir.short{color:var(--green)}.dir.neu{color:var(--gold)}
+.win{font-size:13px;color:var(--dim)}
+.win b{display:block;font-size:26px;color:var(--txt);font-family:"SF Mono",Consolas,monospace;margin-top:2px}
+.conf{font-size:13px;color:var(--dim)}
+.conf b{display:block;font-size:26px;color:var(--gold);font-family:"SF Mono",Consolas,monospace;margin-top:2px}
+.bsum{flex:1;min-width:260px;font-size:13.5px;color:#c3d0db;border-left:1px solid #2b3644;padding-left:22px}
+/* six cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.six{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+.six .h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.six .h span:first-child{font-size:14px;font-weight:600}
+.tag{font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid}
+.tag.bull{color:var(--red);border-color:rgba(226,87,76,.45);background:rgba(226,87,76,.1)}
+.tag.bear{color:var(--green);border-color:rgba(47,179,122,.45);background:rgba(47,179,122,.1)}
+.tag.neu{color:var(--gold);border-color:rgba(230,180,92,.4);background:rgba(230,180,92,.08)}
+.bar{height:5px;background:#1b2530;border-radius:4px;overflow:hidden;margin:8px 0 10px}
+.bar i{display:block;height:100%;border-radius:4px}
+.six ul{list-style:none;font-size:12.5px;color:#a9b8c5}
+.six li{padding-left:11px;position:relative;margin-bottom:4px}
+.six li:before{content:"·";position:absolute;left:0;color:var(--gold)}
+/* tech */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tcol{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 15px;font-size:12.5px;color:#a9b8c5}
+.tcol h4{font-size:13px;color:var(--gold);margin-bottom:8px;font-weight:600;letter-spacing:.5px}
+.tcol li{list-style:none;padding-left:10px;position:relative;margin-bottom:3px}
+.tcol li:before{content:"›";position:absolute;left:0;color:#4b6f8f}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--dim);font-weight:500;padding:7px 8px;border-bottom:1px solid var(--line);font-size:12px}
+td{padding:7px 8px;border-bottom:1px solid rgba(30,42,54,.55)}
+tr:last-child td{border-bottom:none}
+.num{font-family:"SF Mono",Consolas,monospace;text-align:right}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.note{font-size:12px;color:var(--dim);border-left:2px solid #2b3644;padding-left:10px;margin-top:10px}
+/* debate */
+.round{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.side{border-radius:12px;padding:16px 18px;border:1px solid}
+.side.bull{background:linear-gradient(180deg,rgba(226,87,76,.07),rgba(226,87,76,.02));border-color:rgba(226,87,76,.28)}
+.side.bear{background:linear-gradient(180deg,rgba(47,179,122,.07),rgba(47,179,122,.02));border-color:rgba(47,179,122,.3)}
+.side h4{font-size:13.5px;margin-bottom:10px}
+.side.bull h4{color:var(--red)}.side.bear h4{color:var(--green)}
+.side ol{list-style:none;counter-reset:a}
+.side ol li{counter-increment:a;font-size:12.5px;color:#b6c4d1;margin-bottom:9px;padding-left:26px;position:relative}
+.side ol li:before{content:counter(a);position:absolute;left:0;top:1px;width:17px;height:17px;line-height:17px;text-align:center;
+font-size:10.5px;border-radius:50%;background:#1e2a36;color:#9fb0c0;font-family:monospace}
+.rlabel{font-size:12px;color:var(--gold);letter-spacing:2px;margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.rlabel:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#2b3644,transparent)}
+.final{font-size:13px;color:#c8d4df;background:#0d141c;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.plan div{background:#0d141c;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.plan span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:3px}
+.plan b{font-size:15px;font-family:"SF Mono",Consolas,monospace;color:#e8f1f8}
+.foot{text-align:center;color:#5d6d7c;font-size:11.5px;margin-top:26px;line-height:1.9}
+@media(max-width:900px){.grid3,.grid4,.split,.round,.plan{grid-template-columns:1fr}.hd .t2{font-size:30px}.price .p{font-size:32px}}
+</style></head><body><div class="wrap">
+
+<div class="hd">
+  <div>
+    <div class="t1">FUTURES DEEP ANALYSIS · 多 AGENT 辩论</div>
+    <div class="t2">原油 <span class="mono" style="font-size:22px;color:#9fb0c0">SC2612</span></div>
+    <div class="t3">上海国际能源交易中心 · 报告日期 2026-11-06 · 数据口径：日K=新浪财经期货，持仓=交易所前20席位（akshare）</div>
+  </div>
+  <div class="price">
+    <div class="p up">644</div>
+    <div class="kv"><span>涨跌 <b class="up">+3.16%</b></span>
+      <span>持仓 <b>18,762</b></span><span>成交 <b>127,996</b></span>
+      <span>结算 <b>637</b></span></div>
+  </div>
+</div>
+
+<div class="banner">
+  <div class="row">
+    <div><div class="win">最终裁决</div><div class="dir neu">中性</div></div>
+    <div><div class="win">胜率评估</div><b>多方 48% / 空方 52%</b></div>
+    <div><div class="conf">校准后置信度</div><b>50%</b>
+      <div class="small dim" style="margin-top:4px">基础 50% × 系数 1.0｜2~4 个交易日</div></div>
+    <div class="bsum">地缘同时出现升级与缓和两个反向信号，技术面空头但超卖，持仓仅 1.8 万手且持续离场；事件驱动下方向胜率不足，判定观望。由原品种 BU 低置信度触发分析。</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>一、行情与近8日走势</h2>
+  <svg viewBox="0 0 520 88" width="100%" height="88" preserveAspectRatio="none"><polygon points="6,86 6.0,17.2 78.6,18.7 151.1,12.0 223.7,19.4 296.3,37.4 368.9,47.0 441.4,80.0 514.0,68.7 514,86" fill="#e6b45c" opacity=".10"/><polyline points="6.0,17.2 78.6,18.7 151.1,12.0 223.7,19.4 296.3,37.4 368.9,47.0 441.4,80.0 514.0,68.7" fill="none" stroke="#e6b45c" stroke-width="1.8" stroke-linejoin="round"/></svg>
+  <div class="small dim" style="margin-top:6px">近8个交易日收盘价路径（2026-10-28 ~ 2026-11-06）。10-30 的 729.5 连续下跌至 11-05 的 624（-14.5%），11-06 反弹 3.16% 至 644，仍处暴跌后的修复阶段。</div>
+</div>
+
+<div class="card">
+  <h2>二、六维数据全景</h2>
+  <div class="grid3"><div class="six"><div class="h"><span>① 库存</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>全球石油供过于求态势未变，IEA 预计 2026 年供应增 250 万桶/日</li><li>国内 SC 交割库库存未获取到当日数据（iFinD 不可用）</li><li>该子项以公开机构平衡表替代，标注为定性判断</li></ul></div><div class="six"><div class="h"><span>② 仓单</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>INE 仓单数据本日未获取</li><li>总持仓仅 18,762 手，为七个品种最低</li><li>低持仓意味着流动性风险高于方向风险</li></ul></div><div class="six"><div class="h"><span>③ 期限结构</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>SC2612 为当前主力，远月未纳入本次抓取</li><li>SC 对布伦特（96-100 美元）呈约 6%-9% 贴水</li><li>内外盘价差反映运费与汇率，方向性弱</li></ul></div><div class="six"><div class="h"><span>④ 技术面</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>EMA5 668 < EMA10 690 < EMA20 705，空头排列</li><li>MACD 绿柱 -23.9，较前值 -21.4 略扩张</li><li>RSI 36.9 回升、KDJ J5.8 低位、WR -75 超卖</li></ul></div><div class="six"><div class="h"><span>⑤ 新闻基本面</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>美伊冲突延续，霍尔木兹海峡仍处封锁，油轮遇袭</li><li>美国中期选举民主党夺回两院，市场预期对伊冲突趋缓</li><li>布伦特本周仍跌约 10%，11-06 盘中触及 100.83 后回落</li></ul></div><div class="six"><div class="h"><span>⑥ 持仓席位</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>SC 无前20名会员持仓排名数据（能源中心不披露同口径）</li><li>持仓 18,762 手，单日 -3,173，5 日 -8,601</li><li>减仓下跌后减仓反弹，资金持续离场</li></ul></div></div>
+  <div class="note">本品种唯一强驱动是地缘政治，而地缘在本周同时出现“升级（海峡封锁）”与“缓和（中期选举）”两个反向信号，六维中四维中性，属于典型的事件驱动型不确定标的。</div>
+</div>
+
+<div class="card">
+  <h2>三、技术面深度面板</h2>
+  <div class="grid4"><div class="tcol"><h4>趋势指标</h4><ul><li>EMA5 668 < EMA10 690 < EMA20 705 < EMA60 683，空头排列</li><li>5 日 -13.3%、20 日 -12.3%，60 日 +25.0%</li><li>604.8 为 20 日低点，515.5 为 60 日低点</li></ul></div><div class="tcol"><h4>震荡指标</h4><ul><li>RSI14 36.9（前值 31.7），自超卖回升</li><li>KDJ：K30.2 / D42.4 / J5.8，低位待金叉</li><li>WR14 -75.4，超卖区</li></ul></div><div class="tcol"><h4>量能与形态</h4><ul><li>成交 127,996 手 ≈ 5 日均量 76%，缩量反弹</li><li>持仓 18,762 手，单日 -3,173，5 日 -8,601</li><li>资金持续离场，反弹缺乏持仓支撑</li></ul></div><div class="tcol"><h4>关键价位</h4><ul><li>支撑：628（11-06 低点）/ 604.8（20 日低）/ 552.8（BOLL 下轨）</li><li>压力：668（EMA5）/ 705（EMA20）/ 763.9（20 日高）</li><li>ATR14 40.6，日波动约 6.3%</li></ul></div></div>
+  <div class="note">多指标交叉验证：均线空头、量能萎缩、持仓离场，仅震荡指标超卖；技术面判定为下跌趋势中的技术反弹，强度：弱，方向可信度低。</div>
+</div>
+
+<div class="card">
+  <h2>四、期限结构与基差</h2>
+  <div class="split">
+    <div><div style="display:flex;align-items:center;gap:12px;margin-bottom:7px"><span class="mono small" style="width:78px;color:#9fb0c0">SC2612</span><div style="flex:1;background:#0b1118;border-radius:4px;height:20px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:18.0%;border-radius:4px;background:linear-gradient(90deg,#2d4a63,#3f6f8f)"></i></div><span class="num small" style="width:86px">644</span><span class="num small dim" style="width:76px">OI 18,762</span></div>
+      <div class="note">仅抓取到主力 SC2612，远月合约本次未纳入。SC 对布伦特贴水约 6%-9%，内外盘结构不构成独立方向依据。</div></div>
+    <div>
+      <table><thead><tr><th>项目</th><th class="num">数值</th></tr></thead><tbody>
+      <tr><td>现货基准</td><td class="num mono">布伦特 96-100 美元/桶</td></tr>
+      <tr><td>主力期货收盘</td><td class="num mono">644</td></tr>
+      <tr><td>基差（现货−期货）</td><td class="num mono" style="color:var(--gold)">SC 贴水约 6%-9%（内外盘）</td></tr>
+      </tbody></table>
+      <div class="note">SC 以人民币/桶计价，按汇率折算后较布伦特贴水 6%-9%，属运费与交割地差异的正常区间，不构成套利信号。</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>五、持仓席位面板（前20名会员）</h2>
+  <div class="split">
+    <div>
+      <h3 style="color:var(--red);font-size:13.5px">多头前5席位</h3>
+      <table><thead><tr><th>席位</th><th class="num">多单</th><th class="num">增减</th></tr></thead><tbody><tr><td>（无数据）</td><td class="num">0</td><td class="num ">+0</td></tr></tbody></table>
+    </div>
+    <div>
+      <h3 style="color:var(--green);font-size:13.5px">空头前5席位</h3>
+      <table><thead><tr><th>席位</th><th class="num">空单</th><th class="num">增减</th></tr></thead><tbody><tr><td>（无数据）</td><td class="num">0</td><td class="num ">+0</td></tr></tbody></table>
+    </div>
+  </div>
+  <div class="plan" style="margin-top:16px">
+    <div><span>前20净持仓</span><b style="color:var(--green)">+0</b></div>
+    <div><span>当日变化</span><b>-3,173</b></div>
+    <div><span>5日窗口累计</span><b>-8,601（持仓）</b></div>
+    <div><span>连续同向</span><b>1 日↓</b></div>
+    <div><span>多头集中度</span><b>0.0%</b></div>
+    <div><span>空头集中度</span><b>0.0%</b></div>
+  </div>
+  <div class="note">上海国际能源交易中心不披露与商品交易所同口径的前20名会员多空排名，本维度以总持仓变化替代：持仓 18,762 手、单日 -3,173、5 日 -8,601，资金持续离场，无法给出席位方向判断。<br>数据日期：2026-11-06（交易所前20名会员持仓排名，akshare 新浪源；当日未发布时已回退最近交易日并标注）。</div>
+</div>
+
+<div class="card">
+  <h2>六、三轮多空辩论</h2>
+  <div class="rlabel">ROUND 1 · 立论陈词</div>
+  <div class="round"><div class="side bull"><h4>🐂 多头首席 · 立论陈词</h4><ol><li>地缘溢价远未出清：霍尔木兹海峡仍处封锁状态，波斯湾再度发生多起油轮遇袭，供应中断风险实质存在。</li><li>布伦特 11-05 +3.88%、11-06 盘中触及 100.83 美元，外盘已率先反弹，SC 滞后 1 日，11-06 +3.16% 只是补涨。</li><li>技术面 RSI 31.7→36.9、J 值 5.8、WR -75，三重超卖叠加，604.8 的 20 日低点构成短期支撑。</li></ol></div><div class="side bear"><h4>🐻 空头首席 · 立论陈词</h4><ol><li>美国中期选举民主党夺回参众两院，市场预期美以对伊冲突趋缓，这是地缘溢价的最大杀手，布伦特本周仍跌约 10%。</li><li>供需基本面过剩：IEA 预计 2026 年全球供应增 250 万桶/日，供过于求态势未变，油价中枢下移是主趋势。</li><li>技术面均线完全空头、持仓 5 日减 8,601 手，缩量反弹缺乏资金，604.8 一旦失守将打开 550 的空间。</li></ol></div></div>
+  <div class="rlabel">ROUND 2 · 交叉驳斥</div>
+  <div class="round"><div class="side bull"><h4>🐂 多头 · 交叉驳斥</h4><ol><li>空方用“选举缓和”线性外推，但海峡封锁是物理事实，不是预期——只要油轮还在遇袭，供应中断就是现实风险。</li><li>“供应增 250 万桶/日”是年度平衡表，对 1-3 周的盘面定价影响有限，短期边际变量是地缘与库存。</li><li>持仓减 8,601 手发生在下跌段，空头同样在离场，缩量下跌+缩量反弹=双向动能衰竭，利于超跌修复。</li></ol></div><div class="side bear"><h4>🐻 空头 · 交叉驳斥</h4><ol><li>多方的“物理封锁”已被市场交易三周，布伦特从 110 跌到 96 就是证明——地缘溢价在退潮，而不是在积累。</li><li>SC 持仓仅 1.8 万手，任何一方都难以形成趋势，把低持仓解读为“动能衰竭”是美化，实质是流动性撤离。</li><li>技术面 644 连 EMA5（668）都未触及，反弹力度弱于跌幅，空头结构完好。</li></ol></div></div>
+  <div class="rlabel">ROUND 3 · 最终陈词</div>
+  <div class="final"><b style="color:var(--red)">🐂 多头最终陈词：</b>这是事件驱动的品种，不是趋势品种。海峡封锁、油轮遇袭、外盘站上 100 美元，三个事实支持一轮修复到 680-700。若回踩 628 我做多，止损 605。</div><div class="final" style="margin-top:12px"><b style="color:var(--green)">🐻 空头最终陈词：</b>方向不由技术决定，由选举与 OPEC+ 决定。民主党掌控两院后对伊政策转向的概率上升，本周 -10% 就是定价。反弹到 668-680 做空，目标 605，止损 700。</div>
+</div>
+
+<div class="card">
+  <h2>七、总决策官裁决</h2>
+  <table style="margin-bottom:16px"><thead><tr><th>维度</th><th class="num">多方评分</th><th class="num">空方评分</th><th>裁要</th></tr></thead>
+  <tbody><tr><td>库存</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">年度过剩，短期无数据</td></tr><tr><td>仓单</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">数据缺失，不参与定夺</td></tr><tr><td>期限结构</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">内外盘贴水属正常区间</td></tr><tr><td>技术面</td><td class="num" style="color:var(--red)">4</td><td class="num" style="color:var(--green)">7</td><td style="color:#a9b8c5">空头排列，反弹缩量</td></tr><tr><td>新闻基本面</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">地缘双向信号并存</td></tr><tr><td>持仓席位</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">无席位数据，资金离场</td></tr></tbody></table>
+  <div class="split">
+    <div class="side bull"><h4>多方最强 / 最弱</h4>
+      <div style="font-size:12.5px;color:#b6c4d1"><b style="color:var(--red)">最强：</b>海峡封锁与油轮遇袭是现实供应风险。<br><br>
+      <b style="color:var(--dim)">最弱：</b>持仓萎缩，反弹无资金承接。</div></div>
+    <div class="side bear"><h4>空方最强 / 最弱</h4>
+      <div style="font-size:12.5px;color:#b6c4d1"><b style="color:var(--green)">最强：</b>中期选举改变地缘预期，本周 -10% 已验证。<br><br>
+      <b style="color:var(--dim)">最弱：</b>超卖+事件驱动，做空易被突袭。</div></div>
+  </div>
+  <h3 style="margin:20px 0 10px;color:var(--gold);font-size:14px">决策方案</h3>
+  <div class="plan">
+    <div><span>方向</span><b>中性</b></div>
+    <div><span>入场区间</span><b>观望</b></div>
+    <div><span>止损</span><b>—</b></div>
+    <div><span>目标一</span><b>—</b></div>
+    <div><span>目标二</span><b>—</b></div>
+    <div><span>预期窗口</span><b>2~4 个交易日</b></div>
+  </div>
+  <div class="note" style="margin-top:14px"><b style="color:var(--gold)">置信度校准：</b>基础置信度 50%（50-59 档），档位系数 1.0，校准后 50%。低于原品种 BU 的 52%，按规则不替换，保留 BU。</div>
+  <div class="note"><b style="color:var(--gold)">复盘上下文：</b>5 日复盘：SC 有效样本 3 条、方向命中 3 条（100%），11-02/11-03/11-04 三笔空单全部止盈成功，是近 5 日表现最好的品种。但三次成功均建立在单边下跌段，当前进入地缘反复的震荡段，历史胜率不能外推。</div>
+  <h3 style="margin:18px 0 8px;color:var(--gold);font-size:14px">风险提示</h3>
+  <div class="note">① 地缘事件可在盘中瞬间推动油价 5%-8%，隔夜风险极高；② SC 持仓仅 1.8 万手，流动性差、滑点大；③ 中期选举后的对伊政策若明确转向，油价可能加速下行。</div>
+</div>
+
+<div class="foot">本报告由 AI 多Agent辩论系统自动生成，数据来源：新浪财经期货日K、交易所前20名会员持仓、郑商所/上期所仓单日报、公开新闻与机构观点。<br>
+所有观点仅供研究参考，不构成任何投资建议。期货交易具有杠杆风险，请独立判断并严格控制仓位。</div>
+</div></body></html>
