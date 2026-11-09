@@ -1,0 +1,121 @@
+{
+  "asof": "2026-11-09",
+  "lookback": 5,
+  "dates": [
+    "2026-11-03",
+    "2026-11-04",
+    "2026-11-05",
+    "2026-11-06",
+    "2026-11-09"
+  ],
+  "varieties": {
+    "BU": {
+      "contract": "BU2701",
+      "net": 17869.0,
+      "net_chg_today": -4556.0,
+      "net_chg_window": -1908.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.7603,
+      "short_concentration": 0.6641,
+      "status": "净多减仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "CJ": {
+      "contract": "CJ2701",
+      "net": -24785.0,
+      "net_chg_today": -2503.0,
+      "net_chg_window": -6045.0,
+      "consecutive_days": -5,
+      "long_concentration": 0.4589,
+      "short_concentration": 0.5687,
+      "status": "净空增仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "EB": {
+      "contract": "EB2612",
+      "net": 7384.0,
+      "net_chg_today": -5931.0,
+      "net_chg_window": 8426.0,
+      "consecutive_days": -2,
+      "long_concentration": 0.7354,
+      "short_concentration": 0.7067,
+      "status": "净多增仓",
+      "days": 4,
+      "contract_changed": false
+    },
+    "J": {
+      "contract": "J2701",
+      "net": 2651.0,
+      "net_chg_today": 646.0,
+      "net_chg_window": 780.0,
+      "consecutive_days": 2,
+      "long_concentration": 0.7571,
+      "short_concentration": 0.696,
+      "status": "净多增仓",
+      "days": 2,
+      "contract_changed": false
+    },
+    "JD": {
+      "contract": "JD2612",
+      "net": 11014.0,
+      "net_chg_today": 3291.0,
+      "net_chg_window": 4267.0,
+      "consecutive_days": 4,
+      "long_concentration": 0.5684,
+      "short_concentration": 0.5101,
+      "status": "净多增仓",
+      "days": 4,
+      "contract_changed": false
+    },
+    "JM": {
+      "contract": "JM2701",
+      "net": 2832.0,
+      "net_chg_today": -6679.0,
+      "net_chg_window": 4476.0,
+      "consecutive_days": -2,
+      "long_concentration": 0.6417,
+      "short_concentration": 0.6354,
+      "status": "净多增仓",
+      "days": 4,
+      "contract_changed": false
+    },
+    "LC": {
+      "contract": "LC2701",
+      "net": -15379.0,
+      "net_chg_today": 5105.0,
+      "net_chg_window": -4079.0,
+      "consecutive_days": 1,
+      "long_concentration": 0.7504,
+      "short_concentration": 0.7897,
+      "status": "净空增仓",
+      "days": 4,
+      "contract_changed": false
+    },
+    "LH": {
+      "contract": "LH2701",
+      "net": -11062.0,
+      "net_chg_today": -1679.0,
+      "net_chg_window": -3210.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.5269,
+      "short_concentration": 0.5951,
+      "status": "净空增仓",
+      "days": 4,
+      "contract_changed": false
+    },
+    "MA": {
+      "contract": "MA2701",
+      "net": 82812.0,
+      "net_chg_today": -27143.0,
+      "net_chg_window": -34936.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.6849,
+      "short_concentration": 0.59,
+      "status": "净多减仓",
+      "days": 5,
+      "contract_changed": false
+    }
+  }
+}
