@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>焦煤JM 深度分析 · 多Agent辩论报告</title><style>:root{--bg:#0a0e13;--panel:#111821;--panel2:#0d141c;--line:#1e2a36;--txt:#d7e0e8;--dim:#8b9aa8;
+--gold:#e6b45c;--red:#e2574c;--green:#2fb37a;--blue:#4b93c9;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 20% -10%,#16212d 0%,#0a0e13 55%) no-repeat,#0a0e13;color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Helvetica Neue",sans-serif;line-height:1.7;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:linear-gradient(180deg,#121a23,#0e151d);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+h2{font-size:19px;letter-spacing:.5px;margin-bottom:16px;padding-left:12px;border-left:3px solid var(--gold);font-weight:600}
+h3{font-size:15px;margin-bottom:10px;color:#eaf2f8}
+.mono{font-family:"SF Mono",Consolas,monospace}
+.dim{color:var(--dim)}
+.small{font-size:12.5px}
+.hd{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;
+background:linear-gradient(135deg,#141d27 0%,#0d141b 60%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:20px}
+.hd .t1{font-size:13px;color:var(--gold);letter-spacing:3px}
+.hd .t2{font-size:38px;font-weight:700;letter-spacing:1px;margin:4px 0 2px}
+.hd .t3{font-size:13px;color:var(--dim)}
+.price{text-align:right}
+.price .p{font-size:40px;font-weight:700;font-family:"SF Mono",Consolas,monospace}
+.up{color:var(--red)}.down{color:var(--green)}
+.kv{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--dim);justify-content:flex-end}
+.kv b{color:var(--txt);font-family:"SF Mono",Consolas,monospace;font-weight:600}
+.banner{position:relative;overflow:hidden;border-radius:16px;padding:24px 26px;margin-bottom:20px;border:1px solid #2b3644;
+background:linear-gradient(120deg,#1a2430,#0f1720 70%)}
+.banner:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+background:radial-gradient(circle,rgba(230,180,92,.16),transparent 65%)}
+.banner .row{display:flex;flex-wrap:wrap;gap:34px;align-items:center;position:relative;z-index:2}
+.dir{font-size:34px;font-weight:800;letter-spacing:4px}
+.dir.long{color:var(--red)}.dir.short{color:var(--green)}.dir.neu{color:var(--gold)}
+.win{font-size:13px;color:var(--dim)}
+.win b{display:block;font-size:26px;color:var(--txt);font-family:"SF Mono",Consolas,monospace;margin-top:2px}
+.conf{font-size:13px;color:var(--dim)}
+.conf b{display:block;font-size:26px;color:var(--gold);font-family:"SF Mono",Consolas,monospace;margin-top:2px}
+.bsum{flex:1;min-width:260px;font-size:13.5px;color:#c3d0db;border-left:1px solid #2b3644;padding-left:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.six{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+.six .h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.six .h span:first-child{font-size:14px;font-weight:600}
+.tag{font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid}
+.tag.bull{color:var(--red);border-color:rgba(226,87,76,.45);background:rgba(226,87,76,.1)}
+.tag.bear{color:var(--green);border-color:rgba(47,179,122,.45);background:rgba(47,179,122,.1)}
+.tag.neu{color:var(--gold);border-color:rgba(230,180,92,.4);background:rgba(230,180,92,.08)}
+.bar{height:5px;background:#1b2530;border-radius:4px;overflow:hidden;margin:8px 0 10px}
+.bar i{display:block;height:100%;border-radius:4px}
+.six ul{list-style:none;font-size:12.5px;color:#a9b8c5}
+.six li{padding-left:11px;position:relative;margin-bottom:4px}
+.six li:before{content:"·";position:absolute;left:0;color:var(--gold)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tcol{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 15px;font-size:12.5px;color:#a9b8c5}
+.tcol h4{font-size:13px;color:var(--gold);margin-bottom:8px;font-weight:600;letter-spacing:.5px}
+.tcol ul{list-style:none}
+.tcol li{padding-left:10px;position:relative;margin-bottom:3px}
+.tcol li:before{content:"›";position:absolute;left:0;color:#4b6f8f}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--dim);font-weight:500;padding:7px 8px;border-bottom:1px solid var(--line);font-size:12px}
+td{padding:7px 8px;border-bottom:1px solid rgba(30,42,54,.55)}
+tr:last-child td{border-bottom:none}
+.num{font-family:"SF Mono",Consolas,monospace;text-align:right}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.note{font-size:12px;color:var(--dim);border-left:2px solid #2b3644;padding-left:10px;margin-top:10px}
+.round{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.side{border-radius:12px;padding:16px 18px;border:1px solid}
+.side.bull{background:linear-gradient(180deg,rgba(226,87,76,.07),rgba(226,87,76,.02));border-color:rgba(226,87,76,.28)}
+.side.bear{background:linear-gradient(180deg,rgba(47,179,122,.07),rgba(47,179,122,.02));border-color:rgba(47,179,122,.3)}
+.side h4{font-size:13.5px;margin-bottom:10px}
+.side.bull h4{color:var(--red)}.side.bear h4{color:var(--green)}
+.side ol{list-style:none;counter-reset:a}
+.side ol li{counter-increment:a;font-size:12.5px;color:#b6c4d1;margin-bottom:9px;padding-left:26px;position:relative}
+.side ol li:before{content:counter(a);position:absolute;left:0;top:1px;width:17px;height:17px;line-height:17px;text-align:center;
+font-size:10.5px;border-radius:50%;background:#1e2a36;color:#9fb0c0;font-family:monospace}
+.rlabel{font-size:12px;color:var(--gold);letter-spacing:2px;margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.rlabel:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#2b3644,transparent)}
+.final{font-size:13px;color:#c8d4df;background:#0d141c;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+.plan div{background:#0d141c;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.plan span{display:block;font-size:11.5px;color:var(--dim);margin-bottom:3px}
+.plan b{font-size:15px;font-family:"SF Mono",Consolas,monospace;color:#e8f1f8}
+.foot{text-align:center;color:#5d6d7c;font-size:11.5px;margin-top:26px;line-height:1.9}
+@media(max-width:900px){.grid3,.grid4,.split,.round,.plan{grid-template-columns:1fr}.hd .t2{font-size:30px}.price .p{font-size:32px}}</style></head><body><div class="wrap">
+<div class="hd">
+  <div>
+    <div class="t1">FUTURES DEEP ANALYSIS · 多 AGENT 辩论</div>
+    <div class="t2">焦煤 <span class="mono" style="font-size:22px;color:#9fb0c0">JM2701</span></div>
+    <div class="t3">大连商品交易所 · 报告日期 2026-11-11 · 数据口径：日K=新浪财经期货，持仓=交易所前20席位（akshare），库存/基差=东财/生意社/公开新闻</div>
+  </div>
+  <div class="price">
+    <div class="p up">1,414.5</div>
+    <div class="kv"><span>涨跌 <b class="up">+0.28%</b></span>
+      <span>持仓 <b>456,188</b></span><span>成交 <b>535,882</b></span>
+      <span>5日 <b>+3.25%</b></span><span>20日 <b>-7.94%</b></span></div>
+  </div>
+</div>
+
+<div class="banner">
+  <div class="row">
+    <div><div class="win">最终裁决</div><div class="dir short">空</div></div>
+    <div><div class="win">胜率评估</div><b>空方 57% / 多方 43%</b></div>
+    <div><div class="conf">校准后置信度</div><b>57%</b>
+      <div class="small dim" style="margin-top:4px">基础 64% × 系数 0.89（60-69 档）｜1~3 个交易日</div></div>
+    <div class="bsum">今日价格仅+0.28%但前20空头暴增13,115手、净多转净空-2,996手；焦炭第三轮提降开启、炼焦煤现货下调、焦企吨焦亏损85元，反弹沽空。</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>一、行情与近8日走势</h2>
+  <svg viewBox="0 0 520 88" width="100%" height="88" preserveAspectRatio="none"><polygon points="6,86 6.0,59.8 78.6,80.0 151.1,73.9 223.7,24.8 296.3,14.7 368.9,38.9 441.4,19.4 514.0,14.0 514,86" fill="#e2574c" opacity=".10"/><polyline points="6.0,59.8 78.6,80.0 151.1,73.9 223.7,24.8 296.3,14.7 368.9,38.9 441.4,19.4 514.0,14.0" fill="none" stroke="#e2574c" stroke-width="1.8" stroke-linejoin="round"/></svg>
+  <div class="small dim" style="margin-top:6px">近8个交易日收盘价路径（最新 1,414.5）。单日 +0.28%，5日 +3.25%，20日 -7.94%；20日区间分位 75.0%，60日区间分位 25.0%。</div>
+</div>
+
+<div class="card">
+  <h2>二、六维数据全景</h2>
+  <div class="grid3"><div class="six"><div class="h"><span>① 库存/供给</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>523家样本精煤日产66.1万吨（11-06），环比-1.7%，近三年低位</li><li>山西停产矿井由119座降至34座，产能解封约七成，但“解封不解量”</li><li>矿山精煤库存累库9.02%，供给收缩的边际效应下降</li></ul></div><div class="six"><div class="h"><span>② 仓单</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>大商所仓单日报接口解析失败，本维度数据缺失</li><li>按中性计入，不做方向加分</li><li>总持仓456,188手，单日+6,773、5日-8,803</li></ul></div><div class="six"><div class="h"><span>③ 期限结构</span><span class="tag bull">利多 7/10</span></div><div class="bar"><i style="width:70%;background:var(--red)"></i></div><ul><li>JM2612 1,400.5 &lt; JM2701 1,414.5 &gt; 2702 1,367.5 &gt; 2703 1,347.5</li><li>近月升水、远月贴水的back结构</li><li>主力贴水现货2,148.75约734元（-34.2%，现货主焦煤口径）</li></ul></div><div class="six"><div class="h"><span>④ 技术面</span><span class="tag neu">中性 5/10</span></div><div class="bar"><i style="width:50%;background:var(--gold)"></i></div><ul><li>EMA5 1,406 / EMA10 1,407 / EMA20 1,424 / EMA60 1,474，价格站上短均线</li><li>MACD +11.2，DIF -26.9上穿DEA -32.5；RSI14 45.4；KDJ 53.3/43.2/73.5</li><li>5日+3.25%、20日-7.94%，20日区间75%分位；ATR14 40.3</li></ul></div><div class="six"><div class="h"><span>⑤ 新闻基本面</span><span class="tag bear">利空 3/10</span></div><div class="bar"><i style="width:30%;background:var(--green)"></i></div><ul><li>11-11 焦炭第三轮提降开启，炼焦煤价格整体偏弱、唐山主焦煤下调</li><li>11-11 独立焦企入炉煤成本2,255元/吨、焦炭均价2,170元/吨，吨焦亏损85元</li><li>钢厂盈利率低位、铁水回落，双焦需求预期转弱</li></ul></div><div class="six"><div class="h"><span>⑥ 持仓席位</span><span class="tag bear">利空 3/10</span></div><div class="bar"><i style="width:30%;background:var(--green)"></i></div><ul><li>前20净空2,996手（-13,796），多头29.21万手（-681）、空头29.51万手（+13,115）</li><li>连续1日净空增加，5日窗口-14,741手；多空集中度64.0%/64.7%</li><li>空头单日暴增13,115手，为近日最大单日增仓</li></ul></div></div>
+</div>
+
+<div class="card">
+  <h2>三、技术面深度面板</h2>
+  <div class="grid4"><div class="tcol"><h4>趋势指标</h4><ul><li>EMA5 1,406、EMA10 1,407，价格1,414.5站上短均线</li><li>EMA20 1,424、EMA60 1,474仍压制</li><li>5日+3.25%、20日-7.94%</li></ul></div><div class="tcol"><h4>震荡指标</h4><ul><li>RSI14 45.4，中性</li><li>KDJ：K 53.3 / D 43.2 / J 73.5，偏热</li><li>BOLL：上轨1,478 / 中轨1,413 / 下轨1,348；WR14 -42.6</li></ul></div><div class="tcol"><h4>量能与形态</h4><ul><li>成交535,882手，量比0.94</li><li>持仓456,188手，单日+6,773、5日-8,803，增仓滞涨</li><li>1,352.5双底，1,424-1,440为压力带</li></ul></div><div class="tcol"><h4>关键价位</h4><ul><li>支撑：1,396（11-09低点）/ 1,370（11-04低点）/ 1,348（BOLL下轨）</li><li>压力：1,424（EMA20）/ 1,440 / 1,474（EMA60）</li><li>ATR14 40.3，止损留1.5倍ATR</li></ul></div></div>
+  <div class="note">多指标交叉验证：EMA=短多长空｜MACD=零轴下金叉（+11.2）｜RSI14 45.4｜KDJ J 73.5｜增仓滞涨。结论：反弹乏力，空头增仓形成压制。</div>
+</div>
+
+<div class="card">
+  <h2>四、期限结构与基差</h2>
+  <div class="split">
+    <div><div style="display:flex;align-items:center;gap:12px;margin-bottom:7px"><span class="mono small" style="width:82px;color:#9fb0c0">JM2612</span><div style="flex:1;background:#0b1118;border-radius:4px;height:20px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:99.0%;border-radius:4px;background:linear-gradient(90deg,#2d4a63,#3f6f8f)"></i></div><span class="num small" style="width:86px">1,400.5</span><span class="num small dim" style="width:96px">OI 54,680</span></div><div style="display:flex;align-items:center;gap:12px;margin-bottom:7px"><span class="mono small" style="width:82px;color:#9fb0c0">JM2701</span><div style="flex:1;background:#0b1118;border-radius:4px;height:20px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:100.0%;border-radius:4px;background:linear-gradient(90deg,#2d4a63,#3f6f8f)"></i></div><span class="num small" style="width:86px">1,414.5</span><span class="num small dim" style="width:96px">OI 456,188</span></div><div style="display:flex;align-items:center;gap:12px;margin-bottom:7px"><span class="mono small" style="width:82px;color:#9fb0c0">JM2702</span><div style="flex:1;background:#0b1118;border-radius:4px;height:20px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:96.7%;border-radius:4px;background:linear-gradient(90deg,#2d4a63,#3f6f8f)"></i></div><span class="num small" style="width:86px">1,367.5</span><span class="num small dim" style="width:96px">OI 33,714</span></div><div style="display:flex;align-items:center;gap:12px;margin-bottom:7px"><span class="mono small" style="width:82px;color:#9fb0c0">JM2703</span><div style="flex:1;background:#0b1118;border-radius:4px;height:20px;position:relative"><i style="position:absolute;left:0;top:0;bottom:0;width:95.3%;border-radius:4px;background:linear-gradient(90deg,#2d4a63,#3f6f8f)"></i></div><span class="num small" style="width:86px">1,347.5</span><span class="num small dim" style="width:96px">OI 31,097</span></div><div class="note">近月升水、远月贴水的back结构；主力深度贴水现货（口径差异大），仅作方向参考。</div></div>
+    <div>
+      <table><thead><tr><th>项目</th><th class="num">数值</th></tr></thead><tbody><tr><td>现货基准</td><td class="num mono">2,148.75</td></tr><tr><td>主力期货收盘</td><td class="num mono">1,414.5</td></tr><tr><td>基差（期货−现货）</td><td class="num mono" style="color:var(--gold)">-734.25（-34.2%）</td></tr></tbody></table>
+      <div class="note">现货基准取11-10主焦煤口径2,148.75元/吨，与JM2701交割标准差异大，基差仅作方向参考。</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>五、持仓席位面板（前20名会员）</h2>
+  <div class="split">
+    <div><h3 style="color:var(--red);font-size:13.5px">多头前5席位</h3>
+      <table><thead><tr><th>席位</th><th class="num">多单</th><th class="num">增减</th></tr></thead><tbody><tr><td>永安期货</td><td class="num">40,183</td><td class="num up">+702</td></tr><tr><td>国泰君安</td><td class="num">33,160</td><td class="num down">-453</td></tr><tr><td>东证期货</td><td class="num">26,847</td><td class="num down">-1,552</td></tr><tr><td>银河期货</td><td class="num">21,505</td><td class="num down">-755</td></tr><tr><td>海通期货</td><td class="num">18,792</td><td class="num up">+1,382</td></tr></tbody></table></div>
+    <div><h3 style="color:var(--green);font-size:13.5px">空头前5席位</h3>
+      <table><thead><tr><th>席位</th><th class="num">空单</th><th class="num">增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class="num">46,270</td><td class="num up">+2,577</td></tr><tr><td>中信期货</td><td class="num">33,957</td><td class="num down">-99</td></tr><tr><td>银河期货</td><td class="num">31,819</td><td class="num up">+2,949</td></tr><tr><td>一德期货</td><td class="num">21,289</td><td class="num up">+1,552</td></tr><tr><td>永安期货</td><td class="num">20,777</td><td class="num down">-91</td></tr></tbody></table></div>
+  </div>
+  <div class="plan" style="margin-top:16px"><div><span>前20净持仓</span><b>-2,996</b></div><div><span>当日变化</span><b>-13,796</b></div><div><span>5日窗口累计</span><b>-14,741</b></div><div><span>连续同向</span><b>1 日↓</b></div><div><span>多头集中度</span><b>64.0%</b></div><div><span>空头集中度</span><b>64.7%</b></div></div>
+  <div class="note">净空2,996手，当日-13,796手；空头单日+13,115手、多头-681手，资金大幅转空。数据日期：2026-11-11（交易所前20名会员，akshare）。</div>
+</div>
+
+<div class="card">
+  <h2>六、三轮多空辩论</h2>
+  <div class="rlabel">ROUND 1 · 立论陈词</div>
+  <div class="round">
+    <div class="side bull"><h4>🐂 多头首席 · 立论陈词</h4><ol><li>精煤日产66.1万吨、近三年低位，山西“解封不解量”，供给端仍有支撑。</li><li>价格站上EMA5/10，MACD低位金叉、5日+3.25%，1,352.5双底结构未破。</li><li>深度贴水现货34%，盘面已计价较多悲观预期。</li></ol></div>
+    <div class="side bear"><h4>🐻 空头首席 · 立论陈词</h4><ol><li>今日价格仅+0.28%，但空头暴增13,115手、净多转净空，增仓滞涨是典型顶部信号。</li><li>焦炭第三轮提降开启，炼焦煤现货下调，焦企吨焦亏损85元，产业链负反馈加速。</li><li>钢厂盈利率低位、铁水回落，双焦需求预期转弱，反弹缺乏基本面支撑。</li></ol></div>
+  </div>
+  <div class="rlabel">ROUND 2 · 交叉驳斥</div>
+  <div class="round">
+    <div class="side bull"><h4>🐂 多头 · 交叉驳斥</h4><ol><li>对方把空头增仓当结论，但空头13,115手是在1,414高位建仓，一旦反弹会被套。</li><li>低产量是硬事实，焦企亏损会倒逼减产，供给收缩终将传导至价格。</li><li>深度贴水+双底，做空的赔率并不好。</li></ol></div>
+    <div class="side bear"><h4>🐻 空头 · 交叉驳斥</h4><ol><li>低产量已被盘面交易，矿井复产数量从119降到34座，供给恢复只是时间问题。</li><li>焦炭提降直接压缩焦煤采购价，现货下调已经开始，期货贴水会被现货补跌收敛。</li><li>空头单日+13,115手是产业与机构的一致行动，方向可信度高于短线多头。</li></ol></div>
+  </div>
+  <div class="rlabel">ROUND 3 · 最终陈词</div>
+  <div class="final"><b style="color:var(--red)">🐂 多头最终陈词：</b>回踩做多：1,380-1,395入场，目标1,440/1,470，止损1,355；双底与低产量是核心逻辑。</div>
+  <div class="final" style="margin-top:12px"><b style="color:var(--green)">🐻 空头最终陈词：</b>反弹沽空：1,425-1,440入场，目标1,370/1,340，止损1,460；提降与空头增仓是胜负手。</div>
+</div>
+
+<div class="card">
+  <h2>七、总决策官裁决</h2>
+  <table style="margin-bottom:16px"><thead><tr><th>维度</th><th class="num">多方评分</th><th class="num">空方评分</th><th>裁要</th></tr></thead>
+  <tbody><tr><td>库存/供给</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">低产量但复产预期升温</td></tr><tr><td>仓单</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">数据缺失，中性</td></tr><tr><td>期限结构</td><td class="num" style="color:var(--red)">7</td><td class="num" style="color:var(--green)">3</td><td style="color:#a9b8c5">近月升水back</td></tr><tr><td>技术面</td><td class="num" style="color:var(--red)">5</td><td class="num" style="color:var(--green)">5</td><td style="color:#a9b8c5">双底但增仓滞涨</td></tr><tr><td>新闻基本面</td><td class="num" style="color:var(--red)">3</td><td class="num" style="color:var(--green)">7</td><td style="color:#a9b8c5">焦炭提降、现货下调</td></tr><tr><td>持仓席位</td><td class="num" style="color:var(--red)">3</td><td class="num" style="color:var(--green)">7</td><td style="color:#a9b8c5">空头单日+13,115</td></tr></tbody></table>
+  <div class="split">
+    <div class="side bull"><h4>多方最强 / 最弱</h4>
+      <div style="font-size:12.5px;color:#b6c4d1"><b style="color:var(--red)">最强：</b>低产量+双底+深贴水。<br><br>
+      <b style="color:var(--dim)">最弱：</b>现货下调，需求负反馈。</div></div>
+    <div class="side bear"><h4>空方最强 / 最弱</h4>
+      <div style="font-size:12.5px;color:#b6c4d1"><b style="color:var(--green)">最强：</b>空头暴增+提降+增仓滞涨。<br><br>
+      <b style="color:var(--dim)">最弱：</b>空头高位建仓，反弹易被套。</div></div>
+  </div>
+  <h3 style="margin:20px 0 10px;color:var(--gold);font-size:14px">决策方案</h3>
+  <div class="plan"><div><span>方向</span><b>空</b></div><div><span>入场区间</span><b>1,425 ~ 1,440（反弹沽空）</b></div><div><span>止损</span><b>1,460</b></div><div><span>目标一</span><b>1,370</b></div><div><span>目标二</span><b>1,340</b></div><div><span>预期窗口</span><b>1~3 个交易日</b></div></div>
+  <div class="note" style="margin-top:14px"><b style="color:var(--gold)">置信度校准：</b>基础置信度64%（持仓与基本面强共振，技术面形成对冲），落在60-69档，档位系数0.89，64×0.89=56.96→57%，已裁剪至10%~95%。</div>
+  <div class="note"><b style="color:var(--gold)">复盘上下文：</b>5日复盘：JM 11-04空72%止损失败；11-10多55%进入窗口第1日，今日+0.28%、入场触发、目标/止损未触及，未决。方向命中0/1（0%），连续错误1次，已做反向复核：今日空头暴增13,115手、现货提降，支持由多转空。</div>
+  <div class="note"><b style="color:var(--gold)">替换说明：</b>校准置信度57%＜60%，已分析关联J（39%），未超过57%，保留原品种JM。</div>
+  <h3 style="margin:18px 0 8px;color:var(--gold);font-size:14px">风险提示</h3>
+  <div class="note">① 山西复产再度延后、供给收缩超预期；② 焦炭提降被抵制；③ 1,460止损严格执行。</div>
+</div>
+
+<div class="foot">本报告由 AI 多Agent辩论系统自动生成。数据来源：新浪财经期货日K、交易所前20名会员持仓（akshare）、郑商所仓单日报、生意社/东方财富库存与现货、新浪财经/同花顺公开新闻。<br>
+本会话 iFinD MCP 不可用（错误码 6003），行情与基本面按备选方案降级采集；仓单/库存部分接口失败处已明确标注缺失，未以估计值替代。<br>
+所有观点仅供研究参考，不构成任何投资建议。期货交易具有杠杆风险，请独立判断并严格控制仓位。</div>
+</div></body></html>
