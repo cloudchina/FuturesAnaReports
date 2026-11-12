@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>碳酸锂LC2701 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0b0f17;--panel:#121a26;--panel2:#0f1620;--line:#223044;--txt:#d7e1ee;--muted:#8194ab;--red:#e05252;--green:#3fb98a;--blue:#5b9bd5;--gold:#e0b356}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#16263b 0%,#0b0f17 55%);color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;line-height:1.75}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 22px 70px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:22px}
+h1{font-size:32px;margin:0 0 6px;letter-spacing:1px}
+.sub{color:var(--muted);font-size:14px}
+.badge{display:inline-block;padding:2px 10px;border:1px solid var(--line);border-radius:20px;font-size:12px;color:var(--muted);margin-left:8px}
+.quote{text-align:right;min-width:220px}
+.price{font-size:38px;font-weight:700;color:var(--gold);line-height:1.1}
+.chg{font-size:15px;color:var(--red)}
+.banner{margin:26px 0;padding:22px 24px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(224,82,82,.10),rgba(63,185,138,.08));display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+.banner.short{background:linear-gradient(120deg,rgba(63,185,138,.16),rgba(30,60,90,.25));border-color:#2b5b4c}
+.banner.long{background:linear-gradient(120deg,rgba(224,82,82,.18),rgba(90,45,45,.25));border-color:#6b3434}
+.banner.neutral{background:linear-gradient(120deg,rgba(130,148,171,.14),rgba(40,55,75,.25))}
+.dir{font-size:44px;font-weight:800;letter-spacing:6px}
+.banner.short .dir{color:var(--green)} .banner.long .dir{color:var(--red)} .banner.neutral .dir{color:var(--muted)}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;font-size:14px}
+.kv b{color:#fff} .kv span{color:var(--muted)}
+h2{font-size:20px;margin:38px 0 14px;padding-left:12px;border-left:3px solid var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.dim p{font-size:13px;color:#b9c8da;margin:8px 0 0}
+.dimhead{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.scorebar{display:flex;gap:3px} .scorebar i{width:8px;height:8px;border-radius:2px;background:#26364c;display:block}
+.scorebar i.on{background:linear-gradient(180deg,#e0b356,#c98b2e)}
+.scoreval{font-size:12px;color:var(--muted)}
+.panel{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:18px}
+.techgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.techgrid h4{margin:0 0 8px;color:#fff;font-size:14px}
+.techgrid ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:#b9c8da}
+.techgrid li{margin:3px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 8px;border-bottom:1px solid #1b2839;text-align:left}
+th{color:var(--muted);font-weight:500}
+.up{color:var(--red)} .down{color:var(--green)}
+.tables2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px}
+h4{font-size:14px;margin:10px 0 6px;color:#fff}
+.chart{width:100%;height:auto} .tv{fill:#d7e1ee;font-size:12px} .tl{fill:#8194ab;font-size:12px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.side{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--panel)}
+.side.bull{border-top:3px solid var(--red)} .side.bear{border-top:3px solid var(--green)}
+.side h4{margin:0 0 8px} .side p{font-size:13.5px;color:#c6d3e2;margin:0}
+.round{margin:16px 0 4px;font-size:13px;color:var(--muted);letter-spacing:1px}
+.decision{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+.plan td:first-child{color:var(--muted);width:34%}
+.disclaimer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);color:#6f8096;font-size:12px}
+.muted{color:var(--muted);font-size:13px}
+.footer{margin-top:10px;font-size:12px;color:#6f8096}
+@media(max-width:820px){.grid,.techgrid,.debate,.decision,.tables2,.banner{grid-template-columns:1fr}.quote{text-align:left}}
+</style></head><body><div class="wrap">
+<header>
+  <div>
+    <h1>碳酸锂 LC2701<span class="badge">广期所</span></h1>
+    <div class="sub">深度分析 · 6大维度 + 三轮多空Agent辩论 + 总决策官裁决　|　报告日期 2026-11-12</div>
+    <div class="sub">数据来源：同花顺 iFinD、新浪财经期货日K、akshare 会员持仓、公开资讯</div>
+  </div>
+  <div class="quote"><div class="price">90,900</div><div class="chg">当日 +2.25%</div>
+  <div class="sub">成交量 296,657 手　持仓量 384,249 手（-6372）</div></div>
+</header>
+
+<div class="banner long">
+  <div>
+    <div class="sub">最终裁决</div>
+    <div class="dir">多</div>
+    <div class="sub">胜率评估：多方52% / 空方48%</div>
+    <div class="sub" style="margin-top:8px">校准置信度 <b style="color:#fff;font-size:20px">38.5%</b>　窗口 1~3个交易日</div>
+    <div class="sub">基础置信度 55% × 50-59档系数 0.7（来源：confidence-factors.json）</div>
+  </div>
+  <div class="kv">
+    <div><span>入场区间</span><br><b>89500-90500</b></div>
+    <div><span>止损</span><br><b>88000</b></div>
+    <div><span>目标1</span><br><b>93000</b></div>
+    <div><span>目标2</span><br><b>94500</b></div>
+    <div style="grid-column:1/-1"><span>核心判断</span><br><b>年内低点后的空头回补反弹，库存去化与政策暖风提供短线支撑，但中期趋势仍空；轻仓短线做多。</b></div>
+  </div>
+</div>
+
+<h2>一、六维数据全景（多头视角评分，均值 4.3/10）</h2>
+<div class="grid"><div class="card dim"><div class="dimhead"><b>库存</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">5/10</span></div><p>周度库存125,391吨（环比-2,994吨），延续去化但速度放缓；上游35,702吨、正极厂35,186吨、贸易36,760吨。</p></div><div class="card dim"><div class="dimhead"><b>仓单</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">4/10</span></div><p>LC2701注册仓单21,745手，仓单量偏高，对近月形成实货压制。</p></div><div class="card dim"><div class="dimhead"><b>期限结构</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">5/10</span></div><p>曲线近端小幅back、中段走平、2705回升，整体中性偏平，未给出明确方向。</p></div><div class="card dim"><div class="dimhead"><b>技术面</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">5/10</span></div><p>MA5 89,448 / MA10 89,378 / MA20 92,656 / MA60 122,349；RSI14 41.6；MACD 2693.6。</p></div><div class="card dim"><div class="dimhead"><b>新闻基本面</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">4/10</span></div><p>锂矿供给宽松预期强化，11月4日触及86,360元/吨年内低点，较5月高点跌近六成。；周度产量28,200吨（+1.36%），下游磷酸铁锂/三元库存增加，11月排产预期偏弱。；储能与新能源政策不确定性下降，短线风险偏好回暖，但中期供需宽松未改。</p></div><div class="card dim"><div class="dimhead"><b>持仓席位</b><div class="scorebar"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></div><span class="scoreval">3/10</span></div><p>akshare当日LC2701持仓排名未发布；5日趋势截至11月11日：前20净空-15,379手（当日+5,105，空头回补），空头集中度79.0%。iFinD 11月12日多空持仓比约2.43（多头80,619/空头33,146），口径差异较大，仅作辅助。</p></div></div>
+
+<h2>二、技术面深度面板</h2>
+<div class="panel">
+  <div class="techgrid">
+    <div><h4>趋势指标（均线 / MACD）</h4>
+      <ul><li>MA5 89,448 / MA10 89,378 / MA20 92,656 / MA60 122,349</li>
+      <li>RSI14：41.6；DIF -7281.0，DEA -8627.8，MACD柱 2693.6</li>
+      <li>趋势判断：年内低位反弹，中期仍处下行趋势</li></ul></div>
+    <div><h4>关键价位</h4>
+      <ul><li>第一支撑：87580-88000（前低）；第二支撑：86360（年内低点）</li>
+      <li>第一压力：92656（MA20）；第二压力：95000-96000（前高）</li>
+      <li>20日区间：86,360 ~ 102,300</li></ul></div>
+    <div><h4>多指标共振</h4>
+      <ul><li>多头信号：自86360反弹5.3%、MACD红柱+2,693，底背离迹象、当日减仓上涨（OI-6,372）</li>
+      <li>空头信号：价格低于MA20/MA60（92656/122349）、年内跌幅近六成、仓单21,745手偏高</li></ul></div>
+    <div><h4>形态与量能</h4>
+      <ul><li>年内低点附近的超跌反弹，尚未突破MA20，反弹定性为修复。</li><li>减仓上涨（OI-6,372），空头回补驱动，多头新增资金有限。</li></ul></div>
+  </div>
+</div>
+
+<h2>三、持仓席位面板</h2>
+<div class="panel">
+  <p>akshare当日LC2701持仓排名未发布；5日趋势截至11月11日：前20净空-15,379手（当日+5,105，空头回补），空头集中度79.0%。iFinD 11月12日多空持仓比约2.43（多头80,619/空头33,146），口径差异较大，仅作辅助。</p>
+  <p class="muted">5日趋势：5日净空在11月11日为-15,379手，空头集中度79%，当日空头回补5,105手；11月12日akshare缺数，趋势连续性待确认。</p>
+  <p class="muted">当日前20名席位明细未取得（数据源限制），以净持仓与集中度替代。</p>
+</div>
+
+<h2>四、期限结构</h2>
+<div class="panel"><svg viewBox="0 0 760 250" class="chart"><rect x="66.3" y="168.0" width="86.5" height="30.0" rx="4" fill="#e05252" opacity="0.92"/><text x="109.6" y="160.0" text-anchor="middle" class="tv">88,840</text><text x="109.6" y="222.0" text-anchor="middle" class="tl">LC2611</text><rect x="201.5" y="48.0" width="86.5" height="150.0" rx="4" fill="#e08a3c" opacity="0.92"/><text x="244.8" y="40.0" text-anchor="middle" class="tv">90,900</text><text x="244.8" y="222.0" text-anchor="middle" class="tl">LC2701</text><rect x="336.7" y="88.8" width="86.5" height="109.2" rx="4" fill="#4a86c8" opacity="0.92"/><text x="380.0" y="80.8" text-anchor="middle" class="tv">90,200</text><text x="380.0" y="222.0" text-anchor="middle" class="tl">LC2702</text><rect x="471.9" y="109.7" width="86.5" height="88.3" rx="4" fill="#4a86c8" opacity="0.92"/><text x="515.2" y="101.7" text-anchor="middle" class="tv">89,840</text><text x="515.2" y="222.0" text-anchor="middle" class="tl">LC2703</text><rect x="607.1" y="62.0" width="86.5" height="136.0" rx="4" fill="#4a86c8" opacity="0.92"/><text x="650.4" y="54.0" text-anchor="middle" class="tv">90,660</text><text x="650.4" y="222.0" text-anchor="middle" class="tl">LC2705</text></svg><p class="muted">曲线近端小幅back、中段走平、2705回升，整体中性偏平，未给出明确方向。</p></div>
+
+<h2>五、三轮辩论记录</h2>
+<div class="round">第一轮 · 立论陈词</div>
+<div class="debate">
+  <div class="side bull"><h4>🐂 多头首席（金牛）</h4><p>①超跌：自86,360年内低点反弹5.3%，RSI 41.6自超卖区回升，MACD红柱+2,693，存在底背离。②库存去化：周度库存125,391吨（-2,994），虽放缓但仍去化。③政策暖风：美国中期选举后新能源政策不确定性下降，储能/电网投资预期回暖。</p></div>
+  <div class="side bear"><h4>🐻 空头首席（黑熊）</h4><p>①供给宽松：周产量28,200吨（+1.36%），锂矿复产传闻不断，远端宽松预期强化。②需求偏弱：正极厂与电芯厂库存增加，11月排产预期普遍偏弱。③技术空头：价格低于MA20/MA60（92,656/122,349），仓单21,745手偏高，中期下跌趋势未改。</p></div>
+</div>
+<div class="round">第二轮 · 交叉驳斥</div>
+<div class="debate">
+  <div class="side bull"><h4>🐂 多头驳斥</h4><p>空方把“复产传闻”当成已兑现的供给，但当前库存仍在去化、价格已跌近六成，空头继续打压的边际赔率下降；减仓上涨说明抛压衰竭。</p></div>
+  <div class="side bear"><h4>🐻 空头驳斥</h4><p>多方所谓“底背离”仅是基于年内低点的短线反弹，MA60仍在122,349，趋势毫无反转迹象；仓单高、产量增、需求弱，反弹是空头加仓的机会。</p></div>
+</div>
+<div class="round">第三轮 · 最终陈词</div>
+<div class="debate">
+  <div class="side bull"><h4>🐂 多头终局</h4><p>回踩89,500-90,500轻仓试多，目标93,000/94,500，止损88,000；仅限1-3日短线。</p></div>
+  <div class="side bear"><h4>🐻 空头终局</h4><p>反弹至92,500-93,500沽空，目标89,000，止损95,000。</p></div>
+</div>
+
+<h2>六、总决策官裁决</h2>
+<div class="decision">
+  <div class="panel">
+    <h4>六维多空评分表</h4>
+    <table><thead><tr><th>维度</th><th>多头分</th><th>倾向</th></tr></thead><tbody>
+    <tr><td>库存</td><td>5/10</td><td>中性</td></tr><tr><td>仓单</td><td>4/10</td><td>偏空</td></tr><tr><td>期限结构</td><td>5/10</td><td>中性</td></tr><tr><td>技术面</td><td>5/10</td><td>中性</td></tr><tr><td>新闻基本面</td><td>4/10</td><td>偏空</td></tr><tr><td>持仓席位</td><td>3/10</td><td>偏空</td></tr>
+    <tr><td><b>综合</b></td><td><b>4.3/10</b></td><td><b>偏空</b></td></tr>
+    </tbody></table>
+    <h4>双方最强 / 最弱</h4>
+    <p class="muted">多头最强：自86360反弹5.3%；多头最弱：中期均线压制与量能不足。<br>
+    空头最强：价格低于MA20/MA60（92656/122349）；空头最弱：低库存/深度back限制下跌流畅度。</p>
+  </div>
+  <div class="panel">
+    <h4>决策方案</h4>
+    <table class="plan"><tbody>
+      <tr><td>方向</td><td><b>多</b></td></tr>
+      <tr><td>入场</td><td>89500-90500</td></tr>
+      <tr><td>目标</td><td>93000 / 94500</td></tr>
+      <tr><td>止损</td><td>88000</td></tr>
+      <tr><td>窗口</td><td>1~3个交易日</td></tr>
+      <tr><td>胜率</td><td>多方52% / 空方48%</td></tr>
+      <tr><td>执行要点</td><td>该品种近5日方向命中率仅25%，同向“多”结论已做反向证据复核：供给宽松、仓单高、MA60远上方构成主要反向证据。故仅轻仓短线，严格止损。</td></tr>
+      <tr><td>风险提示</td><td>锂矿复产落地、需求排产再度下修；反弹结束后重回下跌趋势。</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="disclaimer">数据说明：库存/仓单/期限结构/行情来自同花顺 iFinD 与新浪财经；持仓席位来自 akshare（新浪源），2026-11-12 数据；新闻基本面来自 iFinD 资讯检索（2026-11-04 至 2026-11-12）。<br>
+本报告由 AI 基于公开数据自动生成，多Agent辩论为分析框架而非真实人物观点，不构成任何投资建议。期货交易有杠杆风险，请独立决策并严格止损。</div>
+<div class="footer">FuturesAnaReports · 2026-11-12 · LC</div>
+</div></body></html>
