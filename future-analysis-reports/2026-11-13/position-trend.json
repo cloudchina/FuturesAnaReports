@@ -1,0 +1,97 @@
+{
+  "asof": "2026-11-13",
+  "lookback": 5,
+  "dates": [
+    "2026-11-09",
+    "2026-11-10",
+    "2026-11-11",
+    "2026-11-12",
+    "2026-11-13"
+  ],
+  "varieties": {
+    "BU": {
+      "contract": "BU2701",
+      "net": 11505.0,
+      "net_chg_today": -8114.0,
+      "net_chg_window": -6364.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.7453,
+      "short_concentration": 0.6783,
+      "status": "净多减仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "CJ": {
+      "contract": "CJ2701",
+      "net": -27867.0,
+      "net_chg_today": -4851.0,
+      "net_chg_window": -3082.0,
+      "consecutive_days": -2,
+      "long_concentration": 0.4642,
+      "short_concentration": 0.5839,
+      "status": "净空增仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "EB": {
+      "contract": "EB2612",
+      "net": 10064.0,
+      "net_chg_today": -12954.0,
+      "net_chg_window": 2680.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.734,
+      "short_concentration": 0.683,
+      "status": "净多增仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "JD": {
+      "contract": "JD2701",
+      "net": 965.0,
+      "net_chg_today": 354.0,
+      "net_chg_window": -10049.0,
+      "consecutive_days": 4,
+      "long_concentration": 0.538,
+      "short_concentration": 0.5329,
+      "status": "净多减仓",
+      "days": 4,
+      "contract_changed": true
+    },
+    "JM": {
+      "contract": "JM2701",
+      "net": 5155.0,
+      "net_chg_today": 15186.0,
+      "net_chg_window": 2323.0,
+      "consecutive_days": 1,
+      "long_concentration": 0.645,
+      "short_concentration": 0.6342,
+      "status": "净多增仓",
+      "days": 5,
+      "contract_changed": false
+    },
+    "LH": {
+      "contract": "LH2703",
+      "net": -14723.0,
+      "net_chg_today": -687.0,
+      "net_chg_window": -3661.0,
+      "consecutive_days": -1,
+      "long_concentration": 0.5922,
+      "short_concentration": 0.6864,
+      "status": "净空增仓",
+      "days": 5,
+      "contract_changed": true
+    },
+    "MA": {
+      "contract": "MA2701",
+      "net": 96474.0,
+      "net_chg_today": -1111.0,
+      "net_chg_window": 13662.0,
+      "consecutive_days": -2,
+      "long_concentration": 0.7037,
+      "short_concentration": 0.5938,
+      "status": "净多增仓",
+      "days": 5,
+      "contract_changed": false
+    }
+  }
+}
