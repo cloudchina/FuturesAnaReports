@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>苯乙烯 EB2612 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e14;--panel:#111826;--panel2:#0e1420;--line:#1e293b;--txt:#e6edf6;--muted:#8b9bb4;--gold:#f3b544;--bull:#ef4444;--bear:#22c55e;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 50% -200px,#16233a 0%,var(--bg) 60%);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;line-height:1.75;padding:36px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+header{border:1px solid var(--line);background:linear-gradient(135deg,rgba(243,181,68,.08),rgba(17,24,38,.9));border-radius:18px;padding:30px 34px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(243,181,68,.18),transparent 70%)}
+.kicker{color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:34px;margin:8px 0 10px;letter-spacing:1px}
+h1 small{font-size:15px;color:var(--muted);font-weight:400;margin-left:10px}
+.quote{display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+.quote b{color:var(--txt);font-size:18px}
+.up{color:var(--bull)} .down{color:var(--bear)} .num{text-align:right;font-variant-numeric:tabular-nums}
+.verdict{display:grid;grid-template-columns:150px 1fr 260px;gap:22px;align-items:center;margin-top:20px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:24px 30px}
+.dir-badge{width:132px;height:132px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:800;color:#ef4444;background:rgba(239,68,68,.12);border:1px solid #ef444444;letter-spacing:6px}
+.verdict h2{font-size:22px;margin-bottom:8px}
+.verdict p{color:var(--muted);font-size:14.5px}
+.conf-box{text-align:center;border-left:1px solid var(--line);padding-left:20px}
+.conf-box .big{font-size:46px;font-weight:800;color:#ef4444;line-height:1.1}
+.conf-box .lab{color:var(--muted);font-size:13px}
+.conf-box .win{margin-top:8px;font-size:12.5px;color:var(--muted)}
+section{margin-top:26px}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec-title h3{font-size:20px;letter-spacing:1px}
+.sec-title .bar{width:4px;height:22px;background:var(--gold);border-radius:2px}
+.sec-title .sub{color:var(--muted);font-size:13px;margin-left:auto}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dim{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.dim-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}
+.dim-tag{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid transparent}
+.dim-tag.bull{color:var(--bull);background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)}
+.dim-tag.bear{color:var(--bear);background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)}
+.dim-tag.flat{color:var(--muted);background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3)}
+.dim-body{color:var(--muted);font-size:13px;margin:10px 0 12px;min-height:58px}
+.track{height:6px;background:#0a0f18;border-radius:99px;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.bull{background:linear-gradient(90deg,#f87171,#ef4444)}
+.fill.bear{background:linear-gradient(90deg,#4ade80,#22c55e)}
+.fill.flat{background:#475569}
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tech-cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tech-cell h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.tech-cell p{color:var(--muted);font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:12.5px;color:#cbd5e1;background:#0b1220;border:1px solid var(--line);padding:4px 10px;border-radius:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.seat-block h4{font-size:14px;color:var(--gold);margin-bottom:8px}
+table.mini{width:100%;border-collapse:collapse;font-size:13px}
+table.mini th{color:var(--muted);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.mini td{padding:6px 8px;border-bottom:1px dashed #182234}
+table.mini td:first-child,table.mini th:first-child{text-align:left}
+table.mini td.num,table.mini th:nth-child(2),table.mini th:nth-child(3){text-align:right}
+.pos-summary{margin:0 0 14px 0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.term-row{display:flex;align-items:center;gap:12px;margin:8px 0}
+.term-name{width:78px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.term-track{flex:1;height:18px;background:#0a0f18;border-radius:6px;overflow:hidden}
+.term-fill{height:100%;background:linear-gradient(90deg,rgba(243,181,68,.25),rgba(243,181,68,.85));border-radius:6px}
+.term-price{width:90px;text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13px;margin-top:12px}
+.round{margin-top:16px}
+.round h4{font-size:15px;color:var(--gold);margin-bottom:10px;letter-spacing:1px}
+.debate-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.debate-card{border-radius:14px;padding:16px 18px;border:1px solid var(--line);background:var(--panel2)}
+.debate-card p{font-size:13.5px;color:#c6d2e2}
+.bull-card{border-left:3px solid var(--bull)}
+.bear-card{border-left:3px solid var(--bear)}
+.debate-tag{font-size:12px;margin-bottom:6px;color:var(--muted);letter-spacing:.5px}
+.bull-card .debate-tag{color:var(--bull)}
+.bear-card .debate-tag{color:var(--bear)}
+.dec-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}
+table.dec{width:100%;border-collapse:collapse;font-size:13.5px}
+table.dec th{text-align:left;color:var(--muted);font-weight:500;padding:8px;border-bottom:1px solid var(--line)}
+table.dec td{padding:8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+table.dec td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
+.risk{background:rgba(243,181,68,.06);border:1px solid rgba(243,181,68,.25);border-radius:14px;padding:16px 18px;margin-top:14px}
+.risk h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.risk p{color:var(--muted);font-size:13px}
+.plan table{width:100%;border-collapse:collapse;font-size:13.5px}
+.plan td{padding:7px 8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+.plan td:first-child{color:var(--muted);width:42%}
+.str{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.str div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--muted);background:var(--panel2)}
+.str b{color:var(--txt)}
+footer{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12px}
+footer a{color:#7aa2d6;text-decoration:none;word-break:break-all}
+footer ul{margin:8px 0 0 18px}
+.disclaimer{margin-top:16px;color:#6b7a90;font-size:11.5px;line-height:1.7}
+@media(max-width:900px){.verdict{grid-template-columns:1fr}.grid6,.tech-grid,.pos-grid,.debate-pair,.str,.dec-grid{grid-template-columns:1fr}.conf-box{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:14px}}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+  <h1>苯乙烯 <small>EB2612 · 大商所</small></h1>
+  <div class="quote">
+    <span>最新价 <b>9,327</b></span>
+    <span>涨跌 <b class="up">+2.05%</b></span>
+    <span>持仓量 <b>197,385</b></span>
+    <span>成交量 <b>1,256,164</b></span>
+    <span>报告日期 <b>2026-11-16</b></span>
+  </div>
+</header>
+
+<div class="verdict">
+  <div class="dir-badge">多</div>
+  <div>
+    <h2>裁决摘要 · 多</h2>
+    <p>江苏港口库存单周骤降44%至2.103万吨，出口放量、基差+463，低库存与去库共振推升价格；供应高位与需求偏弱限制追高空间。</p>
+    <div class="chips" style="margin-top:12px">
+      <span class="chip">入场 9280~9330</span>
+      <span class="chip">目标 9700 / 10000</span>
+      <span class="chip">止损 9050</span>
+      <span class="chip">窗口 1~2个交易日</span>
+    </div>
+  </div>
+  <div class="conf-box">
+    <div class="big">64.0%</div>
+    <div class="lab">校准后置信度</div>
+    <div class="win">方向触发概率64.0%；多方约64% vs 空方约36%，中等偏强信号。</div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>六维数据全景</h3><span class="sub">综合评分 +12 / ±30</span></div>
+  <div class="grid6"><div class="dim">
+      <div class="dim-head"><span>库存</span><span class="dim-tag bull">多 +4</span></div>
+      <div class="dim-body">江苏港口样本库存2.103万吨（11/16），较11/9的3.76万吨减少1.657万吨（-44.1%）。</div>
+      <div class="track"><div class="fill bull" style="width:80%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>仓单</span><span class="dim-tag flat">中性 0</span></div>
+      <div class="dim-body">大商所11/6调整苯乙烯指定交割仓库；仓单明细未获取，以总持仓19.74万手辅助判断。</div>
+      <div class="track"><div class="fill flat" style="width:3%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>期限结构</span><span class="dim-tag bull">多 +3</span></div>
+      <div class="dim-body">EB2612 9327 / 2701 8875 / 2702 8696 / 2703 8639，深度back；现货9790，基差+463。</div>
+      <div class="track"><div class="fill bull" style="width:60%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>技术面</span><span class="dim-tag bull">多 +1</span></div>
+      <div class="dim-body">站上EMA5/10/60，仍低于EMA20 9492；MACD绿柱收敛，KDJ金叉，5日+4.19%。</div>
+      <div class="track"><div class="fill bull" style="width:20%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>新闻基本面</span><span class="dim-tag bull">多 +2</span></div>
+      <div class="dim-body">周产量32.12万吨（+0.77），开工64.03%；出口放量、港口去库，下游需求一般。</div>
+      <div class="track"><div class="fill bull" style="width:40%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>持仓席位</span><span class="dim-tag bull">多 +2</span></div>
+      <div class="dim-body">前20净多+14099手（当日+5824，5日+5577）；中信多+9038、东证+3327，空头中信-3956。</div>
+      <div class="track"><div class="fill bull" style="width:40%"></div></div>
+    </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>技术面深度面板</h3><span class="sub">趋势 / 震荡 / 量能 / 形态</span></div>
+  <div class="tech-grid">
+    <div class="tech-cell"><h4>趋势判断</h4><p>短期反弹（5日+4.19%），中期仍受EMA20 9492压制；价格站上EMA60 9272，趋势由弱转震荡偏强。</p></div>
+    <div class="tech-cell"><h4>多指标共振</h4><p>多头信号：站上EMA5/10/60、KDJ金叉（K33.6上穿D25.2）、MACD绿柱由-297收敛至-221、持仓5日-59282的减仓反弹，共4项。 空头信号：EMA20 9492未收复、20日仍-4.58%、开工与产量高位，共3项。 中性信号：RSI 46.4处中轴下方；BOLL %B 33.0，未触及上轨。</p></div>
+    <div class="tech-cell"><h4>形态研判</h4><p>8542低点后V型反弹，当前挑战9492颈线；若放量突破，形态目标指向9700~10000。</p></div>
+    <div class="tech-cell"><h4>量能验证</h4><p>成交125.6万手（0.99倍5日均量），价涨量平；持仓19.74万手（+46），价涨仓稳，空头回补为主。</p></div>
+  </div>
+  <div class="chips"><span class="chip">第一支撑9175（EMA5）</span><span class="chip">强支撑9050（前低平台）</span><span class="chip">第一压力9492（EMA20）</span><span class="chip">强压力9700~10000（前高密集区）</span></div>
+  <div class="note">综合结论：技术面修复中，基本面低库存+出口提供驱动，偏多；追高需等突破9492确认。</div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>持仓席位面板</h3><span class="sub">前20名会员 · 2026-11-16</span></div>
+  <div class="panel">
+    <ul class="pos-summary"><li>前20净多+14099手，当日+5824手，5日+5577手。</li><li>多头集中度74.2%，空头67.1%。</li><li>多头前三：国泰君安36005（-1408）、中信20912（+9038）、东证16967（+3327）。</li><li>空头前三：国泰君安24071（-93）、中信建投15373（+719）、东证15004（+330）。</li></ul>
+    <div class="pos-grid">
+      <div class="seat-block"><h4>多头前5席位</h4>
+      <table class="mini"><thead><tr><th>席位</th><th>持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class='num'>36,005</td><td class='num down'>-1,408</td></tr><tr><td>中信期货</td><td class='num'>20,912</td><td class='num up'>+9,038</td></tr><tr><td>东证期货</td><td class='num'>16,967</td><td class='num up'>+3,327</td></tr><tr><td>华泰期货</td><td class='num'>12,088</td><td class='num down'>-2,079</td></tr><tr><td>海通期货</td><td class='num'>9,101</td><td class='num up'>+2,657</td></tr></tbody></table></div>
+      <div class="seat-block"><h4>空头前5席位</h4>
+      <table class="mini"><thead><tr><th>席位</th><th>持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class='num'>24,071</td><td class='num down'>-93</td></tr><tr><td>中信建投</td><td class='num'>15,373</td><td class='num up'>+719</td></tr><tr><td>东证期货</td><td class='num'>15,004</td><td class='num up'>+330</td></tr><tr><td>华泰期货</td><td class='num'>12,439</td><td class='num down'>-1,163</td></tr><tr><td>中信期货</td><td class='num'>9,603</td><td class='num down'>-3,956</td></tr></tbody></table></div>
+    </div>
+    <div class="note"><b>5日趋势：</b>净多增仓（1日↑），5日累计+5577手；中信多单大增9038手、空单减3956手，主力明显转多。<br>数据日期2026-11-16，来源：akshare（新浪）前20名会员持仓；5日趋势窗口2026-11-10~11-16。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>期限结构</h3><span class="sub">2026-11-16 收盘</span></div>
+  <div class="panel">
+    <div class="term-row"><span class="term-name">EB2612</span>
+          <div class="term-track"><div class="term-fill" style="width:100%"></div></div>
+          <span class="term-price">9,327</span></div><div class="term-row"><span class="term-name">EB2701</span>
+          <div class="term-track"><div class="term-fill" style="width:64%"></div></div>
+          <span class="term-price">8,875</span></div><div class="term-row"><span class="term-name">EB2702</span>
+          <div class="term-track"><div class="term-fill" style="width:50%"></div></div>
+          <span class="term-price">8,696</span></div><div class="term-row"><span class="term-name">EB2703</span>
+          <div class="term-track"><div class="term-fill" style="width:45%"></div></div>
+          <span class="term-price">8,639</span></div>
+    <div class="note">近高远低深度backwardation；现货基准价9790，对2612基差+463，低库存下近月偏强。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>三轮多空辩论</h3><span class="sub">立论 → 驳斥 → 终局</span></div>
+  <div class="round"><h4>第一轮 · 立论陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 苯乙烯</div><p>苯乙烯的驱动非常直接：江苏港口库存从3.76万吨降到2.103万吨，单周-44.1%，这是硬去库；同时出口放量，现货9790对期货9327升水463。供应端周产量虽增0.77万吨、开工64.03%，但增量远小于去库幅度，说明出口与下游补货消化了供应。持仓端前20净多+14099手、当日+5824手，中信多单暴增9038手、空单减3956手，主力资金明确转多。技术面站上EMA5/10/60，KDJ金叉、MACD绿柱收敛，5日+4.19%只是修复的开始。目标9700/10000，止损9050。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 苯乙烯</div><p>苯乙烯的上涨是低库存+出口的短期脉冲，持续性存疑。供应端开工64.03%、周产量32.12万吨且环比增加，12月合约临近交割后交易重心转向2701，而2701仅8875，深度back意味着远月更弱。需求端下游EPS/PS/ABS开工一般，终端家电排产未见超预期。技术面20日线9492仍压制，20日累计-4.58%，5日已涨4.19%，短线透支。成本端原油因霍尔木兹复航与IEA过剩预期回落，纯苯支撑减弱。反弹沽空，9450~9500入场，目标9050/8900，止损9700。</p></div>
+  </div></div>
+  <div class="round"><h4>第二轮 · 交叉驳斥</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 苯乙烯</div><p>空方说“脉冲”，但-44.1%的单周去库不是噪音，且出口是持续性订单而非一次性；空方说远月2701弱，但back结构下近月本就是最强合约，2612才是当下交易标的。持仓端中信多单+9038、空单-3956，这不是散户行为。技术上KDJ刚金叉、MACD绿柱连续收敛，空方把“20日线未收复”当利空，却忽略价格已站上EMA60。5日涨4.19%在低库存背景下是趋势启动而非透支。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 苯乙烯</div><p>多方把“去库”线性外推，但港口库存基数仅3.76万吨，绝对量太小，2万吨级别的波动容易失真；且11/16库存下降可能包含船期因素。供应端开工、产量双增是事实，12月后供应压力会显现。持仓端国泰君安多单-1408、华泰-2079，头部多头并未一致加仓；中信的多单增加也可能是对冲。技术面9492未破，RSI 46.4连50都没站上，谈趋势反转过早。原油回落会压制纯苯-苯乙烯估值。</p></div>
+  </div></div>
+  <div class="round"><h4>第三轮 · 最终陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 苯乙烯</div><p>胜负手是“库存-44%+出口放量+净多增仓”三点共振，且发生在深度back结构下。9280~9330做多，止损9050，目标9700/10000；突破9492可加仓。低库存下的去库是最强驱动，回调就是机会。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 苯乙烯</div><p>胜负手是“供应高位+需求平淡+原油回落”。9450~9500沽空，止损9700，目标9050/8900。低库存基数太小，去库的边际效应递减；一旦出口订单放缓，价格会快速回补back。</p></div>
+  </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>总决策官裁决</h3><span class="sub">多空评分 · 决策方案 · 风险提示</span></div>
+  <div class="panel">
+    <div class="str">
+      <div><b>多方最强点：</b>港口库存单周-44.1%、出口放量、基差+463，低库存去库共振；净多+5824、中信多单+9038，资金面确认。</div>
+      <div><b>空方最强点：</b>开工64.03%、产量环比增加，供应高位；需求平淡；EMA20 9492压制，5日涨幅透支，原油成本下移。</div>
+    </div>
+    <div class="dec-grid">
+      <div>
+        <table class="dec"><thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead><tbody><tr><td>库存</td><td class="num up">+4</td><td>江苏港口样本库存2.103万吨（11/16），较11/9的3.76万吨减少1.657万吨（-44.1%）。</td></tr><tr><td>仓单</td><td class="num ">0</td><td>大商所11/6调整苯乙烯指定交割仓库；仓单明细未获取，以总持仓19.74万手辅助判断。</td></tr><tr><td>期限结构</td><td class="num up">+3</td><td>EB2612 9327 / 2701 8875 / 2702 8696 / 2703 8639，深度back；现货9790，基差+463。</td></tr><tr><td>技术面</td><td class="num up">+1</td><td>站上EMA5/10/60，仍低于EMA20 9492；MACD绿柱收敛，KDJ金叉，5日+4.19%。</td></tr><tr><td>新闻基本面</td><td class="num up">+2</td><td>周产量32.12万吨（+0.77），开工64.03%；出口放量、港口去库，下游需求一般。</td></tr><tr><td>持仓席位</td><td class="num up">+2</td><td>前20净多+14099手（当日+5824，5日+5577）；中信多+9038、东证+3327，空头中信-3956。</td></tr></tbody></table>
+      </div>
+      <div class="plan">
+        <table><tr><td>方向</td><td class="up"><b>多</b></td></tr>
+      <tr><td>入场区间</td><td>9280~9330</td></tr>
+      <tr><td>目标位</td><td>9700 / 10000</td></tr>
+      <tr><td>止损位</td><td>9050</td></tr>
+      <tr><td>预期窗口</td><td>1~2个交易日</td></tr>
+      <tr><td>基础置信度</td><td>64%</td></tr>
+      <tr><td>校准系数</td><td>×1.0（confidence-factors.json 档位）</td></tr>
+      <tr><td>最终置信度</td><td><b style="color:#ef4444">64.0%</b></td></tr></table>
+      </div>
+    </div>
+    <div class="risk"><h4>执行策略</h4><p>方向偏多：9280~9330做多，止损9050，目标9700/10000；若跌破9175（EMA5）减仓，跌破9050止损。</p></div>
+    <div class="risk"><h4>风险提示</h4><p>去库被证伪（船期/口径因素）；出口订单回落；原油大跌带动纯苯成本塌陷；12月交割后近月升水快速收敛。</p></div>
+  </div>
+</section>
+
+<footer>
+  <div><b>数据来源：</b>新浪财经期货日K/行情、akshare（新浪）前20名会员持仓、Mysteel/SMM/隆众/百川盈孚等公开资讯、各期货公司日报；复盘校准来自仓库 tools/review_engine.py 的 confidence-factors.json。</div>
+  <ul><li><a href="https://qhweb.eastmoney.com/news/202611163931698193.html" target="_blank">https://qhweb.eastmoney.com/news/202611163931698193.html</a></li><li><a href="https://finance.sina.com.cn/money/future/fmnews/2026-11-13/doc-iniypzqc1102092.shtml" target="_blank">https://finance.sina.com.cn/money/future/fmnews/2026-11-13/doc-iniypzqc1102092.shtml</a></li><li><a href="https://www.itf.com.cn/upfile/news/2026/11/16/2026111694852906.pdf" target="_blank">https://www.itf.com.cn/upfile/news/2026/11/16/2026111694852906.pdf</a></li><li><a href="http://news.10jqka.com.cn/20261116/c681870670.shtml" target="_blank">http://news.10jqka.com.cn/20261116/c681870670.shtml</a></li></ul>
+  <div class="disclaimer">免责声明：本报告由 AI 多 Agent 辩论系统自动生成，所有数据均来自公开渠道，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。报告中“置信度”为结论在预期窗口内触发的概率估计，经近5日复盘系数校准，不代表实际收益承诺。</div>
+</footer>
+</div></body></html>

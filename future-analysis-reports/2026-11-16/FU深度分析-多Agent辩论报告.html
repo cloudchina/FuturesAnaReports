@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>燃料油 FU2701 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e14;--panel:#111826;--panel2:#0e1420;--line:#1e293b;--txt:#e6edf6;--muted:#8b9bb4;--gold:#f3b544;--bull:#ef4444;--bear:#22c55e;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 50% -200px,#16233a 0%,var(--bg) 60%);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;line-height:1.75;padding:36px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+header{border:1px solid var(--line);background:linear-gradient(135deg,rgba(243,181,68,.08),rgba(17,24,38,.9));border-radius:18px;padding:30px 34px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(243,181,68,.18),transparent 70%)}
+.kicker{color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:34px;margin:8px 0 10px;letter-spacing:1px}
+h1 small{font-size:15px;color:var(--muted);font-weight:400;margin-left:10px}
+.quote{display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+.quote b{color:var(--txt);font-size:18px}
+.up{color:var(--bull)} .down{color:var(--bear)} .num{text-align:right;font-variant-numeric:tabular-nums}
+.verdict{display:grid;grid-template-columns:150px 1fr 260px;gap:22px;align-items:center;margin-top:20px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:24px 30px}
+.dir-badge{width:132px;height:132px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:800;color:#22c55e;background:rgba(34,197,94,.12);border:1px solid #22c55e44;letter-spacing:6px}
+.verdict h2{font-size:22px;margin-bottom:8px}
+.verdict p{color:var(--muted);font-size:14.5px}
+.conf-box{text-align:center;border-left:1px solid var(--line);padding-left:20px}
+.conf-box .big{font-size:46px;font-weight:800;color:#22c55e;line-height:1.1}
+.conf-box .lab{color:var(--muted);font-size:13px}
+.conf-box .win{margin-top:8px;font-size:12.5px;color:var(--muted)}
+section{margin-top:26px}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec-title h3{font-size:20px;letter-spacing:1px}
+.sec-title .bar{width:4px;height:22px;background:var(--gold);border-radius:2px}
+.sec-title .sub{color:var(--muted);font-size:13px;margin-left:auto}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dim{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.dim-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}
+.dim-tag{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid transparent}
+.dim-tag.bull{color:var(--bull);background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)}
+.dim-tag.bear{color:var(--bear);background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)}
+.dim-tag.flat{color:var(--muted);background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3)}
+.dim-body{color:var(--muted);font-size:13px;margin:10px 0 12px;min-height:58px}
+.track{height:6px;background:#0a0f18;border-radius:99px;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.bull{background:linear-gradient(90deg,#f87171,#ef4444)}
+.fill.bear{background:linear-gradient(90deg,#4ade80,#22c55e)}
+.fill.flat{background:#475569}
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tech-cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tech-cell h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.tech-cell p{color:var(--muted);font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:12.5px;color:#cbd5e1;background:#0b1220;border:1px solid var(--line);padding:4px 10px;border-radius:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.seat-block h4{font-size:14px;color:var(--gold);margin-bottom:8px}
+table.mini{width:100%;border-collapse:collapse;font-size:13px}
+table.mini th{color:var(--muted);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.mini td{padding:6px 8px;border-bottom:1px dashed #182234}
+table.mini td:first-child,table.mini th:first-child{text-align:left}
+table.mini td.num,table.mini th:nth-child(2),table.mini th:nth-child(3){text-align:right}
+.pos-summary{margin:0 0 14px 0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.term-row{display:flex;align-items:center;gap:12px;margin:8px 0}
+.term-name{width:78px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.term-track{flex:1;height:18px;background:#0a0f18;border-radius:6px;overflow:hidden}
+.term-fill{height:100%;background:linear-gradient(90deg,rgba(243,181,68,.25),rgba(243,181,68,.85));border-radius:6px}
+.term-price{width:90px;text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13px;margin-top:12px}
+.round{margin-top:16px}
+.round h4{font-size:15px;color:var(--gold);margin-bottom:10px;letter-spacing:1px}
+.debate-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.debate-card{border-radius:14px;padding:16px 18px;border:1px solid var(--line);background:var(--panel2)}
+.debate-card p{font-size:13.5px;color:#c6d2e2}
+.bull-card{border-left:3px solid var(--bull)}
+.bear-card{border-left:3px solid var(--bear)}
+.debate-tag{font-size:12px;margin-bottom:6px;color:var(--muted);letter-spacing:.5px}
+.bull-card .debate-tag{color:var(--bull)}
+.bear-card .debate-tag{color:var(--bear)}
+.dec-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}
+table.dec{width:100%;border-collapse:collapse;font-size:13.5px}
+table.dec th{text-align:left;color:var(--muted);font-weight:500;padding:8px;border-bottom:1px solid var(--line)}
+table.dec td{padding:8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+table.dec td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
+.risk{background:rgba(243,181,68,.06);border:1px solid rgba(243,181,68,.25);border-radius:14px;padding:16px 18px;margin-top:14px}
+.risk h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.risk p{color:var(--muted);font-size:13px}
+.plan table{width:100%;border-collapse:collapse;font-size:13.5px}
+.plan td{padding:7px 8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+.plan td:first-child{color:var(--muted);width:42%}
+.str{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.str div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--muted);background:var(--panel2)}
+.str b{color:var(--txt)}
+footer{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12px}
+footer a{color:#7aa2d6;text-decoration:none;word-break:break-all}
+footer ul{margin:8px 0 0 18px}
+.disclaimer{margin-top:16px;color:#6b7a90;font-size:11.5px;line-height:1.7}
+@media(max-width:900px){.verdict{grid-template-columns:1fr}.grid6,.tech-grid,.pos-grid,.debate-pair,.str,.dec-grid{grid-template-columns:1fr}.conf-box{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:14px}}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+  <h1>燃料油 <small>FU2701 · 上期所</small></h1>
+  <div class="quote">
+    <span>最新价 <b>4,169</b></span>
+    <span>涨跌 <b class="down">-1.33%</b></span>
+    <span>持仓量 <b>152,181</b></span>
+    <span>成交量 <b>590,856</b></span>
+    <span>报告日期 <b>2026-11-16</b></span>
+  </div>
+</header>
+
+<div class="verdict">
+  <div class="dir-badge">空</div>
+  <div>
+    <h2>裁决摘要 · 空</h2>
+    <p>中东高硫供应恢复、原油回落，燃料油承压；低硫偏紧与深度back提供支撑。关联品种备选分析。</p>
+    <div class="chips" style="margin-top:12px">
+      <span class="chip">入场 4200~4250</span>
+      <span class="chip">目标 4000 / 3877</span>
+      <span class="chip">止损 4330</span>
+      <span class="chip">窗口 1~3个交易日</span>
+    </div>
+  </div>
+  <div class="conf-box">
+    <div class="big">38.5%</div>
+    <div class="lab">校准后置信度</div>
+    <div class="win">方向触发概率38.5%（低置信度）；空方约39% vs 多方约61%，仅适合轻仓。</div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>六维数据全景</h3><span class="sub">综合评分 -4 / ±30</span></div>
+  <div class="grid6"><div class="dim">
+      <div class="dim-head"><span>库存</span><span class="dim-tag bear">空 -1</span></div>
+      <div class="dim-body">中东出口逐步恢复、阿联酋货源流入亚洲，新加坡高硫紧张缓解；俄罗斯炼厂受制裁扰动。</div>
+      <div class="track"><div class="fill bear" style="width:20%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>仓单</span><span class="dim-tag flat">中性 0</span></div>
+      <div class="dim-body">上期所燃料油仓单数据未获取；FU2701持仓15.22万手。</div>
+      <div class="track"><div class="fill flat" style="width:3%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>期限结构</span><span class="dim-tag bull">多 +1</span></div>
+      <div class="dim-body">FU2612 4360 / FU2701 4169 / FU2702 4012 / FU2703 3877，近高远低back。</div>
+      <div class="track"><div class="fill bull" style="width:20%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>技术面</span><span class="dim-tag bear">空 -2</span></div>
+      <div class="dim-body">低于EMA5/10/20/60，MACD绿柱-256收敛，RSI 41.4、WR -83.8，20日-15.21%。</div>
+      <div class="track"><div class="fill bear" style="width:40%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>新闻基本面</span><span class="dim-tag bear">空 -2</span></div>
+      <div class="dim-body">高硫供应恢复；低硫调和组分偏紧但东北亚炼厂出口增加；原油过剩预期。</div>
+      <div class="track"><div class="fill bear" style="width:40%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>持仓席位</span><span class="dim-tag flat">中性 0</span></div>
+      <div class="dim-body">席位数据未获取；总持仓152181手（-8954）。</div>
+      <div class="track"><div class="fill flat" style="width:3%"></div></div>
+    </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>技术面深度面板</h3><span class="sub">趋势 / 震荡 / 量能 / 形态</span></div>
+  <div class="tech-grid">
+    <div class="tech-cell"><h4>趋势判断</h4><p>短期空头（20日-15.21%），中期仍偏多（60日+24.04%）；价格低于全部均线。</p></div>
+    <div class="tech-cell"><h4>多指标共振</h4><p>多头信号：MACD绿柱由-293收敛至-256、深度back、低硫偏紧，共3项。 空头信号：低于全部均线、高硫供应恢复、原油回落、20日-15.21%，共4项。 中性信号：RSI 41.4；KDJ 21/20/23低位；WR -83.8超卖。</p></div>
+    <div class="tech-cell"><h4>形态研判</h4><p>5676高点后回落至3877，近期在4000~4250震荡，属下跌中继。</p></div>
+    <div class="tech-cell"><h4>量能验证</h4><p>成交59.1万手（0.93倍5日均量）；持仓15.22万手（-8954），减仓下跌。</p></div>
+  </div>
+  <div class="chips"><span class="chip">第一支撑4079（当日低点）</span><span class="chip">强支撑3877（20日低点）</span><span class="chip">第一压力4186（EMA5）</span><span class="chip">强压力4333（EMA10）/4484（EMA20）</span></div>
+  <div class="note">综合结论：技术面偏空，反弹受EMA5/10压制；超卖可能反抽，但不改弱势。</div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>持仓席位面板</h3><span class="sub">前20名会员 · 2026-11-16</span></div>
+  <div class="panel">
+    <ul class="pos-summary"><li>持仓席位数据未获取。</li><li>总持仓152181手，当日-8954手；5日-9734手。</li><li>减仓下跌，空头兑现与多头离场并存。</li></ul>
+    <div class="pos-grid">
+      <div class="seat-block"><h4>多头前5席位</h4><div class="muted">席位明细未获取</div></div>
+      <div class="seat-block"><h4>空头前5席位</h4><div class="muted">席位明细未获取</div></div>
+    </div>
+    <div class="note"><b>5日趋势：</b>无席位明细；持仓持续下降，资金流出。<br>数据日期2026-11-16；席位数据缺失，不作编造。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>期限结构</h3><span class="sub">2026-11-16 收盘</span></div>
+  <div class="panel">
+    <div class="term-row"><span class="term-name">FU2612</span>
+          <div class="term-track"><div class="term-fill" style="width:100%"></div></div>
+          <span class="term-price">4,360</span></div><div class="term-row"><span class="term-name">FU2701</span>
+          <div class="term-track"><div class="term-fill" style="width:78%"></div></div>
+          <span class="term-price">4,169</span></div><div class="term-row"><span class="term-name">FU2702</span>
+          <div class="term-track"><div class="term-fill" style="width:60%"></div></div>
+          <span class="term-price">4,012</span></div><div class="term-row"><span class="term-name">FU2703</span>
+          <div class="term-track"><div class="term-fill" style="width:45%"></div></div>
+          <span class="term-price">3,877</span></div>
+    <div class="note">近高远低back；高硫现货紧张缓解，远月贴水反映供应恢复预期。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>三轮多空辩论</h3><span class="sub">立论 → 驳斥 → 终局</span></div>
+  <div class="round"><h4>第一轮 · 立论陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 燃料油</div><p>燃料油的深度back与低硫紧张是支撑：FU2612 4360、2701 4169、2703 3877，近月大幅升水；低硫调和组分供应仍受限制，东北亚炼厂出口增加需要时间；MACD绿柱从-293收敛至-256，WR -83.8超卖。若原油企稳，燃料油跟随反弹，目标4186/4333，止损4079。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 燃料油</div><p>高硫供应正在恢复：中东出口逐步恢复、阿联酋货源流入亚洲，新加坡高硫极度紧张缓解；原油因霍尔木兹复航与IEA过剩预期回落，成本端下移。技术面价格低于全部均线，20日-15.21%，当日-1.33%。反弹沽空，4200~4250入场，目标4000/3877，止损4330。</p></div>
+  </div></div>
+  <div class="round"><h4>第二轮 · 交叉驳斥</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 燃料油</div><p>空方把“供应恢复”当成现实，但俄罗斯炼厂受制裁、物流和设施受损影响，高硫供应增量有限；低硫紧张也未缓解。技术上WR -83.8超卖、MACD绿柱收敛，空头动能在减弱。深度back下做空近月贴水，风险收益比不佳。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 燃料油</div><p>多方把“超卖”当反弹理由，但20日-15.21%的趋势中超卖可以持续；中东出口恢复是方向性的，新加坡紧张缓解会持续压制月差。原油过剩预期是成本端的系统性利空。技术上EMA5 4186就是反弹压力，空头在4200上方有足够空间。</p></div>
+  </div></div>
+  <div class="round"><h4>第三轮 · 最终陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 燃料油</div><p>胜负手是“深度back+低硫紧张+超卖”。4100~4150轻仓试多，止损4000，目标4333/4484；仅短线。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 燃料油</div><p>胜负手是“高硫供应恢复+原油回落”。4200~4250沽空，止损4330，目标4000/3877。成本与供应双杀。</p></div>
+  </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>总决策官裁决</h3><span class="sub">多空评分 · 决策方案 · 风险提示</span></div>
+  <div class="panel">
+    <div class="str">
+      <div><b>多方最强点：</b>深度back、低硫调和组分偏紧、俄罗斯供应扰动、WR超卖。</div>
+      <div><b>空方最强点：</b>中东高硫供应恢复、新加坡紧张缓解、原油过剩预期、低于全部均线。</div>
+    </div>
+    <div class="dec-grid">
+      <div>
+        <table class="dec"><thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead><tbody><tr><td>库存</td><td class="num down">-1</td><td>中东出口逐步恢复、阿联酋货源流入亚洲，新加坡高硫紧张缓解；俄罗斯炼厂受制裁扰动。</td></tr><tr><td>仓单</td><td class="num ">0</td><td>上期所燃料油仓单数据未获取；FU2701持仓15.22万手。</td></tr><tr><td>期限结构</td><td class="num up">+1</td><td>FU2612 4360 / FU2701 4169 / FU2702 4012 / FU2703 3877，近高远低back。</td></tr><tr><td>技术面</td><td class="num down">-2</td><td>低于EMA5/10/20/60，MACD绿柱-256收敛，RSI 41.4、WR -83.8，20日-15.21%。</td></tr><tr><td>新闻基本面</td><td class="num down">-2</td><td>高硫供应恢复；低硫调和组分偏紧但东北亚炼厂出口增加；原油过剩预期。</td></tr><tr><td>持仓席位</td><td class="num ">0</td><td>席位数据未获取；总持仓152181手（-8954）。</td></tr></tbody></table>
+      </div>
+      <div class="plan">
+        <table><tr><td>方向</td><td class="down"><b>空</b></td></tr>
+      <tr><td>入场区间</td><td>4200~4250</td></tr>
+      <tr><td>目标位</td><td>4000 / 3877</td></tr>
+      <tr><td>止损位</td><td>4330</td></tr>
+      <tr><td>预期窗口</td><td>1~3个交易日</td></tr>
+      <tr><td>基础置信度</td><td>55%</td></tr>
+      <tr><td>校准系数</td><td>×0.7（confidence-factors.json 档位）</td></tr>
+      <tr><td>最终置信度</td><td><b style="color:#22c55e">38.5%</b></td></tr></table>
+      </div>
+    </div>
+    <div class="risk"><h4>执行策略</h4><p>方向偏空但置信度低：4200~4250轻仓沽空，止损4330，目标4000/3877。</p></div>
+    <div class="risk"><h4>风险提示</h4><p>俄罗斯供应进一步中断；低硫紧张升级；原油地缘反弹。</p></div>
+  </div>
+</section>
+
+<footer>
+  <div><b>数据来源：</b>新浪财经期货日K/行情、akshare（新浪）前20名会员持仓、Mysteel/SMM/隆众/百川盈孚等公开资讯、各期货公司日报；复盘校准来自仓库 tools/review_engine.py 的 confidence-factors.json。</div>
+  <ul><li><a href="http://m.toutiao.com/group/7708582411558306304/" target="_blank">http://m.toutiao.com/group/7708582411558306304/</a></li><li><a href="https://www.shfe.cn/products/futures/energyandchemical/fu_f/" target="_blank">https://www.shfe.cn/products/futures/energyandchemical/fu_f/</a></li></ul>
+  <div class="disclaimer">免责声明：本报告由 AI 多 Agent 辩论系统自动生成，所有数据均来自公开渠道，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。报告中“置信度”为结论在预期窗口内触发的概率估计，经近5日复盘系数校准，不代表实际收益承诺。</div>
+</footer>
+</div></body></html>

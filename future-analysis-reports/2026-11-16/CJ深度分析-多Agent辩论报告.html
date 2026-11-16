@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>红枣 CJ2701 深度分析 · 多Agent辩论报告</title>
+<style>
+:root{--bg:#0a0e14;--panel:#111826;--panel2:#0e1420;--line:#1e293b;--txt:#e6edf6;--muted:#8b9bb4;--gold:#f3b544;--bull:#ef4444;--bear:#22c55e;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 50% -200px,#16233a 0%,var(--bg) 60%);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;line-height:1.75;padding:36px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+header{border:1px solid var(--line);background:linear-gradient(135deg,rgba(243,181,68,.08),rgba(17,24,38,.9));border-radius:18px;padding:30px 34px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(243,181,68,.18),transparent 70%)}
+.kicker{color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:34px;margin:8px 0 10px;letter-spacing:1px}
+h1 small{font-size:15px;color:var(--muted);font-weight:400;margin-left:10px}
+.quote{display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+.quote b{color:var(--txt);font-size:18px}
+.up{color:var(--bull)} .down{color:var(--bear)} .num{text-align:right;font-variant-numeric:tabular-nums}
+.verdict{display:grid;grid-template-columns:150px 1fr 260px;gap:22px;align-items:center;margin-top:20px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:24px 30px}
+.dir-badge{width:132px;height:132px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:800;color:#22c55e;background:rgba(34,197,94,.12);border:1px solid #22c55e44;letter-spacing:6px}
+.verdict h2{font-size:22px;margin-bottom:8px}
+.verdict p{color:var(--muted);font-size:14.5px}
+.conf-box{text-align:center;border-left:1px solid var(--line);padding-left:20px}
+.conf-box .big{font-size:46px;font-weight:800;color:#22c55e;line-height:1.1}
+.conf-box .lab{color:var(--muted);font-size:13px}
+.conf-box .win{margin-top:8px;font-size:12.5px;color:var(--muted)}
+section{margin-top:26px}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec-title h3{font-size:20px;letter-spacing:1px}
+.sec-title .bar{width:4px;height:22px;background:var(--gold);border-radius:2px}
+.sec-title .sub{color:var(--muted);font-size:13px;margin-left:auto}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dim{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.dim-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px}
+.dim-tag{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid transparent}
+.dim-tag.bull{color:var(--bull);background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3)}
+.dim-tag.bear{color:var(--bear);background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)}
+.dim-tag.flat{color:var(--muted);background:rgba(148,163,184,.1);border-color:rgba(148,163,184,.3)}
+.dim-body{color:var(--muted);font-size:13px;margin:10px 0 12px;min-height:58px}
+.track{height:6px;background:#0a0f18;border-radius:99px;overflow:hidden}
+.fill{height:100%;border-radius:99px}
+.fill.bull{background:linear-gradient(90deg,#f87171,#ef4444)}
+.fill.bear{background:linear-gradient(90deg,#4ade80,#22c55e)}
+.fill.flat{background:#475569}
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tech-cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tech-cell h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.tech-cell p{color:var(--muted);font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font-size:12.5px;color:#cbd5e1;background:#0b1220;border:1px solid var(--line);padding:4px 10px;border-radius:8px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.seat-block h4{font-size:14px;color:var(--gold);margin-bottom:8px}
+table.mini{width:100%;border-collapse:collapse;font-size:13px}
+table.mini th{color:var(--muted);font-weight:500;text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+table.mini td{padding:6px 8px;border-bottom:1px dashed #182234}
+table.mini td:first-child,table.mini th:first-child{text-align:left}
+table.mini td.num,table.mini th:nth-child(2),table.mini th:nth-child(3){text-align:right}
+.pos-summary{margin:0 0 14px 0;padding-left:18px;color:var(--muted);font-size:13.5px}
+.term-row{display:flex;align-items:center;gap:12px;margin:8px 0}
+.term-name{width:78px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.term-track{flex:1;height:18px;background:#0a0f18;border-radius:6px;overflow:hidden}
+.term-fill{height:100%;background:linear-gradient(90deg,rgba(243,181,68,.25),rgba(243,181,68,.85));border-radius:6px}
+.term-price{width:90px;text-align:right;font-size:13.5px;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13px;margin-top:12px}
+.round{margin-top:16px}
+.round h4{font-size:15px;color:var(--gold);margin-bottom:10px;letter-spacing:1px}
+.debate-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.debate-card{border-radius:14px;padding:16px 18px;border:1px solid var(--line);background:var(--panel2)}
+.debate-card p{font-size:13.5px;color:#c6d2e2}
+.bull-card{border-left:3px solid var(--bull)}
+.bear-card{border-left:3px solid var(--bear)}
+.debate-tag{font-size:12px;margin-bottom:6px;color:var(--muted);letter-spacing:.5px}
+.bull-card .debate-tag{color:var(--bull)}
+.bear-card .debate-tag{color:var(--bear)}
+.dec-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}
+table.dec{width:100%;border-collapse:collapse;font-size:13.5px}
+table.dec th{text-align:left;color:var(--muted);font-weight:500;padding:8px;border-bottom:1px solid var(--line)}
+table.dec td{padding:8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+table.dec td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
+.risk{background:rgba(243,181,68,.06);border:1px solid rgba(243,181,68,.25);border-radius:14px;padding:16px 18px;margin-top:14px}
+.risk h4{color:var(--gold);font-size:14px;margin-bottom:6px}
+.risk p{color:var(--muted);font-size:13px}
+.plan table{width:100%;border-collapse:collapse;font-size:13.5px}
+.plan td{padding:7px 8px;border-bottom:1px dashed #182234;color:#c6d2e2}
+.plan td:first-child{color:var(--muted);width:42%}
+.str{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.str div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--muted);background:var(--panel2)}
+.str b{color:var(--txt)}
+footer{margin-top:34px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:12px}
+footer a{color:#7aa2d6;text-decoration:none;word-break:break-all}
+footer ul{margin:8px 0 0 18px}
+.disclaimer{margin-top:16px;color:#6b7a90;font-size:11.5px;line-height:1.7}
+@media(max-width:900px){.verdict{grid-template-columns:1fr}.grid6,.tech-grid,.pos-grid,.debate-pair,.str,.dec-grid{grid-template-columns:1fr}.conf-box{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:14px}}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div class="kicker">FUTURES DEEP ANALYSIS · MULTI-AGENT DEBATE</div>
+  <h1>红枣 <small>CJ2701 · 郑商所</small></h1>
+  <div class="quote">
+    <span>最新价 <b>6,175</b></span>
+    <span>涨跌 <b class="down">-3.29%</b></span>
+    <span>持仓量 <b>235,053</b></span>
+    <span>成交量 <b>373,276</b></span>
+    <span>报告日期 <b>2026-11-16</b></span>
+  </div>
+</header>
+
+<div class="verdict">
+  <div class="dir-badge">空</div>
+  <div>
+    <h2>裁决摘要 · 空</h2>
+    <p>新季开秤价大幅下移、下游采购谨慎，盘面增仓跌破箱体下沿，空头趋势延续；低估值与空头减仓提供反弹风险。</p>
+    <div class="chips" style="margin-top:12px">
+      <span class="chip">入场 6150~6200</span>
+      <span class="chip">目标 5900 / 5750</span>
+      <span class="chip">止损 6360</span>
+      <span class="chip">窗口 1~3个交易日</span>
+    </div>
+  </div>
+  <div class="conf-box">
+    <div class="big">63.0%</div>
+    <div class="lab">校准后置信度</div>
+    <div class="win">方向触发概率63.0%；空方约63% vs 多方约37%，中等偏强信号。</div>
+  </div>
+</div>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>六维数据全景</h3><span class="sub">综合评分 -9 / ±30</span></div>
+  <div class="grid6"><div class="dim">
+      <div class="dim-head"><span>库存</span><span class="dim-tag flat">中性 0</span></div>
+      <div class="dim-body">36家样本点物理库存9118吨（-40吨/-0.44%），同比+1.07%；去化平缓。</div>
+      <div class="track"><div class="fill flat" style="width:3%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>仓单</span><span class="dim-tag flat">中性 0</span></div>
+      <div class="dim-body">郑商所红枣仓单数据未获取；总持仓23.51万手，当日+2188手。</div>
+      <div class="track"><div class="fill flat" style="width:3%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>期限结构</span><span class="dim-tag bear">空 -2</span></div>
+      <div class="dim-body">CJ2612 5930 / CJ2701 6175 / CJ2703 6175 / CJ2705 6280，contango，远月升水反映新作压力后移。</div>
+      <div class="track"><div class="fill bear" style="width:40%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>技术面</span><span class="dim-tag bear">空 -3</span></div>
+      <div class="dim-body">跌破全部均线，MACD红柱收敛，RSI 36.5、KDJ J 11.8、BOLL %B 18.9；当日-3.29%破位。</div>
+      <div class="track"><div class="fill bear" style="width:60%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>新闻基本面</span><span class="dim-tag bear">空 -3</span></div>
+      <div class="dim-body">新疆新季灰枣收购价2.2~3.5元/公斤，同比大幅下移；河北一级灰枣5.5~6.6元/公斤且下调；下游按需采购。</div>
+      <div class="track"><div class="fill bear" style="width:60%"></div></div>
+    </div><div class="dim">
+      <div class="dim-head"><span>持仓席位</span><span class="dim-tag bear">空 -1</span></div>
+      <div class="dim-body">前20净空-22741手（当日+4769为净空减仓），5日+1122；国泰君安空24990（+1423）。</div>
+      <div class="track"><div class="fill bear" style="width:20%"></div></div>
+    </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>技术面深度面板</h3><span class="sub">趋势 / 震荡 / 量能 / 形态</span></div>
+  <div class="tech-grid">
+    <div class="tech-cell"><h4>趋势判断</h4><p>短期空头趋势（当日-3.29%），中期弱势（60日-24.56%）；价格跌破所有均线，空头排列明确。</p></div>
+    <div class="tech-cell"><h4>多指标共振</h4><p>多头信号：KDJ J 11.8超卖、MACD红柱仍为正、空头当日减仓4769手，共3项（均为弱信号）。 空头信号：跌破全部均线、MACD红柱收敛、RSI 36.5、%B 18.9、增仓下跌、新作收购价下移，共6项。 中性信号：WR -77.1接近超卖；成交1.26倍5日均量，放量下跌。</p></div>
+    <div class="tech-cell"><h4>形态研判</h4><p>6050~6595箱体震荡两周后，11/16放量跌破下沿，形成破位；若反抽6319不过，则确认下跌中继。</p></div>
+    <div class="tech-cell"><h4>量能验证</h4><p>成交37.3万手（1.26倍5日均量），放量下跌；持仓23.51万手（+2188），增仓下跌，空头主动。</p></div>
+  </div>
+  <div class="chips"><span class="chip">第一支撑6050（20日低点）</span><span class="chip">强支撑5900（整数关口）</span><span class="chip">第一压力6319（EMA5）</span><span class="chip">强压力6417（EMA20）/6595（20日高点）</span></div>
+  <div class="note">综合结论：技术面明确偏空，破位后反抽确认是空头机会；超卖可能带来短线反抽，但不改趋势。</div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>持仓席位面板</h3><span class="sub">前20名会员 · 2026-11-16</span></div>
+  <div class="panel">
+    <ul class="pos-summary"><li>前20净空-22741手，当日+4769手（净空减少），5日+1122手。</li><li>多头集中度47.2%，空头集中度56.9%，空头更集中。</li><li>多头前三：中信11151（+503）、国泰君安8507（-1128）、徽商7391（+212）。</li><li>空头前三：国泰君安24990（+1423）、中信11111（+483）、东证9580（-1820）。</li></ul>
+    <div class="pos-grid">
+      <div class="seat-block"><h4>多头前5席位</h4>
+      <table class="mini"><thead><tr><th>席位</th><th>持仓</th><th>增减</th></tr></thead><tbody><tr><td>中信期货</td><td class='num'>11,151</td><td class='num up'>+503</td></tr><tr><td>国泰君安</td><td class='num'>8,507</td><td class='num down'>-1,128</td></tr><tr><td>徽商期货</td><td class='num'>7,391</td><td class='num up'>+212</td></tr><tr><td>银河期货</td><td class='num'>7,305</td><td class='num up'>+644</td></tr><tr><td>方正中期</td><td class='num'>6,839</td><td class='num down'>-342</td></tr></tbody></table></div>
+      <div class="seat-block"><h4>空头前5席位</h4>
+      <table class="mini"><thead><tr><th>席位</th><th>持仓</th><th>增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class='num'>24,990</td><td class='num up'>+1,423</td></tr><tr><td>中信期货</td><td class='num'>11,111</td><td class='num up'>+483</td></tr><tr><td>东证期货</td><td class='num'>9,580</td><td class='num down'>-1,820</td></tr><tr><td>大地期货</td><td class='num'>7,838</td><td class='num up'>+51</td></tr><tr><td>华泰期货</td><td class='num'>7,523</td><td class='num up'>+203</td></tr></tbody></table></div>
+    </div>
+    <div class="note"><b>5日趋势：</b>净空减仓（1日↑），但国泰君安空单+1423手、中信空单+483手，头部空头仍在加码；净空格局稳固。<br>数据日期2026-11-16，来源：akshare（新浪）前20名会员持仓；5日趋势窗口2026-11-10~11-16。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>期限结构</h3><span class="sub">2026-11-16 收盘</span></div>
+  <div class="panel">
+    <div class="term-row"><span class="term-name">CJ2612</span>
+          <div class="term-track"><div class="term-fill" style="width:45%"></div></div>
+          <span class="term-price">5,930</span></div><div class="term-row"><span class="term-name">CJ2701</span>
+          <div class="term-track"><div class="term-fill" style="width:84%"></div></div>
+          <span class="term-price">6,175</span></div><div class="term-row"><span class="term-name">CJ2703</span>
+          <div class="term-track"><div class="term-fill" style="width:84%"></div></div>
+          <span class="term-price">6,175</span></div><div class="term-row"><span class="term-name">CJ2705</span>
+          <div class="term-track"><div class="term-fill" style="width:100%"></div></div>
+          <span class="term-price">6,280</span></div>
+    <div class="note">contango结构，远月升水；新作集中上市压力后移，近月2612最弱。</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>三轮多空辩论</h3><span class="sub">立论 → 驳斥 → 终局</span></div>
+  <div class="round"><h4>第一轮 · 立论陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 红枣</div><p>红枣的估值已经很低：CJ2701报6175，较60日均值大幅下移，60日-24.56%；36家样本点库存9118吨、环比-40吨，虽去化平缓但绝对量不高；新季“增产不增质”，裂口与干条比例偏高、出成率低于去年，一级以上好货有限。技术面KDJ J值11.8、WR -77.1、%B 18.9，均处超卖；MACD红柱仍为正，说明下跌动能并非单边。空头当日减仓4769手，国泰君安多单虽减但中信多单+503。超跌反弹一触即发，目标6319/6417，止损6050。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 红枣</div><p>红枣的下跌是基本面驱动的：新疆新季灰枣收购价从10月下旬3.5~4元/公斤一路跌到2.2~3元/公斤，阿拉尔11/11开秤2.5~3元/公斤，同比大幅下移；河北崔尔庄一级灰枣5.5~6.6元/公斤，本周再下调0.1元，下游按需采购、客商不足三成。库存同比+1.07%，并未真正去化。技术面跌破全部均线、MACD红柱收敛、当日-3.29%放量破位，增仓下跌说明空头主动。目标5900/5750，止损6360。</p></div>
+  </div></div>
+  <div class="round"><h4>第二轮 · 交叉驳斥</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 红枣</div><p>空方把“收购价低”当利空，但收购价低恰恰意味着期货6175相对现货2.2~3元/公斤（折2200~3000元/吨）仍有巨大升水，做空的是升水而非现货；一旦收购季结束、仓单成本固化，期货向现货收敛的空间反而有限。空方说库存同比+1.07%，但9118吨的绝对量对应23.5万手持仓，虚实比并不高。技术面J值11.8已极端超卖，放量下跌后往往有反抽；空头当日减仓4769手，说明也在兑现。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 红枣</div><p>多方把“超卖”当反弹理由，但超卖可以持续，60日-24.56%的趋势不会因J值低而反转。多方说期货对现货升水大，但红枣期货交割品是一级灰枣，河北一级现货5.5~6.6元/公斤折5500~6600元/吨，6175正好在区间内，并无巨大升水。新作集中下树、收购价继续下移是进行时，空头国泰君安+1423、中信+483仍在加码。技术上反抽6319（EMA5）就是空头加仓机会，而非做多理由。</p></div>
+  </div></div>
+  <div class="round"><h4>第三轮 · 最终陈词</h4><div class="debate-pair">
+    <div class="debate-card bull-card"><div class="debate-tag">多头 Agent · 红枣</div><p>胜负手是“极端超卖+新作质量分化+空头减仓”。若反抽至6050~6100企稳可轻仓试多，止损5900，目标6319/6417；但逆势，仓位要轻。</p></div>
+    <div class="debate-card bear-card"><div class="debate-tag">空头 Agent · 红枣</div><p>胜负手是“收购价下移+放量破位+头部空头加码”。6150~6200沽空，止损6360，目标5900/5750；反抽6319不过则加仓。趋势与基本面同向，胜率更高。</p></div>
+  </div></div>
+</section>
+
+<section>
+  <div class="sec-title"><span class="bar"></span><h3>总决策官裁决</h3><span class="sub">多空评分 · 决策方案 · 风险提示</span></div>
+  <div class="panel">
+    <div class="str">
+      <div><b>多方最强点：</b>KDJ/ WR/ %B三重超卖，MACD红柱仍正；新作质量分化、好货有限；空头当日减仓4769手。</div>
+      <div><b>空方最强点：</b>新季收购价2.2~3.5元/公斤大幅下移，下游采购谨慎；跌破全部均线、放量增仓下跌；国泰君安、中信空单加码。</div>
+    </div>
+    <div class="dec-grid">
+      <div>
+        <table class="dec"><thead><tr><th>维度</th><th>评分</th><th>理由</th></tr></thead><tbody><tr><td>库存</td><td class="num ">0</td><td>36家样本点物理库存9118吨（-40吨/-0.44%），同比+1.07%；去化平缓。</td></tr><tr><td>仓单</td><td class="num ">0</td><td>郑商所红枣仓单数据未获取；总持仓23.51万手，当日+2188手。</td></tr><tr><td>期限结构</td><td class="num down">-2</td><td>CJ2612 5930 / CJ2701 6175 / CJ2703 6175 / CJ2705 6280，contango，远月升水反映新作压力后移。</td></tr><tr><td>技术面</td><td class="num down">-3</td><td>跌破全部均线，MACD红柱收敛，RSI 36.5、KDJ J 11.8、BOLL %B 18.9；当日-3.29%破位。</td></tr><tr><td>新闻基本面</td><td class="num down">-3</td><td>新疆新季灰枣收购价2.2~3.5元/公斤，同比大幅下移；河北一级灰枣5.5~6.6元/公斤且下调；下游按需采购。</td></tr><tr><td>持仓席位</td><td class="num down">-1</td><td>前20净空-22741手（当日+4769为净空减仓），5日+1122；国泰君安空24990（+1423）。</td></tr></tbody></table>
+      </div>
+      <div class="plan">
+        <table><tr><td>方向</td><td class="down"><b>空</b></td></tr>
+      <tr><td>入场区间</td><td>6150~6200</td></tr>
+      <tr><td>目标位</td><td>5900 / 5750</td></tr>
+      <tr><td>止损位</td><td>6360</td></tr>
+      <tr><td>预期窗口</td><td>1~3个交易日</td></tr>
+      <tr><td>基础置信度</td><td>63%</td></tr>
+      <tr><td>校准系数</td><td>×1.0（confidence-factors.json 档位）</td></tr>
+      <tr><td>最终置信度</td><td><b style="color:#22c55e">63.0%</b></td></tr></table>
+      </div>
+    </div>
+    <div class="risk"><h4>执行策略</h4><p>方向偏空：6150~6200沽空，止损6360，目标5900/5750；若反抽6319（EMA5）不过可加仓，跌破6050看5900。</p></div>
+    <div class="risk"><h4>风险提示</h4><p>新枣质量/天气炒作；政策收储或托市；空头回补引发超跌反弹；收购价阶段性企稳。</p></div>
+  </div>
+</section>
+
+<footer>
+  <div><b>数据来源：</b>新浪财经期货日K/行情、akshare（新浪）前20名会员持仓、Mysteel/SMM/隆众/百川盈孚等公开资讯、各期货公司日报；复盘校准来自仓库 tools/review_engine.py 的 confidence-factors.json。</div>
+  <ul><li><a href="https://finance.sina.com.cn/money/future/fmnews/2026-11-16/doc-iniywwzf1273306.shtml" target="_blank">https://finance.sina.com.cn/money/future/fmnews/2026-11-16/doc-iniywwzf1273306.shtml</a></li><li><a href="https://www.hlqhgs.com/upload-files/2026/11/02/79a9c0011de345e4b680e877e7dc7655.pdf" target="_blank">https://www.hlqhgs.com/upload-files/2026/11/02/79a9c0011de345e4b680e877e7dc7655.pdf</a></li><li><a href="https://4g.stockstar.com/detail/IG2026111600013381" target="_blank">https://4g.stockstar.com/detail/IG2026111600013381</a></li><li><a href="https://search.cnfin.com/news?q=%E7%BA%A2%E6%9E%A3" target="_blank">https://search.cnfin.com/news?q=%E7%BA%A2%E6%9E%A3</a></li></ul>
+  <div class="disclaimer">免责声明：本报告由 AI 多 Agent 辩论系统自动生成，所有数据均来自公开渠道，不构成任何投资建议。期货交易有杠杆风险，入市需谨慎。报告中“置信度”为结论在预期窗口内触发的概率估计，经近5日复盘系数校准，不代表实际收益承诺。</div>
+</footer>
+</div></body></html>
