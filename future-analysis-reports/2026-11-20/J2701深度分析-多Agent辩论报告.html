@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>焦炭J2701 深度分析 · 多Agent辩论报告</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0b0f17;color:#d7dee8;font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.header{background:linear-gradient(135deg,#111a2b 0%,#0d1420 60%,#131c2e 100%);border-bottom:1px solid #22304a;padding:34px 0 26px;margin-bottom:26px}
+.header h1{font-size:30px;color:#f2f6fc;letter-spacing:1px}
+.header .sub{color:#7f93b0;font-size:14px;margin-top:6px}
+.meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.meta .m{background:#111b2b;border:1px solid #22304a;border-radius:10px;padding:10px 16px;min-width:120px}
+.meta .m .k{font-size:12px;color:#7288a6}
+.meta .m .v{font-size:18px;color:#e8eef7;font-weight:600;margin-top:2px}
+.banner{border-radius:14px;padding:22px 26px;margin-bottom:26px;border:1px solid #22304a;background:linear-gradient(120deg,#131d2e,#0f1724)}
+.banner.bear{border-left:6px solid #ff5c6c;background:linear-gradient(120deg,#241318,#131722)}
+.banner.bull{border-left:6px solid #2ecc8f;background:linear-gradient(120deg,#10241c,#131722)}
+.banner.neu{border-left:6px solid #f0b429;background:linear-gradient(120deg,#241f10,#131722)}
+.banner h2{font-size:24px;color:#fff}
+.banner .core{color:#a9b8cc;margin-top:8px;font-size:15px}
+.banner .lvl{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px}
+.banner .lvl div{font-size:14px;color:#8ea2bd}
+.banner .lvl b{color:#fff;font-size:17px;margin-left:6px}
+.sec-title{font-size:20px;color:#e9f0f9;margin:34px 0 16px;padding-left:12px;border-left:4px solid #3d7bfd}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.grid6{grid-template-columns:1fr}}
+.card{background:#101827;border:1px solid #1e2b40;border-radius:12px;padding:16px 18px}
+.card h3{font-size:15px;color:#8fb7ff;margin-bottom:10px}
+.card .txt{font-size:13.5px;color:#aab9cd;min-height:96px}
+.card .txt li{margin-left:16px;margin-bottom:4px}
+.bars{margin-top:12px}
+.bar{height:8px;border-radius:4px;background:#1b2637;overflow:hidden;margin-bottom:8px;display:flex}
+.bar .fill-b{background:linear-gradient(90deg,#1f9d6b,#2ecc8f);height:100%}
+.bar .fill-s{background:linear-gradient(90deg,#7a2b36,#ff5c6c);height:100%}
+.blabel{font-size:11px;color:#6d809d;display:flex;justify-content:space-between;margin-bottom:3px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid #1b2637;text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{color:#7f93b0;font-weight:500;font-size:12px}
+tr:hover td{background:#0e1624}
+.pos{color:#2ecc8f}.neg{color:#ff5c6c}.neu2{color:#f0b429}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.panel{background:#101827;border:1px solid #1e2b40;border-radius:12px;padding:18px}
+.termbar{display:flex;align-items:flex-end;gap:26px;height:180px;padding:14px 8px 0}
+.termbar .b{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.termbar .b .v{font-size:12px;color:#cfd9e6;margin-bottom:4px}
+.termbar .b .bar2{width:70%;background:linear-gradient(180deg,#3d7bfd,#1d3f86);border-radius:6px 6px 0 0;min-height:6px}
+.termbar .b .l{font-size:12px;color:#7f93b0;margin-top:8px}
+.debate{margin-top:10px}
+.round{margin-bottom:20px}
+.round h4{font-size:15px;color:#c7d4e6;margin-bottom:10px}
+.agent{border-radius:10px;padding:14px 16px;font-size:13.5px;margin-bottom:10px}
+.agent.bull{background:#0f211a;border:1px solid #1d4a37}
+.agent.bear{background:#211216;border:1px solid #4a2229}
+.agent .who{font-weight:700;margin-bottom:6px}
+.agent.bull .who{color:#2ecc8f}
+.agent.bear .who{color:#ff5c6c}
+.scoretab td{font-size:13px}
+.decision{background:#101827;border:1px solid #1e2b40;border-radius:12px;padding:20px;margin-top:16px}
+.decision .row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.decision .row div{background:#0d1624;border:1px solid #1b2a40;border-radius:8px;padding:12px}
+.decision .row .k{font-size:12px;color:#7288a6}
+.decision .row .v{font-size:16px;color:#e8eef7;font-weight:600;margin-top:3px}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;margin-left:8px}
+.tag.bear{background:#3a1820;color:#ff8a96}.tag.bull{background:#123528;color:#55e0a8}.tag.neu{background:#3a3014;color:#f0c860}
+.risk{background:#1a1410;border:1px solid #4a3a1c;border-radius:10px;padding:14px 16px;color:#c9b487;font-size:13px;margin-top:16px}
+.foot{color:#5b6c85;font-size:12px;margin-top:34px;border-top:1px solid #1b2637;padding-top:16px}
+.note{color:#7f93b0;font-size:12.5px;margin-top:8px}
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.tl div{background:#0d1624;border:1px solid #1b2a40;border-radius:8px;padding:10px 12px}
+.tl .k{font-size:12px;color:#7288a6}.tl .v{font-size:15px;color:#e8eef7;font-weight:600;margin-top:2px}
+.fail{color:#ff8a96}.pass{color:#55e0a8}
+</style></head>
+<body>
+<div class="header"><div class="wrap">
+<h1>焦炭 · J2701 深度分析 （关联品种）</h1>
+<div class="sub">多Agent辩论报告　|　交易所：大连商品交易所　|　报告日期：2026-11-20　|　数据来源：新浪财经日K/小时线、AKShare 持仓排名/库存/仓单/现货基差、Web 公开资讯；iFinD 不可用，按备选方案取数</div>
+<div class="meta">
+<div class="m"><div class="k">最新收盘</div><div class="v">1,950.5</div></div>
+<div class="m"><div class="k">当日涨跌</div><div class="v pos">+2.98%</div></div>
+<div class="m"><div class="k">成交量(手)</div><div class="v">55,779</div></div>
+<div class="m"><div class="k">持仓量(手)</div><div class="v">47,537</div></div>
+<div class="m"><div class="k">基准收盘价</div><div class="v">1,950.5</div></div>
+</div></div></div>
+<div class="wrap">
+<div class="banner bear">
+<h2>裁决方向：空<span class="tag bear">53.0% 置信度</span></h2>
+<div class="core">焦炭进入第四轮提降周期、铁水下降，20日高1,987.5构成压力；前20净多仅+1,660手、总量4.75万手偏小，11-20 反弹2.98%后定位于反弹沽空，替代低置信度的焦煤。</div>
+<div class="lvl">
+<div>胜率评估<b>空方 53% / 多方 47%</b></div>
+<div>预期触发窗口<b>1~3 个交易日</b></div>
+<div>入场区间<b>1,965~1,990</b></div>
+<div>目标位<b>1,880 / 1,830</b></div>
+<div>止损<b>2,035</b></div>
+</div>
+<div class="note">置信度校准：基础置信度 53.0% × 档位系数 1.00（50-59档（n=0，系数1.0），confidence-factors.json）= 53.0%，裁剪至10%~95%后为 <b>53.0%</b>。本品种为关联品种：由原品种 JM 低置信度（52.0%）触发，J 置信度53.0%高于原品种，按规则替换。关联强度0.9（焦煤领先焦炭约1日）。</div>
+<div class="note" style="color:#f0c860"><b>关联替换：</b>本品种为关联品种，替换原品种 JM（关联强度 0.9，上游焦煤→焦炭，焦煤领先约1日）。</div>
+</div>
+
+<div class="sec-title">一、六维数据全景</div>
+<div class="grid6"><div class="card"><h3>① 库存</h3><div class="txt"><ul><li>东方财富样本1,180（11/20持平；11/13 999→持续累积）</li><li>焦企开工回落、钢厂按需采购，焦炭库存由低位回升</li><li>库存维度偏空</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:40%"></div><div class="fill-s" style="width:60%"></div></div></div><div class="card"><h3>② 仓单</h3><div class="txt"><ul><li>大商所仓单接口解析失败，按中性处理</li><li>总持仓47,537手，5日+1,250手</li><li>成交放大，反弹中增仓</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:45%"></div><div class="fill-s" style="width:55%"></div></div></div><div class="card"><h3>③ 期限结构</h3><div class="txt"><ul><li>J2701 1,950.5 / J2705 1,817.5，backwardation</li><li>现货2,070元，主力基差+119元（+6.1%）</li><li>180日基差均值+57.8、最高+375，当前基差中性</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:60%"></div><div class="fill-s" style="width:40%"></div></div></div><div class="card"><h3>④ 技术面</h3><div class="txt"><ul><li>收盘1,950.5（+2.98%），20日区间1,831.5~1,987.5</li><li>EMA5 1,928 / EMA10 1,928 / EMA20 1,931 上方，EMA60 1,962 附近</li><li>MACD柱+9.8（前+6.2）、RSI 52.0、KDJ 48.8/54.9/36.7、%B 74.1</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:40%"></div><div class="fill-s" style="width:60%"></div></div></div><div class="card"><h3>⑤ 新闻基本面</h3><div class="txt"><ul><li>焦炭进入第四轮提降周期，现货承压</li><li>铁水产量继续下降，钢厂消耗自有库存</li><li>成本端焦煤供增需弱，成本支撑下移</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:30%"></div><div class="fill-s" style="width:70%"></div></div></div><div class="card"><h3>⑥ 持仓席位</h3><div class="txt"><ul><li>前20净多+1,660手（当日+768，数据日期11-19），2日净多增加，窗口+1,347</li><li>多空双方均减仓（多31,750 / 空30,090），总量仅4.75万手</li><li>国泰多单+324、中信多单+55；国泰空单+5</li></ul></div><div class="blabel"><span>多方</span><span>空方</span></div><div class="bar"><div class="fill-b" style="width:55%"></div><div class="fill-s" style="width:45%"></div></div></div></div>
+
+<div class="sec-title">二、技术面深度面板</div>
+<div class="panel"><table><thead><tr><th>指标 / 项目</th><th>数值</th><th>信号</th></tr></thead><tbody><tr><td>EMA5 / 10 / 20 / 60</td><td>1,928 / 1,928 / 1,931 / 1,962</td><td class="pos">站上短中期均线，EMA60 压制</td></tr><tr><td>MACD (DIF/DEA/柱)</td><td>-8.4 / -13.3 / +9.8</td><td class="pos">零轴下方红柱扩大</td></tr><tr><td>RSI(14)</td><td>52.0</td><td class="neu2">中性，刚过50</td></tr><tr><td>KDJ (K/D/J)</td><td>48.8 / 54.9 / 36.7</td><td class="neu2">中性区域，J值回落</td></tr><tr><td>BOLL (下/中/上)</td><td>1,847 / 1,917 / 1,987</td><td class="pos">%B 74.1，逼近上轨</td></tr><tr><td>关键价位</td><td>支撑1,917/1,831；压力1,987.5(20日高)/2,035</td><td class="neg">1,987~2,000为强压力</td></tr><tr><td>量能与持仓</td><td>持仓47,537（5日+1,250）</td><td class="neu2">反弹增仓但总量偏小</td></tr></tbody></table><div class="note">【趋势判断】日线由空转震荡，强度弱；【形态】1,831~1,987 箱体，接近上沿；【量能】反弹增仓但持仓总量偏小；【综合】技术面中性偏多，但已接近压力区。</div></div>
+
+<div class="sec-title">三、持仓席位面板</div>
+<div class="panel"><div class="note" style="margin-top:0">数据日期 2026-11-19（11-20 大商所排名未发布，已回退并标注）　前20名净持仓 <b class="pos">+1,660</b> 手（当日 +768）　多31,750 / 空30,090</div><div class="note">5日趋势：净多连续2日增加，窗口+1,347手；但多空双方同步减仓、总量仅4.75万手，资金参与度低，方向可信度一般。</div></div>
+
+<div class="sec-title">四、期限结构</div>
+<div class="panel"><div class="termbar"><div class="b"><div class="v">1,950</div><div class="bar2" style="height:100%"></div><div class="l">J2701</div></div><div class="b"><div class="v">1,818</div><div class="bar2" style="height:30%"></div><div class="l">J2705</div></div></div><div class="note">J2701 1,950.5 高于 J2705 1,817.5，近高远低；现货2,070元升水期货119元（+6.1%），基差中性，对空头略有保护。</div></div>
+
+<div class="sec-title">五、三轮多空辩论</div>
+<div class="debate"><div class="round"><h4>第一轮 · 立论陈词</h4><div class="agent bull"><div class="who">🐂 多头首席分析师 · 金牛</div>① 突破EMA5/10/20，MACD红柱扩大，短线转强。② 净多连续2日增加、基差+119元。③ 焦煤领先指标反弹1.56%带动焦炭补涨。目标1,990/2,050。</div><div class="agent bear"><div class="who">🐻 空头首席分析师 · 黑熊</div>① 第四轮提降周期开启，现货下调压力大。② 铁水下降、库存累积，需求走弱。③ 1,987.5为20日高强压力，%B 74.1接近上轨。目标1,880/1,830。</div></div><div class="round"><h4>第二轮 · 交叉驳斥</h4><div class="agent bull"><div class="who">🐂 多头首席分析师 · 金牛</div>空方把提降视为利空，但盘面已提前反映，基差+6.1%说明期货贴水；净多连续增加显示资金提前布局。</div><div class="agent bear"><div class="who">🐻 空头首席分析师 · 黑熊</div>多方的2.98%是空头回补，持仓总量仅4.75万手、参与度低；提降落地前现货仍有下调空间，%B 74已接近上轨。</div></div><div class="round"><h4>第三轮 · 最终陈词</h4><div class="agent bull"><div class="who">🐂 多头首席分析师 · 金牛</div>决胜点是均线突破+MACD红柱+净多增加。建议1,930~1,955多，止损1,880，目标1,990/2,050。</div><div class="agent bear"><div class="who">🐻 空头首席分析师 · 黑熊</div>决胜点是提降周期+铁水下降+压力位。建议1,965~1,990沽空，止损2,035，目标1,880/1,830。</div></div></div>
+
+<div class="sec-title">六、总决策官裁决</div>
+<div class="panel"><table class="scoretab"><thead><tr><th>维度</th><th>多方评分</th><th>空方评分</th><th>裁决要点</th></tr></thead><tbody><tr><td>库存</td><td class="pos">5/10</td><td class="neg">5/10</td><td style="text-align:left">库存累积，边际偏空</td></tr><tr><td>仓单</td><td class="pos">5/10</td><td class="neg">5/10</td><td style="text-align:left">接口缺失，中性</td></tr><tr><td>期限结构</td><td class="pos">6/10</td><td class="neg">4/10</td><td style="text-align:left">backwardation+基差+6.1%</td></tr><tr><td>技术面</td><td class="pos">4/10</td><td class="neg">6/10</td><td style="text-align:left">短线转强但接近上沿</td></tr><tr><td>新闻基本面</td><td class="pos">3/10</td><td class="neg">7/10</td><td style="text-align:left">第四轮提降+铁水下降</td></tr><tr><td>持仓席位</td><td class="pos">6/10</td><td class="neg">4/10</td><td style="text-align:left">净多2日增但总量小</td></tr></tbody></table><div class="note" style="margin-top:14px"><b>双方最强点：</b>空方：第四轮提降+铁水下降+20日高压制；多方：均线突破+MACD红柱+净多连续增加。<br><b>双方最弱点：</b>空方：盘面已贴水现货，提降落地或利空出尽；多方：持仓总量仅4.75万手，资金验证不足。</div></div>
+<div class="decision">
+<h3 style="color:#8fb7ff;font-size:16px">最终决策方案</h3>
+<div class="row">
+<div><div class="k">方向</div><div class="v">空（反弹沽空）</div></div>
+<div><div class="k">入场</div><div class="v">1,965~1,990</div></div>
+<div><div class="k">时间窗口</div><div class="v">1~3 个交易日</div></div>
+<div><div class="k">目标位</div><div class="v">1,880 / 1,830</div></div>
+<div><div class="k">止损位</div><div class="v">2,035</div></div>
+<div><div class="k">仓位建议</div><div class="v">两成仓位，1~3日</div></div>
+</div>
+<div class="note" style="margin-top:14px"><b>最终置信度：53.0%</b>（基础 53.0% × 系数 1.00）　|　预期触发窗口：1~3 个交易日</div>
+</div>
+
+<div class="sec-title">七、双周期趋势与入场位置</div>
+<div class="panel"><div class="tl"><div><div class="k">日线趋势 / 强度</div><div class="v">震荡 / 弱</div></div><div><div class="k">小时趋势</div><div class="v">多</div></div><div><div class="k">位置评分</div><div class="v">10.0</div></div><div><div class="k">日线布林%B</div><div class="v">0.741</div></div><div><div class="k">小时布林%B</div><div class="v">0.679</div></div><div><div class="k">距小时EMA10(ATR)</div><div class="v">0.99</div></div></div><div class="note">规则判定：<b class="fail">未通过</b>　原因：不在日线区间上沿（%B 0.74，距20日高 0.73ATR）；窄幅震荡禁止低吸/高抛（仅放量突破）；盈亏比不足（0.00<1.5）；位置评分不足（10<60）。口径：日线定方向、小时定位置，位置评分≥60 且无硬伤才通过；本项仅作入场位置参考，不改变裁决方向。</div></div>
+
+<div class="risk"><b>方向失效风险：</b>若焦煤继续反弹带动焦炭突破1,987.5，空单需在2,035止损；提降落地后若盘面反升，视为利空出尽。</div>
+<div class="foot">数据来源：新浪财经期货日K（2026-11-20 收盘）、新浪小时线、AKShare 持仓排名/库存/仓单/现货基差、Web 公开资讯（新浪财经、财联社、金投网、证券时报、SMM 等，检索日 2026-11-22）。持仓席位数据日期：2026-11-19。缺失维度已在对应卡片标注，未做任何编造。本报告由 AI 多Agent辩论系统生成，仅供研究参考，不构成投资建议。期货有风险，入市需谨慎。</div>
+</div>
+</body></html>
