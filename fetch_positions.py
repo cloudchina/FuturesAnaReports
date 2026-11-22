@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """从 akshare（新浪源）抓取期货前 20 名会员持仓排名，输出「持仓席位」维度 JSON。
 
+同时顺带采集交易所仓单日报，在 --out 同目录生成 warehouse.json（失败不影响持仓结果）。
+
 用法:
   python3 fetch_positions.py --varieties 沥青,苯乙烯,生猪,红枣,焦煤,鸡蛋,碳酸锂,甲醇 --date 2026-10-26 --out /workspace/positions.json
   python3 fetch_positions.py --contracts BU2611,EB2612 --date 2026-10-26 --out /workspace/positions.json
@@ -9,17 +11,22 @@
 说明:
   - --varieties 支持品种代码或中文名，脚本自动按成交量/持仓量最大挑选主力合约。
   - 每个合约输出：前20名多头/空头持仓合计及增减、净持仓、集中度、前5席位明细。
+  - 持仓排名取数顺序：新浪 → 交易所官方（GFEX/SHFE）→ 向前回退最多5个自然日，并标注实际日期与来源。
+  - 仓单：SHFE 官网新址解析、CZCE、GFEX 官方 JSON；DCE 反爬时回退 EM 库存并标注口径。
   - --csv 追加/更新长期日志（默认建议 future-analysis-reports/positions-log.csv），供 5 日持仓趋势使用。
-  - 当日数据未发布时，自动向前回退最多 5 个自然日，并在输出中标注实际数据日期。
   - 沙箱为全新环境时，脚本会自动 pip install akshare。
 """
 import argparse
 import csv
+import io
 import json
 import os
 import subprocess
 import sys
 from datetime import datetime, timedelta
+
+import pandas as pd
+import requests
 
 VAR_NAME = {
     "BU": "沥青", "EB": "苯乙烯", "LH": "生猪", "CJ": "红枣", "JM": "焦煤",
@@ -147,6 +154,136 @@ def resolve_legs(ak, contract, date):
     return None, None, None, None
 
 
+# ---------------- 仓单日报（随持仓一并采集，输出 warehouse.json） ----------------
+SHFE_WH = {"BU": "石油沥青", "FU": "燃料油", "LU": "低硫燃料油"}
+CZCE_WH = {"CJ": "CJ", "MA": "MA"}
+GFEX_WH = {"LC": "lc", "SI": "si"}
+DCE_WH = {"EB": "EB", "LH": "LH", "JM": "JM", "JD": "JD", "J": "J",
+          "M": "M", "C": "C", "I": "I", "PP": "PP", "V": "V", "L": "L"}
+
+
+def wh_shfe(date, codes):
+    url = (f"https://www.shfe.com.cn/data/tradedata/future/stockdata/"
+           f"dailystock_{date}/ZH/all.html")
+    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+    r.raise_for_status()
+    r.encoding = "utf-8"
+    tables = pd.read_html(io.StringIO(r.text))
+    out = {}
+    for code in codes:
+        real = SHFE_WH[code]
+        total = chg = 0.0
+        found = False
+        for df in tables:
+            if df.empty or df.shape[1] < 4 or real not in str(df.iloc[0, 0]):
+                continue
+            found = True
+            cols = [str(c) for c in df.columns]
+            qty_col = next((i for i, c in enumerate(cols) if "期货" in c), 2)
+            chg_col = next((i for i, c in enumerate(cols) if "增减" in c), 3)
+            for _, row in df.iloc[1:].iterrows():
+                cells = [str(x) for x in row.tolist()]
+                if any(x in ("合计", "总计", "小计") for x in cells[:3]):
+                    continue
+                try:
+                    total += float(str(row.iloc[qty_col]).replace(",", ""))
+                    chg += float(str(row.iloc[chg_col]).replace(",", ""))
+                except (ValueError, TypeError):
+                    continue
+        if found:
+            out[code] = {"date": date, "receipts": round(total, 1), "chg": round(chg, 1),
+                         "source": "SHFE 仓单日报（官网新址）"}
+    return out
+
+
+def wh_czce(ak, date, codes):
+    data = ak.futures_warehouse_receipt_czce(date=date)
+    out = {}
+    for code in codes:
+        key = CZCE_WH[code]
+        if key not in data:
+            continue
+        df = data[key]
+        subt = df[df.iloc[:, 0].astype(str) == "小计"]
+        qty_cols = [c for c in df.columns if "仓单数量" in str(c)]
+        qty = sum(float(subt[c].fillna(0).sum()) for c in qty_cols) if qty_cols else 0
+        chg = float(subt["当日增减"].fillna(0).sum()) if "当日增减" in df else 0
+        fc = float(subt["有效预报"].fillna(0).sum()) if "有效预报" in df else 0
+        out[code] = {"date": date, "receipts": round(qty, 1), "chg": round(chg, 1),
+                     "forecast": round(fc, 1), "source": "CZCE 仓单日报"}
+    return out
+
+
+def wh_gfex(date, codes):
+    r = requests.post("http://www.gfex.com.cn/u/interfacesWebTdWbillWeeklyQuotes/loadList",
+                      data={"gen_date": date}, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+    rows = (r.json() or {}).get("data") or []
+    out = {}
+    for code in codes:
+        key = GFEX_WH[code].lower()
+        qty = sum(float(x.get("wbillQty") or 0) for x in rows
+                  if str(x.get("varietyOrder", "")).lower() == key)
+        diff = sum(float(x.get("diff") or 0) for x in rows
+                   if str(x.get("varietyOrder", "")).lower() == key)
+        if rows:
+            out[code] = {"date": date, "receipts": round(qty, 1), "chg": round(diff, 1),
+                         "source": "GFEX 仓单日报（官方JSON）"}
+    return out
+
+
+def wh_dce(ak, date, codes):
+    out = {}
+    try:
+        df = ak.futures_warehouse_receipt_dce(date=date)
+        for code in codes:
+            sub = df[df["品种代码"].astype(str).str.upper() == DCE_WH[code]]
+            if sub.empty:
+                continue
+            out[code] = {"date": date,
+                         "receipts": round(float(sub["今日仓单量（手）"].fillna(0).sum()), 1),
+                         "chg": round(float(sub["增减（手）"].fillna(0).sum()), 1),
+                         "source": "DCE 仓单日报"}
+    except Exception:  # noqa: BLE001
+        pass
+    for code in codes:
+        if code in out:
+            continue
+        try:
+            inv = ak.futures_inventory_em(symbol=VAR_NAME[code]).dropna().tail(3)
+            last = inv.iloc[-1]
+            out[code] = {"date": str(last["日期"]), "receipts": float(last["库存"]),
+                         "chg": float(last["增减"]),
+                         "source": "EM 库存（DCE仓单接口412反爬，代理口径）",
+                         "note": "非严格仓单，仅作库存维度参考"}
+        except Exception:  # noqa: BLE001
+            continue
+    return out
+
+
+def collect_warehouse(ak, date, codes):
+    """按交易所分派采集仓单，返回 {code: {...}}；单交易所失败不影响其他交易所。"""
+    codes = [c for c in dict.fromkeys(codes) if c]
+    result, errors = {}, {}
+    groups = (("SHFE", wh_shfe, [c for c in codes if c in SHFE_WH], False),
+              ("CZCE", wh_czce, [c for c in codes if c in CZCE_WH], True),
+              ("GFEX", wh_gfex, [c for c in codes if c in GFEX_WH], False),
+              ("DCE", wh_dce, [c for c in codes if c in DCE_WH], True))
+    for label, fn, targets, need_ak in groups:
+        if not targets:
+            continue
+        try:
+            result.update(fn(ak, date, targets) if need_ak else fn(date, targets))
+        except Exception as e:  # noqa: BLE001
+            errors[label] = repr(e)[:160]
+    for c in codes:
+        if c not in result:
+            errors.setdefault(c, "未获取到仓单数据")
+    return {"asof": f"{date[:4]}-{date[4:6]}-{date[6:]}",
+            "fetched_at": datetime.now().isoformat(timespec="seconds"),
+            "source": "SHFE新址/CZCE/GFEX官方/DCE(或EM回退)",
+            "warehouse": result, "errors": errors}
+
+
 def upsert_csv(path, date, data):
     """把当日快照幂等写入长期日志（键：日期+品种+合约），供 5 日持仓趋势使用。"""
     fields = ["日期", "品种", "合约", "总持仓", "前20多单", "前20空单", "净持仓",
@@ -271,6 +408,19 @@ def main():
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
+
+    wh = None
+    try:
+        codes = [v or variety_of(c) for v, c, _ in targets]
+        wh = collect_warehouse(ak, date, codes)
+        wh_path = os.path.join(os.path.dirname(os.path.abspath(args.out)), "warehouse.json")
+        with open(wh_path, "w", encoding="utf-8") as f:
+            json.dump(wh, f, ensure_ascii=False, indent=2)
+        for c, v in wh["warehouse"].items():
+            print(f"仓单 {c} {v['date']} {v['receipts']:.0f}（{v['chg']:+.0f}） [{v['source']}]")
+        print(f"wrote {wh_path}")
+    except Exception as e:  # noqa: BLE001
+        print("warehouse skipped:", repr(e)[:160], file=sys.stderr)
 
     if args.csv:
         upsert_csv(args.csv, date, data)
