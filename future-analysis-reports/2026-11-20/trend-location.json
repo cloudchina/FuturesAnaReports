@@ -323,13 +323,13 @@
       "rule_pass": false,
       "fail_reasons": [
         "逆日线（日线空）",
-        "位置评分不足（5<60）"
+        "位置评分不足（10<60）"
       ],
-      "location_score": 5,
+      "location_score": 10,
       "score_parts": {
         "alignment": 0,
         "location": 0,
-        "confirmation": 0,
+        "confirmation": 5,
         "risk_reward": 5,
         "rr": 1.54
       },
@@ -492,13 +492,13 @@
       "fail_reasons": [
         "不在日线区间上沿（%B 0.19，距20日高 7.67ATR）",
         "盈亏比不足（0.95<1.5）",
-        "位置评分不足（10<60）"
+        "位置评分不足（15<60）"
       ],
-      "location_score": 10.0,
+      "location_score": 15.0,
       "score_parts": {
         "alignment": 10,
         "location": 0.0,
-        "confirmation": 0,
+        "confirmation": 5,
         "risk_reward": 0,
         "rr": 0.95
       },

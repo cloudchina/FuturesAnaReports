@@ -95,6 +95,58 @@ def leg(ak, contract, date, symbol):
     return rows
 
 
+SHFE_VARS = {"BU", "FU", "LU", "RU", "SP", "AL", "CU", "ZN", "PB", "NI", "SN", "AU", "AG",
+             "RB", "HC", "SS", "BR", "AO", "EC"}
+GFEX_VARS = {"LC", "SI"}
+
+
+def official_legs(ak, contract, date):
+    """交易所官方持仓排名（新浪缺失时回退）：GFEX 官方接口、SHFE 官方接口。
+
+    大商所官网接口返回 412 反爬，无法使用，仍依赖新浪（通常滞后 1 个交易日）。
+    """
+    v = variety_of(contract)
+    try:
+        if v in GFEX_VARS:
+            data = ak.futures_gfex_position_rank(date=date)
+            df = data.get(contract.lower())
+            if df is None or df.empty:
+                return None
+            longs = [[str(r["long_party_name"]), float(r["long_open_interest"]),
+                      float(r["long_open_interest_chg"])] for _, r in df.iterrows()]
+            shorts = [[str(r["short_party_name"]), float(r["short_open_interest"]),
+                       float(r["short_open_interest_chg"])] for _, r in df.iterrows()]
+            return longs, shorts
+        if v in SHFE_VARS:
+            data = ak.get_shfe_rank_table(date=date, vars_list=[v])
+            df = data.get(contract.lower())
+            if df is None or df.empty:
+                return None
+            longs = [[str(r["long_party_name"]), float(r["long_open_interest"]),
+                      float(r["long_open_interest_chg"])] for _, r in df.iterrows()]
+            shorts = [[str(r["short_party_name"]), float(r["short_open_interest"]),
+                       float(r["short_open_interest_chg"])] for _, r in df.iterrows()]
+            return longs, shorts
+    except Exception:  # noqa: BLE001
+        return None
+    return None
+
+
+def resolve_legs(ak, contract, date):
+    """按 新浪→交易所官方→向前回退最多5个自然日 的顺序取持仓排名。"""
+    base = datetime.strptime(date, "%Y%m%d").date()
+    for i in range(6):
+        ds = (base - timedelta(days=i)).strftime("%Y%m%d")
+        longs = leg(ak, contract, ds, "多单持仓")
+        shorts = leg(ak, contract, ds, "空单持仓")
+        if longs and shorts:
+            return longs, shorts, ds, "sina"
+        pair = official_legs(ak, contract, ds)
+        if pair:
+            return pair[0], pair[1], ds, "exchange"
+    return None, None, None, None
+
+
 def upsert_csv(path, date, data):
     """把当日快照幂等写入长期日志（键：日期+品种+合约），供 5 日持仓趋势使用。"""
     fields = ["日期", "品种", "合约", "总持仓", "前20多单", "前20空单", "净持仓",
@@ -181,19 +233,19 @@ def main():
     data = {}
     for v, contract, oi in targets:
         try:
-            longs = leg(ak, contract, date, "多单持仓")
-            shorts = leg(ak, contract, date, "空单持仓")
+            longs, shorts, actual, source = resolve_legs(ak, contract, date)
             if not longs or not shorts:
-                errors[contract] = f"{date} 无持仓排名数据"
+                errors[contract] = f"{date} 无持仓排名数据（新浪及交易所官方均不可用）"
                 continue
-            total_oi = (oi_map.get(contract.upper(), {}) or {}).get(date) or oi
+            total_oi = (oi_map.get(contract.upper(), {}) or {}).get(actual) or oi
             long_sum = sum(x[1] for x in longs)
             short_sum = sum(x[1] for x in shorts)
             long_chg = sum(x[2] for x in longs)
             short_chg = sum(x[2] for x in shorts)
             data[contract] = {
                 "variety": v or variety_of(contract),
-                "date": date,
+                "date": actual,
+                "source": source,
                 "total_oi": total_oi,
                 "long_top20": long_sum,
                 "short_top20": short_sum,
