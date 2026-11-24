@@ -1,0 +1,59 @@
+{
+  "asof": "2026-11-24",
+  "fetched_at": "2026-11-24T19:33:29",
+  "source": "SHFE新址/CZCE/GFEX官方/DCE(或EM回退)",
+  "warehouse": {
+    "BU": {
+      "date": "20261124",
+      "receipts": 66560.0,
+      "chg": 0.0,
+      "source": "SHFE 仓单日报（官网新址）"
+    },
+    "CJ": {
+      "date": "20261124",
+      "receipts": 0.0,
+      "chg": 0.0,
+      "forecast": 0.0,
+      "source": "CZCE 仓单日报"
+    },
+    "MA": {
+      "date": "20261124",
+      "receipts": 650.0,
+      "chg": 650.0,
+      "forecast": 0.0,
+      "source": "CZCE 仓单日报"
+    },
+    "EB": {
+      "date": "2026-10-30",
+      "receipts": 0.0,
+      "chg": -2430.0,
+      "source": "EM 库存（DCE仓单接口412反爬，代理口径）",
+      "note": "非严格仓单，仅作库存维度参考"
+    },
+    "LH": {
+      "date": "2026-11-24",
+      "receipts": 637.0,
+      "chg": 0.0,
+      "source": "EM 库存（DCE仓单接口412反爬，代理口径）",
+      "note": "非严格仓单，仅作库存维度参考"
+    },
+    "JM": {
+      "date": "2026-11-23",
+      "receipts": 0.0,
+      "chg": -1359.0,
+      "source": "EM 库存（DCE仓单接口412反爬，代理口径）",
+      "note": "非严格仓单，仅作库存维度参考"
+    },
+    "JD": {
+      "date": "2026-11-24",
+      "receipts": 14.0,
+      "chg": 6.0,
+      "source": "EM 库存（DCE仓单接口412反爬，代理口径）",
+      "note": "非严格仓单，仅作库存维度参考"
+    }
+  },
+  "errors": {
+    "GFEX": "JSONDecodeError('Expecting value: line 1 column 1 (char 0)')",
+    "LC": "未获取到仓单数据"
+  }
+}
