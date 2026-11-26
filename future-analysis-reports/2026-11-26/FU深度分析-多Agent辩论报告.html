@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>燃料油FU2701 深度分析 · 多Agent辩论报告</title><style>
+:root{--bg:#0b0f16;--bg2:#111827;--card:#151c28;--line:#243044;--txt:#e5e7eb;--mut:#94a3b8;
+--red:#ef4444;--green:#22c55e;--gold:#f59e0b;--blue:#3b82f6;--cyan:#22d3ee;--purple:#a78bfa;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(180deg,#080b11 0%,#0b0f16 100%);color:var(--txt);
+font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+line-height:1.75;padding:28px 18px 60px;max-width:1180px;margin:0 auto;font-size:14px}
+a{color:var(--cyan);text-decoration:none}
+.hd{background:linear-gradient(135deg,#131c2b 0%,#0f1520 100%);border:1px solid var(--line);
+border-radius:16px;padding:26px 28px;margin-bottom:18px;position:relative;overflow:hidden}
+.hd:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;
+background:radial-gradient(circle,rgba(59,130,246,.25),transparent 70%);border-radius:50%}
+.hd h1{font-size:25px;font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+.hd .sub{color:var(--mut);font-size:13px}
+.px{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px}
+.px div{min-width:96px}
+.px .k{color:var(--mut);font-size:12px}
+.px .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.up{color:var(--red)}.down{color:var(--green)}.flat{color:var(--mut)}
+.banner{border-radius:16px;padding:20px 24px;margin-bottom:18px;border:1px solid var(--line);
+background:linear-gradient(135deg,rgba(239,68,68,.10),rgba(17,24,39,.6))}
+.banner.short{background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(17,24,39,.6))}
+.banner.neutral{background:linear-gradient(135deg,rgba(148,163,184,.14),rgba(17,24,39,.6))}
+.banner h2{font-size:19px;margin-bottom:8px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;
+border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.tag.red{color:#fecaca;border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.15)}
+.tag.green{color:#bbf7d0;border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.15)}
+.tag.gold{color:#fde68a;border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.15)}
+.tag.blue{color:#bfdbfe;border-color:rgba(59,130,246,.5);background:rgba(59,130,246,.15)}
+.banner .core{color:#cbd5e1;font-size:13.5px}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px}
+.kbox{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.kbox .k{color:var(--mut);font-size:12px;margin-bottom:3px}
+.kbox .v{font-size:15px;font-weight:600}
+h3.sec{font-size:16px;margin:26px 0 12px;padding-left:10px;border-left:3px solid var(--blue);letter-spacing:.4px}
+.grid6{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px}
+.dim{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.dim h4{font-size:14px;margin-bottom:8px;color:#dbeafe}
+.dim p{font-size:12.5px;color:#cbd5e1;margin-bottom:4px}
+.bar{height:7px;background:#1f2937;border-radius:99px;overflow:hidden;display:flex;margin-top:9px}
+.bar i{display:block;height:100%}
+.score{display:flex;justify-content:space-between;font-size:11px;color:var(--mut);margin-top:5px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.col{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.col h5{font-size:13px;margin-bottom:7px;color:#e2e8f0}
+.col ul{list-style:none;font-size:12.5px;color:#cbd5e1}
+.col li{margin:5px 0;padding-left:14px;position:relative}
+.col li:before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:7px 9px;border-bottom:1px solid #1e293b;text-align:right}
+th{color:var(--mut);font-weight:500;background:rgba(255,255,255,.02)}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:none}
+.ts{display:flex;flex-direction:column;gap:6px}
+.tsrow{display:flex;align-items:center;gap:10px;font-size:12.5px}
+.tsrow .name{width:78px;color:var(--mut);flex:none}
+.tsrow .bwrap{flex:1;background:#1a2332;border-radius:5px;height:20px;position:relative}
+.tsrow .bwrap i{display:block;height:100%;border-radius:5px;
+background:linear-gradient(90deg,rgba(59,130,246,.35),rgba(59,130,246,.8))}
+.tsrow .val{width:130px;text-align:right;flex:none;font-variant-numeric:tabular-nums}
+.round{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.round h4{font-size:14px;margin-bottom:10px;color:#e2e8f0}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.duel{grid-template-columns:1fr}}
+.side{border-radius:10px;padding:12px 14px;border:1px solid var(--line)}
+.side.bull{background:linear-gradient(160deg,rgba(239,68,68,.10),rgba(0,0,0,.15));border-color:rgba(239,68,68,.3)}
+.side.bear{background:linear-gradient(160deg,rgba(34,197,94,.10),rgba(0,0,0,.15));border-color:rgba(34,197,94,.3)}
+.side h5{font-size:13px;margin-bottom:7px}
+.side.bull h5{color:#fca5a5}.side.bear h5{color:#86efac}
+.side p{font-size:12.5px;color:#cbd5e1;margin:6px 0}
+.side ol{margin-left:16px;font-size:12.5px;color:#cbd5e1}
+.side li{margin:4px 0}
+.verdict{background:linear-gradient(135deg,#131c2b,#0e1420);border:1px solid var(--gold);
+border-radius:16px;padding:20px 24px;margin-top:8px}
+.verdict h3{font-size:17px;margin-bottom:10px}
+.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);border-radius:10px;
+padding:12px 14px;font-size:12.5px;color:#fde68a;margin-top:12px}
+.note{font-size:12px;color:var(--mut);margin-top:8px}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:#64748b}
+.replace{background:rgba(167,139,250,.10);border:1px solid rgba(167,139,250,.4);border-radius:10px;
+padding:10px 14px;font-size:12.5px;color:#ddd6fe;margin-bottom:14px}
+</style></head><body>
+<div class="hd"><h1>燃料油 FU2701 · 深度分析</h1>
+<div class="sub">上海期货交易所 · 报告日期 2026-11-26 · 数据截至 2026-11-26 收盘 · 多Agent三轮辩论</div>
+<div class="px">
+<div><div class="k">收盘价</div><div class="v">3,907.0</div></div>
+<div><div class="k">涨跌</div><div class="v up">+7.34%</div></div>
+<div><div class="k">持仓量</div><div class="v">119,679</div></div>
+<div><div class="k">5日 / 20日</div><div class="v" style="font-size:15px">-0.53% / -27.89%</div></div>
+<div><div class="k">成交/5日均</div><div class="v" style="font-size:15px">1.19×</div></div>
+</div></div>
+<div class="replace">由原品种沥青 BU（校准 36.4%）、苯乙烯 EB（35.0%）、甲醇 MA（36.4%）低置信度触发，替换为关联品种 FU 燃料油（原油产业链，commodity_relations.yaml 关联强度 0.8）。注意方向由原品种的「多」转为「空」。</div>
+<div class="banner short"><h2>裁决：<span class="tag green">空</span>
+<span class="tag gold">空方 57% / 多方 43%</span>
+<span class="tag blue">校准置信度 49.7%</span><span class="tag">窗口 1~3 个交易日</span></h2>
+<div class="core">胡塞武装击中沙特最大炼厂与吉达/吉赞港、霍尔木兹两船触雷，布伦特升至 94.71 美元，FU 单日冲高 4040 后收 3907（+7.34%）留长上影、减仓 9,523 手；新加坡燃料油库存升至 2,080.5 万桶（10-16 以来 +15.3%）、仓单 9.27 万吨、前 20 净空增 5,708 手，反弹沽空、不追空。</div>
+<div class="kgrid">
+<div class="kbox"><div class="k">入场区间</div><div class="v">3,980 ~ 4,060</div></div>
+<div class="kbox"><div class="k">目标1 / 目标2</div><div class="v">3,800 / 3,700</div></div>
+<div class="kbox"><div class="k">止损</div><div class="v">4,130</div></div>
+<div class="kbox"><div class="k">基础置信度 × 系数</div><div class="v">46% × 1.08 = 49.7%</div></div>
+</div></div>
+<div class="panel"><h3 class="sec" style="margin-top:4px">近5日复盘提示（规则引擎）</h3>
+<p style="font-size:12.5px;color:#cbd5e1">近 5 日 1 条可终评样本：11-20「空」止盈成功（100%），无在途预测。今日为地缘驱动的冲高回落，日线仍空/强（ADX 38.0、score -4），本次延续空头方向与近 5 日有效方向一致；但小时距 EMA10 已 +1.28 ATR，故只做反弹沽空、不追空。</p></div>
+<h3 class="sec">六维数据全景</h3><div class="grid6"><div class="dim"><h4>① 库存</h4><p>新加坡燃料油库存 2,080.5 万桶（11-20，同花顺 iFinD EDB），较 10-16 的 1,804.3 万桶累库 15.3%</p><p>区域高硫供给由紧转松，累库趋势连续四周</p><p>国内炼厂产出受原油到港与利润约束，短期弹性有限</p><div class="bar"><i style="width:30%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:70%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 3/10</span><span>空头 7/10</span></div></div><div class="dim"><h4>② 仓单</h4><p>上期所燃料油仓单 92,660 吨（11-26，-2,000），绝对量偏高</p><p>仓单高位对 FU2701 近月形成实盘压力</p><p>同期持仓 119,679 手，单日减仓 9,523 手（-7.4%）</p><div class="bar"><i style="width:30%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:70%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 3/10</span><span>空头 7/10</span></div></div><div class="dim"><h4>③ 期限结构</h4><p>FU2701 3,907 > 2702 3,798 > 2703 3,720 > 2704 3,632 > 2705 3,552 > 2709 3,343</p><p>全曲线深度 backwardation，近月较 2705 升水 355 元</p><p>近强远弱反映高硫现货紧张，地缘溢价集中在近月</p><div class="bar"><i style="width:70%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:30%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 7/10</span><span>空头 3/10</span></div></div><div class="dim"><h4>④ 技术面</h4><p>EMA5 3,792 < EMA10 3,892 < EMA20 4,102 < EMA60 4,145，中期空头排列未破</p><p>今日 +7.34% 冲高 4,040 后回落收 3,907（振幅 8.5%），留长上影</p><p>MACD 绿柱 -111.0（前值 -168.0）收敛，RSI 42.0、%B 0.354</p><div class="bar"><i style="width:30%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:70%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 3/10</span><span>空头 7/10</span></div></div><div class="dim"><h4>⑤ 新闻基本面</h4><p>胡塞称击中沙特最大炼厂与吉达/吉赞港，霍尔木兹两船触雷，布伦特 94.71 美元</p><p>IEA 11-13 报告仍判断 Q4 全球重回过剩；OPEC+ 11-29 议 2027 配额，属双向事件风险</p><p>上期所 11-03 起将 FU2612/FU2701 涨跌停板放宽至 18%，波动显著放大</p><div class="bar"><i style="width:50%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:50%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 5/10</span><span>空头 5/10</span></div></div><div class="dim"><h4>⑥ 持仓席位</h4><p>前 20 净空 -2,250 手（11-26），当日 -5,708 手，净空大幅增加</p><p>多头 -6,513 / 空头 -805，多头离场速度远快于空头</p><p>空集中度 61.5% 高于多 59.6%，空头略占主导</p><div class="bar"><i style="width:30%;background:linear-gradient(90deg,#ef4444,#f87171)"></i><i style="width:70%;background:linear-gradient(90deg,#22c55e,#4ade80)"></i></div><div class="score"><span>多头 3/10</span><span>空头 7/10</span></div></div></div>
+<h3 class="sec">技术面深度面板（日线）</h3><div class="panel"><div class="cols"><div class="col"><h5>趋势指标</h5><ul><li>EMA5 3,792 / EMA10 3,892 / EMA20 4,102 / EMA60 4,145，中期空头排列</li><li>DIF -226.2 / DEA -170.7，绿柱 -111.0（前值 -168.0）收敛</li><li>收盘 3,907 仍在 EMA20 下方，反弹未改中期结构</li></ul></div><div class="col"><h5>震荡指标</h5><ul><li>RSI14 42.0（前值 31.9），自超卖区回升至中性偏弱</li><li>KDJ 26.9/18.6/43.6，低位金叉向上</li><li>布林 %B 0.354，位于中轨下方</li></ul></div><div class="col"><h5>量能指标</h5><ul><li>成交 776,791 手，为 5 日均量 1.19 倍，放量反弹</li><li>持仓 119,679 手，单日 -9,523 手，减仓上行＝空头回补为主</li><li>ATR14 244.3（6.25%），波动率处于极高水平</li></ul></div><div class="col"><h5>形态与关键价位</h5><ul><li>今日振幅 3,720-4,040（8.5%），长上影显示高位抛压</li><li>20 日区间 3,535-5,676，60 日低点 3,371</li><li>压力：4,040 / EMA20 4,102；支撑：3,800 / 3,720</li></ul></div></div><div class="cols" style="margin-top:12px"><div class="col"><h5>技术结论</h5><ul><li>日线空头排列 + 单日冲高回落，反弹动能衰减；以反弹 3,980-4,060 沽空、目标 3,800/3,700、止损 4,130 执行，强度评级：中（顺日线、逆短期动能）。</li></ul></div><div class="col"><h5>多指标共振</h5><ul><li>空头信号：EMA20/60 压制、净空增仓、仓单高位、长上影</li><li>多头信号：深度 backwardation、高硫紧、KDJ 低位金叉</li><li>量能：放量但减仓，反弹由空头回补驱动，质量一般</li></ul></div><div class="col"><h5>风险提示</h5><ul><li>地缘事件具有二元性：若霍尔木兹实质封锁或炼厂持续受损，油价二次冲高将击穿 4,130 止损；严格执行止损、不重仓。</li></ul></div></div></div>
+<h3 class="sec">持仓席位面板</h3><div class="panel"><p style="font-size:12.5px;color:#cbd5e1">数据日期 <b>2026-11-26</b>（前 20 名会员；来源：akshare 新浪席位）｜前 20 净空 <b>-2,250</b> 手（当日 -5,708），多头 -6,513、空头 -805，多头离场更快；多/空集中度 多 59.6% / 空 61.5%。跨日序列自 11-25 起才有记录（11-25 净多 +857），连续趋势参考性有限。</p><div class="cols" style="margin-top:12px"><div class="col"><h5>多头前5席位</h5><table><tr><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>国泰君安</td><td>11,145</td><td>-420</td></tr><tr><td>中信期货</td><td>8,368</td><td>-1,477</td></tr><tr><td>银河期货</td><td>6,246</td><td>+537</td></tr><tr><td>东证期货</td><td>5,982</td><td>-3,995</td></tr><tr><td>华泰期货</td><td>4,108</td><td>-397</td></tr></table></div><div class="col"><h5>空头前5席位</h5><table><tr><th>席位</th><th>持仓</th><th>增减</th></tr><tr><td>国泰君安</td><td>11,201</td><td>-2,014</td></tr><tr><td>中信期货</td><td>8,212</td><td>-942</td></tr><tr><td>东证期货</td><td>7,201</td><td>+1,284</td></tr><tr><td>永安期货</td><td>6,761</td><td>+556</td></tr><tr><td>华泰期货</td><td>4,713</td><td>-270</td></tr></table></div></div></div>
+<h3 class="sec">期限结构</h3><div class="panel"><div class="ts"><div class="tsrow"><span class="name">FU2701</span><span class="bwrap"><i style="width:100.0%"></i></span><span class="val">3,907.0 （OI 119,679）</span></div><div class="tsrow"><span class="name">FU2702</span><span class="bwrap"><i style="width:92.3%"></i></span><span class="val">3,798.0 （OI 39,858）</span></div><div class="tsrow"><span class="name">FU2703</span><span class="bwrap"><i style="width:86.7%"></i></span><span class="val">3,720.0 （OI 43,588）</span></div><div class="tsrow"><span class="name">FU2704</span><span class="bwrap"><i style="width:80.5%"></i></span><span class="val">3,632.0 （OI 10,832）</span></div><div class="tsrow"><span class="name">FU2705</span><span class="bwrap"><i style="width:74.8%"></i></span><span class="val">3,552.0 （OI 21,841）</span></div><div class="tsrow"><span class="name">FU2709</span><span class="bwrap"><i style="width:60.0%"></i></span><span class="val">3,343.0 （OI 3,839）</span></div></div><p class="note">结构：深度 backwardation（近高远低），2701 较 2705 升水 355 元（9.1%），近月紧张与远月过剩预期并存；远月流动性偏弱（2709 持仓仅 3,839 手），曲线对方向的指引弱于原油与持仓。</p></div>
+<h3 class="sec">三轮多空辩论实录</h3><div class="round"><h4>第一轮 · 立论陈词</h4><div class="duel"><div class="side bull"><h5>🐂 多头首席</h5><ol><li>地缘供给冲击真实：胡塞击中沙特最大炼厂与吉达/吉赞港、霍尔木兹两船触雷，布伦特 94.71 美元，高硫裂解价差走强。</li><li>全曲线深度 back：2701 较 2705 升水 355 元，近月可交割货源偏紧，仓单当日 -2,000。</li><li>20 日 -27.9% 后极度超跌，RSI 从 31.9 回升至 42.0、KDJ 低位金叉，技术性修复空间存在。</li></ol></div><div class="side bear"><h5>🐻 空头首席</h5><ol><li>仓单 92,660 吨绝对值偏高，FU2701 临近交割月，实盘压力明确。</li><li>前 20 净空 -2,250、当日 -5,708，多头减 6,513 远快于空头减 805，资金在用脚投票。</li><li>今日冲高 4,040 收 3,907、振幅 8.5%，减仓上涨＝空头回补，而非新多入场，反弹质量差。</li></ol></div></div></div><div class="round"><h4>第二轮 · 交叉驳斥</h4><div class="duel"><div class="side bull"><h5>🐂 多头首席</h5><ol><li>仓单高被深度 back 对冲：近月升水即市场为紧俏货源支付的溢价，且当日仍在去化 2,000 吨。</li><li>净空是价格冲高后的对冲盘，不代表方向；在 back 结构下空头移仓成本为正，难以长期压制。</li><li>长上影是获利了结而非趋势反转，EMA10 3,892 已收复，短线止跌成立。</li></ol></div><div class="side bear"><h5>🐻 空头首席</h5><ol><li>back 是现货紧的结果，但地缘溢价一旦回吐，back 会快速收窄，不能用结构为价格兜底。</li><li>减仓上涨说明没有新多承接，一旦空头回补结束，价格将失去买盘。</li><li>日线 EMA20/60 在 4,102/4,145 形成双重压制，4,040 即为日内压力，反弹是下跌中继。</li></ol></div></div></div><div class="round"><h4>第三轮 · 最终陈词</h4><div class="duel"><div class="side bull"><h5>🐂 多头首席</h5><p>胜负手：地缘供给中断短期不可证伪 + 深度 back。策略：不追高，回踩 3,820-3,880 轻仓试多，止损 3,740，目标 4,080；若跌破 3,720 则多头逻辑作废。</p></div><div class="side bear"><h5>🐻 空头首席</h5><p>胜负手：仓单高位 + 净空增仓 + 冲高回落长上影。策略：反弹 3,980-4,060 沽空，目标 3,800/3,700，止损 4,130，顺日线空头排列而为。</p></div></div></div>
+<h3 class="sec">总决策官裁决</h3><div class="verdict"><h3>⚖️ 六维多空评分</h3><table><tr><th>维度</th><th>多头</th><th>空头</th><th>裁决理由</th></tr><tr><td>① 库存</td><td style="color:#fca5a5">3/10</td><td style="color:#86efac">7/10</td><td style="text-align:left">新加坡燃料油库存 2,080.5 万桶（11-20），10-16 以来累库 15.3%</td></tr><tr><td>② 仓单</td><td style="color:#fca5a5">3/10</td><td style="color:#86efac">7/10</td><td style="text-align:left">上期所仓单 92,660 吨（-2,000），绝对量偏高，近月有实盘压力</td></tr><tr><td>③ 期限结构</td><td style="color:#fca5a5">7/10</td><td style="color:#86efac">3/10</td><td style="text-align:left">2701 较 2705 升水 355 元，全曲线深度 backwardation</td></tr><tr><td>④ 技术面</td><td style="color:#fca5a5">3/10</td><td style="color:#86efac">7/10</td><td style="text-align:left">EMA20/60 压制、冲高 4,040 回落留长上影，反弹质量差</td></tr><tr><td>⑤ 新闻基本面</td><td style="color:#fca5a5">5/10</td><td style="color:#86efac">5/10</td><td style="text-align:left">地缘溢价 vs IEA 过剩与 OPEC+ 增产风险，双向</td></tr><tr><td>⑥ 持仓席位</td><td style="color:#fca5a5">3/10</td><td style="color:#86efac">7/10</td><td style="text-align:left">前 20 净空 -2,250、当日 -5,708，多头离场更快</td></tr><tr><td><b>合计</b></td><td><b>24/60</b></td><td><b>36/60</b></td><td style="text-align:left">—</td></tr></table><p style="margin-top:14px;font-size:13px;color:#cbd5e1">六维对比空方 36:24 领先。空方赢在累库、仓单高位、净空增仓与冲高回落的量价背离；多方仅有深度 back 与地缘溢价。裁决为「空」，但地缘事件具二元性，只做反弹沽空、严设止损。</p><div class="cols" style="margin-top:14px"><div class="col"><h5>多方最强 / 最弱</h5><ul><li>深度 backwardation + 地缘供给中断</li><li>新加坡累库、仓单高位、净空增仓、日线空头排列</li></ul></div><div class="col"><h5>空方最强 / 最弱</h5><ul><li>累库 + 仓单 + 净空增仓 + 冲高回落四重共振</li><li>地缘溢价可快速回吐，反弹高度不可测</li></ul></div></div><h3 style="margin-top:16px;font-size:15px">决策方案</h3><table><tr><th>项目</th><th>内容</th></tr><tr><td>方向</td><td>空（空方 60% / 多方 40%）</td></tr><tr><td>入场</td><td>3,980 ~ 4,060</td></tr><tr><td>目标</td><td>3,800 / 3,700</td></tr><tr><td>止损</td><td>4,130</td></tr><tr><td>预期窗口</td><td>1~3 个交易日</td></tr><tr><td>基础置信度</td><td>46%（地缘事件驱动、方向可信但路径波动大；顺日线 +1，仓单/持仓 +2，位置/波动 -1）</td></tr><tr><td>校准系数</td><td>1.08（confidence-factors.json「<50」档：n=11、实际触发 45.5%、系数 1.08）</td></tr><tr><td>校准后置信度</td><td><b>49.7%</b>（裁剪至 10%~95%）</td></tr></table><div class="warn">风险提示：若霍尔木兹实质封锁或沙特炼厂持续受损，油价二次冲高将直接击穿 4,130；单笔仓位不超过计划仓位的一半。</div><p class="note">置信度定义：该结论在预期窗口内触发的概率；时间越短、概率越高则价值越大。校准口径来自仓库 review_engine 生成的 confidence-factors.json（近5日 21 条可终评样本）。</p></div>
+<h3 class="sec">双周期趋势与入场位置</h3><div class="panel"><div class="kgrid"><div class="kbox"><div class="k">日线趋势 / 强度</div><div class="v">空 / 强</div></div><div class="kbox"><div class="k">小时趋势 / 强度</div><div class="v">震荡 / 弱</div></div><div class="kbox"><div class="k">日线 / 小时 布林%B</div><div class="v">0.354 / 0.899</div></div><div class="kbox"><div class="k">距EMA10（ATR倍数）日/小时</div><div class="v">0.06 / 1.28</div></div><div class="kbox"><div class="k">位置评分</div><div class="v" style="color:#ef4444">45.0</div></div><div class="kbox"><div class="k">规则判定</div><div class="v" style="color:#ef4444">未通过</div></div></div><p class="note" style="margin-top:10px">评分构成：方向一致 30 / 位置 0.0 / 确认 5 / 赔率 10（盈亏比 5.17）。判定说明：反弹过高（距小时EMA10 +1.28ATR>0.6）；位置评分不足（45<60）。</p></div>
+<div class="foot">数据来源：行情为新浪财经期货日K与小时线（2026-11-26 收盘）；库存/现货等基本面优先取同花顺 iFinD EDB（新加坡燃料油库存、沥青开工率与厂库、苯乙烯港口库存、甲醇港口库存、炼焦煤三口径库存、外三元生猪均价、河北灰枣、电池级碳酸锂），并交叉核对交易所仓单日报、akshare 前20席位与隆众/卓创/SMM/Mysteel/中信/南华/银河等公开资讯。复盘与置信度由仓库内确定性引擎计算；数据可能存在延迟或口径差异，内容仅供研究参考，不构成任何投资建议。</div>
+</body></html>
