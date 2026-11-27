@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生猪（LH2703）深度分析 · 多Agent辩论报告 · 2026-11-27</title>
+<style>
+:root{
+ --bg:#080b10; --panel:#101620; --panel2:#141c28; --line:#22303f;
+ --txt:#e6edf6; --muted:#8b98a9; --up:#ef4b56; --down:#2fbf71; --gold:#e8b23a;
+ --blue:#4c9aff; --purple:#9d7bff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(1200px 600px at 12% -10%,#15202e 0%,#080b10 55%) fixed;
+ color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+ line-height:1.75;font-size:14px;padding:28px 18px 60px}
+.wrap{max-width:1180px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;
+ border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px;flex-wrap:wrap}
+.brand{font-size:12px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+h1{font-size:30px;letter-spacing:.04em;line-height:1.3}
+h1 span{color:var(--gold)}
+.meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--txt);font-weight:600}
+.chg-up{color:var(--up)}.chg-dn{color:var(--down)}
+.banner{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:22px;
+ background:linear-gradient(115deg,#16202d 0%,#0d131c 70%)}
+.banner .bar{display:flex;align-items:center;gap:16px;padding:18px 22px;flex-wrap:wrap}
+.dir{font-size:26px;font-weight:800;padding:2px 20px;border-radius:8px;letter-spacing:.12em}
+.win{font-size:15px;color:var(--muted)}
+.win b{color:var(--gold);font-size:17px}
+.core{padding:0 22px 18px;color:#c8d4e3;font-size:14.5px}
+.targets{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.targets div{padding:14px 20px;border-right:1px solid var(--line)}
+.targets div:last-child{border-right:0}
+.targets small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+.targets b{font-size:18px;color:var(--gold)}
+h2{font-size:17px;margin:30px 0 14px;padding-left:11px;border-left:3px solid var(--gold);letter-spacing:.05em}
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+.card h3{font-size:14.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.tag{font-size:11.5px;padding:1px 8px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+.card ul{list-style:none;font-size:13px;color:#bfcbdb}
+.card li{position:relative;padding-left:13px;margin-bottom:7px}
+.card li:before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.8}
+.sbar{display:flex;align-items:center;gap:9px;margin-top:11px}
+.sbar .track{flex:1;height:6px;background:#1c2733;border-radius:4px;overflow:hidden}
+.sbar .fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#3b82f6,#e8b23a,#ef4b56)}
+.sbar span{font-size:12px;color:var(--muted);min-width:34px;text-align:right}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.kv{margin-bottom:12px}
+.kv .k{color:var(--muted);font-size:12px;letter-spacing:.08em;margin-bottom:3px}
+.sig{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.sig b{font-size:12px;padding:2px 9px;border-radius:20px}
+.sig .b{background:rgba(239,75,86,.13);color:#ff8b93;border:1px solid rgba(239,75,86,.35)}
+.sig .s{background:rgba(47,191,113,.12);color:#5fd99b;border:1px solid rgba(47,191,113,.32)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:500;font-size:12px;letter-spacing:.05em}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.pos-up{color:var(--up)}.pos-dn{color:var(--down)}
+.curve{display:flex;align-items:flex-end;gap:16px;height:190px;padding:12px 6px 0}
+.curve .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.curve .v{font-size:12.5px;color:var(--gold);margin-bottom:6px}
+.curve .b{width:100%;max-width:64px;border-radius:6px 6px 0 0;
+ background:linear-gradient(180deg,rgba(76,154,255,.85),rgba(76,154,255,.18));border:1px solid rgba(76,154,255,.5)}
+.curve .lb{font-size:11.5px;color:var(--muted);margin-top:6px}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.side.bull{border-top:3px solid var(--up)}
+.side.bear{border-top:3px solid var(--down)}
+.side h4{font-size:14px;margin-bottom:9px}
+.side.bull h4{color:#ff8b93}.side.bear h4{color:#5fd99b}
+.side p{font-size:13px;color:#c2cfe0;margin-bottom:9px;text-align:justify}
+.round{font-size:12px;color:var(--muted);letter-spacing:.14em;margin:18px 0 9px}
+.dec{display:grid;grid-template-columns:1.25fr 1fr;gap:14px}
+.score-tbl td:first-child{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;padding:1px 9px;border-radius:20px;background:#1b2531;border:1px solid var(--line);color:var(--muted)}
+.ok{color:#5fd99b}.no{color:#ff8b93}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:6px}
+.tl div{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.tl small{display:block;color:var(--muted);font-size:11.5px;margin-bottom:3px}
+.tl b{font-size:15px}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+.foot p{margin-bottom:7px}
+@media(max-width:900px){.grid6{grid-template-columns:1fr 1fr}.tech-grid,.debate,.dec{grid-template-columns:1fr}.tl{grid-template-columns:repeat(3,1fr)}.targets{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="wrap">
+<div class="top"><div>
+<div class="brand">Futures Deep Analysis · 6D + Multi-Agent Debate</div>
+<h1>生猪 <span>LH2703</span> </h1>
+<div class="meta">
+<div>大商所　报告日期 <b>2026-11-27</b></div>
+<div>收盘 <b>9,560.0</b></div>
+<div>涨跌 <b class="chg-up">+0.68%</b></div>
+<div>持仓 <b>215,527</b> <span class="pos-up">(+4,439)</span></div>
+<div>成交 <b>192,711</b> 手</div>
+</div></div>
+<div style="text-align:right"><div class="brand">VERDICT</div>
+<div style="font-size:34px;font-weight:800;color:#2fbf71;letter-spacing:.1em">空</div>
+<div style="font-size:12px;color:var(--muted)">校准置信度 57.0%</div></div></div>
+
+<div class="banner">
+<div class="bar"><div class="dir" style="background:rgba(0,0,0,.25);color:#2fbf71;border:1px solid #2fbf71">空</div>
+<div class="win">胜率评估 <b>空方 50% / 多方 50%（分歧市，倾向反弹沽空）</b>　|　预期窗口 1~3 个交易日</div></div>
+<div class="core">远月大幅升水 + 供应后置 + 净空连续增仓，反弹已进入压力区，倾向反弹沽空</div>
+<div class="targets">
+<div><small>入场区间</small><b>9650~9750</b></div>
+<div><small>目标 1 / 2</small><b>9,350 / 9,150</b></div>
+<div><small>止损</small><b>9,900</b></div>
+<div><small>基准收盘</small><b>9,560</b></div>
+</div></div>
+
+<h2>六维数据全景</h2>
+<div class="grid6"><div class="card"><h3>① 库存<span class="tag">中性</span></h3>
+        <ul><li>冻品库存量较大、缓慢消化；出栏均重 125.77 公斤（同比 +1.76%），库存后置压力仍在</li><li>10 月能繁母猪 456.56 万头（环比 -1.47%、同比 -9.55%），去产能延续但速度放缓</li><li>10 月商品猪存栏 3,688.85 万头（+0.22%），出栏 1,196.49 万头（-1.03%）</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:50%"></div></div><span>5/10</span></div></div><div class="card"><h3>② 仓单<span class="tag">中性</span></h3>
+        <ul><li>仓单 637 张（+0），处于低位</li><li>LH2703 总持仓 21.55 万手（+4,439），今日增仓上涨</li><li>11 月规模场出栏完成率已超 80%，下旬出栏压力边际减轻</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:50%"></div></div><span>5/10</span></div></div><div class="card"><h3>③ 期限结构<span class="tag">偏空</span></h3>
+        <ul><li>LH2701 9845 &gt; LH2703 9560 &lt; LH2705 10595 &lt; LH2707 11750 &lt; LH2709 12725</li><li>近月贴水远月，2705/2707 对 2703 分别升水 1,035 / 2,190 元</li><li>2703 对河南现货 9.34 元/公斤升水约 220 元/吨</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:30%"></div></div><span>3/10</span></div></div><div class="card"><h3>④ 技术面<span class="tag">中性偏多</span></h3>
+        <ul><li>EMA10 9466 &lt; EMA20 9524，EMA60 10353；收盘 9560 站上 EMA10/20</li><li>MACD 零轴下金叉、红柱 154.7；RSI 47.8；J 值 57.9；%B 0.74</li><li>5 日 +3.74%、20 日 +0.53%，11-23 涨停后高位震荡</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:50%"></div></div><span>5/10</span></div></div><div class="card"><h3>⑤ 新闻基本面<span class="tag">中性偏空</span></h3>
+        <ul><li>11-23 LH2701 涨停至 10,060、11-24 收 10,175；河南现货 9.34、江苏 9.42 元/公斤</li><li>腌腊灌肠需求启动 + 北方降雪影响调运 + 散户惜售，短期现货偏强</li><li>机构一致提示：反弹空间有限，体重同比偏高、冻品高库存、春节前供应后置</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:40%"></div></div><span>4/10</span></div></div><div class="card"><h3>⑥ 持仓席位<span class="tag">偏空</span></h3>
+        <ul><li>前 20 净空 -20,047 手（当日 -938），5 日 -5,357，净空持续增仓</li><li>多单 125,694（+3,154）、空单 145,741（+4,092）</li><li>空集中度 67.6% 高于多 58.3%；国泰空 25,037（+1,644）、中信空 20,926（+2,628）</li></ul><div class="sbar"><div class="track"><div class="fill" style="width:30%"></div></div><span>3/10</span></div></div></div>
+
+<h2>技术面深度面板</h2>
+<div class="tech-grid">
+<div class="panel">
+<div class="kv"><div class="k">趋势判断</div>短期：涨停后高位震荡，5 日 +3.74%；中期：EMA60 之下，反弹未改下行大结构</div>
+<div class="kv"><div class="k">关键价位</div>支撑 9466（EMA10）/ 9325（今日低）/ 9000（20 日低）；压力 9700 / 9890（5 日高）/ 10353（EMA60）</div>
+<div class="kv"><div class="k">多空信号</div><div class="sig"><b class="b">▲ MACD 零轴下金叉、红柱放大</b><b class="b">▲ 收盘站上 EMA10/EMA20</b><b class="b">▲ 5 日 +3.74%、现货 8 连涨</b><b class="s">▼ 2703 较现货升水约 220 元</b><b class="s">▼ %B 0.74 接近上轨</b><b class="s">▼ 远月 2705/2707 大幅升水压制 2703</b></div></div>
+</div>
+<div class="panel">
+<div class="kv"><div class="k">形态研判</div>11-23 涨停后 3 日高位横盘，量能萎缩，属反弹中继或顶部构筑，方向待 9,890 与 9,325 突破确认</div>
+<div class="kv"><div class="k">量能验证</div>成交 19.3 万手（1.13 倍），持仓 +4,439，增仓滞涨，多空分歧加大</div>
+<div class="kv"><div class="k">综合结论</div>技术面中性偏多但上方压力密集，9,700-9,890 是空头防守区</div>
+</div></div>
+
+<h2>持仓席位面板</h2>
+<div class="panel">
+<div class="tl" style="grid-template-columns:repeat(4,1fr)">
+<div><small>前20净持仓</small><b>-20,047 手</b></div>
+<div><small>当日变化</small><b>-938 手</b></div>
+<div><small>趋势</small><b style="font-size:13px">净空连续增仓（5 日 -5,357）</b></div>
+<div><small>集中度</small><b style="font-size:13px">多 58.3% / 空 67.6%</b></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px">
+<div><div class="k" style="color:var(--muted);font-size:12px;margin-bottom:6px">多头前 5 席位</div>
+<table><thead><tr><th>席位</th><th class="num">多单</th><th class="num">增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class='num'>15,743</td><td class='num pos-up'>+108</td></tr><tr><td>中信期货</td><td class='num'>15,045</td><td class='num pos-up'>+1,792</td></tr><tr><td>中信建投</td><td class='num'>10,904</td><td class='num pos-up'>+226</td></tr><tr><td>东证期货</td><td class='num'>7,903</td><td class='num pos-up'>+311</td></tr><tr><td>银河期货</td><td class='num'>6,468</td><td class='num pos-dn'>-437</td></tr></tbody></table></div>
+<div><div class="k" style="color:var(--muted);font-size:12px;margin-bottom:6px">空头前 5 席位</div>
+<table><thead><tr><th>席位</th><th class="num">空单</th><th class="num">增减</th></tr></thead><tbody><tr><td>国泰君安</td><td class='num'>25,037</td><td class='num pos-up'>+1,644</td></tr><tr><td>中信期货</td><td class='num'>20,926</td><td class='num pos-up'>+2,628</td></tr><tr><td>东证期货</td><td class='num'>10,639</td><td class='num pos-up'>+617</td></tr><tr><td>中信建投</td><td class='num'>10,570</td><td class='num pos-up'>+89</td></tr><tr><td>中泰期货</td><td class='num'>8,847</td><td class='num pos-dn'>-993</td></tr></tbody></table></div>
+</div>
+<div class="note">净空 2 万手且持续增仓，空头集中度 67.6% 明显高于多头，头部席位国泰、中信同步加空，资金面偏空且趋势连续。　（数据日期：2026-11-27，前20名会员合计）</div>
+</div>
+
+<h2>期限结构</h2>
+<div class="panel"><div class="curve"><div class="col"><div class="v">9,845</div><div class="b" style="height:52px"></div><div class="lb">LH2701</div></div><div class="col"><div class="v">9,560</div><div class="b" style="height:40px"></div><div class="lb">LH2703</div></div><div class="col"><div class="v">10,595</div><div class="b" style="height:83px"></div><div class="lb">LH2705</div></div><div class="col"><div class="v">11,750</div><div class="b" style="height:130px"></div><div class="lb">LH2707</div></div><div class="col"><div class="v">12,725</div><div class="b" style="height:170px"></div><div class="lb">LH2709</div></div></div>
+<div class="note">近弱远强或平坦，市场对远月给出溢价</div></div>
+
+<h2>双周期趋势与入场位置</h2>
+<div class="panel"><div class="tl">
+        <div><small>日线趋势</small><b>震荡 / 弱</b></div>
+        <div><small>小时趋势</small><b>多 / 中</b></div>
+        <div><small>日线 %B</small><b>0.74</b></div>
+        <div><small>小时 %B</small><b>0.593</b></div>
+        <div><small>距小时EMA10</small><b>0.52 ATR</b></div>
+        <div><small>位置评分</small><b>15.0</b></div>
+        </div>
+        <div class="note">规则判定：<b class="no">未通过</b>　原因：不在日线区间上沿（%B 0.74，距20日高 1.28ATR）；窄幅震荡禁止低吸/高抛（仅放量突破）；盈亏比不足（0.00&lt;1.5）；位置评分不足（15&lt;60）</div></div>
+
+<h2>三轮多空辩论</h2>
+<div class="round">ROUND 1 · 立论陈词</div>
+<div class="debate">
+<div class="side bull"><h4>🐂 多头首席 · 立论</h4><p>多头逻辑有三：一是产能去化，10 月能繁 456.56 万头、同比 -9.55%，三季度末存栏为 2021 年以来最低；二是季节性，腌腊灌肠启动、北方降雪影响调运；三是盘面结构，2703 对 2701 贴水 285 元，存在补涨空间。现货从 8.58 涨到 9.4 元/公斤，8 连涨证明供应阶段性收紧。</p></div>
+<div class="side bear"><h4>🐻 空头首席 · 立论</h4><p>空头核心是‘反弹空间有限 + 供应后置’：能繁去化速度已放缓（9-10 月淘汰母猪折扣率反弹），出栏均重同比 +1.76%，冻品库存高企，11 月规模场提前出栏意味着春节前供应压力更大。2703 是春节后合约，对应需求最淡季，却对现货升水 220 元、对 2701 仅贴水 285 元，估值偏高。</p></div>
+</div>
+<div class="round">ROUND 2 · 交叉驳斥</div>
+<div class="debate">
+<div class="side bull"><h4>🐂 多头首席 · 驳斥</h4><p>对方说‘远月升水压制’，但远月升水正是去产能预期的合理定价，2703 只比现货高 220 元，并未透支。净空 2 万手看似压力，但空头集中度高意味着一旦现货继续走强，踩踏风险大；11-23 涨停就是空头集中平仓的结果。</p></div>
+<div class="side bear"><h4>🐻 空头首席 · 驳斥</h4><p>对方把‘涨停’当趋势，但 11-23 涨停后 4 个交易日未能创新高，成交萎缩、持仓增加，是典型的滞涨。前 20 净空 2 万手且连续增仓，空头集中度 67.6%，国泰、中信两大席位同步加空——资金在用真金白银否定反弹延续性。</p></div>
+</div>
+<div class="round">ROUND 3 · 最终陈词</div>
+<div class="debate">
+<div class="side bull"><h4>🐂 多头首席 · 终局</h4><p>最终判断：2703 回调至 9,400-9,480 做多，止损 9,280，目标 9,750/9,900，1~3 个交易日；若现货转跌则放弃。</p></div>
+<div class="side bear"><h4>🐻 空头首席 · 终局</h4><p>最终判断：9,700-9,890 反弹沽空，止损 9,950，目标 9,350/9,150，1~3 个交易日；若跌破 9,325 加速。</p></div>
+</div>
+
+<h2>总决策官裁决</h2>
+<div class="dec">
+<div class="panel"><table class="score-tbl"><thead><tr><th>维度</th><th class="num">评分</th><th>依据</th></tr></thead>
+<tbody><tr><td>库存</td><td class='num'><b style='color:#e8b23a'>5</b>/10</td><td>冻品高库存、体重同比偏高，去化偏慢</td></tr><tr><td>仓单</td><td class='num'><b style='color:#e8b23a'>5</b>/10</td><td>仓单 637 张，处低位</td></tr><tr><td>期限结构</td><td class='num'><b style='color:#2fbf71'>3</b>/10</td><td>2705/2707 大幅升水，2703 对现货升水 220</td></tr><tr><td>技术面</td><td class='num'><b style='color:#e8b23a'>5</b>/10</td><td>站上 EMA10/20，但 %B 0.74、上方压力密集</td></tr><tr><td>新闻基本面</td><td class='num'><b style='color:#e8b23a'>4</b>/10</td><td>腌腊旺季 vs 供应后置，机构一致看反弹有限</td></tr><tr><td>持仓席位</td><td class='num'><b style='color:#2fbf71'>3</b>/10</td><td>净空 -20,047 且连续增仓，空头集中度 67.6%</td></tr></tbody></table>
+<div class="note">最强点：持仓席位方向明确（净空 2 万手连续增仓）<br>最弱点：期限结构（3 分）显示远月升水已高，且近 5 日该品种判断连续失误</div></div>
+<div class="panel">
+<div class="kv"><div class="k">最终决策</div><b style="font-size:22px;color:#2fbf71">空　空方 50% / 多方 50%（分歧市，倾向反弹沽空）</b></div>
+<div class="kv"><div class="k">执行方案</div>
+入场 <b>9650~9750</b>　目标 <b>9,350 / 9,150</b>　止损 <b>9,900</b><br>
+预期窗口 1~3 个交易日</div>
+<div class="kv"><div class="k">核心逻辑</div>现货反弹接近尾声、2703 对现货升水且远月曲线陡峭，叠加净空 2 万手连续增仓，反弹沽空赔率优于追多；但近 5 日该品种多空反复，务必轻仓。</div>
+<div class="kv"><div class="k">置信度</div>
+基础 46% × 档位系数 1.24（<50 档）= <b style="color:var(--gold);font-size:19px">57.0%</b>
+<div class="note">系数来源：confidence-factors.json（近5日滚动复盘：整体系数 0.87；50-59 档 0.7、&lt;50 档 1.24，未达 min_samples 档位为 1.0），结果已裁剪至 10%~95%。</div></div>
+<div class="kv"><div class="k">风险提示</div>腌腊需求超预期、现货继续上涨；空头集中度过高引发二次踩踏；政策收储扰动。</div>
+</div></div>
+
+<div class="foot">
+<p>数据来源：新浪财经期货日K/60分钟线；akshare 持仓排名（新浪/交易所）；交易所仓单日报与东财仓单口径；隆众、卓创、钢联、Mysteel、中信期货、华泰期货、光大期货、银河期货、海证期货、广州期货等公开研报（iFinD 资讯检索）。</p>
+<p>复盘依据：同日双触以小时线判先后；近 5 日整体方向命中率 42.9%、结论触发率 40.9%，高置信度存在虚高，已按档位系数校准。</p>
+<p>持仓数据日期 2026-11-27（前 20 名会员合计，来源 akshare/交易所）；LC 广期所席位数据缺失，已标注。</p>
+<p>本报告由 AI 基于公开数据自动生成，仅用于研究与复盘，不构成任何投资建议。期货交易风险极大，请独立决策并严格控制仓位。</p>
+</div>
+</div></body></html>
